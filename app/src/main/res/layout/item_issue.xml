@@ -5,15 +5,21 @@
 
     <ImageView
         android:id="@+id/issue_ImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside" />
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:background="#20000000" />
 
     <TextView
         android:id="@+id/issue_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:gravity="center"
         android:textColor="@color/white" />
 
 </RelativeLayout>

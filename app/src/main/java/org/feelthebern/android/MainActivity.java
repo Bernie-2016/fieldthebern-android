@@ -1,7 +1,6 @@
 package org.feelthebern.android;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +8,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import org.feelthebern.android.api.Api;
+import org.feelthebern.android.api.models.Collection;
 import org.feelthebern.android.dagger.Dagger;
 
 import java.io.IOException;
@@ -23,6 +24,8 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity {
     @Inject
     Api mApi;
+    @Inject
+    Gson mGson;
 
     private RecyclerView mRecyclerView;
 
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 final String responseString = response.body().string();
+                Collection homeCollection = mGson.fromJson(responseString, Collection.class);
                 json.post(new Runnable() {
                     @Override
                     public void run() {

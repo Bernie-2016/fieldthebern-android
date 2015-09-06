@@ -2,11 +2,8 @@ package org.feelthebern.android;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.GridView;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
@@ -16,6 +13,7 @@ import com.squareup.okhttp.Response;
 import org.feelthebern.android.api.Api;
 import org.feelthebern.android.api.models.Collection;
 import org.feelthebern.android.dagger.Dagger;
+import org.feelthebern.android.issues.IssuesAdapter;
 
 import java.io.IOException;
 
@@ -27,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     Gson mGson;
 
-    private RecyclerView mRecyclerView;
+    private GridView mGridView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Dagger.mainCompenent(this).inject(this);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.issues_gridview);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-        final TextView json = (TextView) findViewById(R.id.mytext);
+        mGridView = (GridView) findViewById(R.id.issues_GridView);
         mApi.loadFeed(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -52,12 +47,11 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 final String responseString = response.body().string();
-                Collection homeCollection = mGson.fromJson(responseString, Collection.class);
-                json.post(new Runnable() {
+                final Collection homeCollection = mGson.fromJson(responseString, Collection.class);
+                mGridView.post(new Runnable() {
                     @Override
                     public void run() {
-                        json.setText(responseString);
-
+                        mGridView.setAdapter(new IssuesAdapter(MainActivity.this, homeCollection.getApiItems()));
                     }
                 });
             }
@@ -71,18 +65,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

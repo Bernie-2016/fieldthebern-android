@@ -5,9 +5,7 @@ package org.feelthebern.android.api.models;
  */
 public interface ApiItem {
 
-    String getTitle();
-
-    String getTitle();
-
     String getImageUrlThumb();
+
+    String getTitle();
 }

@@ -1,59 +1,69 @@
-# Copyright: Benjamin Weiss (keyboardsurfer) https://github.com/keyboardsurfer
-# Under CC-BY-SA V3.0 (https://creativecommons.org/licenses/by-sa/3.0/legalcode)
+##############################################
+# Misc non-source files
+##############################################
+*.lock
+.DS_Store
+Thumbs.db
+desktop.ini
 
-# built application files
-*.apk
-*.ap_
-*.jar
-!gradle/wrapper/gradle-wrapper.jar
 
-# lint folder
-lint
-
-# files for the dex VM
-*.dex
-
-# Java class files
-*.class
-
+##############################################
 # generated files
+##############################################
+apps/
 bin/
 gen/
-classes/
-gen-external-apklibs/
+*.apk
+*.ap_
+*.dex
+*.class
+*.bin
 
-# maven output folder
-target
 
-# Local configuration file (sdk path, etc)
+##############################################
+# Local config
+##############################################
 local.properties
 
-# Eclipse project files
+
+##############################################
+# Secure
+##############################################
+*.keystore
+secure.properties
+
+
+##############################################
+# Eclipse
+##############################################
 .classpath
 .project
-.metadata
-.settings
+proguard/
 
-# IntelliJ files
-.idea
+
+
+##############################################
+# Intellij 
+##############################################
+.idea/
 *.iml
-
-# OSX files
-.DS_Store
-
-# Windows files
-Thumbs.db
-
-# vi swap files
+*.iws
+*.ipr
+*~
 *.swp
 
-# backup files
-*.bak
+#.idea/workspace.xml
+#.idea/tasks.xml
 
-# gradle directory
-.gradle
+
+##############################################
+# Gradle
+##############################################
+.gradle/*/taskArtifacts/*
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/*/build
+/*/*/production
 build/
-
-#for oh-my-zsh jira plugin (https://github.com/robbyrussell/oh-my-zsh/wiki/Plugins#jira)
-.jira-url
-atlassian-ide-plugin.xml
+app/build/**

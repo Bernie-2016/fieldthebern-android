@@ -48,4 +48,5 @@ dependencies {
     compile 'io.reactivex:rxandroid:0.24.0'
     compile 'io.reactivex:rxjava:1.0.12'
     compile 'com.jakewharton:butterknife:7.0.0'
+    compile 'com.squareup.mortar:mortar:0.19'
 }

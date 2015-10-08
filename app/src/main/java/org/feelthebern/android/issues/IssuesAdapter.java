@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.R;
-import org.feelthebern.android.api.models.ApiItem;
+import org.feelthebern.android.models.ApiItem;
 
 import java.util.List;
 

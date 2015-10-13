@@ -1,4 +1,4 @@
-package org.feelthebern.android.api.models;
+package org.feelthebern.android.models;
 
 /**
  * Created by AndrewOrobator on 9/5/15.

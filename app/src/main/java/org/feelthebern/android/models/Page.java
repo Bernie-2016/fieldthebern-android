@@ -1,4 +1,4 @@
-package org.feelthebern.android.api.models;
+package org.feelthebern.android.models;
 
 import com.google.gson.annotations.SerializedName;
 

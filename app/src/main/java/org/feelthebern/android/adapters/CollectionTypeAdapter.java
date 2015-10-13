@@ -1,4 +1,4 @@
-package org.feelthebern.android.api.adapters;
+package org.feelthebern.android.adapters;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -8,9 +8,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
-import org.feelthebern.android.api.models.ApiItem;
-import org.feelthebern.android.api.models.Collection;
-import org.feelthebern.android.api.models.Page;
+import org.feelthebern.android.models.ApiItem;
+import org.feelthebern.android.models.Collection;
+import org.feelthebern.android.models.Page;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

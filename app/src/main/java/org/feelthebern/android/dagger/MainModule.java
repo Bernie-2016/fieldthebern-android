@@ -5,8 +5,8 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.feelthebern.android.api.adapters.CollectionTypeAdapter;
-import org.feelthebern.android.api.models.Collection;
+import org.feelthebern.android.adapters.CollectionTypeAdapter;
+import org.feelthebern.android.models.Collection;
 
 import javax.inject.Singleton;
 

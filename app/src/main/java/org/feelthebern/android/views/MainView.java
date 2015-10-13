@@ -22,9 +22,7 @@ package org.feelthebern.android.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import org.feelthebern.android.R;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.Main;
 
@@ -33,7 +31,6 @@ import javax.inject.Inject;
 public class MainView extends LinearLayout {
     @Inject Main.Presenter presenter;
 
-    private TextView textView;
 
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,7 +39,6 @@ public class MainView extends LinearLayout {
 
     @Override protected void onFinishInflate() {
         super.onFinishInflate();
-        textView = (TextView) findViewById(R.id.text);
     }
 
     @Override protected void onAttachedToWindow() {
@@ -55,7 +51,4 @@ public class MainView extends LinearLayout {
         super.onDetachedFromWindow();
     }
 
-    public void show(CharSequence stuff) {
-        textView.setText(stuff);
-    }
 }

@@ -28,24 +28,16 @@ import com.squareup.okhttp.Response;
 import org.feelthebern.android.R;
 import org.feelthebern.android.api.Api;
 import org.feelthebern.android.dagger.MainComponent;
-import org.feelthebern.android.dagger.MainModule;
 import org.feelthebern.android.issues.IssuesAdapter;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.views.MainView;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import mortar.ViewPresenter;
-import mortar.MortarScope;
-import mortar.bundler.BundleServiceRunner;
-
-import static mortar.MortarScope.buildChild;
-import static mortar.MortarScope.findChild;
 
 public class Main {
 
@@ -66,8 +58,8 @@ public class Main {
         Gson mGson;
 
         @Inject
-        Presenter(Gson gson) {
-            //this.mApi = mApi;
+        Presenter(Gson gson, Api api) {
+            this.mApi = api;
             this.mGson = gson;
         }
 
@@ -76,7 +68,6 @@ public class Main {
 
         @Override protected void onLoad(Bundle savedInstanceState) {
             //if (savedInstanceState != null && serial == -1) serial = savedInstanceState.getInt("serial");
-            //getView().show("Update #" + ++serial + " at " + format.format(new Date()));
 
             mGridView = (GridView) getView().findViewById(R.id.issues_GridView);
             mApi.loadFeed(new Callback() {

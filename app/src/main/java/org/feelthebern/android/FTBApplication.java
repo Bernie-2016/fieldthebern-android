@@ -18,13 +18,12 @@
 package org.feelthebern.android;
 
 import android.app.Application;
-import android.content.Context;
 
+import org.feelthebern.android.dagger.DaggerMainComponent;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.dagger.MainModule;
 import org.feelthebern.android.mortar.DaggerService;
 
-import dagger.Component;
 import mortar.MortarScope;
 
 /**
@@ -33,21 +32,29 @@ import mortar.MortarScope;
 public class FTBApplication extends Application {
 
     private MortarScope rootScope;
-
+    static MainComponent component;
 
     @Override
     public Object getSystemService(String name) {
         if (rootScope == null) {
             rootScope = MortarScope.buildRootScope()
-                    .withService(DaggerService.SERVICE_NAME,
-                            DaggerService.createComponent(MainComponent.class,
-                                    new MainModule(getApplicationContext())))
+                    .withService(DaggerService.DAGGER_SERVICE, getComponent())
                             .build("Root");
         }
 
         return rootScope.hasService(name) ? rootScope.getService(name) : super.getSystemService(name);
     }
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        component = DaggerMainComponent.builder()
+                .mainModule(new MainModule(getApplicationContext()))
+                .build();
 
+    }
 
+    public static MainComponent getComponent() {
+        return component;
+    }
 }

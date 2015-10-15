@@ -21,15 +21,23 @@ package org.feelthebern.android.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import org.feelthebern.android.R;
+import org.feelthebern.android.issues.IssuesAdapter;
+import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.Main;
 
 import javax.inject.Inject;
 
 public class MainView extends LinearLayout {
-    @Inject Main.Presenter presenter;
+
+    @Inject
+    Main.Presenter presenter;
+
+    private GridView gridView;
 
 
     public MainView(Context context, AttributeSet attrs) {
@@ -37,18 +45,27 @@ public class MainView extends LinearLayout {
         DaggerService.<Main.Component>getDaggerComponent(context).inject(this);
     }
 
-    @Override protected void onFinishInflate() {
+    @Override
+    protected void onFinishInflate() {
         super.onFinishInflate();
     }
 
-    @Override protected void onAttachedToWindow() {
+    @Override
+    protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
     }
 
-    @Override protected void onDetachedFromWindow() {
+    @Override
+    protected void onDetachedFromWindow() {
         presenter.dropView(this);
         super.onDetachedFromWindow();
+    }
+
+
+    public void setData(Collection collection) {
+        gridView = (GridView) findViewById(R.id.issues_GridView);
+        gridView.setAdapter(new IssuesAdapter(getContext(), collection.getApiItems()));
     }
 
 }

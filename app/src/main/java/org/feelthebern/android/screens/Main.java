@@ -66,7 +66,7 @@ public class Main {
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
-            HomeIssueSpec spec = new HomeIssueSpec(UrlConfig.HOME_JSON_URL);
+            HomeIssueSpec spec = new HomeIssueSpec(UrlConfig.HOME_JSON_URL_STUB);
 
             subscription = repo.get(spec)
                     .observeOn(AndroidSchedulers.mainThread())

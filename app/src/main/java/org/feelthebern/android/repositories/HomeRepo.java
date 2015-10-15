@@ -1,71 +1,84 @@
 package org.feelthebern.android.repositories;
 
 import com.google.gson.Gson;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
+import org.feelthebern.android.config.UrlConfig;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
+import retrofit.http.GET;
+import retrofit.http.Path;
 import rx.Observable;
-import rx.Subscriber;
 
 /**
- *
+ * Data repository for loading the tiles on the "home" page
  */
 public class HomeRepo {
 
-
-    Gson gson;
+    final Gson gson;
 
     @Inject
     public HomeRepo(Gson gson) {
         this.gson = gson;
     }
 
+    /**
+     * Main "API" method to the HomeRepo.
+     *
+     * This is what presenters can use to load data without caring where the data comes from.
+     *
+     * Generally you will want to subscribe on Schedulers.io()
+     * and observe on AndroidSchedulers.mainThread(),
+     * unit tests can run synchronously
+     *
+     * @param spec
+     * @return
+     */
     public Observable<Collection> get(final HomeIssueSpec spec) {
 
-        //TODO
-        return Observable.create(new Observable.OnSubscribe<Collection>() {
-            @Override
-            public void call(final Subscriber<? super Collection> subscriber) {
-                //subscriber.onNext();
+        /*
+            eventually this will be something like
 
-                loadFeed(new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(final Response response) throws IOException {
-                        if (!response.isSuccessful()) {
-                            return;
-                        }
-
-                        final String responseString = response.body().string();
-                        final Collection homeCollection = gson.fromJson(responseString, Collection.class);
-                        subscriber.onNext(homeCollection);
-                    }
-                },
-                spec.url());
+            if (cached) {
+                getFromDb();
+            } else {
+                getFromHttp();
             }
-        });
+
+         */
+        return getFromHttp(spec.url());
     }
 
 
-    private void loadFeed(Callback callback, String url) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
+    /**
+     * Retrofit 2 endpoint definition
+     *
+     * TODO: better to put this with the model? How best to handle changing urls?
+     */
+    private interface MainEndpoint {
+//        @GET(UrlConfig.HOME_JSON_URL_STUB)
+//        Observable<Collection> load();
+        @GET("{urlStub}/")
+        Observable<Collection> load(@Path("urlStub") String urlStub);
+    }
+
+    /**
+     * Might be best to pass the spec through to this method...?
+     */
+    private Observable<Collection> getFromHttp(final String urlStub) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(UrlConfig.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build();
 
-        client.newCall(request).enqueue(callback);
+        MainEndpoint endpoint = retrofit.create(MainEndpoint.class);
+
+        return endpoint.load(urlStub);
     }
 }

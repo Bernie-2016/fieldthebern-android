@@ -6,7 +6,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.feelthebern.android.api.Api;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 

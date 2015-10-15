@@ -25,6 +25,7 @@ import org.feelthebern.android.dagger.MainModule;
 import org.feelthebern.android.mortar.DaggerService;
 
 import mortar.MortarScope;
+import timber.log.Timber;
 
 /**
  *
@@ -48,6 +49,10 @@ public class FTBApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
         component = DaggerMainComponent.builder()
                 .mainModule(new MainModule(getApplicationContext()))
                 .build();

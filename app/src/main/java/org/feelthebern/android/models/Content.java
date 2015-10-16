@@ -1,7 +1,28 @@
 package org.feelthebern.android.models;
 
 /**
- * Created by AndrewOrobator on 9/5/15.
+ * Content is a single item in a page's 'contents' array
+ * content item types include "p" "h1" "h2" "h3" "nav"
+ *
+ * The full site JSON structure is something like:
+ *
+ * collection {obj}
+ *  +-items [array]
+ *      +-page
+ *      +-collection
+ *          +-items [array]
+ *              +-page
+ *              +-page
+ *      +-page
+ *      +-collection
+ *          +-items [array]
+ *              +-page
+ *              +-page {obj}
+ *                  +-content [array]
+ *                      +-content item (this object) h1
+ *                      +-content item (this object) h2
+ *                      +-content item (this object) p
+ *
  */
 public class Content {
     private String text;

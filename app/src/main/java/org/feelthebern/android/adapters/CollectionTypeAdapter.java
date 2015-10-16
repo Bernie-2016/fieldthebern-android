@@ -17,7 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by AndrewOrobator on 9/4/15.
+ * Looks like this type adapter treats the top level object as a "collection"
+ * It then grabs the "items" json array named 'jsonElements'
+ * Then looping through this array is check the type of each item
+ * Each item is deserialized into a page or collection, based on its type.
+ *
+ * The final array is a mix of pages and collection objects,
+ * this is set as a list of ApiItems on the Collection object we're deserializing.
+ *
+ * TODO: this could use some unit tests
+ * TODO: We'll need to do something similar with page.content json arrays of 'h1' 'h2' 'p' etc
  */
 public class CollectionTypeAdapter implements JsonDeserializer<Collection> {
 

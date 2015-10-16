@@ -16,9 +16,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Looks like this type adapter treats the top level object as a "collection"
- * It then grabs the "items" json array named 'jsonElements'
+ * It then grabs the "items" json array named jsonElements
  * Then looping through this array is check the type of each item
  * Each item is deserialized into a page or collection, based on its type.
  *
@@ -33,21 +35,37 @@ public class CollectionTypeAdapter implements JsonDeserializer<Collection> {
 
     @Override
     public Collection deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+
+        //new gson that doesn't have the CollectionTypeAdapter, so it deserializes normally
         Gson gson = new Gson();
         Collection collection = gson.fromJson(json, Collection.class);
-        JsonObject jObj = gson.fromJson(json, JsonObject.class);
+        JsonObject jObj = context.deserialize(json, JsonObject.class);
         JsonArray jsonElements = (JsonArray) jObj.get("items");
         List<ApiItem> items = new ArrayList<>(jsonElements.size());
+
+        //Timber.v("BEGIN deserializing parent collection: %s | %s ", collection.getTitle(), collection.getName());
 
         for (int i = 0; i < jsonElements.size(); i++) {
             JsonObject jsonObject = (JsonObject) jsonElements.get(i);
             String type = jsonObject.get("type").getAsString();
             if ("collection".equals(type)) {
-                items.add(gson.fromJson(jsonObject, Collection.class));
+                //here we want to use the 'context' gson which does have the type adapter
+                Collection childCollection = context.deserialize(jsonObject, Collection.class);
+                items.add(childCollection);
+//                Timber.v("deserializing childCollection --------- %s | %s %d",
+//                        childCollection.getTitle(),
+//                        childCollection.getName(),
+//                        i);
             } else {
-                items.add(gson.fromJson(jsonObject, Page.class));
+                Page page = context.deserialize(jsonObject, Page.class);
+                items.add(page);
+//                Timber.v("deserializing child page --------- %s %d",
+//                        page.getTitle(),
+//                        i);
             }
         }
+
+        //Timber.v("END deserializing parent collection: %s | %s ", collection.getTitle(), collection.getName());
 
         collection.setApiItems(items);
         return collection;

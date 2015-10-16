@@ -31,6 +31,8 @@ import timber.log.Timber;
  *
  * TODO: this could use some unit tests
  * TODO: We'll need to do something similar with page.content json arrays of 'h1' 'h2' 'p' etc
+ * TODO: this may not be very efficient as we deserialize the collection object twice
+ * TODO: we could probably do some sort of "peek"
  */
 public class CollectionTypeAdapter implements JsonDeserializer<Collection> {
 

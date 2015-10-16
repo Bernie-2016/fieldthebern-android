@@ -27,14 +27,14 @@ import java.util.List;
 public class Page implements ApiItem {
     private String title;
     private String url;
-    private List<Content> contents;
+    private List<Content> content;
     @SerializedName("image_url_thumb")
     private String imageUrlThumb;
     @SerializedName("image_url_full")
     private String imageUrlFull;
 
-    public List<Content> getContents() {
-        return contents;
+    public List<Content> getContent() {
+        return content;
     }
 
     public String getImageUrlFull() {

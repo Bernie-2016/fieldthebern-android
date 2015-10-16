@@ -23,10 +23,11 @@ package org.feelthebern.android.models;
  *                      +-content item (this object) h2
  *                      +-content item (this object) p
  *
+ * @see org.feelthebern.android.adapters.PageContentTypeAdapter
  */
 public class Content {
-    private String text;
-    private String type;
+    protected String text;
+    protected String type;
 
     public String getText() {
         return text;

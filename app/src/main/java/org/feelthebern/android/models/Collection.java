@@ -5,7 +5,24 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 /**
- * Created by AndrewOrobator on 8/29/15.
+ * Collection is an object with a field for an array of items.
+ * items include "page" and other "collections"
+ *
+ * The full site JSON structure is something like:
+ *
+ * collection {obj}
+ *  +-items [array]
+ *      +-page
+ *      +-collection
+ *          +-items [array]
+ *              +-page
+ *              +-page
+ *      +-page
+ *      +-collection
+ *          +-items [array]
+ *              +-page
+ *              +-page {obj}
+ *                  +-content [array]
  */
 public class Collection implements ApiItem {
     private String name;

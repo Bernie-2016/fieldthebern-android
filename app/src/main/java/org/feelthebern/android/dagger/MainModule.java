@@ -6,7 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.feelthebern.android.adapters.CollectionTypeAdapter;
+import org.feelthebern.android.adapters.PageContentTypeAdapter;
 import org.feelthebern.android.models.Collection;
+import org.feelthebern.android.models.Content;
 
 import javax.inject.Singleton;
 
@@ -14,7 +16,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by AndrewOrobator on 8/29/15.
+ *
  */
 @Module
 @Singleton
@@ -27,6 +29,7 @@ public class MainModule {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Collection.class, new CollectionTypeAdapter());
+        gsonBuilder.registerTypeAdapter(Content.class, new PageContentTypeAdapter());
 
         mGson = gsonBuilder.create();
     }

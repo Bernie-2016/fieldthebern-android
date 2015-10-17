@@ -5,8 +5,8 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.feelthebern.android.adapters.CollectionTypeAdapter;
-import org.feelthebern.android.adapters.PageContentTypeAdapter;
+import org.feelthebern.android.parsing.CollectionDeserializer;
+import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Content;
 
@@ -28,8 +28,8 @@ public class MainModule {
         mContext = context.getApplicationContext();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Collection.class, new CollectionTypeAdapter());
-        gsonBuilder.registerTypeAdapter(Content.class, new PageContentTypeAdapter());
+        gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
+        gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
 
         mGson = gsonBuilder.create();
     }

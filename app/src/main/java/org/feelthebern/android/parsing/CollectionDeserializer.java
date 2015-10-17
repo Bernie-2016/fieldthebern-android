@@ -1,4 +1,4 @@
-package org.feelthebern.android.adapters;
+package org.feelthebern.android.parsing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -16,8 +16,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
-
 /**
  * Custom Gson deserializer for 'collections' with a mix of 'pages' and 'collections' as children
  *
@@ -34,7 +32,7 @@ import timber.log.Timber;
  * TODO: this may not be very efficient as we deserialize the collection object twice
  * TODO: we could probably do some sort of "peek"
  */
-public class CollectionTypeAdapter implements JsonDeserializer<Collection> {
+public class CollectionDeserializer implements JsonDeserializer<Collection> {
 
 
     @Override

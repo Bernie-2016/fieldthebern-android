@@ -25,7 +25,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import org.feelthebern.android.R;
-import org.feelthebern.android.issues.IssuesAdapter;
+import org.feelthebern.android.adapters.IssuesAdapter;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.Main;

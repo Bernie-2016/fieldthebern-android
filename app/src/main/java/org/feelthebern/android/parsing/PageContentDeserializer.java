@@ -1,4 +1,4 @@
-package org.feelthebern.android.adapters;
+package org.feelthebern.android.parsing;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
  * TODO: this could use some unit tests
  * TODO: We'll need to do something similar with page.content json arrays of 'h1' 'h2' 'p' etc
  */
-public class PageContentTypeAdapter implements JsonDeserializer<Content> {
+public class PageContentDeserializer implements JsonDeserializer<Content> {
 
 
     @Override

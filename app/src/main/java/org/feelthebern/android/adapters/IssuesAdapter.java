@@ -1,4 +1,4 @@
-package org.feelthebern.android.issues;
+package org.feelthebern.android.adapters;
 
 import android.content.Context;
 import android.view.View;

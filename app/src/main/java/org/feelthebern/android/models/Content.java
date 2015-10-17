@@ -1,5 +1,7 @@
 package org.feelthebern.android.models;
 
+import org.feelthebern.android.parsing.PageContentDeserializer;
+
 /**
  * Content is a single item in a page's 'contents' array
  * content item types include "p" "h1" "h2" "h3" "nav"
@@ -23,7 +25,7 @@ package org.feelthebern.android.models;
  *                      +-content item (this object) h2
  *                      +-content item (this object) p
  *
- * @see org.feelthebern.android.adapters.PageContentTypeAdapter
+ * @see PageContentDeserializer
  */
 public class Content {
     protected String text;

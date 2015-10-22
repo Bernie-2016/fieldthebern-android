@@ -1,6 +1,7 @@
 package org.feelthebern.android.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -43,7 +44,9 @@ public class HomeScreenGridAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.item_issue, null);
+            convertView = LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.item_issue, parent, false);
         }
 
         ApiItem apiItem = getItem(position);

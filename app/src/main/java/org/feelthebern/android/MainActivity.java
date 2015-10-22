@@ -3,18 +3,31 @@ package org.feelthebern.android;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import org.feelthebern.android.mortar.DaggerService;
+import org.feelthebern.android.mortar.LayoutFactory;
 import org.feelthebern.android.screens.DaggerMain_Component;
 import org.feelthebern.android.screens.Main;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import flow.Flow;
+import flow.History;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
+import timber.log.Timber;
 
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
 
 public class MainActivity extends AppCompatActivity {
+
+    Flow flow;
+
+    @Bind(R.id.container_main)
+    FrameLayout container;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,7 +65,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         BundleServiceRunner.getBundleServiceRunner(this).onCreate(savedInstanceState);
-        setContentView(R.layout.main_view);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        initFlow();
+    }
+
+    private void initFlow() {
+        flow = new Flow(History.single(new Main()));
+        flow.setDispatcher(new Flow.Dispatcher() {
+            @Override
+            public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
+                Timber.v("Flow.Traversal direction: %s", traversal.direction.toString());
+                Object newState = traversal.destination.top();
+                Timber.v("Flow.Traversal newState: %s", newState.getClass().getSimpleName());
+                View view = LayoutFactory.createView(container.getContext(), newState);
+
+                //if we want fancy transitions, this is where we do that
+                container.removeAllViews();
+                container.addView(view);
+                /////////////////////////////////////////////////////////
+
+                callback.onTraversalCompleted();
+            }
+        });
     }
 
     @Override

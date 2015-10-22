@@ -20,9 +20,11 @@ import android.os.Bundle;
 
 import com.google.gson.Gson;
 
+import org.feelthebern.android.R;
 import org.feelthebern.android.config.UrlConfig;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.models.Collection;
+import org.feelthebern.android.mortar.Layout;
 import org.feelthebern.android.repositories.HomeRepo;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 import org.feelthebern.android.views.MainView;
@@ -36,8 +38,10 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+import flow.path.Path;
 
-public class Main {
+@Layout(R.layout.main_view)
+public class Main extends Path {
 
     public Main() {
     }

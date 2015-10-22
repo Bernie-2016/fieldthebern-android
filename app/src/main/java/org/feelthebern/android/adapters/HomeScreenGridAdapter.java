@@ -51,9 +51,10 @@ public class HomeScreenGridAdapter extends BaseAdapter {
 
         ApiItem apiItem = getItem(position);
         TextView issueTextView = (TextView) convertView.findViewById(R.id.issue_TextView);
+        ImageView issueImageView = (ImageView) convertView.findViewById(R.id.issue_ImageView);
+
         issueTextView.setText(apiItem.getTitle());
 
-        ImageView issueImageView = (ImageView) convertView.findViewById(R.id.issue_ImageView);
         Picasso.with(context)
                 .load(apiItem.getImageUrlThumb())
                 .into(issueImageView);

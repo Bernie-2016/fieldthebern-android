@@ -15,6 +15,8 @@ import org.feelthebern.android.models.ApiItem;
 
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  */
 public class HomeScreenGridAdapter extends BaseAdapter {
@@ -59,6 +61,22 @@ public class HomeScreenGridAdapter extends BaseAdapter {
                 .load(apiItem.getImageUrlThumb())
                 .into(issueImageView);
 
+        convertView.setTag(apiItem);
+
+        convertView.setOnClickListener(onGridItemClick);
+
         return convertView;
     }
+
+
+    View.OnClickListener onGridItemClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ApiItem tagData = (ApiItem) v.getTag();
+
+            Timber.v("onGridItemClick: %s %s",
+                    tagData.getClass().getSimpleName(),
+                    tagData.getTitle());
+        }
+    };
 }

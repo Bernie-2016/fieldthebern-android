@@ -25,7 +25,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import org.feelthebern.android.R;
-import org.feelthebern.android.adapters.IssuesAdapter;
+import org.feelthebern.android.adapters.HomeScreenGridAdapter;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.Main;
@@ -65,7 +65,7 @@ public class MainView extends LinearLayout {
 
     public void setData(Collection collection) {
         gridView = (GridView) findViewById(R.id.issues_GridView);
-        gridView.setAdapter(new IssuesAdapter(getContext(), collection.getApiItems()));
+        gridView.setAdapter(new HomeScreenGridAdapter(getContext(), collection.getApiItems()));
     }
 
 }

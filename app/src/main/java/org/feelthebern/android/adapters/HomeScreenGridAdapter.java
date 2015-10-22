@@ -15,25 +15,24 @@ import org.feelthebern.android.models.ApiItem;
 import java.util.List;
 
 /**
- * Created by AndrewOrobator on 9/6/15.
  */
-public class IssuesAdapter extends BaseAdapter {
-    private final List<ApiItem> mApiItems;
-    private final Context mContext;
+public class HomeScreenGridAdapter extends BaseAdapter {
+    private final List<ApiItem> apiItems;
+    private final Context context;
 
-    public IssuesAdapter(Context context, List<ApiItem> apiItems) {
-        mApiItems = apiItems;
-        mContext = context;
+    public HomeScreenGridAdapter(Context context, List<ApiItem> apiItems) {
+        this.apiItems = apiItems;
+        this.context = context;
     }
 
     @Override
     public int getCount() {
-        return mApiItems.size();
+        return apiItems.size();
     }
 
     @Override
     public ApiItem getItem(int position) {
-        return mApiItems.get(position);
+        return apiItems.get(position);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class IssuesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = View.inflate(mContext, R.layout.item_issue, null);
+            convertView = View.inflate(context, R.layout.item_issue, null);
         }
 
         ApiItem apiItem = getItem(position);
@@ -52,7 +51,9 @@ public class IssuesAdapter extends BaseAdapter {
         issueTextView.setText(apiItem.getTitle());
 
         ImageView issueImageView = (ImageView) convertView.findViewById(R.id.issue_ImageView);
-        Picasso.with(mContext).load(apiItem.getImageUrlThumb()).into(issueImageView);
+        Picasso.with(context)
+                .load(apiItem.getImageUrlThumb())
+                .into(issueImageView);
 
         return convertView;
     }

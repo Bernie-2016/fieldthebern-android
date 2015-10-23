@@ -12,9 +12,12 @@ import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.models.ApiItem;
+import org.feelthebern.android.models.Page;
+import org.feelthebern.android.screens.PageScreen;
 
 import java.util.List;
 
+import flow.Flow;
 import timber.log.Timber;
 
 /**
@@ -77,6 +80,12 @@ public class HomeScreenGridAdapter extends BaseAdapter {
             Timber.v("onGridItemClick: %s %s",
                     tagData.getClass().getSimpleName(),
                     tagData.getTitle());
+
+            if (tagData instanceof Page) {
+                Flow.get(v).set(new PageScreen((Page) tagData));
+            }
+
+            Timber.v("Flow.get v= %s", Flow.get(v).toString());
         }
     };
 }

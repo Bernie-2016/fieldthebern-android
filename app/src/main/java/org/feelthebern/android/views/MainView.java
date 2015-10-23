@@ -42,7 +42,9 @@ public class MainView extends LinearLayout {
 
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<Main.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<Main.Component>
+                getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
+                .inject(this);
     }
 
     @Override

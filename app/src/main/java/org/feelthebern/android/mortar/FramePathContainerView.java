@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package com.example.mortar.screen;
+package org.feelthebern.android.mortar;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import com.example.mortar.R;
+
+import org.feelthebern.android.R;
+
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;

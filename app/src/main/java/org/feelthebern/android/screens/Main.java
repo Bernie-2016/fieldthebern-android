@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
 import org.feelthebern.android.config.UrlConfig;
+import org.feelthebern.android.dagger.CusomScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.FlowPathBase;
@@ -32,7 +33,6 @@ import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 import org.feelthebern.android.views.MainView;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -64,15 +64,15 @@ public class Main extends FlowPathBase {
         return Main.class.getName();
     }
 
-    @Singleton
+    @CusomScreenScope
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(MainView t);
-
         Gson gson();
+        HomeRepo repo();
     }
 
-    @Singleton
+    @CusomScreenScope
     static public class Presenter extends ViewPresenter<MainView> {
 
         final Gson gson;
@@ -88,6 +88,8 @@ public class Main extends FlowPathBase {
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
+
+            Timber.v("main repo loading");
             HomeIssueSpec spec = new HomeIssueSpec(UrlConfig.HOME_JSON_URL_STUB);
 
             subscription = repo.get(spec)
@@ -117,6 +119,7 @@ public class Main extends FlowPathBase {
         @Override
         protected void onSave(Bundle outState) {
         }
+
 
         @Override
         public void dropView(MainView view) {

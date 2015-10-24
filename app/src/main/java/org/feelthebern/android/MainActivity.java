@@ -27,9 +27,7 @@ import static mortar.MortarScope.findChild;
 
 public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
-    Flow flow;
     private MortarScope activityScope;
-    private HandlesBack containerAsHandlesBack;
     private FlowDelegate flowDelegate;
 
     @Bind(R.id.container_main)
@@ -60,13 +58,12 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
             if (flowService != null) return flowService;
         }
 
-
         MortarScope activityScope = findChild(getApplicationContext(), getScopeName());
 
         if (activityScope == null) {
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
-                    .withService(DaggerService.DAGGER_SERVICE, getMainScreenComponent())
+                    //.withService(DaggerService.DAGGER_SERVICE, getMainScreenComponent())
                             //.withService("flow.Flow.FLOW_SERVICE", getFlow())
                     .build(getScopeName());
         }
@@ -82,11 +79,11 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 //        return flow;
 //    }
 
-    private Main.Component getMainScreenComponent() {
-        return DaggerMain_Component.builder()
-                .mainComponent(FTBApplication.getComponent())
-                .build();
-    }
+//    private Main.Component getMainScreenComponent() {
+//        return DaggerMain_Component.builder()
+//                .mainComponent(FTBApplication.getComponent())
+//                .build();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
         flowDelegate = FlowDelegate.onCreate(
                 nonConfig,
                 getIntent(),
@@ -203,6 +201,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
      */
     @Override
     public void onBackPressed() {
-        if (!containerAsHandlesBack.onBackPressed()) super.onBackPressed();
+        if (!container.onBackPressed()) super.onBackPressed();
     }
 }

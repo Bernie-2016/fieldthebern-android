@@ -7,6 +7,7 @@ import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -14,13 +15,16 @@ import retrofit.RxJavaCallAdapterFactory;
 import retrofit.http.GET;
 import retrofit.http.Path;
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Data repository for loading the tiles on the "home" page
  */
+@Singleton
 public class HomeRepo {
 
     final Gson gson;
+    private Collection collectionMemCache;
 
     @Inject
     public HomeRepo(Gson gson) {
@@ -51,7 +55,17 @@ public class HomeRepo {
             }
 
          */
-        return getFromHttp(spec.url());
+
+        if (collectionMemCache!=null) {
+            return Observable.just(collectionMemCache);
+        }
+        return getFromHttp(spec.url()).map(new Func1<Collection, Collection>() {
+            @Override
+            public Collection call(Collection collection) {
+                collectionMemCache = collection;
+                return collectionMemCache;
+            }
+        });
     }
 
 

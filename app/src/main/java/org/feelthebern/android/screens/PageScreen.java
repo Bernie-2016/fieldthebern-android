@@ -3,6 +3,7 @@ package org.feelthebern.android.screens;
 import android.os.Bundle;
 
 import org.feelthebern.android.R;
+import org.feelthebern.android.adapters.PageRecyclerAdapter;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.mortar.HasComponent;
@@ -83,6 +84,7 @@ public class PageScreen extends FlowPathBase{
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad page: %s", page.getTitle());
+            getView().setAdapter(new PageRecyclerAdapter(page));
         }
 
 

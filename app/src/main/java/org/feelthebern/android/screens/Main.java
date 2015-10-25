@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
 import org.feelthebern.android.config.UrlConfig;
-import org.feelthebern.android.dagger.CusomScreenScope;
+import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.FlowPathBase;
@@ -64,7 +64,7 @@ public class Main extends FlowPathBase {
         return Main.class.getName();
     }
 
-    @CusomScreenScope
+    @FtbScreenScope
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(MainView t);
@@ -72,7 +72,7 @@ public class Main extends FlowPathBase {
         HomeRepo repo();
     }
 
-    @CusomScreenScope
+    @FtbScreenScope
     static public class Presenter extends ViewPresenter<MainView> {
 
         final Gson gson;

@@ -1,10 +1,10 @@
 package org.feelthebern.android.views;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
 
-import org.feelthebern.android.R;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.PageScreen;
 
@@ -13,8 +13,7 @@ import javax.inject.Inject;
 /**
  *
  */
-
-public class PageView extends LinearLayout {
+public class PageView extends RecyclerView {
 
     @Inject
     PageScreen.Presenter presenter;
@@ -22,16 +21,19 @@ public class PageView extends LinearLayout {
     public PageView(Context context) {
         super(context);
         injectSelf(context);
+        setLayoutManager(context);
     }
 
     public PageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         injectSelf(context);
+        setLayoutManager(context);
     }
 
     public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         injectSelf(context);
+        setLayoutManager(context);
     }
 
 
@@ -41,6 +43,11 @@ public class PageView extends LinearLayout {
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
 //                getDaggerComponent(context, PageScreen.class.getName())
                 .inject(this);
+    }
+
+    private void setLayoutManager(Context context) {
+        LinearLayoutManager llm = new LinearLayoutManager(context);
+        setLayoutManager(llm);
     }
 
     @Override

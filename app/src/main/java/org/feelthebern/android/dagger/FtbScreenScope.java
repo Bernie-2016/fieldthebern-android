@@ -6,5 +6,5 @@ import javax.inject.Scope;
  *
  */
 @Scope
-public @interface CusomScreenScope {
+public @interface FtbScreenScope {
 }

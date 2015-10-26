@@ -19,5 +19,14 @@
         android:layout_height="match_parent"
         android:numColumns="auto_fit"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:visibility="invisible"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressWheel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_gravity="center"
         />
 </org.feelthebern.android.views.MainView>

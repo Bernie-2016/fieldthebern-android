@@ -24,8 +24,12 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:ignore="MissingPrefix"
         fontPath="fonts/Dosis-SemiBold.otf"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textAllCaps="true"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="6"
+        android:shadowColor="@android:color/black"
         />
 
 </RelativeLayout>

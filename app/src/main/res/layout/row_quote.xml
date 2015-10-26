@@ -8,5 +8,6 @@
           tools:ignore="MissingPrefix"
           fontPath="fonts/Dosis-Light.otf"
           android:textSize="16sp"
+          style="@style/PageMargins"
     />
 

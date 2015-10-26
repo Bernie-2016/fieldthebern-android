@@ -5,7 +5,7 @@ import android.os.Bundle;
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.PageRecyclerAdapter;
-import org.feelthebern.android.events.ChangeBackgroundEvent;
+import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.annotations.Layout;
@@ -86,9 +86,12 @@ public class PageScreen extends FlowPathBase{
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad page: %s", page.getTitle());
             getView().setAdapter(new PageRecyclerAdapter(page));
-            FTBApplication
-                    .getEventBus()
-                    .post(new ChangeBackgroundEvent(page.getImageUrlFull()));
+
+            new ChangePageEvent()
+                    .with(FTBApplication.getEventBus())
+                    .img(page.getImageUrlFull())
+                    .title(page.getTitle())
+                    .dispatch();
         }
 
 

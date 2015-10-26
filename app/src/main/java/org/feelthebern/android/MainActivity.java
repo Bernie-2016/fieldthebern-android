@@ -2,7 +2,10 @@ package org.feelthebern.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
@@ -11,12 +14,9 @@ import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
-import org.feelthebern.android.events.ChangeBackgroundEvent;
-import org.feelthebern.android.mortar.DaggerService;
+import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.mortar.GsonParceler;
-import org.feelthebern.android.mortar.HandlesBack;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
-import org.feelthebern.android.screens.DaggerMain_Component;
 import org.feelthebern.android.screens.Main;
 
 import butterknife.Bind;
@@ -28,6 +28,7 @@ import flow.path.Path;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
@@ -42,6 +43,12 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Bind(R.id.backdrop)
     ImageView backgroundImage;
+
+    @Bind(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbar;
+
+    @Bind(R.id.appbar)
+    AppBarLayout appBarLayout;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -127,6 +134,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         setSupportActionBar(toolbar);
 
         FTBApplication.getEventBus().register(this);
+
+        setToolbarFont();
     }
 
     @Override
@@ -233,10 +242,23 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
 
     @Subscribe
-    public void onChangeBackgroundEvent(ChangeBackgroundEvent event) {
+    public void onChangePageEvent(ChangePageEvent event) {
 
         Picasso.with(getApplicationContext())
-                .load(event.getUrl())
+                .load(event.getImgUrl())
                 .into(backgroundImage);
+
+        appBarLayout.setExpanded(!event.shouldClose(), true);
+
+        collapsingToolbar.setTitle(event.getTitle());
+    }
+
+
+
+    private void setToolbarFont() {
+        Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Dosis-Medium.otf");
+        collapsingToolbar.setCollapsedTitleTypeface(typeface);
+        collapsingToolbar.setExpandedTitleTypeface(typeface);
+
     }
 }

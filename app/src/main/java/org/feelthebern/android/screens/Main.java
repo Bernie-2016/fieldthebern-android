@@ -25,6 +25,7 @@ import org.feelthebern.android.R;
 import org.feelthebern.android.config.UrlConfig;
 import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
+import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.annotations.Layout;
@@ -90,6 +91,7 @@ public class Main extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
 
             Timber.v("main repo loading");
+            getView().showLoadingAnimation();
             HomeIssueSpec spec = new HomeIssueSpec(UrlConfig.HOME_JSON_URL_STUB);
 
             subscription = repo.get(spec)
@@ -102,6 +104,15 @@ public class Main extends FlowPathBase {
             @Override
             public void onCompleted() {
 
+                String pageName = getView().getResources().getString(R.string.app_name);
+
+                new ChangePageEvent()
+                        .with(FTBApplication.getEventBus())
+                        .title(pageName)
+                        .shouldClose(true)
+                        .dispatch();
+
+                getView().hideLoadingAnimation();
             }
 
             @Override

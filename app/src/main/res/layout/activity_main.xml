@@ -18,7 +18,9 @@
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:expandedTitleMarginStart="16dp"
+            >
 
 
             <ImageView
@@ -35,12 +37,9 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 android:background="#00000000"
-                xmlns:tools="http://schemas.android.com/tools"
-                tools:ignore="MissingPrefix"
-                fontPath="fonts/Dosis-Light.otf"
-                android:textSize="24sp"
-                android:textAllCaps="true"
-                />
+
+                >
+            </android.support.v7.widget.Toolbar>
 
 
         </android.support.design.widget.CollapsingToolbarLayout>

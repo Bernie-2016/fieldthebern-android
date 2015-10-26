@@ -20,7 +20,10 @@ package org.feelthebern.android.views;
 
 
 import android.content.Context;
+import android.os.Build;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
@@ -32,7 +35,7 @@ import org.feelthebern.android.screens.Main;
 
 import javax.inject.Inject;
 
-public class MainView extends LinearLayout {
+public class MainView extends FrameLayout {
 
     @Inject
     Main.Presenter presenter;
@@ -53,7 +56,7 @@ public class MainView extends LinearLayout {
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
     }
@@ -67,6 +70,9 @@ public class MainView extends LinearLayout {
 
     public void setData(Collection collection) {
         gridView = (GridView) findViewById(R.id.issues_GridView);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            gridView.setNestedScrollingEnabled(true);
+        }
         gridView.setAdapter(new HomeScreenGridAdapter(getContext(), collection.getApiItems()));
     }
 

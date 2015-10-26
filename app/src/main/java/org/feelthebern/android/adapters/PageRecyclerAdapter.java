@@ -9,6 +9,7 @@ import android.widget.TextView;
 import org.feelthebern.android.R;
 import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.models.Content;
+import org.feelthebern.android.models.Img;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.views.holders.ViewHolderFactory;
 
@@ -18,7 +19,7 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- *
+ * {@inheritDoc}
  */
 public class PageRecyclerAdapter extends MultiAdapter {
 
@@ -45,7 +46,6 @@ public class PageRecyclerAdapter extends MultiAdapter {
         ((BaseViewHolder) holder).setModel(items.get(position));
         //((BaseViewHolder) holder).setItemClickListener(itemClickListener);
     }
-
 
 
 

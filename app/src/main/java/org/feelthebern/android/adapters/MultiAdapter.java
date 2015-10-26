@@ -1,8 +1,5 @@
 package org.feelthebern.android.adapters;
 
-/**
- *
- */
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,9 +7,10 @@ import android.view.View;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public abstract class MultiAdapter
-        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+/**
+ * handles multiple content types and view holders, which all must extend a base view holder
+ */
+public abstract class MultiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Map<Class<?>, OnTypedItemClick> listeners = new HashMap<>();
     protected ClickListener itemClickListener;

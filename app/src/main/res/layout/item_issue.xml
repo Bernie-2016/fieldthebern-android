@@ -20,6 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:ignore="MissingPrefix"
+        fontPath="fonts/Dosis-SemiBold.otf"
+        android:textSize="24sp"
+        android:textAllCaps="true"
+        />
 
 </RelativeLayout>

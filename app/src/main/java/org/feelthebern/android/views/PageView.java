@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
 
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.PageScreen;
@@ -59,6 +60,22 @@ public class PageView extends RecyclerView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
+//        addOnScrollListener(new OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//
+//                if (getChildAt(0) != null) {
+//                    View view = getChildAt(0);
+//                    //view.setTranslationY(-view.getTop() / 2);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -66,5 +83,6 @@ public class PageView extends RecyclerView {
         presenter.dropView(this);
         super.onDetachedFromWindow();
     }
+
 
 }

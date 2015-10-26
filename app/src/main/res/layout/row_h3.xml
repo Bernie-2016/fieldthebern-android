@@ -7,6 +7,6 @@
           xmlns:tools="http://schemas.android.com/tools"
           tools:ignore="MissingPrefix"
           fontPath="fonts/Dosis-ExtraBold.otf"
-          android:textSize="16sp"
+          android:textSize="18sp"
     />
 

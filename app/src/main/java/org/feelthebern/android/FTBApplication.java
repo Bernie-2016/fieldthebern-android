@@ -19,6 +19,8 @@ package org.feelthebern.android;
 
 import android.app.Application;
 
+import com.squareup.otto.Bus;
+
 import org.feelthebern.android.dagger.DaggerMainComponent;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.dagger.MainModule;
@@ -35,6 +37,7 @@ public class FTBApplication extends Application {
 
     private MortarScope rootScope;
     static MainComponent component;
+    static Bus bus;
 
     @Override
     public Object getSystemService(String name) {
@@ -64,6 +67,11 @@ public class FTBApplication extends Application {
 //                .build()
 //        );
 
+        bus = new Bus();
+    }
+
+    public static Bus getEventBus() {
+        return bus;
     }
 
     public static MainComponent getComponent() {

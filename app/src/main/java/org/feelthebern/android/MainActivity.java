@@ -4,9 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
+import org.feelthebern.android.events.ChangeBackgroundEvent;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.HandlesBack;
@@ -34,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
+
+    @Bind(R.id.backdrop)
+    ImageView backgroundImage;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -111,6 +119,14 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 parceler,
                 History.single(new Main()),
                 this);
+
+        // Find the toolbar view inside the activity layout
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // Sets the Toolbar to act as the ActionBar for this Activity window.
+        // Make sure the toolbar exists in the activity and is not null
+        setSupportActionBar(toolbar);
+
+        FTBApplication.getEventBus().register(this);
     }
 
     @Override
@@ -190,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
             activityScope.destroy();
             activityScope = null;
         }
-
+        FTBApplication.getEventBus().unregister(this);
         super.onDestroy();
     }
 
@@ -213,5 +229,14 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+
+    @Subscribe
+    public void onChangeBackgroundEvent(ChangeBackgroundEvent event) {
+
+        Picasso.with(getApplicationContext())
+                .load(event.getUrl())
+                .into(backgroundImage);
     }
 }

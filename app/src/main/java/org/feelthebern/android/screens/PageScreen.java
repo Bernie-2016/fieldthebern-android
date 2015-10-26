@@ -6,8 +6,7 @@ import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.PageRecyclerAdapter;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
-import org.feelthebern.android.mortar.HasComponent;
-import org.feelthebern.android.mortar.Layout;
+import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.views.PageView;
 
 import javax.inject.Inject;

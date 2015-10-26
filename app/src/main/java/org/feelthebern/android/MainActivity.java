@@ -1,5 +1,6 @@
 package org.feelthebern.android;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import flow.History;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
@@ -202,5 +204,14 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Override
     public void onBackPressed() {
         if (!container.onBackPressed()) super.onBackPressed();
+    }
+
+
+    /**
+     * Required for the custom font library
+     */
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

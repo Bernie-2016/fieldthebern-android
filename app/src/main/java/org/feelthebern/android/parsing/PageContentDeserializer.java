@@ -10,9 +10,13 @@ import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.H1;
 import org.feelthebern.android.models.H2;
 import org.feelthebern.android.models.H3;
+import org.feelthebern.android.models.Iframe;
 import org.feelthebern.android.models.Img;
+import org.feelthebern.android.models.List;
 import org.feelthebern.android.models.Nav;
 import org.feelthebern.android.models.P;
+import org.feelthebern.android.models.Quote;
+import org.feelthebern.android.models.Video;
 
 import java.lang.reflect.Type;
 
@@ -50,6 +54,20 @@ public class PageContentDeserializer implements JsonDeserializer<Content> {
             case "nav":
                 typedContent = context.deserialize(json, Nav.class);
                 break;
+            case "video":
+                typedContent = context.deserialize(json, Video.class);
+                break;
+            case "quote":
+                typedContent = context.deserialize(json, Quote.class);
+                break;
+            case "list":
+                typedContent = context.deserialize(json, List.class);
+                break;
+            case "iframe":
+                typedContent = context.deserialize(json, Iframe.class);
+                break;
+            default:
+                throw new JsonParseException("unknown type:"+untypedContent.getType());
         }
 
         return typedContent;

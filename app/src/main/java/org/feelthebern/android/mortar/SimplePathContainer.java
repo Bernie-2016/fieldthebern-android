@@ -24,7 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.feelthebern.android.mortar.Layout;
+import org.feelthebern.android.annotations.Layout;
 
 import flow.Flow;
 import flow.path.Path;

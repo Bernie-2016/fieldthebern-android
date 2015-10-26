@@ -26,6 +26,7 @@ import org.feelthebern.android.mortar.DaggerService;
 
 import mortar.MortarScope;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  *
@@ -56,6 +57,12 @@ public class FTBApplication extends Application {
         component = DaggerMainComponent.builder()
                 .mainModule(new MainModule(getApplicationContext()))
                 .build();
+
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+//                .setDefaultFontPath("fonts/Dosis-Regular.otf")
+//                .setFontAttrId(R.attr.fontPath)
+//                .build()
+//        );
 
     }
 

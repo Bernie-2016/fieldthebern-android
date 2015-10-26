@@ -7,6 +7,8 @@ package org.feelthebern.android.mortar;
 import android.content.Context;
 import android.view.LayoutInflater;
 
+import org.feelthebern.android.annotations.Layout;
+
 public final class LayoutFactory {
 
     /** Create an instance of the view specified in a {@link Layout} annotation. */

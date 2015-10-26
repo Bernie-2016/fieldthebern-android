@@ -1,4 +1,4 @@
-package org.feelthebern.android.mortar;
+package org.feelthebern.android.annotations;
 
 /*
  * Copyright 2016 FeelTheBern.org

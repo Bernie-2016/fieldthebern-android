@@ -6,13 +6,13 @@ import org.feelthebern.android.annotations.Layout;
 /**
  *
  */
-@Layout(R.layout.row_video)
-public class Video extends Content {
+@Layout(R.layout.row_p)
+public class List extends Content {
 
-    private String src;
+    private java.util.List<String> list;
 
     @Override
     public String getText() {
-        return src;
+        return list.get(0);//TODO
     }
 }

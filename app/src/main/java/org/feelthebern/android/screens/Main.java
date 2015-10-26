@@ -27,7 +27,7 @@ import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.FlowPathBase;
-import org.feelthebern.android.mortar.Layout;
+import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.repositories.HomeRepo;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 import org.feelthebern.android.views.MainView;

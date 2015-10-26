@@ -7,21 +7,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.feelthebern.android.R;
+import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.Page;
+import org.feelthebern.android.views.holders.ViewHolderFactory;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  *
  */
-public class PageRecyclerAdapter extends RecyclerView.Adapter<PageRecyclerAdapter.ContentItemViewHolder>{
+public class PageRecyclerAdapter extends MultiAdapter {
 
 
     private final List<Content> items;
 
-    public PageRecyclerAdapter (Page page) {
-
+    public PageRecyclerAdapter(Page page) {
         this.items = page.getContent();
     }
 
@@ -31,27 +35,28 @@ public class PageRecyclerAdapter extends RecyclerView.Adapter<PageRecyclerAdapte
     }
 
     @Override
-    public ContentItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_h1, parent, false);
-        return new ContentItemViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return ViewHolderFactory.create(viewType, parent);
     }
 
     @Override
-    public void onBindViewHolder(ContentItemViewHolder holder, int position) {
-        holder.textView.setText(items.get(position).getText());
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Timber.v("position: %d", position);
+        ((BaseViewHolder) holder).setModel(items.get(position));
+        //((BaseViewHolder) holder).setItemClickListener(itemClickListener);
     }
 
 
 
 
-
-    public static class ContentItemViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
-
-        ContentItemViewHolder(View itemView) {
-            super(itemView);
-            textView = (TextView)itemView.findViewById(R.id.row_h1_text);
-        }
+    @Override
+    public int getItemViewType(final int position) {
+        Content item = items.get(position);
+        Annotation annotation = item.getClass().getAnnotation(Layout.class);
+        Layout layoutAnnotation = (Layout) annotation;
+        return layoutAnnotation.value();
     }
+
+
+
 }

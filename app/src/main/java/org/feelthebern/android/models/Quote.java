@@ -6,10 +6,10 @@ import org.feelthebern.android.annotations.Layout;
 import java.util.List;
 
 /**
- * TODO: delay implementation until implmenting all other content items
+ *
  */
-@Layout(R.layout.row_nav)
-public class Nav extends Content {
+@Layout(R.layout.row_quote)
+public class Quote extends Content {
     private List<Anchor> anchors;
     private List<Link> links;
 

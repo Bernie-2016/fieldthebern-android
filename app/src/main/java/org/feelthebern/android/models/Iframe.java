@@ -6,8 +6,8 @@ import org.feelthebern.android.annotations.Layout;
 /**
  *
  */
-@Layout(R.layout.row_video)
-public class Video extends Content {
+@Layout(R.layout.row_iframe)
+public class Iframe extends Content {
 
     private String src;
 

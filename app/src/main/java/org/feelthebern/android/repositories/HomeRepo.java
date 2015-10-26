@@ -59,6 +59,7 @@ public class HomeRepo {
         if (collectionMemCache!=null) {
             return Observable.just(collectionMemCache);
         }
+
         return getFromHttp(spec.url()).map(new Func1<Collection, Collection>() {
             @Override
             public Collection call(Collection collection) {

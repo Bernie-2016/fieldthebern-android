@@ -6,7 +6,6 @@
           android:orientation="vertical"
           xmlns:tools="http://schemas.android.com/tools"
           tools:ignore="MissingPrefix"
-          fontPath="fonts/Dosis-ExtraBold.otf"
-          android:textSize="24sp"
+          android:textSize="14sp"
     />
 

@@ -22,6 +22,7 @@ public class QuoteHolder extends BaseViewHolder<Quote> {
 
     @Override
     public void setModel(final Quote model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

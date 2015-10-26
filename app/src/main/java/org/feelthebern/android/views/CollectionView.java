@@ -1,11 +1,13 @@
 package org.feelthebern.android.views;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import org.feelthebern.android.mortar.DaggerService;
+import org.feelthebern.android.screens.CollectionScreen;
 import org.feelthebern.android.screens.PageScreen;
 
 import javax.inject.Inject;
@@ -13,24 +15,24 @@ import javax.inject.Inject;
 /**
  *
  */
-public class PageView extends RecyclerView {
+public class CollectionView extends RecyclerView {
 
     @Inject
-    PageScreen.Presenter presenter;
+    CollectionScreen.Presenter presenter;
 
-    public PageView(Context context) {
+    public CollectionView(Context context) {
         super(context);
         injectSelf(context);
         setLayoutManager(context);
     }
 
-    public PageView(Context context, AttributeSet attrs) {
+    public CollectionView(Context context, AttributeSet attrs) {
         super(context, attrs);
         injectSelf(context);
         setLayoutManager(context);
     }
 
-    public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CollectionView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         injectSelf(context);
         setLayoutManager(context);
@@ -39,15 +41,15 @@ public class PageView extends RecyclerView {
 
 
     private void injectSelf(Context context) {
-        DaggerService.<PageScreen.Component>
+        DaggerService.<CollectionScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
 //                getDaggerComponent(context, PageScreen.class.getName())
                 .inject(this);
     }
 
     private void setLayoutManager(Context context) {
-        LinearLayoutManager llm = new LinearLayoutManager(context);
-        setLayoutManager(llm);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
+        setLayoutManager(gridLayoutManager);
     }
 
     @Override

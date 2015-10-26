@@ -22,6 +22,7 @@ public class H2Holder extends BaseViewHolder<H2> {
 
     @Override
     public void setModel(final H2 model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

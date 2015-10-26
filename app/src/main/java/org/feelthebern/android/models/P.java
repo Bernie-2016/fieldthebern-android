@@ -1,10 +1,14 @@
 package org.feelthebern.android.models;
 
+import org.feelthebern.android.R;
+import org.feelthebern.android.annotations.Layout;
+
 import java.util.List;
 
 /**
  *
  */
+@Layout(R.layout.row_p)
 public class P extends Content {
     private List<Anchor> anchors;
     private List<Link> links;

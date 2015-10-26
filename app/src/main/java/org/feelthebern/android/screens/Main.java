@@ -20,15 +20,20 @@ import android.os.Bundle;
 
 import com.google.gson.Gson;
 
+import org.feelthebern.android.FTBApplication;
+import org.feelthebern.android.R;
 import org.feelthebern.android.config.UrlConfig;
+import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
+import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Collection;
+import org.feelthebern.android.mortar.FlowPathBase;
+import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.repositories.HomeRepo;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 import org.feelthebern.android.views.MainView;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -37,20 +42,38 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class Main {
+@Layout(R.layout.main_view)
+public class Main extends FlowPathBase {
 
     public Main() {
     }
 
-    @Singleton
+    @Override
+    public int getLayout() {
+        return R.layout.main_view;
+    }
+
+    @Override
+    public Object createComponent() {
+        return DaggerMain_Component.builder()
+                .mainComponent(FTBApplication.getComponent())
+                .build();
+    }
+
+    @Override
+    public String getScopeName() {
+        return Main.class.getName();
+    }
+
+    @FtbScreenScope
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(MainView t);
-
         Gson gson();
+        HomeRepo repo();
     }
 
-    @Singleton
+    @FtbScreenScope
     static public class Presenter extends ViewPresenter<MainView> {
 
         final Gson gson;
@@ -66,6 +89,9 @@ public class Main {
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
+
+            Timber.v("main repo loading");
+            getView().showLoadingAnimation();
             HomeIssueSpec spec = new HomeIssueSpec(UrlConfig.HOME_JSON_URL_STUB);
 
             subscription = repo.get(spec)
@@ -78,6 +104,15 @@ public class Main {
             @Override
             public void onCompleted() {
 
+                String pageName = getView().getResources().getString(R.string.app_name);
+
+                new ChangePageEvent()
+                        .with(FTBApplication.getEventBus())
+                        .title(pageName)
+                        .shouldClose(true)
+                        .dispatch();
+
+                getView().hideLoadingAnimation();
             }
 
             @Override
@@ -95,6 +130,7 @@ public class Main {
         @Override
         protected void onSave(Bundle outState) {
         }
+
 
         @Override
         public void dropView(MainView view) {

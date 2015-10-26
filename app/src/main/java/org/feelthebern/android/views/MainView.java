@@ -20,40 +20,57 @@ package org.feelthebern.android.views;
 
 
 import android.content.Context;
+import android.os.Build;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import org.feelthebern.android.R;
-import org.feelthebern.android.adapters.IssuesAdapter;
+import org.feelthebern.android.adapters.HomeScreenGridAdapter;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.Main;
 
 import javax.inject.Inject;
 
-public class MainView extends LinearLayout {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class MainView extends FrameLayout {
 
     @Inject
     Main.Presenter presenter;
 
-    private GridView gridView;
+    @Bind(R.id.issues_GridView)
+    GridView gridView;
+
+    @Bind(R.id.progressWheel)
+    ProgressBar progressWheel;
+
 
 
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        DaggerService.<Main.Component>getDaggerComponent(context).inject(this);
+        DaggerService.<Main.Component>
+                getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
+                .inject(this);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        ButterKnife.bind(this, this);
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
+
     }
 
     @Override
@@ -64,8 +81,20 @@ public class MainView extends LinearLayout {
 
 
     public void setData(Collection collection) {
-        gridView = (GridView) findViewById(R.id.issues_GridView);
-        gridView.setAdapter(new IssuesAdapter(getContext(), collection.getApiItems()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            gridView.setNestedScrollingEnabled(true);
+        }
+        gridView.setAdapter(new HomeScreenGridAdapter(getContext(), collection.getApiItems()));
+    }
+
+    public void showLoadingAnimation() {
+        progressWheel.setVisibility(View.VISIBLE);
+        gridView.setVisibility(View.INVISIBLE);
+    }
+
+    public void hideLoadingAnimation() {
+        progressWheel.setVisibility(View.GONE);
+        gridView.setVisibility(View.VISIBLE);
     }
 
 }

@@ -19,6 +19,8 @@ package org.feelthebern.android;
 
 import android.app.Application;
 
+import com.squareup.otto.Bus;
+
 import org.feelthebern.android.dagger.DaggerMainComponent;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.dagger.MainModule;
@@ -26,6 +28,7 @@ import org.feelthebern.android.mortar.DaggerService;
 
 import mortar.MortarScope;
 import timber.log.Timber;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  *
@@ -34,6 +37,7 @@ public class FTBApplication extends Application {
 
     private MortarScope rootScope;
     static MainComponent component;
+    static Bus bus;
 
     @Override
     public Object getSystemService(String name) {
@@ -57,6 +61,17 @@ public class FTBApplication extends Application {
                 .mainModule(new MainModule(getApplicationContext()))
                 .build();
 
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+//                .setDefaultFontPath("fonts/Dosis-Regular.otf")
+//                .setFontAttrId(R.attr.fontPath)
+//                .build()
+//        );
+
+        bus = new Bus();
+    }
+
+    public static Bus getEventBus() {
+        return bus;
     }
 
     public static MainComponent getComponent() {

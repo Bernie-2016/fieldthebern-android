@@ -27,9 +27,9 @@ public class DaggerService {
      * Caller is required to know the type of the component for this context.
      */
     @SuppressWarnings("unchecked") //
-    public static <T> T getDaggerComponent(Context context) {
+    public static <T> T getDaggerComponent(Context context, String serviceName) {
         //noinspection ResourceType
-        return (T) context.getSystemService(DAGGER_SERVICE);
+        return (T) context.getSystemService(serviceName);
     }
 
     /**

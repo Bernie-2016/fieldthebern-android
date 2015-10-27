@@ -42,6 +42,12 @@ public class Page implements ApiItem {
     }
 
     public String getImageUrlFull() {
+
+        if (imageUrlFull.startsWith("http://feelthebern.org20")){
+            imageUrlFull = imageUrlFull
+                    .replace("http://feelthebern.org20",
+                    "http://feelthebern.org/wp-content/uploads/20");
+        }
         return imageUrlFull;
     }
 

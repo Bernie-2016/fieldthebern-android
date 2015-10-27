@@ -27,6 +27,7 @@ import flow.History;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
+import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
@@ -244,8 +245,11 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Subscribe
     public void onChangePageEvent(ChangePageEvent event) {
 
+        Timber.v("onChangePageEvent e=%s", event.toString());
+        //Picasso.with(getApplicationContext()).setLoggingEnabled(true);
         Picasso.with(getApplicationContext())
                 .load(event.getImgUrl())
+                .placeholder(backgroundImage.getDrawable())
                 .into(backgroundImage);
 
         appBarLayout.setExpanded(!event.shouldClose(), true);

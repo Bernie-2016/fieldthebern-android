@@ -84,7 +84,7 @@ public class PageScreen extends FlowPathBase{
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
-            Timber.v("onLoad page: %s", page.getTitle());
+            Timber.v("onLoad page: %s", page.getImageUrlFull());
             getView().setAdapter(new PageRecyclerAdapter(page));
 
             new ChangePageEvent()

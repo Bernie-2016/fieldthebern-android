@@ -21,19 +21,17 @@ public class PageView extends RecyclerView {
     public PageView(Context context) {
         super(context);
         injectSelf(context);
-        setLayoutManager(context);
+
     }
 
     public PageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         injectSelf(context);
-        setLayoutManager(context);
     }
 
     public PageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         injectSelf(context);
-        setLayoutManager(context);
     }
 
 
@@ -59,6 +57,7 @@ public class PageView extends RecyclerView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
+        setLayoutManager(getContext());
     }
 
     @Override

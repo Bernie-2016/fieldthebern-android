@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import org.feelthebern.android.R;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.CollectionScreen;
 import org.feelthebern.android.screens.PageScreen;
@@ -48,7 +49,8 @@ public class CollectionView extends RecyclerView {
     }
 
     private void setLayoutManager(Context context) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 2);
+        GridLayoutManager gridLayoutManager
+                = new GridLayoutManager(context, context.getResources().getInteger(R.integer.num_cols));
         setLayoutManager(gridLayoutManager);
     }
 
@@ -68,6 +70,5 @@ public class CollectionView extends RecyclerView {
         presenter.dropView(this);
         super.onDetachedFromWindow();
     }
-
 
 }

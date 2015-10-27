@@ -22,6 +22,8 @@ package org.feelthebern.android.views;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import org.feelthebern.android.R;
+import org.feelthebern.android.adapters.CollectionRecyclerAdapter;
 import org.feelthebern.android.adapters.HomeScreenGridAdapter;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.DaggerService;
@@ -45,8 +48,8 @@ public class MainView extends FrameLayout {
     @Inject
     Main.Presenter presenter;
 
-    @Bind(R.id.issues_GridView)
-    GridView gridView;
+    @Bind(R.id.mainRecyclerView)
+    RecyclerView recyclerView;
 
     @Bind(R.id.progressWheel)
     ProgressBar progressWheel;
@@ -60,6 +63,12 @@ public class MainView extends FrameLayout {
                 .inject(this);
     }
 
+    private void setLayoutManager(Context context) {
+        GridLayoutManager gridLayoutManager
+                = new GridLayoutManager(context, context.getResources().getInteger(R.integer.num_cols));
+        recyclerView.setLayoutManager(gridLayoutManager);
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -70,6 +79,7 @@ public class MainView extends FrameLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
+        setLayoutManager(this.getContext());
 
     }
 
@@ -81,20 +91,20 @@ public class MainView extends FrameLayout {
 
 
     public void setData(Collection collection) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            gridView.setNestedScrollingEnabled(true);
-        }
-        gridView.setAdapter(new HomeScreenGridAdapter(getContext(), collection.getApiItems()));
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            gridView.setNestedScrollingEnabled(true);
+//        }
+        recyclerView.setAdapter(new CollectionRecyclerAdapter(collection));
     }
 
     public void showLoadingAnimation() {
         progressWheel.setVisibility(View.VISIBLE);
-        gridView.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
     }
 
     public void hideLoadingAnimation() {
         progressWheel.setVisibility(View.GONE);
-        gridView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
 }

@@ -24,12 +24,18 @@
 
 
             <ImageView
-                android:id="@+id/backdrop"
+            android:id="@+id/backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:layout_collapseMode="parallax"
+            android:background="#087ed7"/>
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                android:background="#087ed7"/>
+                android:background="@drawable/fade_black_to_clear"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

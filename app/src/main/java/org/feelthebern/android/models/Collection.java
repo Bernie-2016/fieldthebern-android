@@ -2,6 +2,9 @@ package org.feelthebern.android.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.feelthebern.android.R;
+import org.feelthebern.android.annotations.Layout;
+
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ import java.util.List;
  *              +-page {obj}
  *                  +-content [array]
  */
+@Layout(R.layout.item_collection)
 public class Collection implements ApiItem {
     private String name;
     private String title;

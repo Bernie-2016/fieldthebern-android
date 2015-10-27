@@ -22,6 +22,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
 
     @Override
     public void setModel(final Video model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

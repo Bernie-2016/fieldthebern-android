@@ -22,6 +22,7 @@ public class ErrorViewHolder extends BaseViewHolder<Content> {
 
     @Override
     public void setModel(final Content model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

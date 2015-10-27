@@ -22,6 +22,7 @@ public class ListHolder extends BaseViewHolder<List> {
 
     @Override
     public void setModel(final List model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

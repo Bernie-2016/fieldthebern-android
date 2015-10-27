@@ -12,7 +12,9 @@ import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.models.ApiItem;
+import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Page;
+import org.feelthebern.android.screens.CollectionScreen;
 import org.feelthebern.android.screens.PageScreen;
 
 import java.util.List;
@@ -83,6 +85,8 @@ public class HomeScreenGridAdapter extends BaseAdapter {
 
             if (tagData instanceof Page) {
                 Flow.get(v).set(new PageScreen((Page) tagData));
+            } else if (tagData instanceof Collection) {
+                Flow.get(v).set(new CollectionScreen((Collection) tagData));
             }
 
             Timber.v("Flow.get v= %s", Flow.get(v).toString());

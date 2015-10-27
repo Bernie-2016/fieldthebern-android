@@ -22,6 +22,7 @@ public class PHolder extends BaseViewHolder<P> {
 
     @Override
     public void setModel(final P model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

@@ -22,6 +22,7 @@ public class NavHolder extends BaseViewHolder<Nav> {
 
     @Override
     public void setModel(final Nav model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

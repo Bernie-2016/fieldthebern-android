@@ -22,6 +22,7 @@ public class H3Holder extends BaseViewHolder<H3> {
 
     @Override
     public void setModel(final H3 model) {
+        super.setModel(model);
         textView.setText(model.getText());
     }
 }

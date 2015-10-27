@@ -25,7 +25,7 @@ public class ImgHolder extends BaseViewHolder<Img> {
 
     @Override
     public void setModel(final Img model) {
-
+        super.setModel(model);
         Picasso.with(imageView.getContext())
                 .load(model.getText())
                 .into(imageView);

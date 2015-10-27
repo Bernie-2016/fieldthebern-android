@@ -6,12 +6,16 @@ package org.feelthebern.android.adapters;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import timber.log.Timber;
+
 
 /**
  * A base ViewHolder that has a Model type "M". to set the mode call setModel()
  */
 
-public abstract class BaseViewHolder<M> extends RecyclerView.ViewHolder implements View.OnClickListener {
+public abstract class BaseViewHolder<M>
+        extends RecyclerView.ViewHolder
+        implements View.OnClickListener {
 
     protected M model;
     protected MultiAdapter.ClickListener adapterListener;
@@ -30,7 +34,10 @@ public abstract class BaseViewHolder<M> extends RecyclerView.ViewHolder implemen
      */
     @Override
     public void onClick(View v) {
-        if (model == null) {
+        Timber.v("onClick"+v);
+
+        if (getModel() == null) {
+            Timber.v("getModel was null :"+v);
             return;
         }
 

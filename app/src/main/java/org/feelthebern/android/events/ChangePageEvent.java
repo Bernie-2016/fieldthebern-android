@@ -52,4 +52,15 @@ public class ChangePageEvent {
     public boolean shouldClose() {
         return shouldClose;
     }
+
+
+    @Override
+    public String toString() {
+        return "ChangePageEvent{" +
+                "img='" + img + '\'' +
+                ", bus=" + bus +
+                ", title='" + title + '\'' +
+                ", shouldClose=" + shouldClose +
+                '}';
+    }
 }

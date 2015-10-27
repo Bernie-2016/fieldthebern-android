@@ -13,11 +13,10 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     >
 
-    <GridView
-        android:id="@+id/issues_GridView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mainRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="auto_fit"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:visibility="invisible"
         />

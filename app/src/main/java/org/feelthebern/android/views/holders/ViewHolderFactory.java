@@ -48,6 +48,12 @@ public class ViewHolderFactory {
             case R.layout.row_list:
                 return new ListHolder(inflate(resId, parent));
 
+            case R.layout.item_collection:
+                return new CollectionHolder(inflate(resId, parent));
+
+            case R.layout.item_page:
+                return new PageHolder(inflate(resId, parent));
+
             default:
                 Timber.e(new Exception(),
                         "Unmapped view holder... res id: %d, returning default",

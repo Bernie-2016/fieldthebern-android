@@ -2,6 +2,9 @@ package org.feelthebern.android.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.feelthebern.android.R;
+import org.feelthebern.android.annotations.Layout;
+
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ import java.util.List;
  *              +-page {obj}
  *                  +-content [array]
  */
+@Layout(R.layout.item_page)
 public class Page implements ApiItem {
     private String title;
     private String url;
@@ -38,6 +42,12 @@ public class Page implements ApiItem {
     }
 
     public String getImageUrlFull() {
+
+        if (imageUrlFull.startsWith("http://feelthebern.org20")){
+            imageUrlFull = imageUrlFull
+                    .replace("http://feelthebern.org20",
+                    "http://feelthebern.org/wp-content/uploads/20");
+        }
         return imageUrlFull;
     }
 

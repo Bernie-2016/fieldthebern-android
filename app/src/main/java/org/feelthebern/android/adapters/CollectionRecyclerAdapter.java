@@ -1,5 +1,6 @@
 package org.feelthebern.android.adapters;
 
+import android.animation.ObjectAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,7 +8,6 @@ import android.view.ViewGroup;
 import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.models.ApiItem;
 import org.feelthebern.android.models.Collection;
-import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.screens.CollectionScreen;
 import org.feelthebern.android.screens.PageScreen;
@@ -52,6 +52,7 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
 
 
 
+
     @Override
     public int getItemViewType(final int position) {
         ApiItem item = items.get(position);
@@ -64,6 +65,12 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
 
         @Override
         public void onClick(Object model, View v) {
+            ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
+                    .setDuration(100)
+                    .start();
+            ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
+                    .setDuration(100)
+                    .start();
             ApiItem apiItem = (ApiItem) model;
 
             Timber.v("onGridItemClick: %s %s",

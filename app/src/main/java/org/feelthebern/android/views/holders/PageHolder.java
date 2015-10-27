@@ -8,7 +8,6 @@ import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.BaseViewHolder;
-import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Page;
 
 import butterknife.Bind;

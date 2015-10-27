@@ -9,7 +9,6 @@ import com.squareup.picasso.Picasso;
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.BaseViewHolder;
 import org.feelthebern.android.models.Collection;
-import org.feelthebern.android.models.Img;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

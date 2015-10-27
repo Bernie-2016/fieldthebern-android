@@ -6,7 +6,7 @@ import org.feelthebern.android.annotations.Layout;
 /**
  *
  */
-@Layout(R.layout.row_p)
+@Layout(R.layout.row_list)
 public class List extends Content {
 
     private java.util.List<String> list;

@@ -75,14 +75,14 @@ public class HomeRepo {
 
         if (collectionMemCache!=null) {
             return Observable.just(collectionMemCache);
-        } else if (fileCacheExists()) {
-            try {
-                collectionMemCache = getFromFile();
-                return Observable.just(collectionMemCache);
-            } catch (FileNotFoundException e) {
-                Timber.e(e, "FileNotFoundException loading json");
-            }
         }
+//        else if (fileCacheExists()) {
+//            try {
+//                return Observable.just(getFromFile());
+//            } catch (FileNotFoundException e) {
+//                Timber.e(e, "FileNotFoundException loading json");
+//            }
+//        }
 
         return getFromHttp(spec.url())
                 .map(new Func1<Collection, Collection>() {
@@ -97,11 +97,9 @@ public class HomeRepo {
     private Collection getFromFile() throws FileNotFoundException {
         File file = new File(context.getFilesDir(), JSON_FILE_PATH);
         Reader fileReader = new FileReader(file);
-        //Gson gson = new Gson();
-
         JsonReader jsonReader = new JsonReader(fileReader);
-        //jsonReader.setLenient(true);
-        return gson.fromJson(jsonReader, Collection.class);
+        collectionMemCache = gson.fromJson(jsonReader, Collection.class);
+        return collectionMemCache;
     }
 
     private boolean fileCacheExists() {
@@ -149,7 +147,7 @@ public class HomeRepo {
                 .baseUrl(UrlConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
+                //.client(client)
                 .build();
 
         MainEndpoint endpoint = retrofit.create(MainEndpoint.class);

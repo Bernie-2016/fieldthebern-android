@@ -87,9 +87,6 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
         ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
                 .setDuration(100)
                 .start();
-        ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
-                .setDuration(100)
-                .start();
     }
 
 }

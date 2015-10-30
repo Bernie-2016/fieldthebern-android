@@ -20,20 +20,16 @@ package org.feelthebern.android.views;
 
 
 import android.content.Context;
-import android.os.Build;
-import android.support.v4.widget.NestedScrollView;
+import android.graphics.LightingColorFilter;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.CollectionRecyclerAdapter;
-import org.feelthebern.android.adapters.HomeScreenGridAdapter;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.Main;
@@ -74,6 +70,7 @@ public class MainView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this, this);
+        progressWheel.getIndeterminateDrawable().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFFFFF));
         Timber.v("onFinishInflate");
     }
 
@@ -93,9 +90,6 @@ public class MainView extends FrameLayout {
 
 
     public void setData(Collection collection) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            gridView.setNestedScrollingEnabled(true);
-//        }
         recyclerView.setAdapter(new CollectionRecyclerAdapter(collection));
     }
 

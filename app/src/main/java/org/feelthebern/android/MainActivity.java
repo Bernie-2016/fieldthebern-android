@@ -1,5 +1,6 @@
 package org.feelthebern.android;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -8,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
@@ -49,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Bind(R.id.backdrop)
     ImageView backgroundImage;
+
+    @Bind(R.id.shading)
+    View shading;
 
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbar;
@@ -180,42 +185,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 //        return flowDelegate.onRetainNonConfigurationInstance();
 //    }
 
-//    private void initFlow() {
-//
-//        flow.setDispatcher(new Flow.Dispatcher() {
-//            @Override
-//            public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
-//                Object newState = traversal.destination.top();
-//                MortarScope activityScope;
-//                View view;
-//
-//                if (newState instanceof HasComponent) {
-//                    activityScope = findChild(getApplicationContext(), getScopeName());
-//
-//                    MortarScope childScope = activityScope
-//                            .buildChild()
-//                            .build(newState.getClass().getName());
-//
-//                    final Context childContext = childScope.createContext(MainActivity.this);
-//                    view = LayoutFactory.createView(childContext, newState);
-//                } else {
-//                    view = LayoutFactory.createView(container.getContext(), newState);
-//                }
-//
-//                Timber.v("Flow.Traversal direction: %s", traversal.direction.toString());
-//                Timber.v("Flow.Traversal newState: %s", newState.getClass().getSimpleName());
-//
-//                //if we want fancy transitions, this is where we do that
-//                container.removeAllViews();
-//                container.addView(view);
-//                /////////////////////////////////////////////////////////
-//
-//                callback.onTraversalCompleted();
-//
-//                Timber.v("Flow onTraversalCompleted");
-//            }
-//        });
-//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -265,7 +234,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     public void onChangePageEvent(ChangePageEvent event) {
 
         Timber.v("onChangePageEvent e=%s", event.toString());
-        //Picasso.with(getApplicationContext()).setLoggingEnabled(true);
         Picasso.with(getApplicationContext())
                 .load(event.getImgUrl())
                 .placeholder(backgroundImage.getDrawable())
@@ -274,6 +242,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         appBarLayout.setExpanded(!event.shouldClose(), true);
 
         collapsingToolbar.setTitle(event.getTitle());
+
+        animateShading(event.getImgUrl() != null);
+        animateBg(event.getImgUrl() != null);
     }
 
 
@@ -283,5 +254,21 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         collapsingToolbar.setCollapsedTitleTypeface(typeface);
         collapsingToolbar.setExpandedTitleTypeface(typeface);
 
+    }
+
+    void animateShading(boolean show) {
+        shading.setVisibility(View.VISIBLE);
+        float toAlpha = show ? 1 : 0;
+        ObjectAnimator.ofFloat(shading, "alpha", shading.getAlpha(), toAlpha)
+                .setDuration(100)
+                .start();
+    }
+
+    void animateBg(boolean show) {
+        backgroundImage.setVisibility(View.VISIBLE);
+        float toAlpha = show ? 1 : 0;
+        ObjectAnimator.ofFloat(backgroundImage, "alpha", backgroundImage.getAlpha(), toAlpha)
+                .setDuration(100)
+                .start();
     }
 }

@@ -1,14 +1,36 @@
 package org.feelthebern.android.repositories;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.squareup.okhttp.Interceptor;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 
 import org.feelthebern.android.config.UrlConfig;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.repositories.specs.HomeIssueSpec;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.Writer;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okio.Buffer;
+import okio.BufferedSink;
+import okio.BufferedSource;
+import okio.Okio;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -16,6 +38,7 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import rx.Observable;
 import rx.functions.Func1;
+import timber.log.Timber;
 
 /**
  * Data repository for loading the tiles on the "home" page
@@ -24,11 +47,15 @@ import rx.functions.Func1;
 public class HomeRepo {
 
     final Gson gson;
+    private final Context context;
     private Collection collectionMemCache;
 
+    private static final String JSON_FILE_PATH = "ftb.json";
+
     @Inject
-    public HomeRepo(Gson gson) {
+    public HomeRepo(Gson gson, Context context) {
         this.gson = gson;
+        this.context = context;
     }
 
     /**
@@ -45,28 +72,42 @@ public class HomeRepo {
      */
     public Observable<Collection> get(final HomeIssueSpec spec) {
 
-        /*
-            eventually this will be something like
-
-            if (cached) {
-                getFromDb();
-            } else {
-                getFromHttp();
-            }
-
-         */
 
         if (collectionMemCache!=null) {
             return Observable.just(collectionMemCache);
+        } else if (fileCacheExists()) {
+            try {
+                collectionMemCache = getFromFile();
+                return Observable.just(collectionMemCache);
+            } catch (FileNotFoundException e) {
+                Timber.e(e, "FileNotFoundException loading json");
+            }
         }
 
-        return getFromHttp(spec.url()).map(new Func1<Collection, Collection>() {
-            @Override
-            public Collection call(Collection collection) {
-                collectionMemCache = collection;
-                return collectionMemCache;
-            }
-        });
+        return getFromHttp(spec.url())
+                .map(new Func1<Collection, Collection>() {
+                    @Override
+                    public Collection call(Collection collection) {
+                        collectionMemCache = collection;
+                        return collectionMemCache;
+                    }
+                });
+    }
+
+    private Collection getFromFile() throws FileNotFoundException {
+        File file = new File(context.getFilesDir(), JSON_FILE_PATH);
+        Reader fileReader = new FileReader(file);
+        //Gson gson = new Gson();
+
+        JsonReader jsonReader = new JsonReader(fileReader);
+        //jsonReader.setLenient(true);
+        return gson.fromJson(jsonReader, Collection.class);
+    }
+
+    private boolean fileCacheExists() {
+
+        return new File(context.getFilesDir(), JSON_FILE_PATH)
+                .exists();
     }
 
 
@@ -86,14 +127,49 @@ public class HomeRepo {
      * Might be best to pass the spec through to this method...?
      */
     private Observable<Collection> getFromHttp(final String urlStub) {
+
+
+        OkHttpClient client = new OkHttpClient();
+        client.interceptors().add(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Response response = chain.proceed(chain.request());
+                MediaType contentType = response.body().contentType();
+                String bodyString = response.body().string();
+                ResponseBody body = ResponseBody.create(contentType, bodyString);
+                ResponseBody body2 = ResponseBody.create(contentType, bodyString);
+                write(response.newBuilder().body(body2).build());
+                return response.newBuilder().body(body).build();
+
+            }
+        });
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(UrlConfig.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
                 .build();
 
         MainEndpoint endpoint = retrofit.create(MainEndpoint.class);
 
         return endpoint.load(urlStub);
     }
+
+//    private final Buffer buffer = new Buffer();
+//
+//    void read(BufferedSource in, long byteCount) throws IOException {
+//        in.require(byteCount);
+//        in.read(buffer, byteCount);
+//    }
+
+    void write(Response response) throws IOException {
+        File downloadedFile = new File(context.getFilesDir(), JSON_FILE_PATH);
+
+        BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
+        sink.writeAll(response.body().source());
+        sink.close();
+    }
+
 }

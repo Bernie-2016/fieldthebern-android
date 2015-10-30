@@ -22,17 +22,17 @@ import dagger.Provides;
 @Module
 @Singleton
 public class MainModule {
-    private final Context mContext;
+    private final Context context;
     private final Gson mGson;
 
     public MainModule(Context context) {
-        mContext = context.getApplicationContext();
+        this.context = context.getApplicationContext();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
 
-        mGson = gsonBuilder.create();
+        mGson = gsonBuilder.setPrettyPrinting().create();
     }
 
     @Provides
@@ -44,7 +44,7 @@ public class MainModule {
     @Provides
     @Singleton
     public HomeRepo provideRepo(Gson gson) {
-        return new HomeRepo(gson);
+        return new HomeRepo(gson, context);
     }
 
 }

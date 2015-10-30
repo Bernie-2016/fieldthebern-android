@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import mortar.MortarScope;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -74,7 +75,7 @@ public class PageScreen extends FlowPathBase{
     @Singleton
     static public class Presenter extends ViewPresenter<PageView> {
 
-        private final Page page;
+        private Page page;
 
         @Inject
         Presenter(Page page) {
@@ -84,6 +85,14 @@ public class PageScreen extends FlowPathBase{
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
+
+            Timber.v("onLoad passed page: %s", page);
+
+            if (page == null) {
+                page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
+                Timber.v("onLoad savedInstanceState page: %s", page);
+            }
+
             Timber.v("onLoad page: %s", page.getImageUrlFull());
             getView().setAdapter(new PageRecyclerAdapter(page));
 
@@ -97,10 +106,18 @@ public class PageScreen extends FlowPathBase{
 
         @Override
         protected void onSave(Bundle outState) {
+            outState.putParcelable(Page.PAGE_PARCEL, page);
         }
 
         @Override
         public void dropView(PageView view) {
+            super.dropView(view);
+        }
+
+        @Override
+        protected void onEnterScope(MortarScope scope) {
+            super.onEnterScope(scope);
+            Timber.v("onEnterScope: %s", scope);
         }
     }
 }

@@ -35,6 +35,7 @@ import org.feelthebern.android.views.MainView;
 
 import javax.inject.Inject;
 
+import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
@@ -138,6 +139,12 @@ public class Main extends FlowPathBase {
             if (subscription!=null && !subscription.isUnsubscribed()) {
                 subscription.unsubscribe();
             }
+        }
+
+        @Override
+        protected void onEnterScope(MortarScope scope) {
+            super.onEnterScope(scope);
+            Timber.v("onEnterScope: %s", scope);
         }
     }
 }

@@ -42,6 +42,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class MainView extends FrameLayout {
 
@@ -73,6 +74,7 @@ public class MainView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this, this);
+        Timber.v("onFinishInflate");
     }
 
     @Override

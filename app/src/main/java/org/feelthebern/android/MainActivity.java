@@ -11,12 +11,17 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.events.ChangePageEvent;
+import org.feelthebern.android.models.Collection;
+import org.feelthebern.android.models.Content;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
+import org.feelthebern.android.parsing.CollectionDeserializer;
+import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.screens.Main;
 
 import butterknife.Bind;
@@ -106,7 +111,13 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GsonParceler parceler = new GsonParceler(new Gson());
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
+        gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
+
+
+        GsonParceler parceler = new GsonParceler(gsonBuilder.create());
 
         @SuppressWarnings("deprecation")
         FlowDelegate.NonConfigurationInstance nonConfig =
@@ -125,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 getIntent(),
                 savedInstanceState,
                 parceler,
-                History.single(new Main()),
+                getHistory(savedInstanceState, parceler),
                 this);
 
         // Find the toolbar view inside the activity layout
@@ -137,6 +148,13 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         FTBApplication.getEventBus().register(this);
 
         setToolbarFont();
+    }
+
+    private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
+        if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
+            return History.from(savedInstanceState, parceler);
+        }
+        return History.single(new Main());
     }
 
     @Override
@@ -202,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        flowDelegate.onSaveInstanceState(outState);
         BundleServiceRunner.getBundleServiceRunner(this).onSaveInstanceState(outState);
     }
 

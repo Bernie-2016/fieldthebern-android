@@ -65,12 +65,8 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
 
         @Override
         public void onClick(Object model, View v) {
-            ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
-                    .setDuration(100)
-                    .start();
-            ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
-                    .setDuration(100)
-                    .start();
+            animateClick(v);
+
             ApiItem apiItem = (ApiItem) model;
 
             Timber.v("onGridItemClick: %s %s",
@@ -86,5 +82,14 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
             Timber.v("Flow.get v= %s", Flow.get(v).toString());
         }
     };
+
+    void animateClick(View v) {
+        ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
+                .setDuration(100)
+                .start();
+        ObjectAnimator.ofFloat(v, "alpha", 1f, 0f, 1f)
+                .setDuration(100)
+                .start();
+    }
 
 }

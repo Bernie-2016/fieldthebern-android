@@ -19,6 +19,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import mortar.MortarScope;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -77,7 +78,7 @@ public class CollectionScreen extends FlowPathBase{
     @Singleton
     static public class Presenter extends ViewPresenter<CollectionView> {
 
-        private final Collection collection;
+        private Collection collection;
 
         @Inject
         Presenter(Collection collection) {
@@ -87,6 +88,14 @@ public class CollectionScreen extends FlowPathBase{
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
+
+            Timber.v("onLoad passed collection: %s", collection);
+
+            if (collection == null) {
+                collection = savedInstanceState.getParcelable(Collection.COLLECTION_PARCEL);
+                Timber.v("onLoad savedInstanceState collection: %s", collection);
+            }
+
             Timber.v("onLoad collection: %s", collection.getTitle());
             getView().setAdapter(new CollectionRecyclerAdapter(collection));
 
@@ -100,10 +109,18 @@ public class CollectionScreen extends FlowPathBase{
 
         @Override
         protected void onSave(Bundle outState) {
+            outState.putParcelable(Collection.COLLECTION_PARCEL, collection);
         }
 
         @Override
         public void dropView(CollectionView view) {
+            super.dropView(view);
+        }
+
+        @Override
+        protected void onEnterScope(MortarScope scope) {
+            super.onEnterScope(scope);
+            Timber.v("onEnterScope: %s", scope);
         }
     }
 }

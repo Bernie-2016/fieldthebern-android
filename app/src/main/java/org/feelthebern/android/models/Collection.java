@@ -1,10 +1,14 @@
 package org.feelthebern.android.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.annotations.Layout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +32,9 @@ import java.util.List;
  *                  +-content [array]
  */
 @Layout(R.layout.item_collection)
-public class Collection implements ApiItem {
+public class Collection extends ApiItem implements Parcelable {
+    public static final String COLLECTION_PARCEL = "CollectionParcelKey";
+
     private String name;
     private String title;
     private String url;
@@ -38,16 +44,17 @@ public class Collection implements ApiItem {
 
     @SerializedName("image_url_full")
     private String imageUrlFull;
-    private List<ApiItem> mApiItems;
+    private List<ApiItem> items;
 
     public List<ApiItem> getApiItems() {
-        return mApiItems;
+        return items;
     }
 
     public String getImageUrlFull() {
         return imageUrlFull;
     }
 
+    @Override
     public String getImageUrlThumb() {
         return imageUrlThumb;
     }
@@ -56,6 +63,7 @@ public class Collection implements ApiItem {
         return name;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }
@@ -65,11 +73,61 @@ public class Collection implements ApiItem {
     }
 
     public void setApiItems(List<ApiItem> apiItems) {
-        if (mApiItems != null) {
-            throw new IllegalStateException("Api Items have already been set");
-        }
+//        if (items != null) {
+//            throw new IllegalStateException("Api Items have already been set");
+//        }
 
-        mApiItems = apiItems;
+        items = apiItems;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(this.name);
+        dest.writeString(this.title);
+        dest.writeString(this.url);
+        dest.writeString(this.imageUrlThumb);
+        dest.writeString(this.imageUrlFull);
+        dest.writeTypedList(this.items);
+    }
+
+    public Collection() {
+    }
+
+    protected Collection(Parcel in) {
+        super(in);
+        this.name = in.readString();
+        this.title = in.readString();
+        this.url = in.readString();
+        this.imageUrlThumb = in.readString();
+        this.imageUrlFull = in.readString();
+        this.items = new ArrayList<>();
+        in.readTypedList(items, ApiItem.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Collection> CREATOR = new Parcelable.Creator<Collection>() {
+        public Collection createFromParcel(Parcel source) {
+            return new Collection(source);
+        }
+
+        public Collection[] newArray(int size) {
+            return new Collection[size];
+        }
+    };
+
+
+    @Override
+    public String toString() {
+        //simple toString so we don't return the whole damn collection
+        return "Collection{" +
+                "title='" + title + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

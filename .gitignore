@@ -31,7 +31,8 @@ local.properties
 ##############################################
 *.keystore
 secure.properties
-
+# API keys
+keys.xml
 
 ##############################################
 # Eclipse

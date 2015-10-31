@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView android:id="@+id/text"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          xmlns:tools="http://schemas.android.com/tools"
-          tools:ignore="MissingPrefix"
-          fontPath="fonts/Dosis-ExtraBold.otf"
-          android:textSize="18sp"
-          style="@style/PageMargins"
-    />
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <com.google.android.youtube.player.YouTubeThumbnailView
+        android:id="@+id/youtubethumbnailview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+
+
+    <TextView android:id="@+id/text"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:ignore="MissingPrefix"
+              fontPath="fonts/Dosis-ExtraBold.otf"
+              android:textSize="18sp"
+              style="@style/PageMargins"
+              android:visibility="gone"
+        />
+
+</LinearLayout>
+
+
 

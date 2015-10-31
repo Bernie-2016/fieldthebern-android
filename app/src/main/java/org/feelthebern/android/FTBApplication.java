@@ -28,7 +28,6 @@ import org.feelthebern.android.mortar.DaggerService;
 
 import mortar.MortarScope;
 import timber.log.Timber;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  *

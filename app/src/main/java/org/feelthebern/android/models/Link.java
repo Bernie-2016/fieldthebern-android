@@ -4,7 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
+ * The following should linkify the word "majority"
+ * text: "The majority of the U.S. prison population is male and..."
+ * href: "http://www.example.com/",
+ * start: 4,
+ * end: 12
  *
+ * @see org.feelthebern.android.parsing.Linky
  */
 public class Link implements Parcelable {
     private String href;
@@ -12,6 +18,17 @@ public class Link implements Parcelable {
     private int start; //zero based index of the character prior to starting the link
     private int end;    //zero based index of the character after to ending the link
 
+    public String getHref() {
+        return href;
+    }
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
 
     @Override
     public int describeContents() {
@@ -46,8 +63,4 @@ public class Link implements Parcelable {
 }
 
 
-// The following should linkify the word "majority"
-//text: "The majority of the U.S. prison population is male and..."
-//href: "http://www.example.com/",
-//start: 4,
-//end: 12
+

@@ -17,7 +17,6 @@
 package org.feelthebern.android.mortar;
 
 import android.content.Context;
-import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -61,6 +60,9 @@ public class FramePathContainerView extends FrameLayout
 
   @Override public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
     disabled = true;
+
+    //TODO   add a method to container to hold a ref to the traversal, then we can get
+    //TODO   a view for a SceneAction and for trying to use the Transitions framework
     container.executeTraversal(this, traversal, new Flow.TraversalCallback() {
       @Override public void onTraversalCompleted() {
         callback.onTraversalCompleted();

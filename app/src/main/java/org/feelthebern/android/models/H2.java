@@ -13,7 +13,7 @@ import java.util.List;
  *
  */
 @Layout(R.layout.row_h2)
-public class H2 extends Content implements Parcelable {
+public class H2 extends Content implements Parcelable, Linkable {
     private List<Anchor> anchors;
     private List<Link> links;
 

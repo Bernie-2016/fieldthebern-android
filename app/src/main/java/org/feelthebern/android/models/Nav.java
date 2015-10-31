@@ -13,7 +13,7 @@ import java.util.List;
  * TODO: delay implementation until implmenting all other content items
  */
 @Layout(R.layout.row_nav)
-public class Nav extends Content implements Parcelable {
+public class Nav extends Content implements Parcelable, Linkable {
     private List<Anchor> anchors;
     private List<Link> links;
 

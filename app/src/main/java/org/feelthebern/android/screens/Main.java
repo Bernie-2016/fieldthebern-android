@@ -22,13 +22,12 @@ import com.google.gson.Gson;
 
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
-import org.feelthebern.android.config.UrlConfig;
+import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.FlowPathBase;
-import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.repositories.CollectionRepo;
 import org.feelthebern.android.repositories.specs.CollectionSpec;
 import org.feelthebern.android.views.MainView;

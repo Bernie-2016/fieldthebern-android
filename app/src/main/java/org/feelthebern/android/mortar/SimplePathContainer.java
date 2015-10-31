@@ -26,13 +26,14 @@ import android.view.ViewGroup;
 
 import org.feelthebern.android.annotations.Layout;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;
 import flow.path.PathContext;
 import flow.path.PathContextFactory;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static flow.Flow.Direction.REPLACE;
 

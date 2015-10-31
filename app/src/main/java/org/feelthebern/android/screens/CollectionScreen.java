@@ -5,19 +5,15 @@ import android.os.Bundle;
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.CollectionRecyclerAdapter;
-import org.feelthebern.android.adapters.PageRecyclerAdapter;
 import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Collection;
-import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.views.CollectionView;
-import org.feelthebern.android.views.PageView;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.Module;
 import dagger.Provides;
 import mortar.MortarScope;
 import mortar.ViewPresenter;

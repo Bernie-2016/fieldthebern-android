@@ -3,32 +3,18 @@ package org.feelthebern.android.repositories;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 
 import org.feelthebern.android.config.UrlConfig;
-import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.repositories.specs.PageSpec;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import okio.BufferedSink;
-import okio.Okio;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;

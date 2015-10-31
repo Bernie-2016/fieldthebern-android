@@ -1,6 +1,5 @@
 package org.feelthebern.android.models;
 
-import org.feelthebern.android.models.Link;
 
 import java.util.List;
 

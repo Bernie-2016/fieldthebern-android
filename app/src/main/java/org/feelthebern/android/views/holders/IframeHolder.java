@@ -5,7 +5,6 @@ import android.widget.TextView;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.BaseViewHolder;
-import org.feelthebern.android.models.H3;
 import org.feelthebern.android.models.Iframe;
 
 /**

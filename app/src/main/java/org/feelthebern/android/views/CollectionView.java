@@ -2,14 +2,12 @@ package org.feelthebern.android.views;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.mortar.DaggerService;
 import org.feelthebern.android.screens.CollectionScreen;
-import org.feelthebern.android.screens.PageScreen;
 
 import javax.inject.Inject;
 

@@ -11,7 +11,6 @@ import com.google.android.youtube.player.YouTubeThumbnailView;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.BaseViewHolder;
-import org.feelthebern.android.models.H3;
 import org.feelthebern.android.models.Video;
 
 import butterknife.Bind;

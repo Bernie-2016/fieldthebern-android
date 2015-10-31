@@ -7,13 +7,13 @@ import com.google.gson.Gson;
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.PageRecyclerAdapter;
+import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
-import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.repositories.PageRepo;
 import org.feelthebern.android.repositories.specs.PageSpec;
 import org.feelthebern.android.views.PageView;
@@ -21,7 +21,6 @@ import org.feelthebern.android.views.PageView;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;

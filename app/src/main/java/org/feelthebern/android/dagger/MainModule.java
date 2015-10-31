@@ -9,7 +9,8 @@ import org.feelthebern.android.parsing.CollectionDeserializer;
 import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Content;
-import org.feelthebern.android.repositories.HomeRepo;
+import org.feelthebern.android.repositories.CollectionRepo;
+import org.feelthebern.android.repositories.PageRepo;
 
 import javax.inject.Singleton;
 
@@ -43,8 +44,14 @@ public class MainModule {
 
     @Provides
     @Singleton
-    public HomeRepo provideRepo(Gson gson) {
-        return new HomeRepo(gson, context);
+    public CollectionRepo provideCollectionRepo(Gson gson) {
+        return new CollectionRepo(gson, context);
+    }
+
+    @Provides
+    @Singleton
+    public PageRepo providePageRepo(Gson gson) {
+        return new PageRepo(gson, context);
     }
 
 }

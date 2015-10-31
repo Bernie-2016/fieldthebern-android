@@ -63,7 +63,7 @@ public class CollectionScreen extends FlowPathBase{
         }
 
         @Provides
-        public Collection providePage() {
+        public Collection provideCollection() {
             return collection;
         }
     }

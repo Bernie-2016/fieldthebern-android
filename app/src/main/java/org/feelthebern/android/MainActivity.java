@@ -271,4 +271,18 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 .setDuration(100)
                 .start();
     }
+
+
+    void setStatusBarColo() {
+//        Window window = activity.getWindow();
+//
+//// clear FLAG_TRANSLUCENT_STATUS flag:
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//
+//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//
+//// finally change the color
+//        window.setStatusBarColor(activity.getResources().getColor(R.color.my_statusbar_color));
+    }
 }

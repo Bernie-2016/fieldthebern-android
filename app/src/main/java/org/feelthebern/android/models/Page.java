@@ -35,6 +35,7 @@ import java.util.List;
 public class Page extends ApiItem implements Parcelable {
     public static final String PAGE_PARCEL = "PageParcelKey";
 
+    private int data;
     private String title;
     private String url;
     private List<Content> content;
@@ -71,6 +72,17 @@ public class Page extends ApiItem implements Parcelable {
         return url;
     }
 
+    public int getData() {
+        return data;
+    }
+
+    public void setData(int data) {
+        this.data = data;
+    }
+
+    public void setContent(List<Content> contentList) {
+        this.content = contentList;
+    }
 
     @Override
     public int describeContents() {
@@ -80,6 +92,7 @@ public class Page extends ApiItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeInt(this.data);
         dest.writeString(this.title);
         dest.writeString(this.url);
         dest.writeString(this.imageUrlThumb);
@@ -92,6 +105,7 @@ public class Page extends ApiItem implements Parcelable {
 
     protected Page(Parcel in) {
         super(in);
+        this.data = in.readInt();
         this.title = in.readString();
         this.url = in.readString();
         this.imageUrlThumb = in.readString();
@@ -110,12 +124,14 @@ public class Page extends ApiItem implements Parcelable {
         }
     };
 
-
     @Override
     public String toString() {
         return "Page{" +
-                "title='" + title + '\'' +
+                "data id=" + data +
+                ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
                 '}';
     }
+
+
 }

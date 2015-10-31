@@ -2,14 +2,23 @@ package org.feelthebern.android.screens;
 
 import android.os.Bundle;
 
+import com.google.gson.Gson;
+
 import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.PageRecyclerAdapter;
+import org.feelthebern.android.dagger.FtbScreenScope;
+import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.events.ChangePageEvent;
+import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.annotations.Layout;
+import org.feelthebern.android.repositories.PageRepo;
+import org.feelthebern.android.repositories.specs.PageSpec;
 import org.feelthebern.android.views.PageView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,6 +27,10 @@ import dagger.Module;
 import dagger.Provides;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -26,10 +39,10 @@ import timber.log.Timber;
 @Layout(R.layout.screen_page)
 public class PageScreen extends FlowPathBase{
 
-    private final Page page;
+    private final PageSpec pageSpec;
 
     public PageScreen(Page page) {
-        this.page = page;
+        this.pageSpec = new PageSpec(page);
     }
 
     @Override
@@ -41,7 +54,8 @@ public class PageScreen extends FlowPathBase{
     public Object createComponent() {
         return DaggerPageScreen_Component
                 .builder()
-                .pageModule(new PageModule(page))
+                .pageModule(new PageModule(pageSpec))
+                .mainComponent(FTBApplication.getComponent())
                 .build();
     }
 
@@ -53,55 +67,93 @@ public class PageScreen extends FlowPathBase{
 
     @Module
     class PageModule {
-        private final Page p;
+        private final PageSpec p;
 
-        public PageModule(Page p) {
+        public PageModule(PageSpec p) {
             this.p = p;
         }
 
         @Provides
-        public Page providePage() {
+        public PageSpec providePageSpec() {
             return p;
         }
     }
 
-    @Singleton
-    @dagger.Component(modules = PageModule.class)
+    @FtbScreenScope
+    @dagger.Component(dependencies = MainComponent.class, modules = PageModule.class)
     public interface Component {
         void inject(PageView t);
-        Page getPage();
+        PageSpec getPageSpec();
+        PageRepo pageRepo();
+        Gson gson();
     }
 
-    @Singleton
+    @FtbScreenScope
     static public class Presenter extends ViewPresenter<PageView> {
 
-        private Page page;
+        final PageSpec pageSpec;
+        Page page;
+        final Gson gson;
+        final PageRepo repo;
+        Subscription subscription;
 
         @Inject
-        Presenter(Page page) {
-            this.page = page;
+        Presenter(PageRepo repo, PageSpec pageSpec, Gson gson) {
+            this.repo = repo;
+            this.pageSpec = pageSpec;
+            this.gson = gson;
+            this.page = pageSpec.page();
         }
+
 
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
-
-            Timber.v("onLoad passed page: %s", page);
-
-            if (page == null) {
+            Timber.v("onLoad");
+            if (savedInstanceState != null) {
                 page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
                 Timber.v("onLoad savedInstanceState page: %s", page);
             }
 
-            Timber.v("onLoad page: %s", page.getImageUrlFull());
-            getView().setAdapter(new PageRecyclerAdapter(page));
 
-            new ChangePageEvent()
-                    .with(FTBApplication.getEventBus())
-                    .img(page.getImageUrlFull())
-                    .title(page.getTitle())
-                    .dispatch();
+            //if (page.getContent() == null) {
+                Timber.v("PageRepo loading");
+                //getView().showLoadingAnimation();
+
+                subscription = repo.get(pageSpec)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(observer);
+            //}
         }
+
+        Observer<List<Content>> observer = new Observer<List<Content>>() {
+            @Override
+            public void onCompleted() {
+
+                Timber.v("onLoad page: %s", page.getImageUrlFull());
+                getView().setAdapter(new PageRecyclerAdapter(page));
+
+                new ChangePageEvent()
+                        .with(FTBApplication.getEventBus())
+                        .img(page.getImageUrlFull())
+                        .title(page.getTitle())
+                        .dispatch();
+
+                //getView().hideLoadingAnimation();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "Main presenter error in observer/rx");
+            }
+
+            @Override
+            public void onNext(List<Content> contentList) {
+                page.setContent(contentList);
+                Timber.v("page repo returned the contentList");
+            }
+        };
 
 
         @Override

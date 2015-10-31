@@ -45,7 +45,6 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Timber.v("position: %d", position);
         ((BaseViewHolder) holder).setModel(items.get(position));
         ((BaseViewHolder) holder).setItemClickListener(onGridItemClick);
     }

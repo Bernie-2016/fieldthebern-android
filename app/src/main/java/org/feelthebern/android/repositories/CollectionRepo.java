@@ -3,7 +3,6 @@ package org.feelthebern.android.repositories;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.MediaType;
@@ -13,23 +12,18 @@ import com.squareup.okhttp.ResponseBody;
 
 import org.feelthebern.android.config.UrlConfig;
 import org.feelthebern.android.models.Collection;
-import org.feelthebern.android.repositories.specs.HomeIssueSpec;
+import org.feelthebern.android.repositories.specs.CollectionSpec;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
-import java.io.Writer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import okio.Buffer;
 import okio.BufferedSink;
-import okio.BufferedSource;
 import okio.Okio;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
@@ -38,13 +32,12 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 import rx.Observable;
 import rx.functions.Func1;
-import timber.log.Timber;
 
 /**
  * Data repository for loading the tiles on the "home" page
  */
 @Singleton
-public class HomeRepo {
+public class CollectionRepo {
 
     final Gson gson;
     private final Context context;
@@ -53,7 +46,7 @@ public class HomeRepo {
     private static final String JSON_FILE_PATH = "ftb.json";
 
     @Inject
-    public HomeRepo(Gson gson, Context context) {
+    public CollectionRepo(Gson gson, Context context) {
         this.gson = gson;
         this.context = context;
     }
@@ -70,7 +63,7 @@ public class HomeRepo {
      * @param spec
      * @return
      */
-    public Observable<Collection> get(final HomeIssueSpec spec) {
+    public Observable<Collection> get(final CollectionSpec spec) {
 
 
         if (collectionMemCache!=null) {
@@ -109,17 +102,7 @@ public class HomeRepo {
     }
 
 
-    /**
-     * Retrofit 2 endpoint definition
-     *
-     * TODO: better to put this with the model? How best to handle changing urls?
-     */
-    private interface MainEndpoint {
-//        @GET(UrlConfig.HOME_JSON_URL_STUB)
-//        Observable<Collection> load();
-        @GET("{urlStub}/")
-        Observable<Collection> load(@Path("urlStub") String urlStub);
-    }
+
 
     /**
      * Might be best to pass the spec through to this method...?
@@ -127,20 +110,20 @@ public class HomeRepo {
     private Observable<Collection> getFromHttp(final String urlStub) {
 
 
-        OkHttpClient client = new OkHttpClient();
-        client.interceptors().add(new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Response response = chain.proceed(chain.request());
-                MediaType contentType = response.body().contentType();
-                String bodyString = response.body().string();
-                ResponseBody body = ResponseBody.create(contentType, bodyString);
-                ResponseBody body2 = ResponseBody.create(contentType, bodyString);
-                write(response.newBuilder().body(body2).build());
-                return response.newBuilder().body(body).build();
-
-            }
-        });
+//        OkHttpClient client = new OkHttpClient();
+//        client.interceptors().add(new Interceptor() {
+//            @Override
+//            public Response intercept(Chain chain) throws IOException {
+//                Response response = chain.proceed(chain.request());
+//                MediaType contentType = response.body().contentType();
+//                String bodyString = response.body().string();
+//                ResponseBody body = ResponseBody.create(contentType, bodyString);
+//                ResponseBody body2 = ResponseBody.create(contentType, bodyString);
+//                write(response.newBuilder().body(body2).build());
+//                return response.newBuilder().body(body).build();
+//
+//            }
+//        });
 
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -150,7 +133,8 @@ public class HomeRepo {
                 //.client(client)
                 .build();
 
-        MainEndpoint endpoint = retrofit.create(MainEndpoint.class);
+        CollectionSpec.CollectionEndpoint endpoint =
+                retrofit.create(CollectionSpec.CollectionEndpoint.class);
 
         return endpoint.load(urlStub);
     }
@@ -162,12 +146,12 @@ public class HomeRepo {
 //        in.read(buffer, byteCount);
 //    }
 
-    void write(Response response) throws IOException {
-        File downloadedFile = new File(context.getFilesDir(), JSON_FILE_PATH);
-
-        BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
-        sink.writeAll(response.body().source());
-        sink.close();
-    }
+//    void write(Response response) throws IOException {
+//        File downloadedFile = new File(context.getFilesDir(), JSON_FILE_PATH);
+//
+//        BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
+//        sink.writeAll(response.body().source());
+//        sink.close();
+//    }
 
 }

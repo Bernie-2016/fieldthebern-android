@@ -1,20 +1,27 @@
 package org.feelthebern.android;
 
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.events.ChangePageEvent;
@@ -25,6 +32,7 @@ import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
 import org.feelthebern.android.parsing.CollectionDeserializer;
 import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.screens.Main;
+import org.feelthebern.android.views.PaletteTransformation;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,6 +48,7 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
+import static org.feelthebern.android.apilevels.ApiLevel.isLollipopOrAbove;
 
 public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
@@ -152,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
         FTBApplication.getEventBus().register(this);
 
-        setToolbarFont();
+        setToolbarStyle();
     }
 
     private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
@@ -236,8 +245,19 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         Timber.v("onChangePageEvent e=%s", event.toString());
         Picasso.with(getApplicationContext())
                 .load(event.getImgUrl())
+                .transform(PaletteTransformation.instance())
                 .placeholder(backgroundImage.getDrawable())
-                .into(backgroundImage);
+                .into(backgroundImage, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap bitmap = ((BitmapDrawable) backgroundImage.getDrawable()).getBitmap(); // Ew!
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+
+                        if (isLollipopOrAbove()) {
+                            setStatusBarColor(palette.getDarkVibrantColor(Color.BLACK));
+                        }
+                    }
+                });
 
         appBarLayout.setExpanded(!event.shouldClose(), true);
 
@@ -245,15 +265,22 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
         animateShading(event.getImgUrl() != null);
         animateBg(event.getImgUrl() != null);
+
+        if (event.getImgUrl() == null && isLollipopOrAbove()) {
+            setStatusBarColor(Color.parseColor("#087ed7"));
+        }
     }
 
 
 
-    private void setToolbarFont() {
+    private void setToolbarStyle() {
         Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Dosis-Medium.otf");
         collapsingToolbar.setCollapsedTitleTypeface(typeface);
         collapsingToolbar.setExpandedTitleTypeface(typeface);
 
+        if (isLollipopOrAbove()) {
+            setStatusBarColor(Color.parseColor("#087ed7"));
+        }
     }
 
     void animateShading(boolean show) {
@@ -273,16 +300,22 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     }
 
 
-    void setStatusBarColo() {
-//        Window window = activity.getWindow();
-//
-//// clear FLAG_TRANSLUCENT_STATUS flag:
-//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//
-//// add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//
-//// finally change the color
-//        window.setStatusBarColor(activity.getResources().getColor(R.color.my_statusbar_color));
+    @TargetApi(21)
+    void setStatusBarColor(int color) {
+        Window window = getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+
+        // finally change the color
+        window.setStatusBarColor(color);
     }
+
+
+
+
 }

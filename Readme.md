@@ -1,5 +1,6 @@
 #FeelTheBern Android
 
+![feel the bern](play_store_bg_1024x500.png)
 This app under development and is currently mostly a mirror of the FTB website. 
 The goal is to provide a tool for grassroots organizers to have quick and easy 
 access to Bernie's stance on the issues.

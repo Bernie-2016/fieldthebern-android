@@ -11,18 +11,11 @@ import org.feelthebern.android.models.H3;
 /**
  *
  */
-public class H3Holder extends BaseViewHolder<H3> {
+public class H3Holder extends LinkableTextHolder<H3> {
 
-    TextView textView;
 
     H3Holder(View itemView) {
         super(itemView);
-        textView = (TextView)itemView.findViewById(R.id.text);
     }
 
-    @Override
-    public void setModel(final H3 model) {
-        super.setModel(model);
-        textView.setText(model.getText());
-    }
 }

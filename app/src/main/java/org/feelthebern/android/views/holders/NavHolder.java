@@ -11,18 +11,11 @@ import org.feelthebern.android.models.Nav;
 /**
  *
  */
-public class NavHolder extends BaseViewHolder<Nav> {
+public class NavHolder extends LinkableTextHolder<Nav> {
 
-    TextView textView;
 
     NavHolder(View itemView) {
         super(itemView);
-        textView = (TextView)itemView.findViewById(R.id.text);
     }
 
-    @Override
-    public void setModel(final Nav model) {
-        super.setModel(model);
-        textView.setText(model.getText());
-    }
 }

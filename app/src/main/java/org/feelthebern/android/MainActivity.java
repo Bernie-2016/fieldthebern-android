@@ -39,7 +39,6 @@ import butterknife.ButterKnife;
 import flow.Flow;
 import flow.FlowDelegate;
 import flow.History;
-import flow.path.Path;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
 import timber.log.Timber;
@@ -72,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
-        Path newScreen = traversal.destination.top();
-        String title = newScreen.getClass().getSimpleName();
+//        Path newScreen = traversal.destination.top();
+//        String title = newScreen.getClass().getSimpleName();
 //        ActionBarOwner.MenuAction menu = new ActionBarOwner.MenuAction("Friends", new Action0() {
 //            @Override public void call() {
 //                Flow.get(MortarDemoActivity.this).set(new FriendListScreen());
@@ -100,8 +99,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         if (activityScope == null) {
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
-                    //.withService(DaggerService.DAGGER_SERVICE, getMainScreenComponent())
-                            //.withService("flow.Flow.FLOW_SERVICE", getFlow())
                     .build(getScopeName());
         }
 
@@ -109,18 +106,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 : super.getSystemService(name);
     }
 
-//    private Flow getFlow() {
-//        if (flow == null) {
-//            flow = new Flow(History.single(new Main()));
-//        }
-//        return flow;
-//    }
-
-//    private Main.Component getMainScreenComponent() {
-//        return DaggerMain_Component.builder()
-//                .mainComponent(FTBApplication.getComponent())
-//                .build();
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
-
 
         GsonParceler parceler = new GsonParceler(gsonBuilder.create());
 
@@ -153,10 +137,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 getHistory(savedInstanceState, parceler),
                 this);
 
-        // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
-        // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
 
         FTBApplication.getEventBus().register(this);

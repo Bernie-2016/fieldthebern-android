@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.annotations.Layout;
+import org.feelthebern.android.views.holders.Linkable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  *
  */
 @Layout(R.layout.row_h1)
-public class H1 extends Content implements Parcelable {
+public class H1 extends Content implements Parcelable, Linkable {
     private List<Anchor> anchors;
     private List<Link> links;
     public List<Anchor> getAnchors() {

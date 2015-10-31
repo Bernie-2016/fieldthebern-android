@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,13 +46,14 @@ public class PageRepo {
 
     final Gson gson;
     private final Context context;
-    private List<Content> pageMemCache;
+    private HashMap<PageSpec, List<Content>> cache;
 
 
     @Inject
     public PageRepo(Gson gson, Context context) {
         this.gson = gson;
         this.context = context;
+        cache = new HashMap<>();
     }
 
     /**
@@ -68,21 +70,20 @@ public class PageRepo {
 
         Timber.v("loading spec: %s", spec.toString());
 
-        if (pageMemCache!=null) {
+        if (cache.containsKey(spec)) {
             Timber.v("loading spec from mem cache");
-            return Observable.just(pageMemCache);
+            return Observable.just(cache.get(spec));
         }
 
         return getFromHttp(spec)
                 .map(new Func1<List<Content>, List<Content>>() {
                     @Override
-                    public List<Content> call(List<Content> page) {
-                        pageMemCache = page;
-                        return pageMemCache;
+                    public List<Content> call(List<Content> contentList) {
+                        cache.put(spec, contentList);
+                        return contentList;
                     }
                 });
     }
-
 
 
     /**

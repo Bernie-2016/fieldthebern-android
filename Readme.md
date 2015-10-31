@@ -58,24 +58,48 @@ Custom deserializers `CollectionDeserializers` and `PageContentDeserializer` are
 
 ####Structure
 
-The JSON structure looks something like this
-  
-    collection {obj}
-     +-items [array]
-         +-page
-         +-collection
-             +-items [array]
-                 +-page
-                 +-page
-         +-page
-         +-collection
-             +-items [array]
-                 +-page
-                 +-page {obj}
-                     +-content [array]
-                     
-####'content' array items *roughly* equate to HTML nodes such as  
+There are two JSON endpoints the app uses.  
 
+#####Collections
+
+`http://feelthebern.org/ftb-json/index2.php`  
+[http://feelthebern.org/ftb-json/index2.php] (http://feelthebern.org/ftb-json/index2.php)
+
+The first endpoint returns a custom model type called a `Collection`  
+
+Collections contain an array `items` which can contain other `Collections` or `Pages`
+
+```
+collection
+ +-items  
+     +-page
+     +-collection
+         +-items  
+             +-page
+             +-page
+     +-page
+     +-collection
+         +-items  
+             +-page
+             +-page 
+```
+
+#####Page Content
+
+`http://feelthebern.org/ftb-json/page.php?id={data}`  
+  
+The number from the `Page` object's `data` field replaces `{data}`  
+
+[http://feelthebern.org/ftb-json/page.php?id=1175](http://feelthebern.org/ftb-json/page.php?id=1175)
+
+The _"page"_ endpoint returns the `Page` object's `content` array  
+
+```
+page {obj} (not returned from this endpoint)
+  +-content [array] (these are the children returned)
+```
+
+'content' array items *roughly* equate to HTML nodes such as  
 * `h1`  
 * `h2`  
 * `h3`  
@@ -83,3 +107,5 @@ The JSON structure looks something like this
 * `img`  
 * `nav`  
 * `video`  
+
+

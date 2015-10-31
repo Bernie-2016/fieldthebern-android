@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.adapters.BaseViewHolder;
+import org.feelthebern.android.models.Linkable;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

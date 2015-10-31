@@ -5,7 +5,7 @@ import android.text.method.LinkMovementMethod;
 import android.widget.TextView;
 
 import org.feelthebern.android.models.Link;
-import org.feelthebern.android.views.holders.Linkable;
+import org.feelthebern.android.models.Linkable;
 
 import java.util.List;
 

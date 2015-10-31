@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import org.feelthebern.android.R;
 import org.feelthebern.android.annotations.Layout;
-import org.feelthebern.android.views.holders.Linkable;
 
 import java.util.ArrayList;
 import java.util.List;

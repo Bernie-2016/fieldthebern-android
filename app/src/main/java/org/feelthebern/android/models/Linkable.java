@@ -1,4 +1,4 @@
-package org.feelthebern.android.views.holders;
+package org.feelthebern.android.models;
 
 import org.feelthebern.android.models.Link;
 

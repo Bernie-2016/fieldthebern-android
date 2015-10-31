@@ -1,6 +1,6 @@
 #FeelTheBern Android
 
-![feel the bern](play_store_bg_1024x500.png)
+![feel the bern](play_store_bg_1024x500.png)  
 This app under development and is currently mostly a mirror of the FTB website. 
 The goal is to provide a tool for grassroots organizers to have quick and easy 
 access to Bernie's stance on the issues.
@@ -52,7 +52,7 @@ Please follow the [git-flow](http://nvie.com/posts/a-successful-git-branching-mo
 
 ##JSON
 
-The JSON is parsed using `GSON`.  The JSON can be found at: [http://feelthebern.org/ftb-json/](http://feelthebern.org/ftb-json/)
+The JSON is parsed using `GSON`.
 
 Custom deserializers `CollectionDeserializers` and `PageContentDeserializer` are passed to `Retrofit` to do the work.
 
@@ -107,5 +107,6 @@ page {obj} (not returned from this endpoint)
 * `img`  
 * `nav`  
 * `video`  
-
-
+  
+The JSON for the full site (not currently used by the app) 
+can be found at: [http://feelthebern.org/ftb-json/](http://feelthebern.org/ftb-json/)

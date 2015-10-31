@@ -1,5 +1,8 @@
 package org.feelthebern.android.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.feelthebern.android.parsing.PageContentDeserializer;
 
 /**
@@ -27,7 +30,7 @@ import org.feelthebern.android.parsing.PageContentDeserializer;
  *
  * @see PageContentDeserializer
  */
-public class Content {
+public class Content implements Parcelable {
     protected String text;
     protected String type;
 
@@ -46,4 +49,34 @@ public class Content {
     public void setType(String type) {
         this.type = type;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.text);
+        dest.writeString(this.type);
+    }
+
+    public Content() {
+    }
+
+    protected Content(Parcel in) {
+        this.text = in.readString();
+        this.type = in.readString();
+    }
+
+    public static final Parcelable.Creator<Content> CREATOR = new Parcelable.Creator<Content>() {
+        public Content createFromParcel(Parcel source) {
+            return new Content(source);
+        }
+
+        public Content[] newArray(int size) {
+            return new Content[size];
+        }
+    };
 }

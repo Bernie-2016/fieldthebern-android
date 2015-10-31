@@ -1,23 +1,38 @@
 package org.feelthebern.android;
 
+import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.events.ChangePageEvent;
+import org.feelthebern.android.models.Collection;
+import org.feelthebern.android.models.Content;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
+import org.feelthebern.android.parsing.CollectionDeserializer;
+import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.screens.Main;
+import org.feelthebern.android.views.PaletteTransformation;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +48,7 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
+import static org.feelthebern.android.apilevels.ApiLevel.isLollipopOrAbove;
 
 public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
@@ -44,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Bind(R.id.backdrop)
     ImageView backgroundImage;
+
+    @Bind(R.id.shading)
+    View shading;
 
     @Bind(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbar;
@@ -106,7 +125,13 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GsonParceler parceler = new GsonParceler(new Gson());
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
+        gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
+
+
+        GsonParceler parceler = new GsonParceler(gsonBuilder.create());
 
         @SuppressWarnings("deprecation")
         FlowDelegate.NonConfigurationInstance nonConfig =
@@ -125,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 getIntent(),
                 savedInstanceState,
                 parceler,
-                History.single(new Main()),
+                getHistory(savedInstanceState, parceler),
                 this);
 
         // Find the toolbar view inside the activity layout
@@ -136,7 +161,14 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
         FTBApplication.getEventBus().register(this);
 
-        setToolbarFont();
+        setToolbarStyle();
+    }
+
+    private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
+        if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
+            return History.from(savedInstanceState, parceler);
+        }
+        return History.single(new Main());
     }
 
     @Override
@@ -162,46 +194,11 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 //        return flowDelegate.onRetainNonConfigurationInstance();
 //    }
 
-//    private void initFlow() {
-//
-//        flow.setDispatcher(new Flow.Dispatcher() {
-//            @Override
-//            public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
-//                Object newState = traversal.destination.top();
-//                MortarScope activityScope;
-//                View view;
-//
-//                if (newState instanceof HasComponent) {
-//                    activityScope = findChild(getApplicationContext(), getScopeName());
-//
-//                    MortarScope childScope = activityScope
-//                            .buildChild()
-//                            .build(newState.getClass().getName());
-//
-//                    final Context childContext = childScope.createContext(MainActivity.this);
-//                    view = LayoutFactory.createView(childContext, newState);
-//                } else {
-//                    view = LayoutFactory.createView(container.getContext(), newState);
-//                }
-//
-//                Timber.v("Flow.Traversal direction: %s", traversal.direction.toString());
-//                Timber.v("Flow.Traversal newState: %s", newState.getClass().getSimpleName());
-//
-//                //if we want fancy transitions, this is where we do that
-//                container.removeAllViews();
-//                container.addView(view);
-//                /////////////////////////////////////////////////////////
-//
-//                callback.onTraversalCompleted();
-//
-//                Timber.v("Flow onTraversalCompleted");
-//            }
-//        });
-//    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        flowDelegate.onSaveInstanceState(outState);
         BundleServiceRunner.getBundleServiceRunner(this).onSaveInstanceState(outState);
     }
 
@@ -246,23 +243,79 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     public void onChangePageEvent(ChangePageEvent event) {
 
         Timber.v("onChangePageEvent e=%s", event.toString());
-        //Picasso.with(getApplicationContext()).setLoggingEnabled(true);
         Picasso.with(getApplicationContext())
                 .load(event.getImgUrl())
+                .transform(PaletteTransformation.instance())
                 .placeholder(backgroundImage.getDrawable())
-                .into(backgroundImage);
+                .into(backgroundImage, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap bitmap = ((BitmapDrawable) backgroundImage.getDrawable()).getBitmap(); // Ew!
+                        Palette palette = PaletteTransformation.getPalette(bitmap);
+
+                        if (isLollipopOrAbove()) {
+                            setStatusBarColor(palette.getDarkVibrantColor(Color.BLACK));
+                        }
+                    }
+                });
 
         appBarLayout.setExpanded(!event.shouldClose(), true);
 
         collapsingToolbar.setTitle(event.getTitle());
+
+        animateShading(event.getImgUrl() != null);
+        animateBg(event.getImgUrl() != null);
+
+        if (event.getImgUrl() == null && isLollipopOrAbove()) {
+            setStatusBarColor(Color.parseColor("#087ed7"));
+        }
     }
 
 
 
-    private void setToolbarFont() {
+    private void setToolbarStyle() {
         Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Dosis-Medium.otf");
         collapsingToolbar.setCollapsedTitleTypeface(typeface);
         collapsingToolbar.setExpandedTitleTypeface(typeface);
 
+        if (isLollipopOrAbove()) {
+            setStatusBarColor(Color.parseColor("#087ed7"));
+        }
     }
+
+    void animateShading(boolean show) {
+        shading.setVisibility(View.VISIBLE);
+        float toAlpha = show ? 1 : 0;
+        ObjectAnimator.ofFloat(shading, "alpha", shading.getAlpha(), toAlpha)
+                .setDuration(100)
+                .start();
+    }
+
+    void animateBg(boolean show) {
+        backgroundImage.setVisibility(View.VISIBLE);
+        float toAlpha = show ? 1 : 0;
+        ObjectAnimator.ofFloat(backgroundImage, "alpha", backgroundImage.getAlpha(), toAlpha)
+                .setDuration(100)
+                .start();
+    }
+
+
+    @TargetApi(21)
+    void setStatusBarColor(int color) {
+        Window window = getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+
+        // finally change the color
+        window.setStatusBarColor(color);
+    }
+
+
+
+
 }

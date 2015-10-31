@@ -13,6 +13,8 @@ import org.feelthebern.android.screens.PageScreen;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 /**
  *
  */
@@ -57,6 +59,7 @@ public class CollectionView extends RecyclerView {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        Timber.v("onFinishInflate");
     }
 
     @Override

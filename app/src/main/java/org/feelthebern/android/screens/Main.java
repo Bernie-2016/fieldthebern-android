@@ -29,12 +29,13 @@ import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.annotations.Layout;
-import org.feelthebern.android.repositories.HomeRepo;
-import org.feelthebern.android.repositories.specs.HomeIssueSpec;
+import org.feelthebern.android.repositories.CollectionRepo;
+import org.feelthebern.android.repositories.specs.CollectionSpec;
 import org.feelthebern.android.views.MainView;
 
 import javax.inject.Inject;
 
+import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
@@ -70,18 +71,18 @@ public class Main extends FlowPathBase {
     public interface Component {
         void inject(MainView t);
         Gson gson();
-        HomeRepo repo();
+        CollectionRepo collectionRepo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<MainView> {
 
         final Gson gson;
-        final HomeRepo repo;
+        final CollectionRepo repo;
         Subscription subscription;
 
         @Inject
-        Presenter(Gson gson, HomeRepo repo) {
+        Presenter(Gson gson, CollectionRepo repo) {
             this.gson = gson;
             this.repo = repo;
         }
@@ -92,7 +93,7 @@ public class Main extends FlowPathBase {
 
             Timber.v("main repo loading");
             getView().showLoadingAnimation();
-            HomeIssueSpec spec = new HomeIssueSpec(UrlConfig.HOME_JSON_URL_STUB);
+            CollectionSpec spec = new CollectionSpec();
 
             subscription = repo.get(spec)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -138,6 +139,12 @@ public class Main extends FlowPathBase {
             if (subscription!=null && !subscription.isUnsubscribed()) {
                 subscription.unsubscribe();
             }
+        }
+
+        @Override
+        protected void onEnterScope(MortarScope scope) {
+            super.onEnterScope(scope);
+            Timber.v("onEnterScope: %s", scope);
         }
     }
 }

@@ -27,7 +27,7 @@
         android:textAllCaps="true"
         android:shadowDx="0"
         android:shadowDy="0"
-        android:shadowRadius="6"
+        android:shadowRadius="8"
         android:shadowColor="@android:color/black"
         />
 

@@ -26,6 +26,19 @@ Before contributing, please be sure your are familiar with the design patterns a
 Feel free to reach out on Slack if you have questions!
 
 
+##Building the app
+
+To build you will need a **YouTube API key**.  
+Follow the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
+
+Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="youtubeApiKey">YOUR-API-KEY</string>
+</resources>
+```
+
 ##Do's and Dont's
 
 **Don't** use `AsyncTask`...   **Do** use `RxJava`

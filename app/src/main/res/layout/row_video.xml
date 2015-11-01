@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<org.feelthebern.android.views.VideoContainerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     >
     <com.google.android.youtube.player.YouTubeThumbnailView
         android:id="@+id/youtubethumbnailview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         />
 
-
-
-    <TextView android:id="@+id/text"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:ignore="MissingPrefix"
-              fontPath="fonts/Dosis-ExtraBold.otf"
-              android:textSize="18sp"
-              style="@style/PageMargins"
-              android:visibility="gone"
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:clickable="false"
+        android:src="@drawable/ic_video_play_icon_256"
+        android:layout_gravity="center"
         />
 
-</LinearLayout>
+    <!--<TextView android:id="@+id/text"-->
+              <!--android:layout_width="match_parent"-->
+              <!--android:layout_height="match_parent"-->
+              <!--tools:ignore="MissingPrefix"-->
+              <!--fontPath="fonts/Dosis-ExtraBold.otf"-->
+              <!--android:textSize="18sp"-->
+              <!--style="@style/PageMargins"-->
+              <!--android:visibility="gone"-->
+              <!--android:autoLink="web"-->
+        <!--/>-->
+
+</org.feelthebern.android.views.VideoContainerView>
 
 
 

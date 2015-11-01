@@ -24,6 +24,14 @@ public class Video extends Content implements Parcelable {
         return id;
     }
 
+    public String getSrc() {
+        return src;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public int describeContents() {
         return 0;

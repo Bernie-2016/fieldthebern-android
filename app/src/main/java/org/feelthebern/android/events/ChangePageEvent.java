@@ -11,6 +11,7 @@ public class ChangePageEvent {
     private Bus bus;
     private String title;
     private boolean shouldClose;
+    private boolean shouldHideToolbar;
 
     public ChangePageEvent() {
     }
@@ -30,8 +31,13 @@ public class ChangePageEvent {
         return this;
     }
 
-    public ChangePageEvent shouldClose(boolean shouldClose) {
+    public ChangePageEvent close(boolean shouldClose) {
         this.shouldClose = shouldClose;
+        return this;
+    }
+
+    public ChangePageEvent hideToolbar(boolean shouldHideToolbar) {
+        this.shouldHideToolbar = shouldHideToolbar;
         return this;
     }
 
@@ -52,7 +58,9 @@ public class ChangePageEvent {
     public boolean shouldClose() {
         return shouldClose;
     }
-
+    public boolean shouldHideToolbar() {
+        return shouldHideToolbar;
+    }
 
     @Override
     public String toString() {
@@ -60,7 +68,8 @@ public class ChangePageEvent {
                 "img='" + img + '\'' +
                 ", bus=" + bus +
                 ", title='" + title + '\'' +
-                ", shouldClose=" + shouldClose +
+                ", close=" + shouldClose +
+                ", hideToolbar=" + shouldHideToolbar +
                 '}';
     }
 }

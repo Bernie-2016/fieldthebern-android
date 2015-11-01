@@ -99,7 +99,9 @@ public class VideoHolder extends BaseViewHolder<Video> {
     VideoContainerView.OnDetachListener onDetachListener = new VideoContainerView.OnDetachListener() {
         @Override
         public void onDetach(VideoContainerView videoContainerView) {
-            loader.release();
+            if (loader!=null) {
+                loader.release();
+            }
         }
     };
 }

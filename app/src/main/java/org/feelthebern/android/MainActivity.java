@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -240,9 +241,23 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                     }
                 });
 
+        if(event.shouldHideToolbar()) {
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+            collapsingToolbar.setLayoutParams(params);
+            collapsingToolbar.requestLayout();
+        } else {
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL|AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbar.setLayoutParams(params);
+            collapsingToolbar.requestLayout();
+        }
+
         appBarLayout.setExpanded(!event.shouldClose(), true);
 
-        collapsingToolbar.setTitle(event.getTitle());
+        if (event.getTitle() != null) {
+            collapsingToolbar.setTitle(event.getTitle());
+        }
 
         animateShading(event.getImgUrl() != null);
         animateBg(event.getImgUrl() != null);

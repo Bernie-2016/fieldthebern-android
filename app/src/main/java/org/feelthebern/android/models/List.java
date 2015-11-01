@@ -16,9 +16,12 @@ public class List extends Content implements Parcelable {
 
     @Override
     public String getText() {
-        return list.get(0);//TODO
+        return list.get(0);//TODO?
     }
 
+    public java.util.List<String> getList() {
+        return list;
+    }
 
     @Override
     public int describeContents() {

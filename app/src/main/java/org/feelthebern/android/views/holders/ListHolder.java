@@ -1,6 +1,8 @@
 package org.feelthebern.android.views.holders;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.feelthebern.android.R;
@@ -12,16 +14,29 @@ import org.feelthebern.android.models.List;
  */
 public class ListHolder extends BaseViewHolder<List> {
 
-    TextView textView;
+    LinearLayout container;
 
     ListHolder(View itemView) {
         super(itemView);
-        textView = (TextView)itemView.findViewById(R.id.text);
+        container = (LinearLayout)itemView;
     }
 
     @Override
     public void setModel(final List model) {
         super.setModel(model);
-        textView.setText(model.getText());
+        setTextList(model.getList());
+    }
+
+    private void setTextList(java.util.List<String> stringList) {
+        container.removeAllViews();
+
+        for (String listItem : stringList) {
+            LinearLayout li = (LinearLayout) LayoutInflater
+                    .from(container.getContext())
+                    .inflate(R.layout.list_item, container, false);
+            TextView textView = (TextView) li.findViewById(R.id.text);
+            textView.setText(listItem);
+            container.addView(li);
+        }
     }
 }

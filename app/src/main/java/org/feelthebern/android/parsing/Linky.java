@@ -1,11 +1,6 @@
 package org.feelthebern.android.parsing;
 
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
-
 import org.feelthebern.android.models.Link;
-import org.feelthebern.android.models.Linkable;
 
 import java.util.List;
 
@@ -23,37 +18,35 @@ public class Linky {
     private static final String aherf = "<a href=\"%s\">";
     private static final String closeTag = "</a>";
 
-    public static void linkify(TextView textView, List<Link> links, String text) {
+    public static String linkify(List<Link> links, String text) {
 
-        int length = text.length();
-        StringBuilder stringBuilder = new StringBuilder();
+        //if(!hasLinks(links)) { return text; }
+
+        int addedChars = 0; //offset for inserting
 
         for (Link link : links) {
+            StringBuilder stringBuilder = new StringBuilder(text);
 
             int start           = link.getStart();
             int end             = link.getEnd();
             String href         = link.getHref();
-            String leadingText  = text.substring(0, start);
             String openTag      = String.format(aherf, href);
-            String linkedText   = text.substring(start, end);
-            String trailingText = text.substring(end, length);
 
-            stringBuilder
-                    .append(leadingText)
-                    .append(openTag)
-                    .append(linkedText)
-                    .append(closeTag)
-                    .append(trailingText);
+            stringBuilder.insert(addedChars + start, openTag);
+            addedChars += openTag.length();
+
+            stringBuilder.insert(addedChars + end, closeTag);
+            addedChars += closeTag.length();
+
+            text = stringBuilder.toString();
         }
 
-        String linkedText = stringBuilder.toString();
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setText(Html.fromHtml(linkedText));
+        return text;
     }
 
 
-    public static boolean hasLinks(Linkable linkableModel) {
-        return  linkableModel.getLinks() !=null &&
-                !linkableModel.getLinks().isEmpty();
+    public static boolean hasLinks(List<Link> links) {
+        return  links!=null &&
+                !links.isEmpty();
     }
 }

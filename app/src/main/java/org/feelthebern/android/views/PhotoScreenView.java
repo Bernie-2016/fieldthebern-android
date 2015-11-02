@@ -5,8 +5,11 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import org.feelthebern.android.FTBApplication;
 import org.feelthebern.android.R;
+import org.feelthebern.android.events.ShowToolbarEvent;
 import org.feelthebern.android.mortar.DaggerService;
+import org.feelthebern.android.mortar.HandlesBack;
 import org.feelthebern.android.screens.PhotoScreen;
 
 import javax.inject.Inject;
@@ -17,7 +20,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 /**
  *
  */
-public class PhotoScreenView extends FrameLayout {
+public class PhotoScreenView extends FrameLayout implements HandlesBack {
 
     @Inject
     PhotoScreen.Presenter presenter;
@@ -76,4 +79,12 @@ public class PhotoScreenView extends FrameLayout {
     }
 
 
+    @Override
+    public boolean onBackPressed() {
+        new ShowToolbarEvent()
+                .with(FTBApplication.getEventBus())
+                .showToolbar(true)
+                .dispatch();
+        return false;
+    }
 }

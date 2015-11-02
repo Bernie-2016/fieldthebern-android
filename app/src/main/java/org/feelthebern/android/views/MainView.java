@@ -58,6 +58,7 @@ public class MainView extends FrameLayout {
         DaggerService.<Main.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
+
     }
 
     private void setLayoutManager(Context context) {
@@ -66,10 +67,15 @@ public class MainView extends FrameLayout {
         recyclerView.setLayoutManager(gridLayoutManager);
     }
 
+    public GridLayoutManager getLayoutManager() {
+        return (GridLayoutManager) recyclerView.getLayoutManager();
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this, this);
+        setLayoutManager(this.getContext());
         progressWheel.getIndeterminateDrawable().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFFFFF));
         Timber.v("onFinishInflate");
     }
@@ -78,8 +84,6 @@ public class MainView extends FrameLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         presenter.takeView(this);
-        setLayoutManager(this.getContext());
-
     }
 
     @Override

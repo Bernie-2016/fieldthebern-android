@@ -252,7 +252,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
             collapsingToolbar.requestLayout();
         }
 
-        appBarLayout.setExpanded(!event.shouldClose(), true);
+        if (!event.shouldRamain()) {
+            appBarLayout.setExpanded(!event.shouldClose(), true);
+        }
 
         if (event.getTitle() != null) {
             collapsingToolbar.setTitle(event.getTitle());

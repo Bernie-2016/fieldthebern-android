@@ -25,6 +25,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.events.ChangePageEvent;
+import org.feelthebern.android.events.ShowToolbarEvent;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Content;
 import org.feelthebern.android.mortar.GsonParceler;
@@ -268,7 +269,17 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         }
     }
 
+    @Subscribe
+    public void onShowToolbarEvent(ShowToolbarEvent event) {
+        if (event.shouldShowToolbar()) {
 
+            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbar.setLayoutParams(params);
+            collapsingToolbar.requestLayout();
+            appBarLayout.setExpanded(false, true);
+        }
+    }
 
     private void setToolbarStyle() {
         Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Dosis-Medium.otf");

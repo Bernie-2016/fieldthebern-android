@@ -2,7 +2,10 @@ package org.feelthebern.android.views.holders;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.text.method.LinkMovementMethod;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -33,6 +36,9 @@ public class VideoHolder extends BaseViewHolder<Video> {
     VideoContainerView videoContainer;
     YouTubeThumbnailLoader loader;
 
+    @Bind(R.id.play_arrow_icon)
+    ImageView playIcon;
+
     VideoHolder(View itemView) {
         super(itemView);
         videoContainer = (VideoContainerView) itemView;
@@ -42,6 +48,8 @@ public class VideoHolder extends BaseViewHolder<Video> {
     @Override
     public void setModel(final Video model) {
         super.setModel(model);
+        removeTextView();
+        playIcon.setVisibility(View.INVISIBLE);
 
         if (model.getSrc().toLowerCase().contains("youtube") && model.getId() == null) {
             // there are about 40 video without the id string set,
@@ -62,6 +70,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
             if(loader!=null) {
                 loader.release();
             }
+
             thumbnail
                     .initialize(thumbnail
                                     .getContext()
@@ -71,6 +80,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
                                 public void onInitializationSuccess(YouTubeThumbnailView view,
                                                                     YouTubeThumbnailLoader loader) {
                                     Timber.v("onInitializationSuccess");
+                                    loader.setOnThumbnailLoadedListener(thumbnailLoadedListener);
                                     VideoHolder.this.loader = loader;
                                     loader.setVideo(model.getId());
                                 }
@@ -91,8 +101,19 @@ public class VideoHolder extends BaseViewHolder<Video> {
                 }
             });
         } else {
-            //textView.setText(model.getText());
-            //textView.setVisibility(View.VISIBLE);
+            //try showing the video url as a text-link
+
+            playIcon.setVisibility(View.INVISIBLE);
+            thumbnail.setVisibility(View.INVISIBLE);
+            TextView textView = (TextView) LayoutInflater
+                    .from(videoContainer.getContext())
+                    .inflate(R.layout.item_video_link, videoContainer, false);
+
+            //String linkText = String.format("<a href=\"%s\">%s</a>", model.getText(), model.getText() );
+            //textView.setMovementMethod(LinkMovementMethod.getInstance());
+            //textView.setText(linkText);
+            textView.setText(model.getText());
+            videoContainer.addView(textView);
         }
     }
 
@@ -102,6 +123,29 @@ public class VideoHolder extends BaseViewHolder<Video> {
             if (loader!=null) {
                 loader.release();
             }
+
+            removeTextView();
+        }
+    };
+
+    private void removeTextView() {
+
+        //if we added a textview we should probably remove it
+        View textView = videoContainer.findViewById(R.id.video_txt_link);
+        if (textView!=null) {
+            videoContainer.removeView(textView);
+        }
+    }
+
+    YouTubeThumbnailLoader.OnThumbnailLoadedListener thumbnailLoadedListener = new YouTubeThumbnailLoader.OnThumbnailLoadedListener() {
+        @Override
+        public void onThumbnailLoaded(YouTubeThumbnailView youTubeThumbnailView, String s) {
+            playIcon.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView, YouTubeThumbnailLoader.ErrorReason errorReason) {
+            Timber.e("Youtube thumbnail loader error %s", errorReason.toString());
         }
     };
 }

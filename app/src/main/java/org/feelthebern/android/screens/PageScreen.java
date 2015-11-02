@@ -1,6 +1,10 @@
 package org.feelthebern.android.screens;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.google.gson.Gson;
 
@@ -24,8 +28,10 @@ import javax.inject.Inject;
 
 import dagger.Module;
 import dagger.Provides;
+import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import mortar.bundler.BundleServiceRunner;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -39,6 +45,10 @@ import timber.log.Timber;
 public class PageScreen extends FlowPathBase{
 
     private final PageSpec pageSpec;
+
+    //hack... see:https://github.com/square/flow/issues/11
+    public Parcelable savedState;
+    //public Parcelable
 
     public PageScreen(Page page) {
         this.pageSpec = new PageSpec(page);
@@ -95,6 +105,10 @@ public class PageScreen extends FlowPathBase{
         final Gson gson;
         final PageRepo repo;
         Subscription subscription;
+        Parcelable recyclerViewState;
+
+
+        private static final String BUNDLE_RECYCLER_LAYOUT = "PageScreen.recycler.layout";
 
         @Inject
         Presenter(PageRepo repo, PageSpec pageSpec, Gson gson) {
@@ -109,12 +123,18 @@ public class PageScreen extends FlowPathBase{
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
+            //Bundle flowSavedBundle = ((PageScreen)Path.get(getView().getContext())).savedState;
+            super.onLoad(savedInstanceState);
             if (savedInstanceState != null) {
                 page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
+                recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
                 Timber.v("onLoad savedInstanceState page: %s", page);
+            } else {
+                //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
+                recyclerViewState = ((PageScreen)Path.get(getView().getContext())).savedState;
             }
 
-
+            //getView().addOnScrollListener(onScrollListener);
             //if (page.getContent() == null) {
                 Timber.v("PageRepo loading");
                 //getView().showLoadingAnimation();
@@ -130,16 +150,28 @@ public class PageScreen extends FlowPathBase{
             @Override
             public void onCompleted() {
 
-                Timber.v("onLoad page: %s", page.getImageUrlFull());
+                Timber.v("onCompleted page: %s", page.getImageUrlFull());
                 getView().setAdapter(new PageRecyclerAdapter(page));
 
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(page.getImageUrlFull())
-                        .title(page.getTitle())
-                        .dispatch();
+                //Parcelable state = ((PageScreen)Path.get(getView().getContext())).savedRecyclerLayoutState;
+                //int scr = ((PageScreen)Path.get(getView().getContext())).scrollPosition;
 
-                //getView().hideLoadingAnimation();
+                if (recyclerViewState!=null) {
+                    getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
+                    new ChangePageEvent()
+                            .with(FTBApplication.getEventBus())
+                            .img(page.getImageUrlFull())
+                            .title(page.getTitle())
+                            .remain(true)
+                            .dispatch();
+                } else {
+                    new ChangePageEvent()
+                            .with(FTBApplication.getEventBus())
+                            .img(page.getImageUrlFull())
+                            .title(page.getTitle())
+                            .dispatch();
+                }
             }
 
             @Override
@@ -155,13 +187,23 @@ public class PageScreen extends FlowPathBase{
         };
 
 
+
+
         @Override
         protected void onSave(Bundle outState) {
+            saveState(outState);
+        }
+
+        private void saveState(Bundle outState) {
+            outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
             outState.putParcelable(Page.PAGE_PARCEL, page);
+            ((PageScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
+            //((PageScreen)Path.get(getView().getContext())). = getView().getLayoutManager().onSaveInstanceState();
         }
 
         @Override
         public void dropView(PageView view) {
+            saveState(new Bundle());
             super.dropView(view);
         }
 
@@ -170,5 +212,23 @@ public class PageScreen extends FlowPathBase{
             super.onEnterScope(scope);
             Timber.v("onEnterScope: %s", scope);
         }
+
+//        //int positionToSave;
+//        //Parcelable stateToSave;
+//
+//        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+//
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                //((PageScreen) Path.get(recyclerView.getContext())).savedRecyclerLayoutState = recyclerView.getLayoutManager().onSaveInstanceState();
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                //positionToSave = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+//            }
+//        };
     }
 }

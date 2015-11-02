@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -180,8 +179,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        flowDelegate.onSaveInstanceState(outState);
         BundleServiceRunner.getBundleServiceRunner(this).onSaveInstanceState(outState);
+        flowDelegate.onSaveInstanceState(outState);
     }
 
 

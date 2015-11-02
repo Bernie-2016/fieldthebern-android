@@ -123,7 +123,6 @@ public class PageScreen extends FlowPathBase{
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-            //Bundle flowSavedBundle = ((PageScreen)Path.get(getView().getContext())).savedState;
             super.onLoad(savedInstanceState);
             if (savedInstanceState != null) {
                 page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
@@ -134,16 +133,12 @@ public class PageScreen extends FlowPathBase{
                 recyclerViewState = ((PageScreen)Path.get(getView().getContext())).savedState;
             }
 
-            //getView().addOnScrollListener(onScrollListener);
-            //if (page.getContent() == null) {
-                Timber.v("PageRepo loading");
-                //getView().showLoadingAnimation();
+            Timber.v("PageRepo loading");
 
-                subscription = repo.get(pageSpec)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(observer);
-            //}
+            subscription = repo.get(pageSpec)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(observer);
         }
 
         Observer<List<Content>> observer = new Observer<List<Content>>() {
@@ -152,9 +147,6 @@ public class PageScreen extends FlowPathBase{
 
                 Timber.v("onCompleted page: %s", page.getImageUrlFull());
                 getView().setAdapter(new PageRecyclerAdapter(page));
-
-                //Parcelable state = ((PageScreen)Path.get(getView().getContext())).savedRecyclerLayoutState;
-                //int scr = ((PageScreen)Path.get(getView().getContext())).scrollPosition;
 
                 if (recyclerViewState!=null) {
                     getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
@@ -187,8 +179,6 @@ public class PageScreen extends FlowPathBase{
         };
 
 
-
-
         @Override
         protected void onSave(Bundle outState) {
             saveState(outState);
@@ -212,23 +202,5 @@ public class PageScreen extends FlowPathBase{
             super.onEnterScope(scope);
             Timber.v("onEnterScope: %s", scope);
         }
-
-//        //int positionToSave;
-//        //Parcelable stateToSave;
-//
-//        RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-//
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                //((PageScreen) Path.get(recyclerView.getContext())).savedRecyclerLayoutState = recyclerView.getLayoutManager().onSaveInstanceState();
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                //positionToSave = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
-//            }
-//        };
     }
 }

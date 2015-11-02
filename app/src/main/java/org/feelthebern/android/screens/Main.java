@@ -17,6 +17,7 @@
 package org.feelthebern.android.screens;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.google.gson.Gson;
 
@@ -34,6 +35,7 @@ import org.feelthebern.android.views.MainView;
 
 import javax.inject.Inject;
 
+import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
@@ -44,6 +46,8 @@ import timber.log.Timber;
 
 @Layout(R.layout.main_view)
 public class Main extends FlowPathBase {
+
+    Parcelable savedState;
 
     public Main() {
     }
@@ -80,39 +84,67 @@ public class Main extends FlowPathBase {
         final CollectionRepo repo;
         Subscription subscription;
 
+        private Collection collection;
+        Parcelable recyclerViewState;
+
+        private static final String BUNDLE_RECYCLER_LAYOUT = "Main.recycler.layout";
+
         @Inject
         Presenter(Gson gson, CollectionRepo repo) {
             this.gson = gson;
             this.repo = repo;
         }
 
-
         @Override
         protected void onLoad(Bundle savedInstanceState) {
 
-            Timber.v("main repo loading");
-            getView().showLoadingAnimation();
-            CollectionSpec spec = new CollectionSpec();
+            if (savedInstanceState != null ) {
+                if (collection == null) {
+                    collection = savedInstanceState.getParcelable(Collection.COLLECTION_PARCEL);
+                    Timber.v("onLoad savedInstanceState collection: %s", collection);
+                }
+                recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+            } else {
+                //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
+                recyclerViewState = ((Main) Path.get(getView().getContext())).savedState;
+            }
 
-            subscription = repo.get(spec)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(observer);
+            if (collection == null) {
+                Timber.v("main repo loading");
+                getView().showLoadingAnimation();
+                CollectionSpec spec = new CollectionSpec();
+
+                subscription = repo.get(spec)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(observer);
+            } else {
+                Timber.v("onLoad collection: %s", collection.getTitle());
+                setDataAndState();
+            }
+        }
+
+        private void setDataAndState() {
+            getView().hideLoadingAnimation();
+            getView().setData(collection);
+
+            String pageName = getView().getResources().getString(R.string.app_name);
+
+            if (recyclerViewState!=null) {
+                getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
+            }
+
+            new ChangePageEvent()
+                    .with(FTBApplication.getEventBus())
+                    .title(pageName)
+                    .close(true)
+                    .dispatch();
         }
 
         Observer<Collection> observer = new Observer<Collection>() {
             @Override
             public void onCompleted() {
-
-                String pageName = getView().getResources().getString(R.string.app_name);
-
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .title(pageName)
-                        .close(true)
-                        .dispatch();
-
-                getView().hideLoadingAnimation();
+                setDataAndState();
             }
 
             @Override
@@ -122,24 +154,30 @@ public class Main extends FlowPathBase {
 
             @Override
             public void onNext(Collection collection) {
-                getView().setData(collection);
+                Presenter.this.collection = collection;
                 Timber.v("main repo returned the collection");
             }
         };
 
         @Override
         protected void onSave(Bundle outState) {
+            saveState(outState);
         }
 
+        private void saveState(Bundle outState) {
+            outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
+            outState.putParcelable(Collection.COLLECTION_PARCEL, collection);
+            ((Main) Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
+        }
 
         @Override
         public void dropView(MainView view) {
-            super.dropView(view);
+            saveState(new Bundle());
             if (subscription!=null && !subscription.isUnsubscribed()) {
                 subscription.unsubscribe();
             }
+            super.dropView(view);
         }
-
         @Override
         protected void onEnterScope(MortarScope scope) {
             super.onEnterScope(scope);

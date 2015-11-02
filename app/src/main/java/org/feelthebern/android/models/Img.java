@@ -18,6 +18,8 @@ import org.feelthebern.android.annotations.Layout;
 @Layout(R.layout.row_img)
 public class Img extends Content implements Parcelable {
 
+    public static final String IMG_PARCEL_KEY = "img_parcel_key";
+
     //text here is the url of the image
     //private String text;
 
@@ -35,6 +37,21 @@ public class Img extends Content implements Parcelable {
     source: "http://www.washingtonpost.com/news/wonkblog/wp/2014/04/30/the-meteoric-costly-and-unprecedented-rise-of-incarceration-in-america/"
     */
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public String getCaption() {
+        return caption;
+    }
+
+    public String getSource() {
+        return source;
+    }
 
     @Override
     public int describeContents() {

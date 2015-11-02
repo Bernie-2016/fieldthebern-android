@@ -109,7 +109,7 @@ public class Main extends FlowPathBase {
                 new ChangePageEvent()
                         .with(FTBApplication.getEventBus())
                         .title(pageName)
-                        .shouldClose(true)
+                        .close(true)
                         .dispatch();
 
                 getView().hideLoadingAnimation();

@@ -18,6 +18,18 @@ public class Link implements Parcelable {
     private int start; //zero based index of the character prior to starting the link
     private int end;    //zero based index of the character after to ending the link
 
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
     public String getHref() {
         return href;
     }

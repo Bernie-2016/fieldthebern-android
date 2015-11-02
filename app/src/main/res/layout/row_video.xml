@@ -13,6 +13,7 @@
         />
 
     <ImageView
+        android:id="@+id/play_arrow_icon"
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:clickable="false"

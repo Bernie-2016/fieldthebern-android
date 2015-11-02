@@ -11,6 +11,7 @@ public class ChangePageEvent {
     private Bus bus;
     private String title;
     private boolean shouldClose;
+    private boolean shouldRamain;
     private boolean shouldHideToolbar;
 
     public ChangePageEvent() {
@@ -36,6 +37,15 @@ public class ChangePageEvent {
         return this;
     }
 
+    /**
+     * keeps the app bar as it is...
+     * @param shouldRamain
+     */
+    public ChangePageEvent remain(boolean shouldRamain) {
+        this.shouldRamain = shouldRamain;
+        return this;
+    }
+
     public ChangePageEvent hideToolbar(boolean shouldHideToolbar) {
         this.shouldHideToolbar = shouldHideToolbar;
         return this;
@@ -57,6 +67,10 @@ public class ChangePageEvent {
 
     public boolean shouldClose() {
         return shouldClose;
+    }
+
+    public boolean shouldRamain() {
+        return shouldRamain;
     }
     public boolean shouldHideToolbar() {
         return shouldHideToolbar;

@@ -6,7 +6,7 @@
           android:orientation="vertical"
           xmlns:tools="http://schemas.android.com/tools"
           tools:ignore="MissingPrefix"
-          android:textSize="14sp"
+          android:textSize="16sp"
           style="@style/PageMargins"
     />
 

@@ -1,5 +1,7 @@
 package org.feelthebern.android.views.holders;
 
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.TextView;
 
@@ -33,8 +35,12 @@ public class LinkableTextHolder<M extends Linkable> extends BaseViewHolder<M> {
     }
 
     protected void setText(final M model) {
-        if (hasLinks(model) && hasText(model)) {
-            linkify(textView, model.getLinks(), model.getText());
+        if (hasLinks(model.getLinks()) && hasText(model)) {
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+            textView.setText(Html.fromHtml(
+                    linkify(model.getLinks(),
+                            model.getText())));
+            ;
         } else if (hasText(model)) {
             textView.setText(model.getText());
         }

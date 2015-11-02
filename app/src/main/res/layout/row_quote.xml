@@ -7,7 +7,7 @@
           xmlns:tools="http://schemas.android.com/tools"
           tools:ignore="MissingPrefix"
           fontPath="fonts/Dosis-Light.otf"
-          android:textSize="16sp"
+          android:textSize="18sp"
           style="@style/PageMargins"
     />
 

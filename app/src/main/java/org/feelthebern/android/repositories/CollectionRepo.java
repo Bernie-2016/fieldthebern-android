@@ -31,6 +31,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
 
@@ -66,21 +67,19 @@ public class CollectionRepo {
      */
     public Observable<Collection> get(final CollectionSpec spec) {
 
-
         if (collectionMemCache!=null) {
+
             Timber.v("returning mem cache");
             return Observable.just(collectionMemCache);
-        }
-        else if (fileCacheExists()) {
-            try {
-                return Observable.just(getFromFile());
-            } catch (FileNotFoundException e) {
-                Timber.e(e, "FileNotFoundException loading json");
-            }
+
+        } else if (fileCacheExists()) {
+
+            return getFromFile();
         }
 
         return getFromHttp(spec.url())
                 .map(new Func1<Collection, Collection>() {
+
                     @Override
                     public Collection call(Collection collection) {
                         collectionMemCache = collection;
@@ -89,13 +88,32 @@ public class CollectionRepo {
                 });
     }
 
-    private Collection getFromFile() throws FileNotFoundException {
-        Timber.v("getFromFile()");
-        File file = new File(context.getFilesDir(), JSON_FILE_PATH);
-        Reader fileReader = new FileReader(file);
-        JsonReader jsonReader = new JsonReader(fileReader);
-        collectionMemCache = gson.fromJson(jsonReader, Collection.class);
-        return collectionMemCache;
+    private Observable<Collection> getFromFile() {
+
+        return Observable.create(new Observable.OnSubscribe<Collection>() {
+
+            @Override
+            public void call(Subscriber<? super Collection> subscriber) {
+
+                Timber.v("getFromFile()");
+                File file = new File(context.getFilesDir(), JSON_FILE_PATH);
+                Reader fileReader;
+
+                try {
+                    fileReader = new FileReader(file);
+                } catch (FileNotFoundException e) {
+                    Timber.e(e, "File not found? we're doomed");
+                    subscriber.onError(e);
+                    return;
+                }
+
+                JsonReader jsonReader = new JsonReader(fileReader);
+                collectionMemCache = gson.fromJson(jsonReader, Collection.class);
+                subscriber.onNext(collectionMemCache);
+                subscriber.onCompleted();
+            }
+        });
+
     }
 
     private boolean fileCacheExists() {
@@ -150,8 +168,8 @@ public class CollectionRepo {
     }
 
     void write(Response response) throws IOException {
-        File downloadedFile = new File(context.getFilesDir(), JSON_FILE_PATH);
 
+        File downloadedFile = new File(context.getFilesDir(), JSON_FILE_PATH);
         BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
         sink.writeAll(response.body().source());
         sink.close();

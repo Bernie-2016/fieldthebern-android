@@ -10,6 +10,8 @@ public class UrlConfig {
 
     public static final String BASE_URL = "http://feelthebern.org/";
 
-    public static final String COLLECTION_JSON_URL_STUB = "index2.php";
+
+    //public static final String COLLECTION_JSON_URL_STUB = "index2.php";
+    public static final String COLLECTION_JSON_URL_STUB = "";
     public static final String PAGE_JSON_URL_STUB = "page.php";
 }

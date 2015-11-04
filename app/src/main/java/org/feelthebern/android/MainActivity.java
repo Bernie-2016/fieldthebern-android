@@ -19,21 +19,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.events.ShowToolbarEvent;
-import org.feelthebern.android.models.Collection;
-import org.feelthebern.android.models.Content;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
-import org.feelthebern.android.parsing.CollectionDeserializer;
-import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.screens.Main;
 import org.feelthebern.android.views.PaletteTransformation;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Bind(R.id.appbar)
     AppBarLayout appBarLayout;
+
+    @Inject
+    Gson gson;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -112,11 +113,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
-        gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
+        FTBApplication.getComponent().inject(this);
 
-        GsonParceler parceler = new GsonParceler(gsonBuilder.create());
+        GsonParceler parceler = new GsonParceler(gson);
 
         @SuppressWarnings("deprecation")
         FlowDelegate.NonConfigurationInstance nonConfig =

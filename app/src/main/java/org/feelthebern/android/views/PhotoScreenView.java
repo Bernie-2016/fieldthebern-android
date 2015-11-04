@@ -70,6 +70,7 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
         presenter.dropView(this);
         if (attacher!=null) {
             attacher.cleanup();
+            attacher = null;
         }
         super.onDetachedFromWindow();
     }

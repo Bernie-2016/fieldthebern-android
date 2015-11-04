@@ -32,10 +32,11 @@ public class PageContentDeserializer implements JsonDeserializer<Content> {
     @Override
     public Content deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-        Gson gson = new Gson(); //use a temp gson so we don't trigger a stack overflow.
-        Content untypedContent = gson.fromJson(json, Content.class);
+        //Gson gson = new Gson(); //use a temp gson so we don't trigger a stack overflow.
+        //Content untypedContent = gson.fromJson(json, Content.class);
+
         Content typedContent = null;
-        switch (untypedContent.getType()) {
+        switch (json.getAsJsonObject().get("type").getAsString()) {
             case "h1":
                 typedContent = context.deserialize(json, H1.class);
                 break;
@@ -67,7 +68,7 @@ public class PageContentDeserializer implements JsonDeserializer<Content> {
                 typedContent = context.deserialize(json, Iframe.class);
                 break;
             default:
-                throw new JsonParseException("unknown type:"+untypedContent.getType());
+                throw new JsonParseException("unknown type:"+json.getAsJsonObject().get("type").getAsString());
         }
 
         return typedContent;

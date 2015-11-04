@@ -98,15 +98,19 @@ public class Main extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
 
-            if (savedInstanceState != null ) {
-                if (collection == null) {
-                    collection = savedInstanceState.getParcelable(Collection.COLLECTION_PARCEL);
-                    Timber.v("onLoad savedInstanceState collection: %s", collection);
+            try {
+                if (savedInstanceState != null ) {
+                    if (collection == null) {
+                        collection = savedInstanceState.getParcelable(Collection.COLLECTION_PARCEL);
+                        Timber.v("onLoad savedInstanceState collection: %s", collection);
+                    }
+                    recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+                } else {
+                    //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
+                    recyclerViewState = ((Main) Path.get(getView().getContext())).savedState;
                 }
-                recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-            } else {
-                //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
-                recyclerViewState = ((Main) Path.get(getView().getContext())).savedState;
+            } catch (Exception e) {
+                Timber.e(e, "Error loading parcels");
             }
 
             if (collection == null) {

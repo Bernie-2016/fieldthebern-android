@@ -41,7 +41,6 @@ public class PageView extends RecyclerView {
     private void injectSelf(Context context) {
         DaggerService.<PageScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
-//                getDaggerComponent(context, PageScreen.class.getName())
                 .inject(this);
     }
 
@@ -59,8 +58,8 @@ public class PageView extends RecyclerView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        presenter.takeView(this);
         setLayoutManager(getContext());
+        presenter.takeView(this);
     }
 
     @Override

@@ -44,7 +44,6 @@ public class CollectionView extends RecyclerView {
     private void injectSelf(Context context) {
         DaggerService.<CollectionScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
-//                getDaggerComponent(context, PageScreen.class.getName())
                 .inject(this);
     }
 

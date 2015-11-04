@@ -1,5 +1,6 @@
 package org.feelthebern.android.screens;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
@@ -77,7 +78,7 @@ public class CollectionScreen extends FlowPathBase{
     @Singleton
     static public class Presenter extends ViewPresenter<CollectionView> {
 
-        private Collection collection;
+        private final Collection collection;
         Parcelable recyclerViewState;
 
         private static final String BUNDLE_RECYCLER_LAYOUT = "CollectionScreen.recycler.layout";
@@ -94,13 +95,15 @@ public class CollectionScreen extends FlowPathBase{
 
             Timber.v("onLoad passed collection: %s", collection);
 
-            if (savedInstanceState != null) {
-                collection = savedInstanceState.getParcelable(Collection.COLLECTION_PARCEL);
-                Timber.v("onLoad savedInstanceState collection: %s", collection);
-                recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-            } else {
-                //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
-                recyclerViewState = ((CollectionScreen) Path.get(getView().getContext())).savedState;
+            try {
+                if (savedInstanceState != null) {
+                    Timber.v("onLoad savedInstanceState collection: %s", collection);
+                    recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+                } else {
+                    recyclerViewState = ((CollectionScreen) Path.get(getView().getContext())).savedState;
+                }
+            } catch (Exception e) {
+                Timber.e(e, "Error loading parcels");
             }
 
             Timber.v("onLoad collection: %s", collection.getTitle());
@@ -113,8 +116,8 @@ public class CollectionScreen extends FlowPathBase{
                         .with(FTBApplication.getEventBus())
                         .img(collection.getImageUrlFull())
                         .title(collection.getTitle())
-                        //.remain(true)
-                        .close(true)
+                        .remain(hasOnlyVisibleChildren())
+                        //.close(!hasOnlyVisibleChildren())
                         .dispatch();
             } else {
                 new ChangePageEvent()
@@ -125,6 +128,23 @@ public class CollectionScreen extends FlowPathBase{
             }
         }
 
+        /**
+         * hacky
+         */
+        private boolean hasOnlyVisibleChildren() {
+            int numCols = getView().getContext().getResources().getInteger(R.integer.num_cols);
+            int orientation = getView().getContext().getResources().getConfiguration().orientation;
+
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                return collection.getApiItems().size() <= numCols * 2;          //4 items usually visible in portrait
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                return collection.getApiItems().size() <= numCols;              //3 items usually visible in landscape
+            } else {
+                return false;
+            }
+
+        }
+
 
         @Override
         protected void onSave(Bundle outState) {
@@ -133,7 +153,6 @@ public class CollectionScreen extends FlowPathBase{
 
         private void saveState(Bundle outState) {
             outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
-            outState.putParcelable(Collection.COLLECTION_PARCEL, collection);
             ((CollectionScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
         }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.feelthebern.android.models.ApiItem;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Content;
 import org.feelthebern.android.parsing.CollectionDeserializer;
@@ -30,7 +31,7 @@ public class MainModule {
         this.context = context.getApplicationContext();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Collection.class, new CollectionDeserializer());
+        gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
 
         mGson = gsonBuilder.setPrettyPrinting().create();

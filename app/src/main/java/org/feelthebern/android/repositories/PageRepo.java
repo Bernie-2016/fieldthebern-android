@@ -28,6 +28,7 @@ import timber.log.Timber;
  * @see PageSpec
  */
 @Singleton
+@Deprecated
 public class PageRepo {
 
     final Gson gson;

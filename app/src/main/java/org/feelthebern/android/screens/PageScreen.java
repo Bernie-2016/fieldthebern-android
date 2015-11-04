@@ -22,7 +22,6 @@ import org.feelthebern.android.repositories.PageRepo;
 import org.feelthebern.android.repositories.specs.PageSpec;
 import org.feelthebern.android.views.PageView;
 
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,11 +30,6 @@ import dagger.Provides;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
-import mortar.bundler.BundleServiceRunner;
-import rx.Observer;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -44,14 +38,13 @@ import timber.log.Timber;
 @Layout(R.layout.screen_page)
 public class PageScreen extends FlowPathBase{
 
-    private final PageSpec pageSpec;
+    private final Page page;
 
     //hack... see:https://github.com/square/flow/issues/11
     public Parcelable savedState;
-    //public Parcelable
 
     public PageScreen(Page page) {
-        this.pageSpec = new PageSpec(page);
+        this.page = page;
     }
 
     @Override
@@ -63,7 +56,7 @@ public class PageScreen extends FlowPathBase{
     public Object createComponent() {
         return DaggerPageScreen_Component
                 .builder()
-                .pageModule(new PageModule(pageSpec))
+                .pageModule(new PageModule(page))
                 .mainComponent(FTBApplication.getComponent())
                 .build();
     }
@@ -76,14 +69,14 @@ public class PageScreen extends FlowPathBase{
 
     @Module
     class PageModule {
-        private final PageSpec p;
+        private final Page p;
 
-        public PageModule(PageSpec p) {
+        public PageModule(Page p) {
             this.p = p;
         }
 
         @Provides
-        public PageSpec providePageSpec() {
+        public Page providePage() {
             return p;
         }
     }
@@ -92,30 +85,21 @@ public class PageScreen extends FlowPathBase{
     @dagger.Component(dependencies = MainComponent.class, modules = PageModule.class)
     public interface Component {
         void inject(PageView t);
-        PageSpec getPageSpec();
-        PageRepo pageRepo();
-        Gson gson();
+        Page getPage();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<PageView> {
 
-        final PageSpec pageSpec;
-        Page page;
-        final Gson gson;
-        final PageRepo repo;
-        Subscription subscription;
+        final Page page;
         Parcelable recyclerViewState;
 
 
         private static final String BUNDLE_RECYCLER_LAYOUT = "PageScreen.recycler.layout";
 
         @Inject
-        Presenter(PageRepo repo, PageSpec pageSpec, Gson gson) {
-            this.repo = repo;
-            this.pageSpec = pageSpec;
-            this.gson = gson;
-            this.page = pageSpec.page();
+        Presenter(Page page) {
+            this.page = page;
         }
 
 
@@ -127,62 +111,38 @@ public class PageScreen extends FlowPathBase{
 
             try {
                 if (savedInstanceState != null) {
-                    page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
                     recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-                    Timber.v("onLoad savedInstanceState page: %s", page);
                 } else {
-                    //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
                     recyclerViewState = ((PageScreen)Path.get(getView().getContext())).savedState;
                 }
             } catch (Exception e) {
                 Timber.e(e, "Error loading parcels");
             }
 
-
-            Timber.v("PageRepo loading");
-
-            subscription = repo.get(pageSpec)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe(observer);
+            setData();
         }
 
-        Observer<List<Content>> observer = new Observer<List<Content>>() {
-            @Override
-            public void onCompleted() {
+        private void setData() {
+            Timber.v("onCompleted page: %s", page.getTitle());
+            getView().setAdapter(new PageRecyclerAdapter(page));
 
-                Timber.v("onCompleted page: %s", page.getImageUrlFull());
-                getView().setAdapter(new PageRecyclerAdapter(page));
+            if (recyclerViewState!=null) {
+                getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
-                if (recyclerViewState!=null) {
-                    getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-                    new ChangePageEvent()
-                            .with(FTBApplication.getEventBus())
-                            .img(page.getImageUrlFull())
-                            .title(page.getTitle())
-                            .remain(true)
-                            .dispatch();
-                } else {
-                    new ChangePageEvent()
-                            .with(FTBApplication.getEventBus())
-                            .img(page.getImageUrlFull())
-                            .title(page.getTitle())
-                            .dispatch();
-                }
+                new ChangePageEvent()
+                        .with(FTBApplication.getEventBus())
+                        .img(page.getImageUrlFull())
+                        .title(page.getTitle())
+                        .remain(true)
+                        .dispatch();
+            } else {
+                new ChangePageEvent()
+                        .with(FTBApplication.getEventBus())
+                        .img(page.getImageUrlFull())
+                        .title(page.getTitle())
+                        .dispatch();
             }
-
-            @Override
-            public void onError(Throwable e) {
-                Timber.e(e, "Main presenter error in observer/rx");
-            }
-
-            @Override
-            public void onNext(List<Content> contentList) {
-                page.setContent(contentList);
-                Timber.v("page repo returned the contentList");
-            }
-        };
+        }
 
 
         @Override
@@ -192,9 +152,7 @@ public class PageScreen extends FlowPathBase{
 
         private void saveState(Bundle outState) {
             outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
-            outState.putParcelable(Page.PAGE_PARCEL, page);
             ((PageScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
-            //((PageScreen)Path.get(getView().getContext())). = getView().getLayoutManager().onSaveInstanceState();
         }
 
         @Override

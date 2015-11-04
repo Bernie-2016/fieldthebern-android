@@ -20,19 +20,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.events.ShowToolbarEvent;
-import org.feelthebern.android.models.Collection;
-import org.feelthebern.android.models.Content;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
-import org.feelthebern.android.parsing.CollectionDeserializer;
-import org.feelthebern.android.parsing.PageContentDeserializer;
 import org.feelthebern.android.screens.Main;
 import org.feelthebern.android.views.PaletteTransformation;
 

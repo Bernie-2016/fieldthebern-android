@@ -58,8 +58,8 @@ public class PageView extends RecyclerView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        presenter.takeView(this);
         setLayoutManager(getContext());
+        presenter.takeView(this);
     }
 
     @Override

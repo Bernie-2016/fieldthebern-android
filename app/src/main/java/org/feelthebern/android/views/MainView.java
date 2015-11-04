@@ -52,7 +52,6 @@ public class MainView extends FrameLayout {
     ProgressBar progressWheel;
 
 
-
     public MainView(Context context, AttributeSet attrs) {
         super(context, attrs);
         DaggerService.<Main.Component>

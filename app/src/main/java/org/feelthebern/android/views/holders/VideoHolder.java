@@ -51,6 +51,8 @@ public class VideoHolder extends BaseViewHolder<Video> {
         removeTextView();
         playIcon.setVisibility(View.INVISIBLE);
 
+        if (model.getSrc()==null) { return; }
+
         if (model.getSrc().toLowerCase().contains("youtube") && model.getId() == null) {
             // there are about 40 video without the id string set,
             // see if we can try parsing it from the url

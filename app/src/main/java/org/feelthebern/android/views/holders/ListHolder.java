@@ -29,7 +29,9 @@ public class ListHolder extends BaseViewHolder<List> {
 
     private void setTextList(java.util.List<String> stringList) {
         container.removeAllViews();
-
+        if (stringList == null) {
+            return;
+        }
         for (String listItem : stringList) {
             LinearLayout li = (LinearLayout) LayoutInflater
                     .from(container.getContext())

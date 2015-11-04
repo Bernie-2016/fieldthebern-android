@@ -124,14 +124,20 @@ public class PageScreen extends FlowPathBase{
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             super.onLoad(savedInstanceState);
-            if (savedInstanceState != null) {
-                page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
-                recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
-                Timber.v("onLoad savedInstanceState page: %s", page);
-            } else {
-                //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
-                recyclerViewState = ((PageScreen)Path.get(getView().getContext())).savedState;
+
+            try {
+                if (savedInstanceState != null) {
+                    page = savedInstanceState.getParcelable(Page.PAGE_PARCEL);
+                    recyclerViewState = savedInstanceState.getParcelable(BUNDLE_RECYCLER_LAYOUT);
+                    Timber.v("onLoad savedInstanceState page: %s", page);
+                } else {
+                    //page = flowSavedBundle.getParcelable(Page.PAGE_PARCEL);
+                    recyclerViewState = ((PageScreen)Path.get(getView().getContext())).savedState;
+                }
+            } catch (Exception e) {
+                Timber.e(e, "Error loading parcels");
             }
+
 
             Timber.v("PageRepo loading");
 

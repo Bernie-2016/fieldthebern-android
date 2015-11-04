@@ -19,6 +19,9 @@ public class ApiItem implements Parcelable {
         return null;
     }
 
+    public String getType() {
+        return type;
+    }
 
     @Override
     public int describeContents() {

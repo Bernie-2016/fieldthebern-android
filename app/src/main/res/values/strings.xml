@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Feel The Bern</string>
+    <string name="search_hint">Search Feel The Bern</string>
     <string name="bullet_point">\u2022</string>
 </resources>

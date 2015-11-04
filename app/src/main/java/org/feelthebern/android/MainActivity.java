@@ -2,6 +2,7 @@ package org.feelthebern.android;
 
 import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,23 +14,33 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import org.feelthebern.android.config.Actions;
+import org.feelthebern.android.db.SearchMatrixCursor;
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.events.ShowToolbarEvent;
+import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
 import org.feelthebern.android.screens.Main;
+import org.feelthebern.android.screens.PageScreen;
 import org.feelthebern.android.views.PaletteTransformation;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -143,6 +154,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         FTBApplication.getEventBus().register(this);
 
         setToolbarStyle();
+
+        handleIntent(getIntent());
     }
 
     private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
@@ -152,11 +165,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         return History.single(new Main());
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        flowDelegate.onNewIntent(intent);
-    }
 
     @Override
     protected void onResume() {
@@ -316,6 +324,58 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the options menu from XML
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if (searchPlate!=null) {
+            searchPlate.setBackgroundColor(Color.DKGRAY);
+            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
+            if (searchText != null) {
+                searchText.setTextColor(Color.WHITE);
+                searchText.setHintTextColor(Color.WHITE);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        flowDelegate.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Actions.SEARCH_SELECTION.equals(intent.getAction())) {
+            String title = intent.getExtras().getString(SearchManager.EXTRA_DATA_KEY);
+            showPage(title);
+        }
+    }
+
+    private void showPage(String title) {
+
+        List<Page> pages = SearchMatrixCursor.allPages;
+
+        for (Page page : pages) {
+            if (page.getTitle().equals(title)){
+                Timber.v("Showing page from search: %s", page.getTitle());
+                Flow.get(this).set(new PageScreen(page));
+                break;
+            }
+        }
 
 
+    }
 }

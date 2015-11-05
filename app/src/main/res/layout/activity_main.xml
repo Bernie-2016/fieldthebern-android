@@ -66,16 +66,6 @@
         android:background="#087ed7"
         />
 
-    <!--<canvass.support.design.widget.FloatingActionButton-->
-        <!--canvass:id="@+id/fab"-->
-        <!--canvass:layout_width="wrap_content"-->
-        <!--canvass:layout_height="wrap_content"-->
-        <!--canvass:src="@drawable/ic_action_location_found"-->
-        <!--canvass:layout_marginBottom="20dp"-->
-        <!--canvass:layout_marginRight="20dp"-->
-        <!--canvass:layout_gravity="bottom|right"-->
-        <!--app:fabSize="normal" />-->
-
 </android.support.design.widget.CoordinatorLayout>
 
 

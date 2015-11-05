@@ -50,7 +50,7 @@ public class CollectionScreen extends FlowPathBase{
 
     @Override
     public String getScopeName() {
-        return CollectionScreen.class.getName();// TODO temp scope name?
+        return CollectionScreen.class.getName() + collection.hashCode();
     }
 
 
@@ -148,11 +148,16 @@ public class CollectionScreen extends FlowPathBase{
 
         @Override
         protected void onSave(Bundle outState) {
+            Timber.v("onSave");
             saveState(outState);
         }
 
         private void saveState(Bundle outState) {
+
+            if (getView()==null) { return; }
+            if (getView().getLayoutManager()==null) { return; }
             outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
+            outState.putParcelable(Collection.COLLECTION_PARCEL, collection);
             ((CollectionScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
         }
 
@@ -167,5 +172,21 @@ public class CollectionScreen extends FlowPathBase{
             super.onEnterScope(scope);
             Timber.v("onEnterScope: %s", scope);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CollectionScreen)) return false;
+
+        CollectionScreen that = (CollectionScreen) o;
+
+        return collection.equals(that.collection);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return collection.hashCode();
     }
 }

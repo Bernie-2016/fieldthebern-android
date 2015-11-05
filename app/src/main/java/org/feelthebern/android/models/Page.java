@@ -36,7 +36,6 @@ public class Page extends ApiItem implements Parcelable {
     public static final String PAGE_PARCEL = "PageParcelKey";
 
     private int data;
-    private String title;
     private String url;
     private List<Content> content;
     @SerializedName("image_url_thumb")
@@ -93,7 +92,6 @@ public class Page extends ApiItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
         dest.writeInt(this.data);
-        dest.writeString(this.title);
         dest.writeString(this.url);
         dest.writeString(this.imageUrlThumb);
         dest.writeString(this.imageUrlFull);
@@ -106,7 +104,6 @@ public class Page extends ApiItem implements Parcelable {
     protected Page(Parcel in) {
         super(in);
         this.data = in.readInt();
-        this.title = in.readString();
         this.url = in.readString();
         this.imageUrlThumb = in.readString();
         this.imageUrlFull = in.readString();

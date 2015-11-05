@@ -4,6 +4,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import org.feelthebern.android.models.ApiItem;
 import org.feelthebern.android.models.Collection;
@@ -14,7 +16,7 @@ import java.lang.reflect.Type;
 /**
  * Custom Gson deserializer for 'ApiItem' with a mix of 'pages' and 'collections' as children
  */
-public class CollectionDeserializer implements JsonDeserializer<ApiItem> {
+public class CollectionDeserializer implements JsonDeserializer<ApiItem>, JsonSerializer<ApiItem> {
 
 
     @Override
@@ -33,5 +35,15 @@ public class CollectionDeserializer implements JsonDeserializer<ApiItem> {
         }
 
         return typedContent;
+    }
+
+    @Override
+    public JsonElement serialize(ApiItem src, Type typeOfSrc, JsonSerializationContext context) {
+
+        if ("collection".equals(src.getType())) {
+            return context.serialize(src, Collection.class);
+        } else {  //("page".equals(type))
+            return context.serialize(src, Page.class);
+        }
     }
 }

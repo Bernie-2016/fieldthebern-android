@@ -35,8 +35,6 @@ import java.util.List;
 public class Collection extends ApiItem implements Parcelable {
     public static final String COLLECTION_PARCEL = "CollectionParcelKey";
 
-    private String name;
-    private String title;
     private String url;
 
     @SerializedName("image_url_thumb")
@@ -59,25 +57,10 @@ public class Collection extends ApiItem implements Parcelable {
         return imageUrlThumb;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    @Override
-    public String getTitle() {
-        return title;
-    }
 
     public String getUrl() {
         return url;
-    }
-
-    public void setApiItems(List<ApiItem> apiItems) {
-//        if (items != null) {
-//            throw new IllegalStateException("Api Items have already been set");
-//        }
-
-        items = apiItems;
     }
 
 
@@ -89,8 +72,6 @@ public class Collection extends ApiItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(this.name);
-        dest.writeString(this.title);
         dest.writeString(this.url);
         dest.writeString(this.imageUrlThumb);
         dest.writeString(this.imageUrlFull);
@@ -102,8 +83,6 @@ public class Collection extends ApiItem implements Parcelable {
 
     protected Collection(Parcel in) {
         super(in);
-        this.name = in.readString();
-        this.title = in.readString();
         this.url = in.readString();
         this.imageUrlThumb = in.readString();
         this.imageUrlFull = in.readString();
@@ -127,7 +106,6 @@ public class Collection extends ApiItem implements Parcelable {
         //simple toString so we don't return the whole damn collection
         return "Collection{" +
                 "title='" + title + '\'' +
-                ", name='" + name + '\'' +
                 '}';
     }
 }

@@ -16,7 +16,7 @@ public final class MortarContextFactory implements PathContextFactory {
 
   @Override public Context setUpContext(Path path, Context parentContext) {
     MortarScope screenScope =
-        screenScoper.getScreenScope(parentContext, path.getClass().getName(), path);
+        screenScoper.getScreenScope(parentContext, ((FlowPathBase)path).getScopeName(), path);
     return new TearDownContext(parentContext, screenScope);
   }
 
@@ -30,7 +30,9 @@ public final class MortarContextFactory implements PathContextFactory {
     private LayoutInflater inflater;
 
     static void destroyScope(Context context) {
-      MortarScope.getScope(context).destroy();
+      //if (context!=null) {
+        MortarScope.getScope(context).destroy();
+      //}
     }
 
     public TearDownContext(Context context, MortarScope scope) {

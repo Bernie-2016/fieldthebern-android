@@ -1,10 +1,6 @@
 package org.feelthebern.android.db;
 
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +16,10 @@ import org.feelthebern.android.models.Page;
 import org.feelthebern.android.repositories.CollectionRepo;
 import org.feelthebern.android.repositories.specs.CollectionSpec;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.inject.Inject;
 
 import rx.Observer;
@@ -29,11 +29,10 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 
-public class SearchMatrixCursor extends MatrixCursor
-{
+public class SearchMatrixCursor extends MatrixCursor {
 
 
-    public static final String[] 	COLUMNS	 		= {	BaseColumns._ID,
+    public static final String[] COLUMNS = {BaseColumns._ID,
             SearchManager.SUGGEST_COLUMN_TEXT_1,
             SearchManager.SUGGEST_COLUMN_ICON_1,
             SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
@@ -41,68 +40,65 @@ public class SearchMatrixCursor extends MatrixCursor
 
     };
 
-    private static final long		MAX_RESULTS		= 5;
+    private static final long MAX_RESULTS = 5;
 
 
     @SuppressWarnings("unused")
-    private final Context	c;
+    private final Context c;
 
     static Collection collection;
     Subscription subscription;
-    public static List<Page> allPages;
+    public static Set<ApiItem> allItems;
 
     @Inject
     CollectionRepo repo;
+    private String query;
 
-    public SearchMatrixCursor( String[] columnNames, Context c )
-    {
-        super ( COLUMNS );
+    public SearchMatrixCursor(String[] columnNames, Context c) {
+        super(COLUMNS);
         this.c = c;
-
-
+        allItems = new HashSet<>();
     }
 
 
-
-    public Cursor getSearchSuggestionCursor( String query )
-    {
-        if (collection==null) {
+    public Cursor getSearchSuggestionCursor(String query) {
+        if (allItems.isEmpty()) {
             FTBApplication.getComponent().inject(this);
-            loadCollectionFromRepo();
+            loadCollectionFromRepo(query);
             return this;
-        } else {
-            parsePageList();
         }
 
-        //List<Page>   	filteredList	= getPermissions(query);
         convertAndAddRows(query);
         return this;
     }
 
-    private void parsePageList() {
+    private void parsePageList(String query) {
 
         //List<Page> unfilteredPages;
-        allPages = new ArrayList<>();
-        allPages.addAll(addChildPages(collection));
-        Timber.v("list...%d", allPages.size());
+        allItems = new HashSet<>();
+        allItems.addAll(addChildPages(collection));
+        Timber.v("list...%d", allItems.size());
+        convertAndAddRows(query);
     }
 
-    private List<Page> addChildPages(Collection subCollection){
+    private Set<ApiItem> addChildPages(Collection subCollection) {
 
-        List<Page> unfilteredPages = new ArrayList<>();
+        Set<ApiItem> unfilteredPages = new HashSet<>();
         List<ApiItem> children = subCollection.getApiItems();
 
-        for (ApiItem apiItem : children) {
-            if("collection".equals(apiItem.getType())) {
-                List<ApiItem> grandkids = ((Collection)apiItem).getApiItems();
+        unfilteredPages.addAll(children);
 
-                for (ApiItem grandKid : grandkids) {
-                    if("page".equals(grandKid.getType())) {
-                        unfilteredPages.add((Page) grandKid);
-                    }
-                }
-            } else {
-                unfilteredPages.add((Page) apiItem);
+        //double for-loop here because using recursion got a stackoverflow... :(
+        //kinda hack, there may be a better way to do this
+        //only accounts for 2 level nesting
+        for (ApiItem apiItem : children) {
+
+            if ("collection".equals(apiItem.getType())) {
+                List<ApiItem> grandkids = ((Collection) apiItem).getApiItems();
+                unfilteredPages.addAll(grandkids);
+//                for (ApiItem grandKid : grandkids) {
+//                    unfilteredPages.add(grandKid);
+//                }
             }
         }
 
@@ -110,8 +106,8 @@ public class SearchMatrixCursor extends MatrixCursor
     }
 
 
-
-    private void loadCollectionFromRepo() {
+    private void loadCollectionFromRepo(String query) {
+        this.query = query;
         CollectionSpec spec = new CollectionSpec();
         subscription = repo.get(spec)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,38 +115,52 @@ public class SearchMatrixCursor extends MatrixCursor
                 .subscribe(observer);
     }
 
-    private void convertAndAddRows( String query )
-    {
-        int 			id 		= 0;
+    private void convertAndAddRows(String query) {
 
-        for(Page page : allPages)
-        {
-            if (page.getTitle().toLowerCase().contains(query)) {
-                Object[] 		row 	= {	id,
-                        page.getTitle(),
-                        R.drawable.ic_file,
-                        Actions.SEARCH_SELECTION,
-                        page.getTitle() //SUGGEST_COLUMN_INTENT_EXTRA_DATA
-                };
+        int numRows = 0;
 
-                this.addRow ( row );
+        for (ApiItem apiItem:allItems) {
 
-                id++;
+            if (apiItem.getTitle().toLowerCase().contains(query)) {
 
-                if (id > 5) {
-                    break;
+                if ("page".equals(apiItem.getType())) {
+                    addRow(getPageRow((Page) apiItem, numRows));
+                    numRows ++;
+                } else if ("collection".equals(apiItem.getType())){
+                    addRow(getCollectionRow((Collection) apiItem, numRows));
+                    numRows ++;
                 }
             }
+
+
+            if (numRows >= 5) { break; }
         }
     }
 
 
+    private Object[] getCollectionRow(Collection item, int id) {
+        return new Object[]{id,
+                item.getTitle(),
+                R.drawable.ic_view_module_white_36dp,
+                Actions.SEARCH_SELECTION_COLLECTION,
+                item.getTitle() //SUGGEST_COLUMN_INTENT_EXTRA_DATA
+        };
+    }
+
+    private Object[] getPageRow(Page page, int id) {
+        return new Object[]{id,
+                page.getTitle(),
+                R.drawable.ic_file,
+                Actions.SEARCH_SELECTION_PAGE,
+                page.getTitle() //SUGGEST_COLUMN_INTENT_EXTRA_DATA
+        };
+    }
 
 
     Observer<Collection> observer = new Observer<Collection>() {
         @Override
         public void onCompleted() {
-            parsePageList();
+            parsePageList(SearchMatrixCursor.this.query);
         }
 
         @Override
@@ -164,46 +174,6 @@ public class SearchMatrixCursor extends MatrixCursor
             Timber.v("... repo returned the collection");
         }
     };
-
-//	private ArrayList<Object> getVOs (String constraint )
-//	{
-//		ArrayList<Object>   	filteredList 		= new ArrayList<Object>();
-//
-//		if(constraint != null && constraint.toString().length() > 0)
-//		{
-//			String 				constraintString 	= constraint.toString();
-//			Matcher 			m 					= Pattern.compile(Pattern.quote( constraintString.trim() ), Pattern.CASE_INSENSITIVE ).matcher("");
-//			int 				size 				= localList.size();
-//			int					maxResults			= MAX_RESULTS;
-//			int 				numMatches 			= 0;
-//
-//			for(int i = 0; i < size; i++)
-//			{
-//				PermissionObj 	pvo 				= (PermissionObj) localList.get(i);
-//				String 			stringToSearch 		= StringUtil.getSearchStrFromPrmObj( pvo );
-//
-//				m.reset( stringToSearch	);
-//
-//				if ( m.find() )
-//				{
-//					filteredList.add ( pvo );
-//					numMatches++;
-//				}
-//
-//				if (numMatches >= maxResults )
-//				{
-//					break;
-//				}
-//			}
-//		}
-//		return filteredList;
-//	}
-
-
-
-
-
-
 
 
 }

@@ -15,11 +15,8 @@ import org.feelthebern.android.annotations.Layout;
 import org.feelthebern.android.dagger.FtbScreenScope;
 import org.feelthebern.android.dagger.MainComponent;
 import org.feelthebern.android.events.ChangePageEvent;
-import org.feelthebern.android.models.Content;
 import org.feelthebern.android.models.Page;
 import org.feelthebern.android.mortar.FlowPathBase;
-import org.feelthebern.android.repositories.PageRepo;
-import org.feelthebern.android.repositories.specs.PageSpec;
 import org.feelthebern.android.views.PageView;
 
 
@@ -63,7 +60,7 @@ public class PageScreen extends FlowPathBase{
 
     @Override
     public String getScopeName() {
-        return PageScreen.class.getName();// TODO temp scope name?
+        return PageScreen.class.getName() + page.getTitle();// TODO temp scope name?
     }
 
 
@@ -79,6 +76,11 @@ public class PageScreen extends FlowPathBase{
         public Page providePage() {
             return p;
         }
+
+        @Provides
+        Presenter providePresenter() {
+            return new Presenter(p);
+        }
     }
 
     @FtbScreenScope
@@ -86,6 +88,7 @@ public class PageScreen extends FlowPathBase{
     public interface Component {
         void inject(PageView t);
         Page getPage();
+        Presenter getPresenter();
     }
 
     @FtbScreenScope
@@ -145,16 +148,24 @@ public class PageScreen extends FlowPathBase{
         }
 
 
+        /**
+         * Called on rotation only
+         */
         @Override
         protected void onSave(Bundle outState) {
             saveState(outState);
         }
 
         private void saveState(Bundle outState) {
+            if (getView()==null) { return; }
+            if (getView().getLayoutManager()==null) { return; }
             outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
             ((PageScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
         }
 
+        /**
+         * Called on navigation
+         */
         @Override
         public void dropView(PageView view) {
             saveState(new Bundle());
@@ -165,6 +176,22 @@ public class PageScreen extends FlowPathBase{
         protected void onEnterScope(MortarScope scope) {
             super.onEnterScope(scope);
             Timber.v("onEnterScope: %s", scope);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Presenter)) return false;
+
+            Presenter presenter = (Presenter) o;
+
+            return !(page != null ? !page.equals(presenter.page) : presenter.page != null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            return page != null ? page.hashCode() : 0;
         }
     }
 }

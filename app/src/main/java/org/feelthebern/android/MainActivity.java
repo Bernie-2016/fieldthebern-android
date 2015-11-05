@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.SearchView;
@@ -22,7 +23,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
@@ -33,14 +33,18 @@ import org.feelthebern.android.config.Actions;
 import org.feelthebern.android.db.SearchMatrixCursor;
 import org.feelthebern.android.events.ChangePageEvent;
 import org.feelthebern.android.events.ShowToolbarEvent;
+import org.feelthebern.android.models.ApiItem;
+import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Page;
+import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
+import org.feelthebern.android.screens.CollectionScreen;
 import org.feelthebern.android.screens.Main;
 import org.feelthebern.android.screens.PageScreen;
 import org.feelthebern.android.views.PaletteTransformation;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Inject
     Gson gson;
+    private Menu menu;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -324,30 +329,33 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     }
 
 
+    SearchView searchView;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         // Inflate the options menu from XML
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-
-        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-        View searchPlate = searchView.findViewById(searchPlateId);
-        if (searchPlate!=null) {
-            searchPlate.setBackgroundColor(Color.DKGRAY);
-            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
-            if (searchText != null) {
-                searchText.setTextColor(Color.WHITE);
-                searchText.setHintTextColor(Color.WHITE);
-            }
-        }
+        searchView.setBackgroundColor(Color.parseColor("#087ed7"));
+//        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
+//        View searchPlate = searchView.findViewById(searchPlateId);
+//        if (searchPlate!=null) {
+//            searchPlate.setBackgroundColor(Color.DKGRAY);
+//            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+//            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
+//            if (searchText != null) {
+//                searchText.setTextColor(Color.WHITE);
+//                searchText.setHintTextColor(Color.WHITE);
+//            }
+//        }
         return true;
     }
 
@@ -358,24 +366,62 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     }
 
     private void handleIntent(Intent intent) {
-        if (Actions.SEARCH_SELECTION.equals(intent.getAction())) {
+        if (Actions.SEARCH_SELECTION_PAGE.equals(intent.getAction())) {
             String title = intent.getExtras().getString(SearchManager.EXTRA_DATA_KEY);
             showPage(title);
+            MenuItemCompat.collapseActionView(this.menu.findItem(R.id.menu_search));
+
+        } else if (Actions.SEARCH_SELECTION_COLLECTION.equals(intent.getAction())) {
+            String title = intent.getExtras().getString(SearchManager.EXTRA_DATA_KEY);
+            showCollection(title);
+            MenuItemCompat.collapseActionView(this.menu.findItem(R.id.menu_search));
         }
     }
 
     private void showPage(String title) {
 
-        List<Page> pages = SearchMatrixCursor.allPages;
+        Set<ApiItem> items = SearchMatrixCursor.allItems;
 
-        for (Page page : pages) {
-            if (page.getTitle().equals(title)){
-                Timber.v("Showing page from search: %s", page.getTitle());
-                Flow.get(this).set(new PageScreen(page));
+        for (ApiItem item : items) {
+
+            if (item.getTitle().equals(title)){
+
+                final Page searchItem = (Page) item;
+                Timber.v("Showing page from search: %s", searchItem.getTitle());
+
+                container.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Flow.get(MainActivity.this).set(new PageScreen(searchItem));
+                    }
+                });
+
                 break;
             }
         }
+    }
 
+    private void showCollection(String title) {
 
+        Set<ApiItem> items = SearchMatrixCursor.allItems;
+
+        for (ApiItem item : items) {
+
+            if (item.getTitle().equals(title)) {
+
+                final Collection searchItem = (Collection) item;
+
+                Timber.v("Showing Collection from search: %s", item.getTitle());
+
+                container.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Flow.get(MainActivity.this).set(new CollectionScreen(searchItem));
+                    }
+                });
+
+                break;
+            }
+        }
     }
 }

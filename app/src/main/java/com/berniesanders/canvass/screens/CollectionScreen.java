@@ -36,11 +36,6 @@ public class CollectionScreen extends FlowPathBase {
     }
 
     @Override
-    public int getLayout() {
-        return R.layout.screen_collection;
-    }
-
-    @Override
     public Object createComponent() {
         return DaggerCollectionScreen_Component
                 .builder()

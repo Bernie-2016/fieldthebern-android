@@ -41,11 +41,6 @@ public class PageScreen extends FlowPathBase {
     }
 
     @Override
-    public int getLayout() {
-        return R.layout.screen_page;
-    }
-
-    @Override
     public Object createComponent() {
         return DaggerPageScreen_Component
                 .builder()

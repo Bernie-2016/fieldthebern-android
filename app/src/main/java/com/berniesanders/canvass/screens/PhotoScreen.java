@@ -33,11 +33,6 @@ public class PhotoScreen extends FlowPathBase {
     }
 
     @Override
-    public int getLayout() {
-        return R.layout.screen_photo_view;
-    }
-
-    @Override
     public Object createComponent() {
         return DaggerPhotoScreen_Component
                 .builder()

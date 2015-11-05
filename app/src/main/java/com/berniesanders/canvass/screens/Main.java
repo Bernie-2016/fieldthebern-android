@@ -53,11 +53,6 @@ public class Main extends FlowPathBase {
     }
 
     @Override
-    public int getLayout() {
-        return R.layout.main_view;
-    }
-
-    @Override
     public Object createComponent() {
         return DaggerMain_Component.builder()
                 .mainComponent(FTBApplication.getComponent())

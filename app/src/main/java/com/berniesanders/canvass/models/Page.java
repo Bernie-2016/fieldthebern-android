@@ -48,10 +48,10 @@ public class Page extends ApiItem implements Parcelable {
 
     public String getImageUrlFull() {
 
-        if (imageUrlFull.startsWith("http://berniesanders.org20")){
+        if (imageUrlFull.startsWith("http://feelthebern.org20")){
             imageUrlFull = imageUrlFull
-                    .replace("http://berniesanders.org20",
-                    "http://berniesanders.org/wp-content/uploads/20");
+                    .replace("http://feelthebern.org20",
+                    "http://feelthebern.org/wp-content/uploads/20");
         }
         return imageUrlFull;
     }

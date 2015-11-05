@@ -30,9 +30,7 @@ public final class MortarContextFactory implements PathContextFactory {
     private LayoutInflater inflater;
 
     static void destroyScope(Context context) {
-      //if (context!=null) {
         MortarScope.getScope(context).destroy();
-      //}
     }
 
     public TearDownContext(Context context, MortarScope scope) {

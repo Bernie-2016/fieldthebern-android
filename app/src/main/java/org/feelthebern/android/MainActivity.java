@@ -36,7 +36,6 @@ import org.feelthebern.android.events.ShowToolbarEvent;
 import org.feelthebern.android.models.ApiItem;
 import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Page;
-import org.feelthebern.android.mortar.FlowPathBase;
 import org.feelthebern.android.mortar.GsonParceler;
 import org.feelthebern.android.mortar.MortarScreenSwitcherFrame;
 import org.feelthebern.android.screens.CollectionScreen;
@@ -67,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     private MortarScope activityScope;
     private FlowDelegate flowDelegate;
+    private Menu menu;
+    SearchView searchView;
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Inject
     Gson gson;
-    private Menu menu;
+
+
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -329,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     }
 
 
-    SearchView searchView;
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -345,17 +347,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         searchView.setBackgroundColor(Color.parseColor("#087ed7"));
-//        int searchPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_plate", null, null);
-//        View searchPlate = searchView.findViewById(searchPlateId);
-//        if (searchPlate!=null) {
-//            searchPlate.setBackgroundColor(Color.DKGRAY);
-//            int searchTextId = searchPlate.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-//            TextView searchText = (TextView) searchPlate.findViewById(searchTextId);
-//            if (searchText != null) {
-//                searchText.setTextColor(Color.WHITE);
-//                searchText.setHintTextColor(Color.WHITE);
-//            }
-//        }
         return true;
     }
 
@@ -383,19 +374,15 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         Set<ApiItem> items = SearchMatrixCursor.allItems;
 
         for (ApiItem item : items) {
-
             if (item.getTitle().equals(title)){
-
                 final Page searchItem = (Page) item;
                 Timber.v("Showing page from search: %s", searchItem.getTitle());
-
                 container.post(new Runnable() {
                     @Override
                     public void run() {
                         Flow.get(MainActivity.this).set(new PageScreen(searchItem));
                     }
                 });
-
                 break;
             }
         }
@@ -406,20 +393,15 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         Set<ApiItem> items = SearchMatrixCursor.allItems;
 
         for (ApiItem item : items) {
-
             if (item.getTitle().equals(title)) {
-
                 final Collection searchItem = (Collection) item;
-
                 Timber.v("Showing Collection from search: %s", item.getTitle());
-
                 container.post(new Runnable() {
                     @Override
                     public void run() {
                         Flow.get(MainActivity.this).set(new CollectionScreen(searchItem));
                     }
                 });
-
                 break;
             }
         }

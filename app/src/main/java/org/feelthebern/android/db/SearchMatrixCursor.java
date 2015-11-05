@@ -32,19 +32,14 @@ import timber.log.Timber;
 public class SearchMatrixCursor extends MatrixCursor {
 
 
-    public static final String[] COLUMNS = {BaseColumns._ID,
+    public static final String[] COLUMNS = {
+            BaseColumns._ID,
             SearchManager.SUGGEST_COLUMN_TEXT_1,
             SearchManager.SUGGEST_COLUMN_ICON_1,
             SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
-            SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA
-
-    };
+            SearchManager.SUGGEST_COLUMN_INTENT_EXTRA_DATA};
 
     private static final long MAX_RESULTS = 5;
-
-
-    @SuppressWarnings("unused")
-    private final Context c;
 
     static Collection collection;
     Subscription subscription;
@@ -54,9 +49,8 @@ public class SearchMatrixCursor extends MatrixCursor {
     CollectionRepo repo;
     private String query;
 
-    public SearchMatrixCursor(String[] columnNames, Context c) {
+    public SearchMatrixCursor() {
         super(COLUMNS);
-        this.c = c;
         allItems = new HashSet<>();
     }
 
@@ -74,7 +68,6 @@ public class SearchMatrixCursor extends MatrixCursor {
 
     private void parsePageList(String query) {
 
-        //List<Page> unfilteredPages;
         allItems = new HashSet<>();
         allItems.addAll(addChildPages(collection));
         Timber.v("list...%d", allItems.size());
@@ -96,9 +89,6 @@ public class SearchMatrixCursor extends MatrixCursor {
             if ("collection".equals(apiItem.getType())) {
                 List<ApiItem> grandkids = ((Collection) apiItem).getApiItems();
                 unfilteredPages.addAll(grandkids);
-//                for (ApiItem grandKid : grandkids) {
-//                    unfilteredPages.add(grandKid);
-//                }
             }
         }
 
@@ -117,11 +107,13 @@ public class SearchMatrixCursor extends MatrixCursor {
 
     private void convertAndAddRows(String query) {
 
+        if(query==null) { return; }
+
         int numRows = 0;
 
         for (ApiItem apiItem:allItems) {
 
-            if (apiItem.getTitle().toLowerCase().contains(query)) {
+            if (apiItem.getTitle().toLowerCase().contains(query.toLowerCase().trim())) {
 
                 if ("page".equals(apiItem.getType())) {
                     addRow(getPageRow((Page) apiItem, numRows));
@@ -174,6 +166,5 @@ public class SearchMatrixCursor extends MatrixCursor {
             Timber.v("... repo returned the collection");
         }
     };
-
 
 }

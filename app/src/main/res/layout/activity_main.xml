@@ -56,25 +56,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <!-- Your Scrollable View -->
-    <org.feelthebern.android.mortar.MortarScreenSwitcherFrame
+    <com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity"
+        tools:context="com.berniesanders.canvass.MainActivity"
         android:id="@+id/container_main"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="#087ed7"
         />
-
-    <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:id="@+id/fab"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:src="@drawable/ic_action_location_found"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--android:layout_marginRight="20dp"-->
-        <!--android:layout_gravity="bottom|right"-->
-        <!--app:fabSize="normal" />-->
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.feelthebern.android" >
+    package="com.berniesanders.canvass" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -9,7 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:name="org.feelthebern.android.FTBApplication"
+        android:name="com.berniesanders.canvass.FTBApplication"
         >
         <activity
             android:name=".MainActivity"
@@ -29,8 +29,8 @@
 
         </activity>
 
-        <provider 	android:name=".providers.SearchProvider"
-                     android:authorities="org.feelthebern.android.providers.SearchProvider"
+        <provider 	android:name="com.berniesanders.canvass.providers.SearchProvider"
+                     android:authorities="com.berniesanders.canvass.providers.SearchProvider"
                      android:exported="false"
             />
     </application>

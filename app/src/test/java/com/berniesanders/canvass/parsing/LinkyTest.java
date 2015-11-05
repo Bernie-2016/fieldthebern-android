@@ -7,7 +7,7 @@ import static com.berniesanders.canvass.parsing.Linky.linkify;
 import org.junit.Test;
 
 //import static org.junit.Assert.*;
-//import static org.assertj.canvass.api.Assertions.assertThat;
+//import static org.assertj.android.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 

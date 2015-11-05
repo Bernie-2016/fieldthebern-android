@@ -3,6 +3,7 @@ package com.berniesanders.canvass.screens;
 import android.os.Bundle;
 
 import com.berniesanders.canvass.FTBApplication;
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.events.ChangePageEvent;
@@ -22,7 +23,7 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(com.berniesanders.canvass.R.layout.screen_photo_view)
+@Layout(R.layout.screen_photo_view)
 public class PhotoScreen extends FlowPathBase {
 
     private final Img img;
@@ -33,7 +34,7 @@ public class PhotoScreen extends FlowPathBase {
 
     @Override
     public int getLayout() {
-        return com.berniesanders.canvass.R.layout.screen_photo_view;
+        return R.layout.screen_photo_view;
     }
 
     @Override

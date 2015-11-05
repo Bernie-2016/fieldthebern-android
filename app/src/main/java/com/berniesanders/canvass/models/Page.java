@@ -3,6 +3,7 @@ package com.berniesanders.canvass.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.google.gson.annotations.SerializedName;
 
@@ -29,7 +30,7 @@ import java.util.List;
  *              +-page {obj}
  *                  +-content [array]
  */
-@Layout(com.berniesanders.canvass.R.layout.item_page)
+@Layout(R.layout.item_page)
 public class Page extends ApiItem implements Parcelable {
     public static final String PAGE_PARCEL = "PageParcelKey";
 

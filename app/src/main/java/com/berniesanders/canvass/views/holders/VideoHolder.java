@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.adapters.BaseViewHolder;
 import com.berniesanders.canvass.models.Video;
 import com.berniesanders.canvass.views.VideoContainerView;
@@ -27,13 +28,13 @@ public class VideoHolder extends BaseViewHolder<Video> {
     //@Bind(R.id.text)
     //TextView textView;
 
-    @Bind(com.berniesanders.canvass.R.id.youtubethumbnailview)
+    @Bind(R.id.youtubethumbnailview)
     YouTubeThumbnailView thumbnail;
 
     VideoContainerView videoContainer;
     YouTubeThumbnailLoader loader;
 
-    @Bind(com.berniesanders.canvass.R.id.play_arrow_icon)
+    @Bind(R.id.play_arrow_icon)
     ImageView playIcon;
 
     VideoHolder(View itemView) {
@@ -73,7 +74,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
             thumbnail
                     .initialize(thumbnail
                                     .getContext()
-                                    .getString(com.berniesanders.canvass.R.string.youtubeApiKey),
+                                    .getString(R.string.youtubeApiKey),
                             new YouTubeThumbnailView.OnInitializedListener() {
                                 @Override
                                 public void onInitializationSuccess(YouTubeThumbnailView view,
@@ -106,7 +107,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
             thumbnail.setVisibility(View.INVISIBLE);
             TextView textView = (TextView) LayoutInflater
                     .from(videoContainer.getContext())
-                    .inflate(com.berniesanders.canvass.R.layout.item_video_link, videoContainer, false);
+                    .inflate(R.layout.item_video_link, videoContainer, false);
 
             //String linkText = String.format("<a href=\"%s\">%s</a>", model.getText(), model.getText() );
             //textView.setMovementMethod(LinkMovementMethod.getInstance());
@@ -130,7 +131,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
     private void removeTextView() {
 
         //if we added a textview we should probably remove it
-        View textView = videoContainer.findViewById(com.berniesanders.canvass.R.id.video_txt_link);
+        View textView = videoContainer.findViewById(R.id.video_txt_link);
         if (textView!=null) {
             videoContainer.removeView(textView);
         }

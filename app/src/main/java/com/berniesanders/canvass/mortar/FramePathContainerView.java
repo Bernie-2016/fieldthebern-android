@@ -22,6 +22,8 @@ import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.berniesanders.canvass.R;
+
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;
@@ -36,7 +38,7 @@ public class FramePathContainerView extends FrameLayout
 
   @SuppressWarnings("UnusedDeclaration") // Used by layout inflation, of course!
   public FramePathContainerView(Context context, AttributeSet attrs) {
-    this(context, attrs, new SimplePathContainer(com.berniesanders.canvass.R.id.screen_switcher_tag, Path.contextFactory()));
+    this(context, attrs, new SimplePathContainer(R.id.screen_switcher_tag, Path.contextFactory()));
   }
 
   /**

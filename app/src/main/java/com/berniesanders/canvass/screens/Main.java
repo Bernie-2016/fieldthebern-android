@@ -19,6 +19,7 @@ package com.berniesanders.canvass.screens;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
@@ -43,7 +44,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-@Layout(com.berniesanders.canvass.R.layout.main_view)
+@Layout(R.layout.main_view)
 public class Main extends FlowPathBase {
 
     Parcelable savedState;
@@ -53,7 +54,7 @@ public class Main extends FlowPathBase {
 
     @Override
     public int getLayout() {
-        return com.berniesanders.canvass.R.layout.main_view;
+        return R.layout.main_view;
     }
 
     @Override
@@ -131,7 +132,7 @@ public class Main extends FlowPathBase {
             getView().hideLoadingAnimation();
             getView().setData(collection);
 
-            String pageName = getView().getResources().getString(com.berniesanders.canvass.R.string.app_name);
+            String pageName = getView().getResources().getString(R.string.app_name);
 
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);

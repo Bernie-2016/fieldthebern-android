@@ -3,6 +3,7 @@ package com.berniesanders.canvass.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * TODO: delay implementation until implmenting all other content items
  */
-@Layout(com.berniesanders.canvass.R.layout.row_nav)
+@Layout(R.layout.row_nav)
 public class Nav extends Content implements Parcelable, Linkable {
     private List<Anchor> anchors;
     private List<Link> links;

@@ -3,6 +3,7 @@ package com.berniesanders.canvass.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 
 /**
@@ -14,7 +15,7 @@ import com.berniesanders.canvass.annotations.Layout;
     caption: "Source",
     source: "http://www.washingtonpost.com/news/wonkblog/wp/2014/04/30/the-meteoric-costly-and-unprecedented-rise-of-incarceration-in-america/"
  */
-@Layout(com.berniesanders.canvass.R.layout.row_img)
+@Layout(R.layout.row_img)
 public class Img extends Content implements Parcelable {
 
     public static final String IMG_PARCEL_KEY = "img_parcel_key";

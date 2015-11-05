@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.berniesanders.canvass.annotations.Layout;
 import com.google.gson.annotations.SerializedName;
-
+import com.berniesanders.canvass.R;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +29,7 @@ import java.util.List;
  *              +-page {obj}
  *                  +-content [array]
  */
-@Layout(com.berniesanders.canvass.R.layout.item_collection)
+@Layout(R.layout.item_collection)
 public class Collection extends ApiItem implements Parcelable {
     public static final String COLLECTION_PARCEL = "CollectionParcelKey";
 

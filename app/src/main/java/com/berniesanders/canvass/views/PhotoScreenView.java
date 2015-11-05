@@ -6,6 +6,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.berniesanders.canvass.FTBApplication;
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.events.ShowToolbarEvent;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.mortar.HandlesBack;
@@ -75,7 +76,7 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     }
 
     public ImageView getImageView() {
-        return (ImageView) findViewById(com.berniesanders.canvass.R.id.iv_photo);
+        return (ImageView) findViewById(R.id.iv_photo);
     }
 
 

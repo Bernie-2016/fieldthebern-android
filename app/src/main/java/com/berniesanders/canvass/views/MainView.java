@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.screens.Main;
 import com.berniesanders.canvass.adapters.CollectionRecyclerAdapter;
 import com.berniesanders.canvass.models.Collection;
@@ -44,10 +45,10 @@ public class MainView extends FrameLayout {
     @Inject
     Main.Presenter presenter;
 
-    @Bind(com.berniesanders.canvass.R.id.mainRecyclerView)
+    @Bind(R.id.mainRecyclerView)
     RecyclerView recyclerView;
 
-    @Bind(com.berniesanders.canvass.R.id.progressWheel)
+    @Bind(R.id.progressWheel)
     ProgressBar progressWheel;
 
 
@@ -61,7 +62,7 @@ public class MainView extends FrameLayout {
 
     private void setLayoutManager(Context context) {
         GridLayoutManager gridLayoutManager
-                = new GridLayoutManager(context, context.getResources().getInteger(com.berniesanders.canvass.R.integer.num_cols));
+                = new GridLayoutManager(context, context.getResources().getInteger(R.integer.num_cols));
         recyclerView.setLayoutManager(gridLayoutManager);
     }
 

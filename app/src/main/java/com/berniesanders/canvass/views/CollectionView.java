@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.screens.CollectionScreen;
 
@@ -48,7 +49,7 @@ public class CollectionView extends RecyclerView {
 
     private void setLayoutManager(Context context) {
         GridLayoutManager gridLayoutManager
-                = new GridLayoutManager(context, context.getResources().getInteger(com.berniesanders.canvass.R.integer.num_cols));
+                = new GridLayoutManager(context, context.getResources().getInteger(R.integer.num_cols));
         setLayoutManager(gridLayoutManager);
     }
 

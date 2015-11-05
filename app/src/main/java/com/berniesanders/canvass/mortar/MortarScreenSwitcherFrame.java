@@ -18,11 +18,13 @@ package com.berniesanders.canvass.mortar;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import com.berniesanders.canvass.R;
+
 import flow.path.Path;
 
 public class MortarScreenSwitcherFrame extends FramePathContainerView {
   public MortarScreenSwitcherFrame(Context context, AttributeSet attrs) {
-    super(context, attrs, new SimplePathContainer(com.berniesanders.canvass.R.id.screen_switcher_tag,
+    super(context, attrs, new SimplePathContainer(R.id.screen_switcher_tag,
         Path.contextFactory(new MortarContextFactory())));
   }
 }

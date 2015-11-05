@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import com.berniesanders.canvass.FTBApplication;
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.adapters.CollectionRecyclerAdapter;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.events.ChangePageEvent;
@@ -24,7 +25,7 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(com.berniesanders.canvass.R.layout.screen_collection)
+@Layout(R.layout.screen_collection)
 public class CollectionScreen extends FlowPathBase {
 
     private final Collection collection;
@@ -36,7 +37,7 @@ public class CollectionScreen extends FlowPathBase {
 
     @Override
     public int getLayout() {
-        return com.berniesanders.canvass.R.layout.screen_collection;
+        return R.layout.screen_collection;
     }
 
     @Override
@@ -131,7 +132,7 @@ public class CollectionScreen extends FlowPathBase {
          * hacky
          */
         private boolean hasOnlyVisibleChildren() {
-            int numCols = getView().getContext().getResources().getInteger(com.berniesanders.canvass.R.integer.num_cols);
+            int numCols = getView().getContext().getResources().getInteger(R.integer.num_cols);
             int orientation = getView().getContext().getResources().getConfiguration().orientation;
 
             if (orientation == Configuration.ORIENTATION_PORTRAIT) {

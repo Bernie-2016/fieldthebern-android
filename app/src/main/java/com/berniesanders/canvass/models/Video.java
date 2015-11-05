@@ -3,12 +3,13 @@ package com.berniesanders.canvass.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 
 /**
  *
  */
-@Layout(com.berniesanders.canvass.R.layout.row_video)
+@Layout(R.layout.row_video)
 public class Video extends Content implements Parcelable {
 
     private String src;

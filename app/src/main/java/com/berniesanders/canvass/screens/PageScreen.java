@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import com.berniesanders.canvass.FTBApplication;
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
@@ -27,7 +28,7 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(com.berniesanders.canvass.R.layout.screen_page)
+@Layout(R.layout.screen_page)
 public class PageScreen extends FlowPathBase {
 
     private final Page page;
@@ -41,7 +42,7 @@ public class PageScreen extends FlowPathBase {
 
     @Override
     public int getLayout() {
-        return com.berniesanders.canvass.R.layout.screen_page;
+        return R.layout.screen_page;
     }
 
     @Override

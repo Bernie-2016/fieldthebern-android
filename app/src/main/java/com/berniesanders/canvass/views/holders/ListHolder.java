@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.adapters.BaseViewHolder;
 import com.berniesanders.canvass.models.List;
 
@@ -34,8 +35,8 @@ public class ListHolder extends BaseViewHolder<List> {
         for (String listItem : stringList) {
             LinearLayout li = (LinearLayout) LayoutInflater
                     .from(container.getContext())
-                    .inflate(com.berniesanders.canvass.R.layout.list_item, container, false);
-            TextView textView = (TextView) li.findViewById(com.berniesanders.canvass.R.id.text);
+                    .inflate(R.layout.list_item, container, false);
+            TextView textView = (TextView) li.findViewById(R.id.text);
             textView.setText(listItem);
             container.addView(li);
         }

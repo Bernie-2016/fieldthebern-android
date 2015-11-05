@@ -3,7 +3,7 @@
   ~ Copyright 2015 FeelTheBern.org
   -->
 
-<org.feelthebern.android.views.MainView
+<com.berniesanders.canvass.views.MainView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -29,4 +29,4 @@
         android:indeterminate="true"
         android:layout_gravity="center"
         />
-</org.feelthebern.android.views.MainView>
+</com.berniesanders.canvass.views.MainView>

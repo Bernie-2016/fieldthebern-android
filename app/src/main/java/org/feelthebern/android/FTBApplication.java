@@ -40,13 +40,17 @@ public class FTBApplication extends Application {
 
     @Override
     public Object getSystemService(String name) {
-        if (rootScope == null) {
+        if (rootScope == null && component!=null) {
             rootScope = MortarScope.buildRootScope()
                     .withService(DaggerService.DAGGER_SERVICE, getComponent())
                             .build("Root");
         }
 
+        if (rootScope == null) {
+            return super.getSystemService(name);
+        }
         return rootScope.hasService(name) ? rootScope.getService(name) : super.getSystemService(name);
+
     }
 
     @Override

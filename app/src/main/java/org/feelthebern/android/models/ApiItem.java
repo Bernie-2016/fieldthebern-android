@@ -10,15 +10,19 @@ public class ApiItem implements Parcelable {
 
     //protected String imageUrlThumb;
     protected String type;
+    protected String title;
 
     public String getImageUrlThumb() {
         return null;
     }
 
     public String getTitle() {
-        return null;
+        return title;
     }
 
+    public String getType() {
+        return type;
+    }
 
     @Override
     public int describeContents() {
@@ -28,6 +32,7 @@ public class ApiItem implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.type);
+        dest.writeString(this.title);
     }
 
     public ApiItem() {
@@ -35,6 +40,7 @@ public class ApiItem implements Parcelable {
 
     protected ApiItem(Parcel in) {
         this.type = in.readString();
+        this.title = in.readString();
     }
 
     public static final Parcelable.Creator<ApiItem> CREATOR = new Parcelable.Creator<ApiItem>() {

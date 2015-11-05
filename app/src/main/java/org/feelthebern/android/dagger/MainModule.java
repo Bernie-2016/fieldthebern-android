@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.feelthebern.android.models.ApiItem;
-import org.feelthebern.android.models.Collection;
 import org.feelthebern.android.models.Content;
 import org.feelthebern.android.parsing.CollectionDeserializer;
 import org.feelthebern.android.parsing.PageContentDeserializer;

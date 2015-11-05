@@ -169,6 +169,8 @@ public class Main extends FlowPathBase {
         }
 
         private void saveState(Bundle outState) {
+            if (getView()==null) { return; }
+            if (getView().getLayoutManager()==null) { return; }
             outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
             outState.putParcelable(Collection.COLLECTION_PARCEL, collection);
             ((Main) Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();

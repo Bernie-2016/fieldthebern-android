@@ -1,16 +1,15 @@
-#FeelTheBern Android
+#Canvass for Bernie / Field the Bern (Android)
 
-![feel the bern](play_store_bg_1024x500.png)  
-This app under development and is currently mostly a mirror of the FTB website. 
-The goal is to provide a tool for grassroots organizers to have quick and easy 
-access to Bernie's stance on the issues.
- 
-It uses the JSON feed to render views (rather than a WebView)
+This app under development. The goal is to provide a tool for grassroots organizers to canvass with.  
+
+Issue info is provided by [FeelTheBern.org](http://FeelTheBern.org)
+
+[Video of the iOS version](http://cl.ly/113H0T2u350V)  
 
 
 ##Code architecture
 
-FTB Android **loosely** uses [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) and the [Repository](http://code.tutsplus.com/tutorials/the-repository-design-pattern--net-35804) design patterns.  
+This app **loosely** uses [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) and the [Repository](http://code.tutsplus.com/tutorials/the-repository-design-pattern--net-35804) design patterns.  
 
 We also use the following open-source libraries.  
 
@@ -21,14 +20,15 @@ We also use the following open-source libraries.
 * [Timber](https://github.com/JakeWharton/timber) (for logging)
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [RxJava](https://github.com/ReactiveX/RxJava)
+* [Otto](https://github.com/square/otto)
 
 Before contributing, please be sure your are familiar with the design patterns and libraries. 
 Feel free to reach out on Slack if you have questions!
 
 
-##Building the app
+##Building
 
-To build you will need a **YouTube API key**.  
+You will need a **YouTube API key**.  
 Follow the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
 
 Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  
@@ -49,23 +49,22 @@ Once you have your key, create a `keys.xml` file under the `app/src/main/res/val
 
 Please follow the [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) branching and branch naming convention
 
+##Issue data from FeelTheBern.org
 
-##JSON
+The JSON for the FeeTheBern issues can be found at:
+[http://feelthebern.org/ftb-json/](http://feelthebern.org/ftb-json/)
 
-The JSON is parsed using `GSON`.
-
-Custom deserializers `CollectionDeserializers` and `PageContentDeserializer` are passed to `Retrofit` to do the work.
 
 ####Structure
 
-There are two JSON endpoints the app uses.  
+There are two important model types returned by FTB: `Collection` and `Page`  
+
+Custom deserializers `CollectionDeserializers` and `PageContentDeserializer` are passed to `Gson` which is passed to `Retrofit` to do the work.
 
 #####Collections
 
-`http://feelthebern.org/ftb-json/index2.php`  
-[http://feelthebern.org/ftb-json/index2.php] (http://feelthebern.org/ftb-json/index2.php)
 
-The first endpoint returns a custom model type called a `Collection`  
+The endpoint returns a custom model type called a `Collection`  
 
 Collections contain an array `items` which can contain other `Collections` or `Pages`
 
@@ -79,25 +78,14 @@ collection
              +-page
      +-page
      +-collection
-         +-items  
+         +-items [array] 
+             +-page
              +-page
              +-page 
+               +-content [array]
 ```
 
 #####Page Content
-
-`http://feelthebern.org/ftb-json/page.php?id={data}`  
-  
-The number from the `Page` object's `data` field replaces `{data}`  
-
-[http://feelthebern.org/ftb-json/page.php?id=1175](http://feelthebern.org/ftb-json/page.php?id=1175)
-
-The _"page"_ endpoint returns the `Page` object's `content` array  
-
-```
-page {obj} (not returned from this endpoint)
-  +-content [array] (these are the children returned)
-```
 
 'content' array items *roughly* equate to HTML nodes such as  
 * `h1`  
@@ -108,5 +96,3 @@ page {obj} (not returned from this endpoint)
 * `nav`  
 * `video`  
   
-The JSON for the full site (not currently used by the app) 
-can be found at: [http://feelthebern.org/ftb-json/](http://feelthebern.org/ftb-json/)

@@ -26,9 +26,9 @@ Before contributing, please be sure your are familiar with the design patterns a
 Feel free to reach out on Slack if you have questions!
 
 
-##Building the app
+##Building
 
-To build you will need a **YouTube API key**.  
+You will need a **YouTube API key**.  
 Follow the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
 
 Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  

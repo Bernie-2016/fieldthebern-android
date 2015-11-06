@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         animateBg(event.getImgUrl() != null);
 
         if (event.getImgUrl() == null && isLollipopOrAbove()) {
-            setStatusBarColor(Color.parseColor("#087ed7"));
+            setStatusBarColor(getResources().getColor(R.color.bernie_dark_blue));
         }
     }
 
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         collapsingToolbar.setExpandedTitleTypeface(typeface);
 
         if (isLollipopOrAbove()) {
-            setStatusBarColor(Color.parseColor("#087ed7"));
+            setStatusBarColor(getResources().getColor(R.color.bernie_dark_blue));
         }
     }
 
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        searchView.setBackgroundColor(Color.parseColor("#087ed7"));
+        searchView.setBackgroundColor(getResources().getColor(R.color.bernie_dark_blue));
         return true;
     }
 

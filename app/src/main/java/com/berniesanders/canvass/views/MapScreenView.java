@@ -1,16 +1,24 @@
 package com.berniesanders.canvass.views;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.screens.MapScreen;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -50,7 +58,6 @@ public class MapScreenView extends FrameLayout {
         super(context, attrs, defStyleAttr);
         injectSelf(context);
     }
-
 
 
     private void injectSelf(Context context) {
@@ -96,6 +103,7 @@ public class MapScreenView extends FrameLayout {
                 @Override
                 public void onMapReady(GoogleMap gmap) {
                     MapScreenView.this.googleMap = gmap;
+                    gmap.animateCamera(CameraUpdateFactory.newCameraPosition(getCurrentLocationCam()));
                     Timber.v("OnMapReadyCallback");
                 }
             });
@@ -128,6 +136,36 @@ public class MapScreenView extends FrameLayout {
 
             activityWeakReference.clear();
         }
+    }
+
+
+    //TODO implement actual location code
+    CameraPosition getCurrentLocationCam() {
+
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(activityWeakReference.get(),
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(activityWeakReference.get(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            //return null //TODO;
+            Timber.e("location permission error");
+            return null;
+        }
+
+
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        return new CameraPosition
+                .Builder()
+                .target(new LatLng(location.getLatitude(), location.getLongitude()))
+                .zoom(17f)
+                .build();
+
     }
 
 }

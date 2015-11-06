@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue500">#2196F3</color>
+    <color name="bernie_dark_blue">#0066ba</color>
+    <color name="bernie_translucent_dark_blue">#990066ba</color>
+    <color name="bernie_green">#20c361</color>
+    <color name="bernie_red">#f55b5b</color>
     <color name="white">#fff</color>
 </resources>

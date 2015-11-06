@@ -74,7 +74,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
             thumbnail
                     .initialize(thumbnail
                                     .getContext()
-                                    .getString(R.string.youtubeApiKey),
+                                    .getString(R.string.googleApiKey),
                             new YouTubeThumbnailView.OnInitializedListener() {
                                 @Override
                                 public void onInitializationSuccess(YouTubeThumbnailView view,

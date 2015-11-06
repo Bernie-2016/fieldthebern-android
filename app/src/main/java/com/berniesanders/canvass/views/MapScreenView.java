@@ -113,21 +113,9 @@ public class MapScreenView extends FrameLayout {
                 public void onMapReady(GoogleMap gmap) {
                     Timber.v("OnMapReadyCallback");
                     MapScreenView.this.googleMap = gmap;
-                    gmap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                                    getCurrentLocationCam()),
-                            300,
-                            new GoogleMap.CancelableCallback() {
-                                @Override
-                                public void onFinish() {
-                                    Timber.v("animateCamera CancelableCallback onFinish");
-                                }
-
-                                @Override
-                                public void onCancel() {
-                                    Timber.w("animateCamera CancelableCallback onCancel");
-                                }
-                            });
-
+                    gmap.setMyLocationEnabled(true);
+                    gmap.moveCamera(CameraUpdateFactory
+                            .newCameraPosition(getCurrentLocationCam()));
                 }
             });
         }

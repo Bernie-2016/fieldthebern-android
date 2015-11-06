@@ -48,6 +48,8 @@ android:layout_height="match_parent" >
             android:layout_height="wrap_content"
             android:src="@drawable/ic_pin_drop_white_48dp"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -57,6 +59,7 @@ android:layout_height="match_parent" >
             >
 
             <TextView
+                android:id="@+id/nearest_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -64,6 +67,7 @@ android:layout_height="match_parent" >
                 android:textSize="12sp"
                 />
             <TextView
+                android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -71,6 +75,7 @@ android:layout_height="match_parent" >
                 android:textSize="24sp"
                 />
             <TextView
+                android:id="@+id/leaning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"

@@ -163,7 +163,7 @@ public class MapScreenView extends FrameLayout {
         return new CameraPosition
                 .Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))
-                .zoom(17f)
+                .zoom(18f)
                 .build();
 
     }

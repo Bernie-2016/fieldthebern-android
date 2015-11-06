@@ -25,6 +25,7 @@ android:layout_height="match_parent" >
         />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/address_btn"
         android:src="@drawable/ic_new_address"
         app:fabSize="normal"
         android:layout_width="84dp"

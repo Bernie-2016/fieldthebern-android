@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
@@ -28,6 +29,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import flow.path.Path;
 import flow.path.PathContext;
 import timber.log.Timber;
@@ -40,6 +44,9 @@ public class MapScreenView extends FrameLayout {
     MapFragment mapFragment;
     GoogleMap googleMap;
     WeakReference<Activity> activityWeakReference;
+
+    @Bind(R.id.address_btn)
+    FloatingActionButton fab;
 
     @Inject
     MapScreen.Presenter presenter;
@@ -81,6 +88,8 @@ public class MapScreenView extends FrameLayout {
             }
         }
 
+
+
         DaggerService.<MapScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
@@ -102,12 +111,33 @@ public class MapScreenView extends FrameLayout {
 
                 @Override
                 public void onMapReady(GoogleMap gmap) {
-                    MapScreenView.this.googleMap = gmap;
-                    gmap.animateCamera(CameraUpdateFactory.newCameraPosition(getCurrentLocationCam()));
                     Timber.v("OnMapReadyCallback");
+                    MapScreenView.this.googleMap = gmap;
+                    gmap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                                    getCurrentLocationCam()),
+                            300,
+                            new GoogleMap.CancelableCallback() {
+                                @Override
+                                public void onFinish() {
+                                    Timber.v("animateCamera CancelableCallback onFinish");
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    Timber.w("animateCamera CancelableCallback onCancel");
+                                }
+                            });
+
                 }
             });
         }
+
+        ButterKnife.bind(this, this);
+    }
+
+    @OnClick(R.id.address_btn)
+    public void addNewAddress() {
+        Timber.v("addNewAddress click");
     }
 
     @Override

@@ -28,14 +28,16 @@ Feel free to reach out on Slack if you have questions!
 
 ##Building
 
-You will need a **YouTube API key**.  
+You will need a **YouTube API key** and **Google Maps Android API Key**.  
 Follow the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
+
+Both APIs use the same key, just add both to your application in the Google API Console.
 
 Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="youtubeApiKey">YOUR-API-KEY</string>
+    <string name="googleApiKey">YOUR-API-KEY</string>
 </resources>
 ```
 

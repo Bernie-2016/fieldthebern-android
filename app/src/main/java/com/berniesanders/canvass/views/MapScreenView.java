@@ -54,7 +54,10 @@ public class MapScreenView extends FrameLayout {
 
 
     private void injectSelf(Context context) {
-        Timber.v("is activity? %s", String.valueOf(context.getClass()));
+        //This is a hack to safely get a reference to the activity.
+        //Flow is internally already passing around the references in a private Map<Path,Context>
+        //So we use a little hacky reflection tool to steal the activity ref
+        //but hold it in a weak ref
         PathContext pathContext = (PathContext) context;
         Map<Path, Context> contextMap = new HashMap<>();
         try {
@@ -92,7 +95,6 @@ public class MapScreenView extends FrameLayout {
 
                 @Override
                 public void onMapReady(GoogleMap gmap) {
-
                     MapScreenView.this.googleMap = gmap;
                     Timber.v("OnMapReadyCallback");
                 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.canvass.views.AddAddressView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        >
+
+        <TextView
+            android:id="@+id/instructions_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:drawableLeft="@drawable/ic_pin_drop_white_48dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:text="Correct the Address below before you knock on the door."
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:singleLine="true"
+            android:text="123 Main St."
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            />
+
+        <EditText
+            android:id="@+id/apartment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:singleLine="true"
+            android:text="Apt / Suite / Etc."
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            />
+
+        <TextView
+            android:id="@+id/reminder_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:text="Remember: enter an apartment number if there is one"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/start_visit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="#44FFFFFF"
+        android:gravity="center"
+        android:text="START VISIT"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/start_visit_btn"
+        android:layout_margin="16dp"
+        android:gravity="center_horizontal"
+        android:text="Ready to knock?"
+        android:textColor="@android:color/white"
+        />
+</com.berniesanders.canvass.views.AddAddressView>

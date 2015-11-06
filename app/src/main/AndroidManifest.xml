@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme"
         android:name="com.berniesanders.canvass.FTBApplication"
         >
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/googleApiKey"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

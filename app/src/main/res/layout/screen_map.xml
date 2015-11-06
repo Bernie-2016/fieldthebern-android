@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.canvass.views.MapScreenView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:map="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent" >
+
+    <fragment
+    android:id="@+id/map_frag"
+    class="com.google.android.gms.maps.MapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="map_frag_tag"
+    />
+</com.berniesanders.canvass.views.MapScreenView>

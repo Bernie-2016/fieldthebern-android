@@ -234,14 +234,10 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         flowDelegate.onPause();
         super.onPause();
     }
+    
     @Override public Object onRetainCustomNonConfigurationInstance() {
         return flowDelegate.onRetainNonConfigurationInstance();
     }
-//    @SuppressWarnings("deprecation") // https://code.google.com/p/android/issues/detail?id=151346
-//    @Override public Object onRetainNonConfigurationInstance() {
-//        return flowDelegate.onRetainNonConfigurationInstance();
-//    }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

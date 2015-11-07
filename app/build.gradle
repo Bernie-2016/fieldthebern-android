@@ -28,6 +28,9 @@ android {
         exclude 'LICENSE.txt'
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
+    lintOptions {
+        disable 'InvalidPackage','WrongConstant'
+    }
 }
 
 dependencies {

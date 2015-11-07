@@ -4,7 +4,7 @@ buildscript {
     repositories {
         jcenter()
         maven {
-            url 'https://repos.zeroturnaround.com/nexus/content/repositories/zt-public-releases'
+            url "https://oss.sonatype.org/content/repositories/snapshots"
         }
     }
     dependencies {
@@ -22,6 +22,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots"
+        }
     }
 }
 

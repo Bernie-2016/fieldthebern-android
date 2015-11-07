@@ -53,7 +53,8 @@ public class Main extends FlowPathBase {
 
     @Override
     public Object createComponent() {
-        return DaggerMain_Component.builder()
+        return DaggerMain_Component
+                .builder()
                 .mainComponent(FTBApplication.getComponent())
                 .build();
     }
@@ -67,14 +68,12 @@ public class Main extends FlowPathBase {
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(MainView t);
-        Gson gson();
         CollectionRepo collectionRepo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<MainView> {
 
-        final Gson gson;
         final CollectionRepo repo;
         Subscription subscription;
 
@@ -86,8 +85,7 @@ public class Main extends FlowPathBase {
         private static final String BUNDLE_RECYCLER_LAYOUT = "Main.recycler.layout";
 
         @Inject
-        Presenter(Gson gson, CollectionRepo repo) {
-            this.gson = gson;
+        Presenter(CollectionRepo repo) {
             this.repo = repo;
         }
 

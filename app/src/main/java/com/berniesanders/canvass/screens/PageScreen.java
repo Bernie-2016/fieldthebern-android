@@ -48,7 +48,6 @@ public class PageScreen extends FlowPathBase {
         return DaggerPageScreen_Component
                 .builder()
                 .pageModule(new PageModule(page))
-                .mainComponent(FTBApplication.getComponent())
                 .build();
     }
 
@@ -70,19 +69,13 @@ public class PageScreen extends FlowPathBase {
         public Page providePage() {
             return p;
         }
-
-        @Provides
-        Presenter providePresenter() {
-            return new Presenter(p);
-        }
     }
 
     @FtbScreenScope
-    @dagger.Component(dependencies = MainComponent.class, modules = PageModule.class)
+    @dagger.Component(modules = PageModule.class)
     public interface Component {
         void inject(PageView t);
         Page getPage();
-        Presenter getPresenter();
     }
 
     @FtbScreenScope
@@ -175,20 +168,5 @@ public class PageScreen extends FlowPathBase {
             Timber.v("onEnterScope: %s", scope);
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Presenter)) return false;
-
-            Presenter presenter = (Presenter) o;
-
-            return !(page != null ? !page.equals(presenter.page) : presenter.page != null);
-
-        }
-
-        @Override
-        public int hashCode() {
-            return page != null ? page.hashCode() : 0;
-        }
     }
 }

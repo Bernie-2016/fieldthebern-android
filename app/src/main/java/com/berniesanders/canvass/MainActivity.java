@@ -154,9 +154,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
         GsonParceler parceler = new GsonParceler(gson);
 
-        @SuppressWarnings("deprecation")
         FlowDelegate.NonConfigurationInstance nonConfig =
-                (FlowDelegate.NonConfigurationInstance) getLastNonConfigurationInstance();
+                (FlowDelegate.NonConfigurationInstance) getLastCustomNonConfigurationInstance();
 
 
         //BundleService helps us save state using the standard activity bundle
@@ -210,7 +209,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         flowDelegate.onPause();
         super.onPause();
     }
-
+    @Override public Object onRetainCustomNonConfigurationInstance() {
+        return flowDelegate.onRetainNonConfigurationInstance();
+    }
 //    @SuppressWarnings("deprecation") // https://code.google.com/p/android/issues/detail?id=151346
 //    @Override public Object onRetainNonConfigurationInstance() {
 //        return flowDelegate.onRetainNonConfigurationInstance();

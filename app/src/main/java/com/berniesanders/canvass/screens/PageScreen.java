@@ -149,8 +149,10 @@ public class PageScreen extends FlowPathBase {
         private void saveState(Bundle outState) {
             if (getView()==null) { return; }
             if (getView().getLayoutManager()==null) { return; }
-            outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
-            ((PageScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
+            recyclerViewState = getView().getLayoutManager().onSaveInstanceState();
+            outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerViewState);
+            ((PageScreen)Path.get(getView().getContext())).savedState = recyclerViewState;
+
         }
 
         /**

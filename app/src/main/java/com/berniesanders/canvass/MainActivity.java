@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         actionBarController.setConfig(null);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
-        if (isFinishing() && activityScope != null) {
+        if (activityScope != null) {
             activityScope.destroy();
             activityScope = null;
         }

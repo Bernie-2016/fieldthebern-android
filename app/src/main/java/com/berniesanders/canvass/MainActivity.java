@@ -48,6 +48,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.ButterKnife;
 import flow.Flow;
 import flow.FlowDelegate;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Bind(R.id.appbar)
     AppBarLayout appBarLayout;
+
+    @BindColor(R.color.bernie_dark_blue) int bernieDarkBlue;
 
     @Inject
     Gson gson;
@@ -279,7 +282,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         animateBg(event.getImgUrl() != null);
 
         if (event.getImgUrl() == null && isLollipopOrAbove()) {
-            setStatusBarColor(getResources().getColor(R.color.bernie_dark_blue));
+            setStatusBarColor(bernieDarkBlue);
         }
     }
 
@@ -301,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         collapsingToolbar.setExpandedTitleTypeface(typeface);
 
         if (isLollipopOrAbove()) {
-            setStatusBarColor(getResources().getColor(R.color.bernie_dark_blue));
+            setStatusBarColor(bernieDarkBlue);
         }
     }
 
@@ -346,7 +349,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        searchView.setBackgroundColor(getResources().getColor(R.color.bernie_dark_blue));
+        searchView.setBackgroundColor(bernieDarkBlue);
         return true;
     }
 

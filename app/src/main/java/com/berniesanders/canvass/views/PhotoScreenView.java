@@ -28,7 +28,7 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     PhotoScreen.Presenter presenter;
     PhotoViewAttacher attacher;
 
-    @Bind(R.id.tv_source)
+    @Bind(R.id.tv_current_matrix)
     TextView sourceTextView;
 
     public PhotoScreenView(Context context) {

@@ -1,13 +1,13 @@
 package com.berniesanders.canvass.screens;
 
 import android.os.Bundle;
+import android.view.View;
 
-import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
-import com.berniesanders.canvass.events.ChangePageEvent;
 import com.berniesanders.canvass.models.Img;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.PhotoScreenView;
 import com.squareup.picasso.Picasso;
@@ -80,23 +80,22 @@ public class PhotoScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-            new ChangePageEvent()
-                    .with(FTBApplication.getEventBus())
-                    .close(true)
-                    .hideToolbar(true)
-                    .dispatch();
 
             Picasso.with(getView().getContext())
                     .load(img.getText())
                     .into(getView().getImageView());
 
+            //getView().getSourceTextView().setText(img.getCaption() +"\n"+img.getSource());
+            getView().getSourceTextView().setVisibility(View.GONE);
 
-            // Set the Drawable displayed
-            //Drawable bitmap = getResources().getDrawable(R.drawable.wallpaper);
-            //mImageView.setImageDrawable(bitmap);
+            setActionBar();
+        }
+        void setActionBar() {
 
-            // Attach a PhotoViewAttacher, which takes care of all of the zooming functionality.
-
+            ActionBarService
+                    .getActionbarController(getView())
+                    .hideToolbar()
+                    .closeAppbar();
         }
 
         @Override

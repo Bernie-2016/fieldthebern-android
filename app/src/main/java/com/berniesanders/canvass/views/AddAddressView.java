@@ -2,22 +2,14 @@ package com.berniesanders.canvass.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.berniesanders.canvass.FTBApplication;
-import com.berniesanders.canvass.R;
-import com.berniesanders.canvass.events.ShowToolbarEvent;
 import com.berniesanders.canvass.mortar.DaggerService;
-import com.berniesanders.canvass.mortar.HandlesBack;
 import com.berniesanders.canvass.screens.AddAddressScreen;
-import com.berniesanders.canvass.screens.PhotoScreen;
 
 import javax.inject.Inject;
 
 import timber.log.Timber;
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  *

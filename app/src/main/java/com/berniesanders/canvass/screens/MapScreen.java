@@ -7,17 +7,13 @@ import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
-import com.berniesanders.canvass.events.ChangePageEvent;
-import com.berniesanders.canvass.models.Img;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.MapScreenView;
-import com.berniesanders.canvass.views.PhotoScreenView;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-import dagger.Module;
-import dagger.Provides;
+import butterknife.ButterKnife;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
 import timber.log.Timber;
@@ -67,12 +63,17 @@ public class MapScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-            new ChangePageEvent()
-                    .with(FTBApplication.getEventBus())
-                    .close(true)
-                    .hideToolbar(true)
-                    .dispatch();
+            ButterKnife.bind(this, getView());
+            setActionBar();
+        }
 
+        void setActionBar() {
+
+            ActionBarService
+                    .getActionbarController(getView())
+                    .hideToolbar()
+                    .closeAppbar()
+                    .setMainImage(null);
         }
 
         @Override

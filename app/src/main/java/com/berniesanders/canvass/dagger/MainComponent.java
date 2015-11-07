@@ -16,7 +16,6 @@ import dagger.Component;
 @Singleton
 @Component(modules = MainModule.class)
 public interface MainComponent {
-    void inject(MainActivity mainActivity);
     void inject(SearchMatrixCursor smc);
     Gson gson();
     CollectionRepo collectionRepo();

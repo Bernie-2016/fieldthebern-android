@@ -2,25 +2,22 @@ package com.berniesanders.canvass.screens;
 
 import android.os.Bundle;
 
-import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
-import com.berniesanders.canvass.events.ChangePageEvent;
-import com.berniesanders.canvass.events.ShowToolbarEvent;
-import com.berniesanders.canvass.models.Img;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.AddAddressView;
-import com.berniesanders.canvass.views.PhotoScreenView;
-import com.berniesanders.canvass.views.TemplateView;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
-import dagger.Module;
-import dagger.Provides;
-import mortar.MortarScope;
+import butterknife.BindString;
+import butterknife.ButterKnife;
+import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
+import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -60,6 +57,10 @@ public class AddAddressScreen extends FlowPathBase {
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<AddAddressView> {
 
+        @BindString(android.R.string.cancel) String cancel;
+
+        @BindString(R.string.add_address) String addAddress;
+
 
         @Inject
         Presenter() {
@@ -68,20 +69,27 @@ public class AddAddressScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-            new ChangePageEvent()
-                    .with(FTBApplication.getEventBus())
-                    .close(true)
-                    .hideToolbar(false)
-                    .title("Add Address")
-                    .remain(true)
-                    .dispatch();
-
-            new ShowToolbarEvent()
-                    .with(FTBApplication.getEventBus())
-                    .showToolbar(true)
-                    .dispatch();
+            ButterKnife.bind(this, getView());
+            setActionBar();
+        }
 
 
+        void setActionBar() {
+            ActionBarController.MenuAction menu =
+                    new ActionBarController.MenuAction()
+                            .label(cancel)
+                            .action(new Action0() {
+                                @Override
+                                public void call() {
+                                    Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
+                                }
+                            });
+            ActionBarService
+                    .getActionbarController(getView())
+                    .showToolbar()
+                    .closeAppbar()
+                    .setMainImage(null)
+                    .setConfig(new ActionBarController.Config(addAddress, menu));
         }
 
         @Override

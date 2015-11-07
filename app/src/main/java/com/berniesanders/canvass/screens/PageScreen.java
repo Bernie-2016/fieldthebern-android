@@ -5,24 +5,27 @@ import android.os.Parcelable;
 
 import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
+import com.berniesanders.canvass.adapters.PageRecyclerAdapter;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
-import com.berniesanders.canvass.events.ChangePageEvent;
+import com.berniesanders.canvass.models.Page;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.PageView;
 
-import com.berniesanders.canvass.adapters.PageRecyclerAdapter;
-import com.berniesanders.canvass.models.Page;
-
-
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import flow.Flow;
+import flow.History;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -45,7 +48,6 @@ public class PageScreen extends FlowPathBase {
         return DaggerPageScreen_Component
                 .builder()
                 .pageModule(new PageModule(page))
-                .mainComponent(FTBApplication.getComponent())
                 .build();
     }
 
@@ -67,19 +69,13 @@ public class PageScreen extends FlowPathBase {
         public Page providePage() {
             return p;
         }
-
-        @Provides
-        Presenter providePresenter() {
-            return new Presenter(p);
-        }
     }
 
     @FtbScreenScope
-    @dagger.Component(dependencies = MainComponent.class, modules = PageModule.class)
+    @dagger.Component(modules = PageModule.class)
     public interface Component {
         void inject(PageView t);
         Page getPage();
-        Presenter getPresenter();
     }
 
     @FtbScreenScope
@@ -114,6 +110,7 @@ public class PageScreen extends FlowPathBase {
             }
 
             setData();
+            setActionBar();
         }
 
         private void setData() {
@@ -122,20 +119,22 @@ public class PageScreen extends FlowPathBase {
 
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(page.getImageUrlFull())
-                        .title(page.getTitle())
-                        .remain(true)
-                        .dispatch();
+                ActionBarService
+                        .getActionbarController(getView())
+                        .showToolbar();
             } else {
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(page.getImageUrlFull())
-                        .title(page.getTitle())
-                        .dispatch();
+                ActionBarService
+                        .getActionbarController(getView())
+                        .openAppbar();
             }
+        }
+
+        void setActionBar() {
+
+            ActionBarService
+                    .getActionbarController(getView())
+                    .setMainImage(page.getImageUrlFull())
+                    .setConfig(new ActionBarController.Config(page.getTitle(), null));
         }
 
 
@@ -150,8 +149,10 @@ public class PageScreen extends FlowPathBase {
         private void saveState(Bundle outState) {
             if (getView()==null) { return; }
             if (getView().getLayoutManager()==null) { return; }
-            outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, getView().getLayoutManager().onSaveInstanceState());
-            ((PageScreen)Path.get(getView().getContext())).savedState = getView().getLayoutManager().onSaveInstanceState();
+            recyclerViewState = getView().getLayoutManager().onSaveInstanceState();
+            outState.putParcelable(BUNDLE_RECYCLER_LAYOUT, recyclerViewState);
+            ((PageScreen)Path.get(getView().getContext())).savedState = recyclerViewState;
+
         }
 
         /**
@@ -169,20 +170,5 @@ public class PageScreen extends FlowPathBase {
             Timber.v("onEnterScope: %s", scope);
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Presenter)) return false;
-
-            Presenter presenter = (Presenter) o;
-
-            return !(page != null ? !page.equals(presenter.page) : presenter.page != null);
-
-        }
-
-        @Override
-        public int hashCode() {
-            return page != null ? page.hashCode() : 0;
-        }
     }
 }

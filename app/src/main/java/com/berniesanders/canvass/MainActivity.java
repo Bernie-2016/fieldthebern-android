@@ -12,7 +12,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.SearchView;
@@ -22,26 +25,29 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-
-import com.berniesanders.canvass.db.SearchMatrixCursor;
-import com.berniesanders.canvass.mortar.GsonParceler;
-import com.google.gson.Gson;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import android.widget.ListView;
 
 import com.berniesanders.canvass.config.Actions;
+import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.events.ChangePageEvent;
 import com.berniesanders.canvass.events.ShowToolbarEvent;
 import com.berniesanders.canvass.models.ApiItem;
 import com.berniesanders.canvass.models.Collection;
 import com.berniesanders.canvass.models.Page;
+import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
 import com.berniesanders.canvass.screens.CollectionScreen;
 import com.berniesanders.canvass.screens.Main;
+import com.berniesanders.canvass.screens.MapScreen;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
+import com.google.gson.Gson;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.Set;
 
@@ -59,9 +65,9 @@ import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
+import static com.berniesanders.canvass.apilevels.ApiLevel.isLollipopOrAbove;
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
-import static com.berniesanders.canvass.apilevels.ApiLevel.isLollipopOrAbove;
 
 public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
@@ -85,11 +91,21 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Bind(R.id.appbar)
     AppBarLayout appBarLayout;
 
-    @BindColor(R.color.bernie_dark_blue) int bernieDarkBlue;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+
+    @Bind(R.id.drawer_listview)
+    ListView drawerListView;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindColor(R.color.bernie_dark_blue)
+    int bernieDarkBlue;
 
     @Inject
     Gson gson;
-
+    private ActionBarDrawerToggle drawerToggle;
 
 
     @Override
@@ -158,14 +174,21 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 getHistory(savedInstanceState, parceler),
                 this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FTBApplication.getEventBus().register(this);
 
         setToolbarStyle();
 
+        createNavigationDrawer();
+
         handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
     private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
@@ -225,7 +248,11 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
      */
     @Override
     public void onBackPressed() {
-        if (!container.onBackPressed()) super.onBackPressed();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            if (!container.onBackPressed()) super.onBackPressed();
+        }
     }
 
 
@@ -258,14 +285,14 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                     }
                 });
 
-        if(event.shouldHideToolbar()) {
+        if (event.shouldHideToolbar()) {
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
             collapsingToolbar.setLayoutParams(params);
             collapsingToolbar.requestLayout();
         } else {
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL|AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
             collapsingToolbar.setLayoutParams(params);
             collapsingToolbar.requestLayout();
         }
@@ -334,8 +361,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     }
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -377,7 +402,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         Set<ApiItem> items = SearchMatrixCursor.allItems;
 
         for (ApiItem item : items) {
-            if (item.getTitle().equals(title)){
+            if (item.getTitle().equals(title)) {
                 final Page searchItem = (Page) item;
                 Timber.v("Showing page from search: %s", searchItem.getTitle());
                 container.post(new Runnable() {
@@ -408,5 +433,36 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 break;
             }
         }
+    }
+
+    private void createNavigationDrawer() {
+        drawerListView.setAdapter(new ArrayAdapter<>(this,
+                R.layout.drawer_list_item, R.id.drawer_list_item_text, new String[]{"Issues", "Canvassing"}));
+        // Set the list's click listener
+        drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Flow flow = Flow.get(view);
+                switch (position) {
+                    case 0:
+                        if (!(flow.getHistory().top() instanceof Main)) {
+                            flow.set(new Main());
+                        }
+                        break;
+                    case 1:
+                        if (!(flow.getHistory().top() instanceof MapScreen)) {
+                            flow.set(new MapScreen());
+                        }
+                        break;
+
+                }
+                drawerLayout.closeDrawers();
+            }
+        });
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(drawerToggle);
     }
 }

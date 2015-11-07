@@ -118,16 +118,10 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
-//        Path newScreen = traversal.destination.top();
-//        String title = newScreen.getClass().getSimpleName();
-//        ActionBarOwner.MenuAction menu = new ActionBarOwner.MenuAction("Friends", new Action0() {
-//            @Override public void call() {
-//                Flow.get(MortarDemoActivity.this).set(new FriendListScreen());
-//            }
-//        });
-//        actionBarOwner.setConfig(
-//                new ActionBarOwner.Config(false, !(newScreen instanceof ChatListScreen), title, menu));
 
+        if (menu != null && menu.findItem(R.id.menu_search) != null) {
+            MenuItemCompat.collapseActionView(menu.findItem(R.id.menu_search)); //hide any half-open SearchView
+        }
         container.dispatch(traversal, callback);
     }
 

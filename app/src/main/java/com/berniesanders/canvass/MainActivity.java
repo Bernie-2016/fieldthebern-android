@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         flowDelegate.onPause();
         super.onPause();
     }
-    
+
     @Override public Object onRetainCustomNonConfigurationInstance() {
         return flowDelegate.onRetainNonConfigurationInstance();
     }

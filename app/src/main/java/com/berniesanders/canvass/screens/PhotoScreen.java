@@ -85,6 +85,8 @@ public class PhotoScreen extends FlowPathBase {
                     .load(img.getText())
                     .into(getView().getImageView());
 
+            //getView().getSourceTextView().setText(img.getCaption() +"\n"+img.getSource());
+            getView().getSourceTextView().setVisibility(View.GONE);
 
             setActionBar();
         }

@@ -28,10 +28,12 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     PhotoScreen.Presenter presenter;
     PhotoViewAttacher attacher;
 
+    @Bind(R.id.tv_source)
+    TextView sourceTextView;
+
     public PhotoScreenView(Context context) {
         super(context);
         injectSelf(context);
-
     }
 
     public PhotoScreenView(Context context, AttributeSet attrs) {
@@ -57,6 +59,7 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     protected void onFinishInflate() {
         super.onFinishInflate();
         Timber.v("onFinishInflate");
+        ButterKnife.bind(this, this);
         attacher = new PhotoViewAttacher(getImageView());
         attacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
     }

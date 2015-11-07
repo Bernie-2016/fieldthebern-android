@@ -139,7 +139,6 @@ public class Page extends ApiItem implements Parcelable {
         if (data != page.data) return false;
         if (title != null ? !title.equals(page.title) : page.title != null) return false;
         if (url != null ? !url.equals(page.url) : page.url != null) return false;
-        if (content != null ? !content.equals(page.content) : page.content != null) return false;
         if (imageUrlThumb != null ? !imageUrlThumb.equals(page.imageUrlThumb) : page.imageUrlThumb != null) {
             return false;
         }
@@ -152,7 +151,6 @@ public class Page extends ApiItem implements Parcelable {
         int result = data;
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (imageUrlThumb != null ? imageUrlThumb.hashCode() : 0);
         result = 31 * result + (imageUrlFull != null ? imageUrlFull.hashCode() : 0);
         return result;

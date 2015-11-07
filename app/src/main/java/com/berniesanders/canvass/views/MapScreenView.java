@@ -130,6 +130,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     @OnClick(R.id.address_btn)
     public void addNewAddress() {
         Timber.v("addNewAddress click");
+        Flow.get(getContext()).set(new AddAddressScreen());
     }
 
     @Override
@@ -153,7 +154,15 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             if (f != null) {
                 activityWeakReference
                         .get()
-                        .getFragmentManager().beginTransaction().remove(f).commit();
+                        .getFragmentManager()
+                        .beginTransaction()
+                        .remove(f)
+                        .commit();
+
+                ///???
+//                activityWeakReference
+//                        .get()
+//                        .getFragmentManager().executePendingTransactions();
             }
 
             activityWeakReference.clear();

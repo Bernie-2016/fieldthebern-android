@@ -19,18 +19,17 @@ package com.berniesanders.canvass.screens;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
-import com.berniesanders.canvass.mortar.FlowPathBase;
-import com.berniesanders.canvass.repositories.specs.CollectionSpec;
-import com.google.gson.Gson;
-
-import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
-import com.berniesanders.canvass.events.ChangePageEvent;
 import com.berniesanders.canvass.models.Collection;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
+import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.repositories.CollectionRepo;
+import com.berniesanders.canvass.repositories.specs.CollectionSpec;
 import com.berniesanders.canvass.views.MainView;
 
 import javax.inject.Inject;
@@ -82,6 +81,8 @@ public class Main extends FlowPathBase {
         private Collection collection;
         Parcelable recyclerViewState;
 
+        ActionBarController actionBarController;
+
         private static final String BUNDLE_RECYCLER_LAYOUT = "Main.recycler.layout";
 
         @Inject
@@ -92,6 +93,10 @@ public class Main extends FlowPathBase {
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
+
+            actionBarController = ActionBarService.getActionbarController(getView());
+
+            actionBarController.showToolbar();
 
             try {
                 if (savedInstanceState != null ) {
@@ -121,6 +126,8 @@ public class Main extends FlowPathBase {
                 Timber.v("onLoad collection: %s", collection.getTitle());
                 setDataAndState();
             }
+
+            setActionBar();
         }
 
         private void setDataAndState() {
@@ -133,11 +140,6 @@ public class Main extends FlowPathBase {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
             }
 
-            new ChangePageEvent()
-                    .with(FTBApplication.getEventBus())
-                    .title(pageName)
-                    .close(true)
-                    .dispatch();
         }
 
         Observer<Collection> observer = new Observer<Collection>() {
@@ -183,6 +185,18 @@ public class Main extends FlowPathBase {
         protected void onEnterScope(MortarScope scope) {
             super.onEnterScope(scope);
             Timber.v("onEnterScope: %s", scope);
+
+        }
+
+
+        void setActionBar() {
+            ActionBarController.MenuAction menu =
+                    new ActionBarController.MenuAction()
+                            .label("search?")
+                            .setIsSearch();
+
+            actionBarController.setConfig(
+                    new ActionBarController.Config("Bernie on the Issues", menu));
         }
     }
 }

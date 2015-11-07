@@ -4,16 +4,18 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
-import com.berniesanders.canvass.events.ShowToolbarEvent;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.mortar.HandlesBack;
 import com.berniesanders.canvass.screens.PhotoScreen;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -78,14 +80,20 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     public ImageView getImageView() {
         return (ImageView) findViewById(R.id.iv_photo);
     }
-
+    public TextView getSourceTextView() {
+        return sourceTextView;
+    }
 
     @Override
     public boolean onBackPressed() {
-        new ShowToolbarEvent()
-                .with(FTBApplication.getEventBus())
-                .showToolbar(true)
-                .dispatch();
+        if (attacher!=null) {
+            attacher.cleanup();
+            attacher = null;
+        }
+
+        ActionBarService
+                .getActionbarController(this)
+                .showToolbar();
         return false;
     }
 }

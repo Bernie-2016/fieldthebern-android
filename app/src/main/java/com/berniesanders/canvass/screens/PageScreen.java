@@ -5,24 +5,27 @@ import android.os.Parcelable;
 
 import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
+import com.berniesanders.canvass.adapters.PageRecyclerAdapter;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
-import com.berniesanders.canvass.events.ChangePageEvent;
+import com.berniesanders.canvass.models.Page;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.PageView;
 
-import com.berniesanders.canvass.adapters.PageRecyclerAdapter;
-import com.berniesanders.canvass.models.Page;
-
-
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import flow.Flow;
+import flow.History;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -114,6 +117,7 @@ public class PageScreen extends FlowPathBase {
             }
 
             setData();
+            setActionBar();
         }
 
         private void setData() {
@@ -122,20 +126,22 @@ public class PageScreen extends FlowPathBase {
 
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(page.getImageUrlFull())
-                        .title(page.getTitle())
-                        .remain(true)
-                        .dispatch();
+                ActionBarService
+                        .getActionbarController(getView())
+                        .showToolbar();
             } else {
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(page.getImageUrlFull())
-                        .title(page.getTitle())
-                        .dispatch();
+                ActionBarService
+                        .getActionbarController(getView())
+                        .openAppbar();
             }
+        }
+
+        void setActionBar() {
+
+            ActionBarService
+                    .getActionbarController(getView())
+                    .setMainImage(page.getImageUrlFull())
+                    .setConfig(new ActionBarController.Config(page.getTitle(), null));
         }
 
 

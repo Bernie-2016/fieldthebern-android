@@ -22,6 +22,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,12 +32,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.berniesanders.canvass.config.Actions;
+import com.berniesanders.canvass.dagger.ActivityComponent;
+import com.berniesanders.canvass.dagger.DaggerActivityComponent;
+import com.berniesanders.canvass.dagger.FtbActivityScope;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
-import com.berniesanders.canvass.events.ChangePageEvent;
-import com.berniesanders.canvass.events.ShowToolbarEvent;
 import com.berniesanders.canvass.models.ApiItem;
 import com.berniesanders.canvass.models.Collection;
 import com.berniesanders.canvass.models.Page;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
 import com.berniesanders.canvass.screens.CollectionScreen;
@@ -45,7 +49,6 @@ import com.berniesanders.canvass.screens.MapScreen;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
 import com.google.gson.Gson;
-import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -69,12 +72,14 @@ import static com.berniesanders.canvass.apilevels.ApiLevel.isLollipopOrAbove;
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
 
-public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
+@FtbActivityScope
+public class MainActivity extends AppCompatActivity implements ActionBarController.Activity, Flow.Dispatcher {
 
     private MortarScope activityScope;
     private FlowDelegate flowDelegate;
     private Menu menu;
     SearchView searchView;
+    private ActionBarController.MenuAction actionBarMenuAction;
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
@@ -107,6 +112,9 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     Gson gson;
     private ActionBarDrawerToggle drawerToggle;
 
+    @Inject
+    ActionBarController actionBarController;
+
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -133,24 +141,34 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
             if (flowService != null) return flowService;
         }
 
-        MortarScope activityScope = findChild(getApplicationContext(), getScopeName());
-
-        if (activityScope == null) {
-            activityScope = buildChild(getApplicationContext()) //
-                    .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
-                    .build(getScopeName());
+        if (activityScope!=null && activityScope.hasService(name)) {
+            return activityScope.getService(name);
         }
 
-        return activityScope.hasService(name) ? activityScope.getService(name)
-                : super.getSystemService(name);
+        return super.getSystemService(name);
     }
 
+    ActivityComponent activityComponent;
+    private ActivityComponent createComponent() {
 
+        if (activityComponent==null) {
+            activityComponent = DaggerActivityComponent.builder()
+                    .mainComponent(FTBApplication.getComponent())
+                    .actionBarModule(new ActionBarController.ActionBarModule())
+                    .build();
+        }
+
+        return activityComponent;
+    }
+
+    FlowDelegate.NonConfigurationInstance nonConfig;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FTBApplication.getComponent().inject(this);
+        createComponent().inject(this);
+
+        initActivityScope();
 
         GsonParceler parceler = new GsonParceler(gson);
 
@@ -182,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         createNavigationDrawer();
 
         handleIntent(getIntent());
+        actionBarController.takeView(this);
     }
 
     @Override
@@ -189,6 +208,18 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
     }
+
+    private void initActivityScope() {
+        activityScope = findChild(getApplicationContext(), getScopeName());
+
+        if (activityScope == null) {
+            activityScope = buildChild(getApplicationContext()) //
+                    .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
+                    .withService(ActionBarService.NAME, actionBarController)
+                    .build(getScopeName());
+        }
+    }
+
 
     private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
         if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
@@ -228,8 +259,8 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
     @Override
     protected void onDestroy() {
-        //actionBarOwner.dropView(this);
-        //actionBarOwner.setConfig(null);
+        actionBarController.dropView(this);
+        actionBarController.setConfig(null);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
         if (isFinishing() && activityScope != null) {
@@ -265,66 +296,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
-
-    @Subscribe
-    public void onChangePageEvent(ChangePageEvent event) {
-
-        Timber.v("onChangePageEvent e=%s", event.toString());
-        Picasso.with(getApplicationContext())
-                .load(event.getImgUrl())
-                .transform(PaletteTransformation.instance())
-                .placeholder(backgroundImage.getDrawable())
-                .into(backgroundImage, new Callback.EmptyCallback() {
-                    @Override
-                    public void onSuccess() {
-                        Bitmap bitmap = ((BitmapDrawable) backgroundImage.getDrawable()).getBitmap(); // Ew!
-                        Palette palette = PaletteTransformation.getPalette(bitmap);
-
-                        if (isLollipopOrAbove()) {
-                            setStatusBarColor(palette.getDarkVibrantColor(Color.BLACK));
-                        }
-                    }
-                });
-
-        if (event.shouldHideToolbar()) {
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
-            collapsingToolbar.setLayoutParams(params);
-            collapsingToolbar.requestLayout();
-        } else {
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-            collapsingToolbar.setLayoutParams(params);
-            collapsingToolbar.requestLayout();
-        }
-
-        if (!event.shouldRamain()) {
-            appBarLayout.setExpanded(!event.shouldClose(), true);
-        }
-
-        if (event.getTitle() != null) {
-            collapsingToolbar.setTitle(event.getTitle());
-        }
-
-        animateShading(event.getImgUrl() != null);
-        animateBg(event.getImgUrl() != null);
-
-        if (event.getImgUrl() == null && isLollipopOrAbove()) {
-            setStatusBarColor(bernieDarkBlue);
-        }
-    }
-
-    @Subscribe
-    public void onShowToolbarEvent(ShowToolbarEvent event) {
-        if (event.shouldShowToolbar()) {
-
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-            collapsingToolbar.setLayoutParams(params);
-            collapsingToolbar.requestLayout();
-            appBarLayout.setExpanded(false, true);
-        }
-    }
 
     private void setToolbarStyle() {
         Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Dosis-Medium.otf");
@@ -363,12 +334,38 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         this.menu = menu;
+        handleOptionsMenu(menu);
+        return true;
+    }
+
+    private void handleOptionsMenu(Menu menu) {
+        if (actionBarMenuAction != null) {
+
+            if (actionBarMenuAction.isSearch()) {
+                setupSearchMenu(menu);
+            } else {
+                menu.add(actionBarMenuAction.label())
+                        .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                        .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                actionBarMenuAction.action().call();
+                                return true;
+                            }
+                        });
+            }
+            //        // Inflate the options menu from XML
+            //        MenuInflater inflater = getMenuInflater();
+            //        inflater.inflate(R.menu.menu_cancel, menu);
+        }
+    }
+
+    private void setupSearchMenu(Menu menu){
         // Inflate the options menu from XML
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
@@ -376,6 +373,11 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
         searchView.setBackgroundColor(bernieDarkBlue);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //handleOptionsMenu(menu);
         return true;
     }
 
@@ -465,5 +467,88 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
 
         // Set the drawer toggle as the DrawerListener
         drawerLayout.setDrawerListener(drawerToggle);
+    }
+
+    @Override
+    public void setMenu(ActionBarController.MenuAction action) {
+        if (action != actionBarMenuAction) {
+            actionBarMenuAction = action;
+            invalidateOptionsMenu();
+        }
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        collapsingToolbar.setTitle(title);
+    }
+
+
+    /**
+     * TODO: move this animation and toolbar code to it's own controller thing...
+     */
+    @Override
+    public void setMainImage(String url) {
+
+        animateShading(false);
+
+        Picasso.with(getApplicationContext())
+                .load(url)
+                .transform(PaletteTransformation.instance())
+                .placeholder(backgroundImage.getDrawable())
+                .into(backgroundImage,
+                        new Callback.EmptyCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Bitmap bitmap = ((BitmapDrawable) backgroundImage.getDrawable()).getBitmap(); // Ew!
+                                Palette palette = PaletteTransformation.getPalette(bitmap);
+
+                                if (isLollipopOrAbove()) {
+                                    setStatusBarColor(palette.getDarkVibrantColor(Color.BLACK));
+                                }
+
+                                animateShading(true);
+                                animateBg(true);
+                            }
+                        });
+
+        if (url == null) {
+            backgroundImage.setImageDrawable(null);
+        }
+
+        if (url == null && isLollipopOrAbove()) {
+            setStatusBarColor(bernieDarkBlue);
+        }
+    }
+
+    @Override
+    public void hideToolbar() {
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+        collapsingToolbar.setLayoutParams(params);
+        collapsingToolbar.requestLayout();
+    }
+
+    @Override
+    public void showToolbar() {
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+        collapsingToolbar.setLayoutParams(params);
+        collapsingToolbar.requestLayout();
+        appBarLayout.setExpanded(false, true);
+    }
+
+    @Override
+    public void openAppbar() {
+        appBarLayout.setExpanded(true, true);
+    }
+
+    @Override
+    public void closeAppbar() {
+        appBarLayout.setExpanded(false, true);
     }
 }

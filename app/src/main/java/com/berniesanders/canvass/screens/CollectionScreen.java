@@ -4,12 +4,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
-import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.adapters.CollectionRecyclerAdapter;
 import com.berniesanders.canvass.annotations.Layout;
-import com.berniesanders.canvass.events.ChangePageEvent;
 import com.berniesanders.canvass.models.Collection;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.CollectionView;
 
@@ -17,9 +17,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Provides;
+import flow.Flow;
+import flow.History;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -106,21 +109,33 @@ public class CollectionScreen extends FlowPathBase {
 
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(collection.getImageUrlFull())
-                        .title(collection.getTitle())
-                        .remain(hasOnlyVisibleChildren())
-                        //.close(!hasOnlyVisibleChildren())
-                        .dispatch();
+                ActionBarService
+                        .getActionbarController(getView())
+                        .showToolbar();
             } else {
-                new ChangePageEvent()
-                        .with(FTBApplication.getEventBus())
-                        .img(collection.getImageUrlFull())
-                        .title(collection.getTitle())
-                        .dispatch();
+                ActionBarService
+                        .getActionbarController(getView())
+                        .openAppbar();
             }
+
+            setActionBar();
+        }
+        void setActionBar() {
+
+            ActionBarController.MenuAction menu =
+                    new ActionBarController.MenuAction()
+                            .label("FPO map screen")
+                            .action(new Action0() {
+                                @Override
+                                public void call() {
+                                    Flow.get(getView()).set(new MapScreen());
+                                }
+                            });
+
+            ActionBarService
+                    .getActionbarController(getView())
+                    .setMainImage(collection.getImageUrlFull())
+                    .setConfig(new ActionBarController.Config(collection.getTitle(), menu));
         }
 
         /**

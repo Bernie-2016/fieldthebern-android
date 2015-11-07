@@ -12,7 +12,10 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.berniesanders.canvass.R;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.DaggerService;
+import com.berniesanders.canvass.mortar.HandlesBack;
+import com.berniesanders.canvass.screens.AddAddressScreen;
 import com.berniesanders.canvass.screens.MapScreen;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,6 +35,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContext;
 import timber.log.Timber;
@@ -39,7 +43,7 @@ import timber.log.Timber;
 /**
  *
  */
-public class MapScreenView extends FrameLayout {
+public class MapScreenView extends FrameLayout implements HandlesBack {
 
     MapFragment mapFragment;
     GoogleMap googleMap;
@@ -186,4 +190,12 @@ public class MapScreenView extends FrameLayout {
 
     }
 
+    @Override
+    public boolean onBackPressed() {
+
+        ActionBarService
+                .getActionbarController(this)
+                .showToolbar();
+        return false;
+    }
 }

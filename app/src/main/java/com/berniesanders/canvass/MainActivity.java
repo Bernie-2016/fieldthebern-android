@@ -12,12 +12,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -95,11 +98,15 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
     @Bind(R.id.drawer_listview)
     ListView drawerListView;
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
     @BindColor(R.color.bernie_dark_blue)
     int bernieDarkBlue;
 
     @Inject
     Gson gson;
+    private ActionBarDrawerToggle drawerToggle;
 
 
     @Override
@@ -168,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 getHistory(savedInstanceState, parceler),
                 this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FTBApplication.getEventBus().register(this);
@@ -178,6 +184,12 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
         createNavigationDrawer();
 
         handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
     private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
@@ -237,7 +249,11 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
      */
     @Override
     public void onBackPressed() {
-        if (!container.onBackPressed()) super.onBackPressed();
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+        else {
+            if (!container.onBackPressed()) super.onBackPressed();
+        }
     }
 
 
@@ -444,26 +460,26 @@ public class MainActivity extends AppCompatActivity implements Flow.Dispatcher {
                 drawerLayout.closeDrawers();
             }
         });
-//
-//        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-//                R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
-//
-//            /** Called when a drawer has settled in a completely closed state. */
-//            public void onDrawerClosed(View view) {
-//                super.onDrawerClosed(view);
-//                //getActionBar().setTitle(mTitle);
-//                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-//            }
-//
-//            /** Called when a drawer has settled in a completely open state. */
-//            public void onDrawerOpened(View drawerView) {
-//                super.onDrawerOpened(drawerView);
-//                //getActionBar().setTitle(mDrawerTitle);
-//                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-//            }
-//        };
-//
-//        // Set the drawer toggle as the DrawerListener
-//        drawerLayout.setDrawerListener(mDrawerToggle);
+
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.setDrawerListener(drawerToggle);
     }
 }

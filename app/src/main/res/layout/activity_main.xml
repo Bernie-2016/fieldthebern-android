@@ -75,7 +75,7 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <include layout="@layout/navigation_drawer"/>
+    <include layout="@layout/screen_navigation_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>
 

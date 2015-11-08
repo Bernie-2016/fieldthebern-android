@@ -26,8 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -45,7 +43,6 @@ import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
 import com.berniesanders.canvass.screens.CollectionScreen;
 import com.berniesanders.canvass.screens.Main;
-import com.berniesanders.canvass.screens.MapScreen;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
 import com.google.gson.Gson;
@@ -80,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     private Menu menu;
     SearchView searchView;
     private ActionBarController.MenuAction actionBarMenuAction;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
@@ -99,9 +97,6 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
-    @Bind(R.id.drawer_listview)
-    ListView drawerListView;
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -110,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
     @Inject
     Gson gson;
-    private ActionBarDrawerToggle drawerToggle;
 
     @Inject
     ActionBarController actionBarController;
@@ -191,10 +185,16 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
         setToolbarStyle();
 
-        createNavigationDrawer();
+        setupDrawerToggle();
 
         handleIntent(getIntent());
+
         actionBarController.takeView(this);
+    }
+
+    private void setupDrawerToggle() {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.setDrawerListener(drawerToggle);
     }
 
     @Override
@@ -428,36 +428,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         }
     }
 
-    private void createNavigationDrawer() {
-        drawerListView.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, R.id.drawer_list_item_text, new String[]{"Issues", "Canvassing"}));
-        // Set the list's click listener
-        drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Flow flow = Flow.get(view);
-                switch (position) {
-                    case 0:
-                        if (!(flow.getHistory().top() instanceof Main)) {
-                            flow.set(new Main());
-                        }
-                        break;
-                    case 1:
-                        if (!(flow.getHistory().top() instanceof MapScreen)) {
-                            flow.set(new MapScreen());
-                        }
-                        break;
 
-                }
-                drawerLayout.closeDrawers();
-            }
-        });
-
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
-
-        // Set the drawer toggle as the DrawerListener
-        drawerLayout.setDrawerListener(drawerToggle);
-    }
 
     @Override
     public void setMenu(ActionBarController.MenuAction action) {

@@ -73,12 +73,13 @@
         android:id="@+id/ready_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
+        android:textColor="@color/b_light_blue2"
         android:text="Ready to knock?"
         android:layout_margin="24dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:gravity="center_horizontal"
+        android:textSize="16sp"
         />
 <View
     android:id="@+id/start_visit_btn"

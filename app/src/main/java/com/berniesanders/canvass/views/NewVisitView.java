@@ -48,6 +48,7 @@ public class NewVisitView extends RelativeLayout {
      * Important to note component type is how the DaggerService finds the right component
      */
     private void injectSelf(Context context) {
+        if (isInEditMode()) {return;}
         DaggerService.<NewVisitScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);

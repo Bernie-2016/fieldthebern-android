@@ -8,4 +8,7 @@
     <color name="dark_blue2">#338ce1</color> <!-- not an official color, but matches the iOS app -->
     <color name="light_blue2">#57a4ea</color> <!-- not an official color, but matches the iOS app -->
 
+    <color name="b_light_blue2">#8fc5f6</color> <!-- not an official color -->
+    <color name="b_light_blue">#448fcc</color> <!-- not an official color-->
+
 </resources>

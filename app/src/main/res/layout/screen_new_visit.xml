@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.canvass.views.NewVisitView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="2dp"
+            android:drawableLeft="@drawable/ic_clipboard"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:text="Check off who you talked to and update their information"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="4dp"
+            android:text="Who did you talk to?"
+            android:textColor="@color/b_light_blue2"
+            android:textSize="16sp"
+            />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_margin="8dp"
+            >
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/add_person"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="?attr/selectableItemBackground"
+                android:drawableLeft="@drawable/ic_person_add_white_36dp"
+                android:drawablePadding="8dp"
+                android:gravity="left|center_vertical"
+                android:padding="8dp"
+                android:text="Add Person"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:background="#44FFFFFF"
+                />
+        </FrameLayout>
+
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/no_one_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:singleLine="true"
+            android:text="No one was home"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/asked_to_leave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:singleLine="true"
+            android:text="I was asked to leave"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="#44FFFFFF"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/start_visit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="SUBMIT VISIT DETAILS"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:textStyle="normal"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/start_visit_btn"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+        android:text="Done talking?"
+        android:textColor="@color/b_light_blue2"
+        android:textSize="16sp"
+        />
+</com.berniesanders.canvass.views.NewVisitView>

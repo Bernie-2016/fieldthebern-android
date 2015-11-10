@@ -166,6 +166,7 @@
         android:text="Add Person"
         android:textColor="@android:color/white"
         android:textSize="22sp"
+        android:textAllCaps="false"
         />
 
 </com.berniesanders.canvass.views.AddPersonView>

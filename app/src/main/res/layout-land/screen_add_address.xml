@@ -103,6 +103,7 @@
         android:background="@color/dark_blue2"
         android:layout_margin="16dp"
         android:layout_toRightOf="@id/ready_label"
+        android:textAllCaps="false"
         />
 
 

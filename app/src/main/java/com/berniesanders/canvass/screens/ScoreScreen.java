@@ -76,6 +76,8 @@ public class ScoreScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+            getView().animateScore();
+            getView().animateLabels();
         }
 
 

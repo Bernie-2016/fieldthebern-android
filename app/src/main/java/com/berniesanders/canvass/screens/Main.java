@@ -34,6 +34,8 @@ import com.berniesanders.canvass.views.MainView;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
@@ -82,6 +84,8 @@ public class Main extends FlowPathBase {
 
         ActionBarController actionBarController;
 
+        @BindString(R.string.main_issues_screen_title) String issuesScreenTitle;
+
         private static final String BUNDLE_RECYCLER_LAYOUT = "Main.recycler.layout";
 
         @Inject
@@ -91,6 +95,8 @@ public class Main extends FlowPathBase {
 
         @Override
         protected void onLoad(Bundle savedInstanceState) {
+
+            ButterKnife.bind(this, getView());
 
             actionBarController = ActionBarService.getActionbarController(getView());
 
@@ -194,7 +200,7 @@ public class Main extends FlowPathBase {
                             .setIsSearch();
 
             actionBarController.setConfig(
-                    new ActionBarController.Config("Bernie on the Issues", menu));
+                    new ActionBarController.Config(issuesScreenTitle, menu));
         }
     }
 }

@@ -2,10 +2,36 @@
     <string name="app_name">Feel The Bern</string>
     <string name="search_hint">Search Feel The Bern</string>
     <string name="add_address">Add Address</string>
+    <string name="add_person">Add Person</string>
+    <string name="score">Score!</string>
+    <string name="points">POINTS</string>
+    <string name="back_to_map">Back to map</string>
+    <string name="for_knocking">+5 for knocking</string>
+    <string name="for_updating">+10 for updating %s\'s info</string>
     <string name="new_visit">New Visit</string>
+    <string name="submit_visit_details">Submit Visit Details</string>
+    <string name="start_visit_btn">Start visit</string>
     <string name="bullet_point">\u2022</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
     <string name="screen_home_issues">Issues</string>
     <string name="screen_home_canvass">Canvass</string>
+
+    <string-array name="party">
+          <item>(select party)</item>
+          <item>Democrat</item>
+          <item>Republican</item>
+          <item>Independent</item>
+          <item>Undeclared</item>
+          <item>Other</item>
+    </string-array>
+
+    <string-array name="interest">
+        <item>(select support level)</item>
+        <item>Strongly for Bernie</item>
+        <item>Leaning for Bernie</item>
+        <item>Undecided</item>
+        <item>Leaning against Bernie</item>
+        <item>Strongly against Bernie</item>
+    </string-array>
 </resources>

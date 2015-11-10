@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.canvass.views.AddPersonView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bernie_dark_blue"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/bernie_dark_blue"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        >
+
+        <TextView
+            android:id="@+id/instructions_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:drawableLeft="@drawable/ic_person_pin_white_48dp"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:text="Adding a new person"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/first_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="First name"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/b_light_blue2"
+                android:textSize="24sp"
+                />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/last_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:hint="Last name"
+                android:singleLine="true"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/b_light_blue2"
+                android:textSize="24sp"
+                />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Party"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/dark_blue2"
+            >
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/party"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:text="Apt / Suite / Etc."
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                />
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="Supports"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/dark_blue2"
+            >
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/interest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:text="How interested in bernie"
+                />
+        </FrameLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="@color/dark_blue2"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/selectableItemBackground"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:text="Add Person"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        />
+
+</com.berniesanders.canvass.views.AddPersonView>

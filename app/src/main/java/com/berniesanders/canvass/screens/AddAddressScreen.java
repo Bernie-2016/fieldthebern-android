@@ -81,7 +81,9 @@ public class AddAddressScreen extends FlowPathBase {
                             .action(new Action0() {
                                 @Override
                                 public void call() {
-                                    Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
+                                    if (getView()!=null) {
+                                        Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
+                                    }
                                 }
                             });
             ActionBarService

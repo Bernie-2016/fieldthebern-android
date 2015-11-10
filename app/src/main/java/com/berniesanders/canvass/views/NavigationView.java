@@ -48,6 +48,7 @@ public class NavigationView extends LinearLayout {
      * the nav sits outside the normal flow container/process
      */
     private void injectSelf(Context context) {
+        if (isInEditMode()) { return; }
         createComponent().inject(this);
     }
 

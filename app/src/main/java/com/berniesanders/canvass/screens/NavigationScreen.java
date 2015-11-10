@@ -106,16 +106,26 @@ public class NavigationScreen extends FlowPathBase {
             drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Flow flow = Flow.get(view);
+                    final Flow flow = Flow.get(view);
                     switch (position) {
                         case 0:
                             if (!(flow.getHistory().top() instanceof MapScreen)) {
-                                flow.set(new MapScreen());
+                                view.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        flow.set(new MapScreen());
+                                    }
+                                }, 150);
                             }
                             break;
                         case 1:
                             if (!(flow.getHistory().top() instanceof Main)) {
-                                flow.set(new Main());
+                                view.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        flow.set(new Main());
+                                    }
+                                });
                             }
                             break;
                     }

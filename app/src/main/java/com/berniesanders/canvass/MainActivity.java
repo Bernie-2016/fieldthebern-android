@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
 
     private void setToolbarStyle() {
-        Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Dosis-Medium.otf");
+        Typeface typeface = TypefaceUtils.load(getAssets(), "fonts/Lato-Heavy.ttf");
         collapsingToolbar.setCollapsedTitleTypeface(typeface);
         collapsingToolbar.setExpandedTitleTypeface(typeface);
 

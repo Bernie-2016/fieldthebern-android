@@ -43,13 +43,13 @@
 
         <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/large_button_height"
             android:layout_margin="8dp"
             >
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/add_person"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
+                android:layout_height="@dimen/large_button_height"
                 android:background="?attr/selectableItemBackground"
                 android:drawableLeft="@drawable/ic_person_add_white_36dp"
                 android:drawablePadding="8dp"
@@ -63,8 +63,8 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="#44FFFFFF"
+                android:layout_height="@dimen/large_button_height"
+                android:background="@color/dark_blue2"
                 />
         </FrameLayout>
 
@@ -96,21 +96,21 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:background="#44FFFFFF"
+        android:background="@color/dark_blue2"
         />
 
     <android.support.v7.widget.AppCompatButton
-        android:id="@+id/start_visit_btn"
+        android:id="@+id/submit"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
-        android:text="SUBMIT VISIT DETAILS"
+        android:text="@string/submit_visit_details"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="22sp"
@@ -120,7 +120,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/start_visit_btn"
+        android:layout_above="@id/submit"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"

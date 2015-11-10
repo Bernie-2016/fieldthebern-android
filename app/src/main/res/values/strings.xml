@@ -6,4 +6,6 @@
     <string name="bullet_point">\u2022</string>
     <string name="drawer_open">Open Navigation Drawer</string>
     <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="screen_home_issues">Issues</string>
+    <string name="screen_home_canvass">Canvass</string>
 </resources>

@@ -42,6 +42,7 @@ import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
 import com.berniesanders.canvass.screens.CollectionScreen;
+import com.berniesanders.canvass.screens.HomeScreen;
 import com.berniesanders.canvass.screens.Main;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
@@ -219,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
             return History.from(savedInstanceState, parceler);
         }
-        return History.single(new Main());
+        return History.single(new HomeScreen());
     }
 
 

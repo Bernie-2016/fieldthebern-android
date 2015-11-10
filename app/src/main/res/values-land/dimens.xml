@@ -5,4 +5,6 @@
     <dimen name="detail_backdrop_height">140dp</dimen>
 
     <integer name="num_cols">3</integer>
+    <dimen name="large_button_height">64dp</dimen>
+    <dimen name="spinner_margin">8dp</dimen>
 </resources>

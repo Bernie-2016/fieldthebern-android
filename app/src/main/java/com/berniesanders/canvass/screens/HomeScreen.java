@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
+import com.berniesanders.canvass.mortar.ActionBarController;
+import com.berniesanders.canvass.mortar.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.HomeView;
 
@@ -103,18 +105,10 @@ public class HomeScreen extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
-            // Some example Page events.
-
-//            new ChangePageEvent()
-//                    .with(FTBApplication.getEventBus())
-//                    .close(true)
-//                    .hideToolbar(true)
-//                    .dispatch();
-
-//            new ShowToolbarEvent()
-//                    .with(FTBApplication.getEventBus())
-//                    .showToolbar(true)
-//                    .dispatch();
+            ActionBarService
+                    .getActionbarController(getView())
+                    .showToolbar()
+                    .closeAppbar();
         }
 
         /**

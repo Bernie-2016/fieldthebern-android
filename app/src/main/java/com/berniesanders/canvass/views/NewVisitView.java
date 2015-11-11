@@ -5,12 +5,18 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.mortar.DaggerService;
+import com.berniesanders.canvass.screens.AddPersonScreen;
 import com.berniesanders.canvass.screens.NewVisitScreen;
+import com.berniesanders.canvass.screens.ScoreScreen;
 import com.berniesanders.canvass.screens.TemplateScreen;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import flow.Flow;
 import timber.log.Timber;
 
 /**
@@ -58,7 +64,9 @@ public class NewVisitView extends RelativeLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        if (isInEditMode()) { return; }
         Timber.v("onFinishInflate");
+        ButterKnife.bind(this, this);
     }
 
     @Override
@@ -73,4 +81,13 @@ public class NewVisitView extends RelativeLayout {
         presenter.dropView(this);
     }
 
+    @OnClick(R.id.add_person)
+    public void addPerson() {
+        Flow.get(this).set(new AddPersonScreen());
+    }
+
+    @OnClick(R.id.submit)
+    public void score() {
+        Flow.get(this).set(new ScoreScreen());
+    }
 }

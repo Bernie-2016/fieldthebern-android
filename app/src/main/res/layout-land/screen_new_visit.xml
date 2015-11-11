@@ -71,7 +71,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:background="#44FFFFFF"
+                    android:background="@color/dark_blue2"
                     />
             </FrameLayout>
 
@@ -82,7 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/main_layout"
         android:padding="8dp"
         >
 
@@ -129,16 +129,16 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:background="#44FFFFFF"
+                android:layout_height="@dimen/large_button_height"
+                android:background="@color/dark_blue2"
                 />
 
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:id="@+id/start_visit_btn"
+                android:layout_height="@dimen/large_button_height"
+                android:id="@+id/submit"
                 android:background="?attr/selectableItemBackground"
-                android:text="SUBMIT VISIT DETAILS"
+                android:text="@string/submit_visit_details"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"

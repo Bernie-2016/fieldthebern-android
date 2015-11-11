@@ -7,6 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@color/bernie_dark_blue"
     >
 
 
@@ -82,9 +83,9 @@
         android:textSize="16sp"
         />
 <View
-    android:id="@+id/start_visit_btn"
+    android:id="@+id/submit"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="@dimen/large_button_height"
     android:layout_alignParentBottom="true"
     android:clickable="true"
     android:background="?attr/selectableItemBackground"
@@ -93,13 +94,13 @@
     />
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:text="START VISIT"
+        android:layout_height="@dimen/large_button_height"
+        android:text="@string/start_visit_btn"
         android:textColor="@android:color/white"
         android:textSize="22sp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:background="#44FFFFFF"
+        android:background="@color/dark_blue2"
         android:layout_margin="16dp"
         android:layout_toRightOf="@id/ready_label"
         />

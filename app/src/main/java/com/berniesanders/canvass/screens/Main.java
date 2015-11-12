@@ -195,8 +195,8 @@ public class Main extends FlowPathBase {
 
         void setActionBar() {
             ActionBarController.MenuAction menu =
-                    new ActionBarController.MenuAction()
-                            .label("search?")
+                    new ActionBarController
+                            .MenuAction()
                             .setIsSearch();
 
             actionBarController.setConfig(

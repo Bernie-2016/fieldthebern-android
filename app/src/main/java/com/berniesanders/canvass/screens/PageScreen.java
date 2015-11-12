@@ -130,11 +130,14 @@ public class PageScreen extends FlowPathBase {
         }
 
         void setActionBar() {
-
+            ActionBarController.MenuAction menu =
+                    new ActionBarController
+                            .MenuAction()
+                            .setIsSearch();
             ActionBarService
                     .getActionbarController(getView())
                     .setMainImage(page.getImageUrlFull())
-                    .setConfig(new ActionBarController.Config(page.getTitle(), null));
+                    .setConfig(new ActionBarController.Config(page.getTitle(), menu));
         }
 
 

@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     }
 
     @Override
-    public Context getContext() {
+    public Context getActivity() {
         return this;
     }
 

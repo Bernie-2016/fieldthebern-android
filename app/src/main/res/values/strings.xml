@@ -17,6 +17,21 @@
     <string name="screen_home_issues">Issues</string>
     <string name="screen_home_canvass">Canvass</string>
     <string name="main_issues_screen_title">Issues</string>
+    <string name="signup_facebook">Sign up with Facebook</string>
+    <string name="signup_email">Sign up with email</string>
+    <string name="have_an_account">Have an account? Login.</string>
+    <string name="login_facebook">Login with Facebook</string>
+    <string name="login_email">Login with email</string>
+    <string name="no_account">No account? Sign up.</string>
+
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_title">Login</string>
+    <string name="signup_title">Sign up</string>
+
+
 
     <string-array name="party">
           <item>(select party)</item>

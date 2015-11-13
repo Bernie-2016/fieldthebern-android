@@ -514,4 +514,18 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     public void closeAppbar() {
         appBarLayout.setExpanded(false, true);
     }
+
+    @Override
+    public void lockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerToggle.setDrawerIndicatorEnabled(false);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void unlockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerToggle.syncState();
+    }
 }

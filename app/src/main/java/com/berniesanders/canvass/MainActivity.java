@@ -46,6 +46,7 @@ import com.berniesanders.canvass.screens.HomeScreen;
 import com.berniesanders.canvass.screens.Main;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
+import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         super.onCreate(savedInstanceState);
 
         createComponent().inject(this);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         initActivityScope();
 
         GsonParceler parceler = new GsonParceler(gson);

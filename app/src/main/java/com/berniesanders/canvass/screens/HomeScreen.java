@@ -12,6 +12,7 @@ import com.berniesanders.canvass.views.HomeView;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
@@ -86,7 +87,7 @@ public class HomeScreen extends FlowPathBase {
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<HomeView> {
 
-
+        @BindString(R.string.app_name) String screenTitle;
         /**
          * When the view is inflated, this presented is automatically injected to the TemplateView
          * Constructor parameters here are injected automatically
@@ -108,7 +109,8 @@ public class HomeScreen extends FlowPathBase {
             ActionBarService
                     .getActionbarController(getView())
                     .showToolbar()
-                    .closeAppbar();
+                    .closeAppbar()
+                    .setConfig(new ActionBarController.Config(screenTitle, null));
         }
 
         /**
@@ -130,6 +132,7 @@ public class HomeScreen extends FlowPathBase {
         @Override
         public void dropView(HomeView view) {
             super.dropView(view);
+            ButterKnife.unbind(this);
         }
 
         @OnClick(R.id.screen_home_canvass)

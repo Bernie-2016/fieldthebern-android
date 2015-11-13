@@ -97,6 +97,7 @@
         android:text="@string/start_visit_btn"
         android:textColor="@android:color/white"
         android:textSize="22sp"
+        android:textAllCaps="false"
         />
 
     <TextView

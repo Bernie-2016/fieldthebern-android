@@ -123,14 +123,9 @@ public class CollectionScreen extends FlowPathBase {
         void setActionBar() {
 
             ActionBarController.MenuAction menu =
-                    new ActionBarController.MenuAction()
-                            .label("FPO map screen")
-                            .action(new Action0() {
-                                @Override
-                                public void call() {
-                                    Flow.get(getView()).set(new MapScreen());
-                                }
-                            });
+                    new ActionBarController
+                            .MenuAction()
+                            .setIsSearch();
 
             ActionBarService
                     .getActionbarController(getView())

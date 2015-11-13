@@ -110,6 +110,7 @@ public class HomeScreen extends FlowPathBase {
                     .getActionbarController(getView())
                     .showToolbar()
                     .closeAppbar()
+                    .unlockDrawer()
                     .setConfig(new ActionBarController.Config(screenTitle, null));
         }
 

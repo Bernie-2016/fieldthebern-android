@@ -199,8 +199,10 @@ public class Main extends FlowPathBase {
                             .MenuAction()
                             .setIsSearch();
 
-            actionBarController.setConfig(
-                    new ActionBarController.Config(issuesScreenTitle, menu));
+            actionBarController
+                    .setMainImage(null)
+                    .openAppbar()
+                    .setConfig(new ActionBarController.Config(issuesScreenTitle, menu));
         }
     }
 }

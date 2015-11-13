@@ -31,19 +31,17 @@
                 android:layout_height="240dp"
                 android:src="@drawable/mask"/>
         </FrameLayout>
-        <TextView
-            android:id="@+id/number_of_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
+
+        <FrameLayout
+            android:id="@+id/points_container"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
             android:layout_gravity="center_horizontal"
-            android:text="15"
-            android:textSize="72sp"
-            android:textStyle="bold"
-            android:layout_margin="0dp"
-            android:padding="0dp"
-            />
+            android:clipChildren="false"
+            >
+
+        </FrameLayout>
+
 
         <TextView
             android:id="@+id/points_label"
@@ -54,27 +52,34 @@
             android:text="@string/points"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
-            />
+            android:textSize="18sp"/>
 
-        <TextView
-            android:id="@+id/for_knocking"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:text="@string/for_knocking"
+            android:orientation="vertical"
             android:layout_gravity="center_horizontal"
-            />
+            android:gravity="left"
+            >
+            <TextView
+                android:id="@+id/for_knocking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="@string/for_knocking"
+                android:textSize="16sp"/>
 
-        <TextView
-            android:id="@+id/for_updating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:text="@string/for_updating"
-            android:layout_gravity="center_horizontal"
-            />
+            <TextView
+                android:id="@+id/for_updating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="@string/for_updating"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
     <View
@@ -96,5 +101,6 @@
         android:textColor="@android:color/white"
         android:background="?attr/selectableItemBackground"
         android:textSize="22sp"
+        android:textAllCaps="false"
         />
 </com.berniesanders.canvass.views.ScoreView>

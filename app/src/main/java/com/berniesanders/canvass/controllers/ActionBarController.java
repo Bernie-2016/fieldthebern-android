@@ -1,4 +1,4 @@
-package com.berniesanders.canvass.mortar;
+package com.berniesanders.canvass.controllers;
 
 /**
  *
@@ -29,8 +29,10 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
         void showToolbar();
         void closeAppbar();
         void openAppbar();
+        void lockDrawer();
+        void unlockDrawer();
         void setMainImage(String url);
-        Context getContext();
+        Context getActivity();
     }
 
     public static class Config {
@@ -110,7 +112,7 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
 
     @Override
     protected BundleService extractBundleService(Activity activity) {
-        return getBundleService(activity.getContext());
+        return getBundleService(activity.getActivity());
     }
 
     private void update() {
@@ -146,6 +148,16 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
     public ActionBarController setMainImage(String url) {
         Activity activity = getView();
         activity.setMainImage(url);
+        return this;
+    }
+    public ActionBarController lockDrawer() {
+        Activity activity = getView();
+        activity.lockDrawer();
+        return this;
+    }
+    public ActionBarController unlockDrawer() {
+        Activity activity = getView();
+        activity.unlockDrawer();
         return this;
     }
 

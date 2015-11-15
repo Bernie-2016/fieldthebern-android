@@ -29,14 +29,18 @@
             android:paddingBottom="2dp"
             android:text="Bernie Sanders"
             android:textSize="14sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            />
 
         <TextView
             android:id="@+id/drawer_header_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="bernie@sanders.com"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            />
 
     </LinearLayout>
 

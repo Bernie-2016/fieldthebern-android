@@ -1,4 +1,4 @@
-package com.berniesanders.canvass.mortar;
+package com.berniesanders.canvass.controllers;
 
 import android.content.Context;
 import android.view.View;

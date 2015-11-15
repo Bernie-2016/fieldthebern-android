@@ -27,9 +27,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.berniesanders.canvass.config.Actions;
+import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.ActivityComponent;
 import com.berniesanders.canvass.dagger.DaggerActivityComponent;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
@@ -37,15 +38,15 @@ import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.models.ApiItem;
 import com.berniesanders.canvass.models.Collection;
 import com.berniesanders.canvass.models.Page;
-import com.berniesanders.canvass.mortar.ActionBarController;
-import com.berniesanders.canvass.mortar.ActionBarService;
+import com.berniesanders.canvass.controllers.ActionBarController;
+import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
+import com.berniesanders.canvass.screens.ChooseSignupScreen;
 import com.berniesanders.canvass.screens.CollectionScreen;
-import com.berniesanders.canvass.screens.HomeScreen;
-import com.berniesanders.canvass.screens.Main;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
+import com.facebook.FacebookSdk;
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -110,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Inject
     ActionBarController actionBarController;
 
+    @Inject
+    ErrorToastController errorToastController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -156,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         super.onCreate(savedInstanceState);
 
         createComponent().inject(this);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
         initActivityScope();
 
         GsonParceler parceler = new GsonParceler(gson);
@@ -211,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
                     .withService(ActionBarService.NAME, actionBarController)
+                    .withService(ErrorToastService.NAME, errorToastController)
                     .build(getScopeName());
         }
     }
@@ -220,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
             return History.from(savedInstanceState, parceler);
         }
-        return History.single(new HomeScreen());
+        return History.single(new ChooseSignupScreen());
     }
 
 
@@ -440,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     }
 
     @Override
-    public Context getContext() {
+    public Context getActivity() {
         return this;
     }
 
@@ -512,5 +516,19 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Override
     public void closeAppbar() {
         appBarLayout.setExpanded(false, true);
+    }
+
+    @Override
+    public void lockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerToggle.setDrawerIndicatorEnabled(false);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void unlockDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        drawerToggle.syncState();
     }
 }

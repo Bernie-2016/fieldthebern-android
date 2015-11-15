@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.berniesanders.canvass.R;
-import com.berniesanders.canvass.mortar.ActionBarService;
+import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.mortar.HandlesBack;
 import com.berniesanders.canvass.screens.PhotoScreen;

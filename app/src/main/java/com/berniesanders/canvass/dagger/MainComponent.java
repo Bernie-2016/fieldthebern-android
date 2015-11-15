@@ -1,7 +1,9 @@
 package com.berniesanders.canvass.dagger;
 
-import com.berniesanders.canvass.MainActivity;
+import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
+import com.berniesanders.canvass.repositories.TokenRepo;
+import com.berniesanders.canvass.repositories.UserRepo;
 import com.google.gson.Gson;
 
 import com.berniesanders.canvass.repositories.CollectionRepo;
@@ -18,6 +20,8 @@ import dagger.Component;
 public interface MainComponent {
     void inject(SearchMatrixCursor smc);
     Gson gson();
+    ErrorToastController errorToastController();
     CollectionRepo collectionRepo();
-    PageRepo pageRepo();
+    TokenRepo tokenRepo();
+    UserRepo userRepo();
 }

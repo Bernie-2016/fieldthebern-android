@@ -29,6 +29,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.berniesanders.canvass.config.Actions;
+import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.ActivityComponent;
 import com.berniesanders.canvass.dagger.DaggerActivityComponent;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
@@ -109,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Inject
     ActionBarController actionBarController;
 
+    @Inject
+    ErrorToastController errorToastController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -210,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
                     .withService(ActionBarService.NAME, actionBarController)
+                    .withService(ErrorToastService.NAME, errorToastController)
                     .build(getScopeName());
         }
     }

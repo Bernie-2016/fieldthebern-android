@@ -7,6 +7,9 @@ public final class LoginEmailRequest {
 
     private final String grant_type = "password";
 
+    /**
+     * email
+     */
     private final String username; //email
     private final String password;
 

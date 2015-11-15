@@ -15,6 +15,46 @@ public class UserAttributes {
     String photo_large_url;
     String base_64_photo_data;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public String getState_code() {
+        return state_code;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public String getPhoto_thumb_url() {
+        return photo_thumb_url;
+    }
+
+    public String getPhoto_large_url() {
+        return photo_large_url;
+    }
+
+    public String getBase_64_photo_data() {
+        return base_64_photo_data;
+    }
+
     @Override
     public String toString() {
         return "UserAttributes{" +

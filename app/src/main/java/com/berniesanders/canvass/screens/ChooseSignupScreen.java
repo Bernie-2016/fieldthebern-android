@@ -1,20 +1,31 @@
 package com.berniesanders.canvass.screens;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
-import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.controllers.ErrorToastService;
+import com.berniesanders.canvass.dagger.FtbScreenScope;
+import com.berniesanders.canvass.dagger.MainComponent;
+import com.berniesanders.canvass.models.ApiError;
 import com.berniesanders.canvass.models.CreateUserAttributes;
 import com.berniesanders.canvass.models.CreateUserRequest;
+import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.mortar.FlowPathBase;
+import com.berniesanders.canvass.repositories.TokenRepo;
 import com.berniesanders.canvass.repositories.UserRepo;
+import com.berniesanders.canvass.repositories.specs.TokenSpec;
 import com.berniesanders.canvass.repositories.specs.UserSpec;
 import com.berniesanders.canvass.views.ChooseSignupView;
 import com.google.gson.Gson;
+
+import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -23,8 +34,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
 import mortar.ViewPresenter;
+import retrofit.HttpException;
+import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -48,6 +60,7 @@ public class ChooseSignupScreen extends FlowPathBase {
     public Object createComponent() {
         return DaggerChooseSignupScreen_Component
                 .builder()
+                .mainComponent(FTBApplication.getComponent())
                 .build();
     }
 
@@ -66,9 +79,11 @@ public class ChooseSignupScreen extends FlowPathBase {
     /**
      */
     @FtbScreenScope
-    @dagger.Component
+    @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(ChooseSignupView t);
+        UserRepo userRepo();
+        TokenRepo tokenRepo();
     }
 
     @FtbScreenScope
@@ -76,10 +91,13 @@ public class ChooseSignupScreen extends FlowPathBase {
 
         @BindString(R.string.signup_title) String screenTitleString;
 
-        UserRepo repo;
+        private final TokenRepo tokenRepo;
+        private final UserRepo repo;
 
         @Inject
-        Presenter() {
+        Presenter(UserRepo repo, TokenRepo tokenRepo) {
+            this.tokenRepo = tokenRepo;
+            this.repo = repo;
         }
 
         @Override
@@ -91,7 +109,7 @@ public class ChooseSignupScreen extends FlowPathBase {
                     new CreateUserRequest()
                             .withAttributes(new CreateUserAttributes
                                             .Builder()
-                                            .email("pj2@example.com")
+                                            .email("pj6@example.com")
                                             .firstName("pj")
                                             .lastName("c")
                                             .password("123456testpwd")
@@ -100,28 +118,32 @@ public class ChooseSignupScreen extends FlowPathBase {
                                             .stateCode("NY")
                                             .build()
                             );
-            repo = new UserRepo(new Gson());
-            UserSpec spec = new UserSpec().create(createUserRequest);
+            final UserSpec spec = new UserSpec().create(createUserRequest);
             repo.create(spec)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<User>() {
-                        @Override
-                        public void call(User user) {
-                            Timber.d("user: %s", user.toString());
-                        }
-                    }).doOnCompleted(new Action0() {
-                @Override
-                public void call() {
-                    Timber.d("createUserRequest done.");
-                }
-            }).doOnError(new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    Timber.e(throwable, "createUserRequest error");
-                }
-            }).subscribe();
+                    .subscribe(observer);
         }
+
+        Observer<User> observer = new Observer<User>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("createUserRequest done.");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "createUserRequest error");
+                if (e instanceof HttpException) {
+                    ErrorToastService.get(getView()).showApiError(e);
+                }
+            }
+
+            @Override
+            public void onNext(User user) {
+                Timber.d("user: %s", user.toString());
+            }
+        };
 
 
         void setActionBar() {

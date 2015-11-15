@@ -1,16 +1,17 @@
 package com.berniesanders.canvass.repositories;
 
+import android.content.Context;
+
 import com.berniesanders.canvass.config.UrlConfig;
-import com.berniesanders.canvass.models.CreateUserAttributes;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
+import com.berniesanders.canvass.models.LoginEmailResponse;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
 import com.berniesanders.canvass.repositories.specs.UserSpec;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,57 +20,30 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.functions.Action0;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
- * Data repository for loading, creating users
+ * Data repository for oauth2
  */
 @Singleton
-public class UserRepo {
+public class TokenRepo {
 
     final Gson gson;
-    private final TokenRepo tokenRepo;
+    private final Context context;
     private final OkHttpClient client = new OkHttpClient();
 
 
     @Inject
-    public UserRepo(Gson gson, TokenRepo tokenRepo) {
+    public TokenRepo(Gson gson, Context context) {
         this.gson = gson;
-        this.tokenRepo = tokenRepo;
+        this.context = context;
     }
 
     /**
      */
-    public Observable<User> create(final UserSpec spec) {
-
-        return create(spec.getCreateUserRequest()).map(new Func1<User, User>() {
-            @Override
-            public User call(User user) {
-
-                Timber.v("Func1 call()");
-
-                CreateUserAttributes userAttributes = spec
-                        .getCreateUserRequest()
-                        .getData()
-                        .getAttributes();
-
-
-                LoginEmailRequest loginEmailRequest =
-                        new LoginEmailRequest(
-                                userAttributes.getEmail(),
-                                userAttributes.getPassword());
-                tokenRepo
-                        .loginEmail(new TokenSpec().email(loginEmailRequest))
-                        .subscribeOn(Schedulers.io())
-                        .subscribe();
-
-                return user;
-            }
-        });
+    public Observable<LoginEmailResponse> loginEmail(final TokenSpec spec) {
+        Timber.v("loginEmail()");
+        return loginEmail(spec.getEmail());
     }
 
 
@@ -77,8 +51,8 @@ public class UserRepo {
     /**
      * Might be best to pass the spec through to this method...?
      */
-    private Observable<User> create(final CreateUserRequest user) {
-        Timber.v("create()");
+    private Observable<LoginEmailResponse> loginEmail(final LoginEmailRequest loginEmailRequest) {
+        Timber.v("loging in Email....");
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -113,10 +87,10 @@ public class UserRepo {
                 .client(client)
                 .build();
 
-        UserSpec.UserEndpoint endpoint =
-                retrofit.create(UserSpec.UserEndpoint.class);
+        TokenSpec.TokenEndpoint endpoint =
+                retrofit.create(TokenSpec.TokenEndpoint.class);
 
-        return endpoint.create(user);
+        return endpoint.loginEmail(loginEmailRequest);
     }
 
 }

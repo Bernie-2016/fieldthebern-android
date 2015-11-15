@@ -20,6 +20,18 @@ public class User {
         String type;
         UserAttributes attributes;
         UserRelationships relationships;
+
+        public int getId() {
+            return id;
+        }
+
+        public UserAttributes getAttributes() {
+            return attributes;
+        }
+
+        public UserRelationships getRelationships() {
+            return relationships;
+        }
     }
 
 

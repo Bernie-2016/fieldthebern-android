@@ -22,8 +22,4 @@ public interface ActivityComponent {
     //What we provide on the FtbActivityScope
     ActionBarController actionBarController();
 
-    //What we're forwarding along from the MainComponent application singleton scope
-    Gson gson();
-    CollectionRepo collectionRepo();
-    PageRepo pageRepo();
 }

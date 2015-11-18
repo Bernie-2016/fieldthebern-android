@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/Bernie-2016/fieldthebern-android/tree/develop.svg?style=svg&circle-token=ca0895f7453c8d07ce49d9b59c05c527ef146bda)](https://circleci.com/gh/Bernie-2016/fieldthebern-android/tree/develop)
+
 #Canvass for Bernie / Field the Bern (Android)
 
 This app under development. The goal is to provide a tool for grassroots organizers to canvass with.  

@@ -29,8 +29,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.berniesanders.canvass.config.Actions;
-import com.berniesanders.canvass.dagger.ActivityComponent;
-import com.berniesanders.canvass.dagger.DaggerActivityComponent;
+import com.berniesanders.canvass.controllers.DialogController;
+import com.berniesanders.canvass.controllers.DialogService;
 import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
@@ -72,7 +72,11 @@ import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
 
 @FtbActivityScope
-public class MainActivity extends AppCompatActivity implements ActionBarController.Activity, Flow.Dispatcher {
+public class MainActivity extends AppCompatActivity
+        implements
+        ActionBarController.Activity,
+        DialogController.Activity,
+        Flow.Dispatcher {
 
     private MortarScope activityScope;
     private FlowDelegate flowDelegate;
@@ -114,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Inject
     ErrorToastController errorToastController;
 
+    @Inject
+    DialogController dialogController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -141,25 +147,13 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         return super.getSystemService(name);
     }
 
-    ActivityComponent activityComponent;
-    private ActivityComponent createComponent() {
-
-        if (activityComponent==null) {
-            activityComponent = DaggerActivityComponent.builder()
-                    .mainComponent(FTBApplication.getComponent())
-                    .actionBarModule(new ActionBarController.ActionBarModule())
-                    .build();
-        }
-
-        return activityComponent;
-    }
 
     FlowDelegate.NonConfigurationInstance nonConfig;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        createComponent().inject(this);
+        FTBApplication.getComponent().inject(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
         initActivityScope();
 
@@ -194,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
         handleIntent(getIntent());
 
+        dialogController.takeView(this);
         actionBarController.takeView(this);
     }
 
@@ -216,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
                     .withService(ActionBarService.NAME, actionBarController)
                     .withService(ErrorToastService.NAME, errorToastController)
+                    .withService(DialogService.NAME, dialogController)
                     .build(getScopeName());
         }
     }
@@ -257,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     protected void onDestroy() {
         actionBarController.dropView(this);
         actionBarController.setConfig(null);
+        dialogController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
         if (activityScope != null) {

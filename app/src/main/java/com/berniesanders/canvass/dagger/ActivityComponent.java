@@ -12,18 +12,8 @@ import dagger.Component;
  *
  */
 @FtbActivityScope
-@Component(
-        modules = ActionBarController.ActionBarModule.class,
-        dependencies = MainComponent.class)
+@Component(dependencies = MainComponent.class)
 public interface ActivityComponent {
 
-    void inject(MainActivity mainActivity);
 
-    //What we provide on the FtbActivityScope
-    ActionBarController actionBarController();
-
-    //What we're forwarding along from the MainComponent application singleton scope
-    Gson gson();
-    CollectionRepo collectionRepo();
-    PageRepo pageRepo();
 }

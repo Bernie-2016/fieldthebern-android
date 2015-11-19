@@ -25,7 +25,7 @@ import dagger.Provides;
 @Singleton
 public class MainModule {
     private final Context context;
-    private final Gson mGson;
+    private final Gson gson;
 
     public MainModule(Context context) {
         this.context = context.getApplicationContext();

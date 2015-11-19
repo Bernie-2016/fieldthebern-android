@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
         dialogController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
-        if (activityScope != null) {
+        if (isFinishing() && activityScope != null) {
             activityScope.destroy();
             activityScope = null;
         }

@@ -42,8 +42,8 @@ import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
-import com.berniesanders.canvass.screens.ChooseSignupScreen;
 import com.berniesanders.canvass.screens.CollectionScreen;
+import com.berniesanders.canvass.screens.InitialScreen;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
 import com.facebook.FacebookSdk;
@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity
     SearchView searchView;
     private ActionBarController.MenuAction actionBarMenuAction;
     private ActionBarDrawerToggle drawerToggle;
+    private InitialScreen initialScreen;
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
@@ -154,6 +155,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         FTBApplication.getComponent().inject(this);
+        FTBApplication.getComponent().inject(initialScreen);
         FacebookSdk.sdkInitialize(getApplicationContext());
         initActivityScope();
 
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
             return History.from(savedInstanceState, parceler);
         }
-        return History.single(new ChooseSignupScreen());
+        return History.single(initialScreen.get());
     }
 
 

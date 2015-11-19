@@ -9,6 +9,7 @@ import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.TokenRepo;
 import com.berniesanders.canvass.repositories.UserRepo;
+import com.berniesanders.canvass.screens.InitialScreen;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 
@@ -28,6 +29,8 @@ import dagger.Component;
 public interface MainComponent {
     void inject(SearchMatrixCursor smc);
     void inject(MainActivity mainActivity);
+    void inject(InitialScreen initialScreen);
+
     Gson gson();
     ErrorToastController errorToastController();
     CollectionRepo collectionRepo();

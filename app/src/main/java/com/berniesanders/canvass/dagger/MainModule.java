@@ -2,6 +2,7 @@ package com.berniesanders.canvass.dagger;
 
 import android.content.Context;
 
+import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.parsing.CollectionDeserializer;
 import com.berniesanders.canvass.parsing.PageContentDeserializer;
@@ -33,25 +34,25 @@ public class MainModule {
         gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
 
-        mGson = gsonBuilder.setPrettyPrinting().create();
+        gson = gsonBuilder.setPrettyPrinting().create();
     }
 
     @Provides
     @Singleton
     public Gson provideGson() {
-        return mGson;
+        return gson;
     }
 
     @Provides
     @Singleton
-    public CollectionRepo provideCollectionRepo(Gson gson) {
+    public CollectionRepo provideCollectionRepo() {
         return new CollectionRepo(gson, context);
     }
 
     @Provides
     @Singleton
-    public PageRepo providePageRepo(Gson gson) {
-        return new PageRepo(gson, context);
+    public ErrorToastController provideErrorToastController() {
+        return new ErrorToastController(context, gson);
     }
 
 }

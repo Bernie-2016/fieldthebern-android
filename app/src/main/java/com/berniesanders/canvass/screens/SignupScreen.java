@@ -2,11 +2,14 @@ package com.berniesanders.canvass.screens;
 
 import android.os.Bundle;
 
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
+import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.dagger.MainComponent;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.SignupView;
 

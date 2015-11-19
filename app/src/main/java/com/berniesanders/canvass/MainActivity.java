@@ -31,6 +31,8 @@ import android.widget.ImageView;
 import com.berniesanders.canvass.config.Actions;
 import com.berniesanders.canvass.dagger.ActivityComponent;
 import com.berniesanders.canvass.dagger.DaggerActivityComponent;
+import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.models.ApiItem;
@@ -108,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
     @Inject
     ActionBarController actionBarController;
+
+    @Inject
+    ErrorToastController errorToastController;
 
 
     @Override
@@ -210,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
                     .withService(ActionBarService.NAME, actionBarController)
+                    .withService(ErrorToastService.NAME, errorToastController)
                     .build(getScopeName());
         }
     }

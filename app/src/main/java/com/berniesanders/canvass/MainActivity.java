@@ -252,7 +252,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         actionBarController.dropView(this);
-        actionBarController.setConfig(null);
         dialogController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
@@ -442,7 +441,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public Context getActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
 

@@ -19,6 +19,7 @@ package com.berniesanders.canvass;
 
 import android.app.Application;
 
+import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.DialogController;
 import com.berniesanders.canvass.dagger.DaggerMainComponent;
 import com.berniesanders.canvass.dagger.MainComponent;
@@ -63,6 +64,7 @@ public class FTBApplication extends Application {
         }
         component = DaggerMainComponent.builder()
                 .mainModule(new MainModule(getApplicationContext()))
+                .actionBarModule(new ActionBarController.ActionBarModule())
                 .dialogModule(new DialogController.DialogModule())
                 .build();
 

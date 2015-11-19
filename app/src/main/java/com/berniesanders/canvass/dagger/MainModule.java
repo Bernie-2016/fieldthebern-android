@@ -1,11 +1,14 @@
 package com.berniesanders.canvass.dagger;
 
 import android.content.Context;
+import android.location.LocationManager;
 
 import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.parsing.CollectionDeserializer;
 import com.berniesanders.canvass.parsing.PageContentDeserializer;
+import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -53,6 +56,19 @@ public class MainModule {
     @Singleton
     public ErrorToastController provideErrorToastController() {
         return new ErrorToastController(context, gson);
+    }
+
+
+    @Provides
+    @Singleton
+    public LocationManager provideLocationManager() {
+        return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    public LocationAdapter provideLocationAdapter(LocationManager locationManager) {
+        return new LocationAdapter(context, locationManager);
     }
 
 }

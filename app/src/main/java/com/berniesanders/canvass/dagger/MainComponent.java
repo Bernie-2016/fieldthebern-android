@@ -7,6 +7,7 @@ import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.google.gson.Gson;
 
+import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.PageRepo;
 
@@ -33,4 +34,5 @@ public interface MainComponent {
 
     ActionBarController actionBarController();
     DialogController dialogController();
+    LocationAdapter locationAdapter();
 }

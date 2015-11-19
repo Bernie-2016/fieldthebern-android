@@ -9,7 +9,6 @@ import com.google.gson.Gson;
 
 import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.repositories.CollectionRepo;
-import com.berniesanders.canvass.repositories.PageRepo;
 
 import javax.inject.Singleton;
 
@@ -30,7 +29,6 @@ public interface MainComponent {
     Gson gson();
     ErrorToastController errorToastController();
     CollectionRepo collectionRepo();
-    PageRepo pageRepo();
 
     ActionBarController actionBarController();
     DialogController dialogController();

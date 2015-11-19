@@ -14,7 +14,6 @@ import com.google.gson.GsonBuilder;
 
 import com.berniesanders.canvass.models.ApiItem;
 import com.berniesanders.canvass.repositories.CollectionRepo;
-import com.berniesanders.canvass.repositories.PageRepo;
 
 import javax.inject.Singleton;
 

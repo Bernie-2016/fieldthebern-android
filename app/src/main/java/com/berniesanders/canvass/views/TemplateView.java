@@ -9,6 +9,7 @@ import com.berniesanders.canvass.screens.TemplateScreen;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
@@ -41,11 +42,11 @@ public class TemplateView extends FrameLayout {
 
 
     /**
-     * This is how the presenter is injected on to this view
-     *
+     * This is how the presenter is injected on to this view.
      * Important to note component type is how the DaggerService finds the right component
      */
     private void injectSelf(Context context) {
+        if (isInEditMode()) { return; }
         DaggerService.<TemplateScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
@@ -55,7 +56,9 @@ public class TemplateView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        if (isInEditMode()) { return; }
         Timber.v("onFinishInflate");
+        //ButterKnife.bind(this, this);
     }
 
     @Override

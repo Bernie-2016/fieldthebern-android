@@ -5,6 +5,8 @@ import android.os.Bundle;
 import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
+import com.berniesanders.canvass.controllers.ActionBarController;
+import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
 import com.berniesanders.canvass.mortar.FlowPathBase;
@@ -17,8 +19,7 @@ import mortar.ViewPresenter;
 import timber.log.Timber;
 
 /**
- * Example for creating new Mortar Screen that helps explain how it all works
- *
+ * Example for creating new Mortar Screen that helps explain how it all works.  
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_template)
@@ -38,11 +39,8 @@ public class TemplateScreen extends FlowPathBase {
 
     /**
      * Create the component defined as an inner class below.
-     *
      * This component will inject the presenter on the view, and dependencies/module on the presenter.
-     *
      * You can pass data (someData) from the Screen to its Presenter through this component.
-     *
      * Remember you must run the gradle 'build' class for Dagger to generate to component code
      */
     @Override
@@ -54,15 +52,9 @@ public class TemplateScreen extends FlowPathBase {
                 .build();
     }
 
-    /**
-     * Important: make this unique to the data you want cages or displayed.
-     * If you show "someData" then add "someData.hashCode()" to the end of this method
-     * This will define the uniqueness that mortar and flow will see this screen for comparisons
-     */
     @Override
     public String getScopeName() {
-        // note someData.hashCode() makes the screen unique
-        return TemplateScreen.class.getName() + someData.hashCode();
+        return TemplateScreen.class.getName();
     }
 
 
@@ -86,11 +78,8 @@ public class TemplateScreen extends FlowPathBase {
 
     /**
      * This component is used to inject the view with the presenter once the view is inflated.
-     *
      * The view will injected itself using this component on inflate.
-     *
      * Expose anything you want injected to the presenter here
-     *
      * Only use "dependencies = MainComponent.class" if you need something from the main component
      * Only use "modules = TemplateModule.class" if you need a module
      */
@@ -134,23 +123,21 @@ public class TemplateScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-
-            // Some example Page events.
-
-//            new ChangePageEvent()
-//                    .with(FTBApplication.getEventBus())
-//                    .close(true)
-//                    .hideToolbar(true)
-//                    .dispatch();
-
-//            new ShowToolbarEvent()
-//                    .with(FTBApplication.getEventBus())
-//                    .showToolbar(true)
-//                    .dispatch();
         }
 
+//        void setActionBar() {
+//            ActionBarController.MenuAction menu =
+//                    new ActionBarController
+//                            .MenuAction()
+//                            .setIsSearch();
+//            ActionBarService
+//                    .getActionbarController(getView())
+//                    .setMainImage(null)
+//                    .setConfig(new ActionBarController.Config("actionbar title", menu));
+//        }
+
         /**
-         * called on rotation only
+         * Called on rotation only
          */
         @Override
         protected void onSave(Bundle outState) {
@@ -158,8 +145,7 @@ public class TemplateScreen extends FlowPathBase {
 
 
         /**
-         * last chance at the view before it is detached
-         *
+         * Last chance at the view before it is detached.
          * You can save state with hack, (restore it the same way by reading the field).
          * objects saved with be "parceled" by gson. Example:
          *

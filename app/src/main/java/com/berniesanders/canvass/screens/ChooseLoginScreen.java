@@ -100,12 +100,13 @@ public class ChooseLoginScreen extends FlowPathBase {
 
         @OnClick(R.id.login_email)
         void loginEmail() {
-            Flow.get(getView().getContext()).set(new LoginScreen());
+            Flow.get(getView().getContext()).set(new LoginScreen(null));
         }
 
+        //TODO: pass a pre-crafted user?
         @OnClick(R.id.login_facebook)
         void loginFacebook() {
-            Flow.get(getView().getContext()).set(new LoginScreen());
+            Flow.get(getView().getContext()).set(new LoginScreen(null));
         }
 
         @OnClick(R.id.no_account)

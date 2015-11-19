@@ -1,14 +1,18 @@
 package com.berniesanders.canvass.dagger;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 
 import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.parsing.CollectionDeserializer;
 import com.berniesanders.canvass.parsing.PageContentDeserializer;
-import com.google.android.gms.location.LocationServices;
+import com.berniesanders.canvass.repositories.TokenRepo;
+import com.berniesanders.canvass.repositories.UserRepo;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -28,6 +32,7 @@ import dagger.Provides;
 public class MainModule {
     private final Context context;
     private final Gson gson;
+    private final RxSharedPreferences rxPrefs;
 
     public MainModule(Context context) {
         this.context = context.getApplicationContext();
@@ -37,6 +42,9 @@ public class MainModule {
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
 
         gson = gsonBuilder.setPrettyPrinting().create();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        rxPrefs = RxSharedPreferences.create(preferences);
     }
 
     @Provides
@@ -53,8 +61,26 @@ public class MainModule {
 
     @Provides
     @Singleton
+    public TokenRepo provideTokenRepo() {
+        return new TokenRepo(this.gson, context, rxPrefs);
+    }
+
+    @Provides
+    @Singleton
+    public UserRepo provideUserRepo(TokenRepo tokenRepo) {
+        return new UserRepo(gson, tokenRepo, rxPrefs);
+    }
+
+    @Provides
+    @Singleton
     public ErrorToastController provideErrorToastController() {
         return new ErrorToastController(context, gson);
+    }
+
+    @Provides
+    @Singleton
+    public RxSharedPreferences provideRxPrefs() {
+        return rxPrefs;
     }
 
 

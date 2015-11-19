@@ -25,8 +25,8 @@ import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
 import com.berniesanders.canvass.models.Collection;
-import com.berniesanders.canvass.mortar.ActionBarController;
-import com.berniesanders.canvass.mortar.ActionBarService;
+import com.berniesanders.canvass.controllers.ActionBarController;
+import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
@@ -199,8 +199,10 @@ public class Main extends FlowPathBase {
                             .MenuAction()
                             .setIsSearch();
 
-            actionBarController.setConfig(
-                    new ActionBarController.Config(issuesScreenTitle, menu));
+            actionBarController
+                    .setMainImage(null)
+                    .openAppbar()
+                    .setConfig(new ActionBarController.Config(issuesScreenTitle, menu));
         }
     }
 }

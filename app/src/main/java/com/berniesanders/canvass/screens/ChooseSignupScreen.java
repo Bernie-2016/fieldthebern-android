@@ -8,59 +8,63 @@ import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
-import com.berniesanders.canvass.views.AddAddressView;
+import com.berniesanders.canvass.views.ChooseSignupView;
 
 import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import flow.Flow;
-import flow.History;
 import mortar.ViewPresenter;
-import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
+ * Example for creating new Mortar Screen that helps explain how it all works
  *
+ * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_add_address)
-public class AddAddressScreen extends FlowPathBase {
+@Layout(R.layout.screen_choose_signup)
+public class ChooseSignupScreen extends FlowPathBase {
 
-
-    public AddAddressScreen() {
+    /**
+     */
+    public ChooseSignupScreen() {
     }
 
+    /**
+     */
     @Override
     public Object createComponent() {
-        return DaggerAddAddressScreen_Component
+        return DaggerChooseSignupScreen_Component
                 .builder()
                 .build();
     }
 
+    /**
+     */
     @Override
     public String getScopeName() {
-        return AddAddressScreen.class.getName();// TODO temp scope name?
+        return ChooseSignupScreen.class.getName();
     }
 
 
-//    @Module
-//    class Module {
-//
-//    }
+    @dagger.Module
+    class Module {
+    }
 
+    /**
+     */
     @FtbScreenScope
     @dagger.Component
     public interface Component {
-        void inject(AddAddressView t);
+        void inject(ChooseSignupView t);
     }
 
     @FtbScreenScope
-    static public class Presenter extends ViewPresenter<AddAddressView> {
+    static public class Presenter extends ViewPresenter<ChooseSignupView> {
 
-        @BindString(android.R.string.cancel) String cancel;
-
-        @BindString(R.string.add_address) String addAddress;
-
+        @BindString(R.string.signup_title) String screenTitleString;
 
         @Inject
         Presenter() {
@@ -75,23 +79,13 @@ public class AddAddressScreen extends FlowPathBase {
 
 
         void setActionBar() {
-            ActionBarController.MenuAction menu =
-                    new ActionBarController.MenuAction()
-                            .label(cancel)
-                            .action(new Action0() {
-                                @Override
-                                public void call() {
-                                    if (getView()!=null) {
-                                        Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
-                                    }
-                                }
-                            });
             ActionBarService
                     .getActionbarController(getView())
                     .showToolbar()
+                    .lockDrawer()
                     .closeAppbar()
                     .setMainImage(null)
-                    .setConfig(new ActionBarController.Config(addAddress, menu));
+                    .setConfig(new ActionBarController.Config(screenTitleString, null));
         }
 
         @Override
@@ -99,9 +93,24 @@ public class AddAddressScreen extends FlowPathBase {
         }
 
         @Override
-        public void dropView(AddAddressView view) {
+        public void dropView(ChooseSignupView view) {
             super.dropView(view);
+            ButterKnife.unbind(this);
         }
 
+        @OnClick(R.id.sign_up_email)
+        void signUpEmail() {
+            Flow.get(getView().getContext()).set(new SignupScreen());
+        }
+
+        @OnClick(R.id.sign_up_facebook)
+        void signUpFacebook() {
+            Flow.get(getView().getContext()).set(new SignupScreen());
+        }
+
+        @OnClick(R.id.have_an_account)
+        void haveAccount() {
+            Flow.get(getView().getContext()).set(new ChooseLoginScreen());
+        }
     }
 }

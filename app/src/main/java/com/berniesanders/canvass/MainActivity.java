@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initialScreen = new InitialScreen();
         FTBApplication.getComponent().inject(this);
         FTBApplication.getComponent().inject(initialScreen);
         FacebookSdk.sdkInitialize(getApplicationContext());

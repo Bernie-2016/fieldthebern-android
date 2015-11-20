@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity
         FTBApplication.getComponent().inject(this);
         FTBApplication.getComponent().inject(initialScreen);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        Timber.d("Facebook app signature: %s", FacebookSdk.getApplicationSignature(getApplicationContext()));
         initActivityScope();
 
         GsonParceler parceler = new GsonParceler(gson);

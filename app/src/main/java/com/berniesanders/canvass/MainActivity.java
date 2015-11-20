@@ -33,6 +33,8 @@ import com.berniesanders.canvass.controllers.DialogController;
 import com.berniesanders.canvass.controllers.DialogService;
 import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.ErrorToastService;
+import com.berniesanders.canvass.controllers.FacebookController;
+import com.berniesanders.canvass.controllers.FacebookService;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.models.ApiItem;
@@ -46,11 +48,17 @@ import com.berniesanders.canvass.screens.CollectionScreen;
 import com.berniesanders.canvass.screens.InitialScreen;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -76,6 +84,7 @@ public class MainActivity extends AppCompatActivity
         implements
         ActionBarController.Activity,
         DialogController.Activity,
+        FacebookController.Activity,
         Flow.Dispatcher {
 
     private MortarScope activityScope;
@@ -85,6 +94,7 @@ public class MainActivity extends AppCompatActivity
     private ActionBarController.MenuAction actionBarMenuAction;
     private ActionBarDrawerToggle drawerToggle;
     private InitialScreen initialScreen;
+    CallbackManager callbackManager;
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
@@ -121,6 +131,9 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     DialogController dialogController;
+
+    @Inject
+    FacebookController facebookController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -192,6 +205,13 @@ public class MainActivity extends AppCompatActivity
 
         dialogController.takeView(this);
         actionBarController.takeView(this);
+        facebookController.takeView(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        facebookController.onActivityResult(requestCode, resultCode, data);
     }
 
     private void setupDrawerToggle() {
@@ -214,6 +234,7 @@ public class MainActivity extends AppCompatActivity
                     .withService(ActionBarService.NAME, actionBarController)
                     .withService(ErrorToastService.NAME, errorToastController)
                     .withService(DialogService.NAME, dialogController)
+                    .withService(FacebookService.NAME, facebookController)
                     .build(getScopeName());
         }
     }
@@ -255,6 +276,7 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         actionBarController.dropView(this);
         dialogController.dropView(this);
+        facebookController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
         if (isFinishing() && activityScope != null) {

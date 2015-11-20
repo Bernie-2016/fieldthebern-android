@@ -6,6 +6,7 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 
 import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.parsing.CollectionDeserializer;

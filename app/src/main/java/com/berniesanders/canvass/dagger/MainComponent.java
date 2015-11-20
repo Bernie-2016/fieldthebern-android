@@ -4,6 +4,7 @@ import com.berniesanders.canvass.MainActivity;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.DialogController;
 import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.repositories.CollectionRepo;
@@ -24,6 +25,7 @@ import dagger.Component;
         modules = {
         ActionBarController.ActionBarModule.class,
         DialogController.DialogModule.class,
+        FacebookController.FacebookModule.class,
         MainModule.class}
 )
 public interface MainComponent {
@@ -41,4 +43,5 @@ public interface MainComponent {
     DialogController dialogController();
     LocationAdapter locationAdapter();
     RxSharedPreferences rxPrefs();
+    FacebookController facebookController();
 }

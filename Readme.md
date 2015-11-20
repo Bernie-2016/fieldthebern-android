@@ -66,7 +66,7 @@ How screen navigation and dependency injection works in our app with flow and mo
 
 * To change "screens" call flow: `Flow.get(context).set(new TemplateScreen());`  
 
-* Flow will manage the backstack by saving the object pass to `set()`
+* Flow will manage the backstack by saving the object passed to `set()`
  
 * flow and mortar read the `TemplateScreen` and inflate the view based on the resId in the `@Layout` annotation `R.layout.screen_template`
  

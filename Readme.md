@@ -90,7 +90,7 @@ How screen navigation and dependency injection works in our app with flow and mo
 
 
 Example using the `ActionBarController` to show the Toolbar from a presenter's `onLoad()` method
-```
+```java
 @Override
 protected void onLoad(Bundle savedInstanceState) {
     ActionBarService.getActionbarController(getView()).showToolbar();

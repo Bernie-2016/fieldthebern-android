@@ -1,5 +1,8 @@
 package com.berniesanders.canvass.config;
 
+import android.content.Context;
+import com.berniesanders.canvass.R;
+
 /**
  * Central place for configuring data access urls
  */
@@ -14,11 +17,11 @@ public class ConfigImpl implements Config {
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
 
-    public ConfigImpl() {
-        BASE_URL = "http://feelthebern.org/";
-        CANVASS_URL = "http://api.groundgameapp-staging.com/";
-        CLIENT_ID = "cbe732e440995e8ae73dfb093de4b880f3a68346e4b1bf933e626599a090bdec";
-        CLIENT_SECRET = "30d732185171be840adff6e11aae9157614bb7be2da2d27100bcb7bc938ac369";
+    public ConfigImpl(Context context) {
+        BASE_URL = context.getString(R.string.baseUrl);
+        CANVASS_URL = context.getString(R.string.canvassUrl);
+        CLIENT_ID = context.getString(R.string.emailClientId);
+        CLIENT_SECRET = context.getString(R.string.emailClientSecret);
     }
 
     @Override

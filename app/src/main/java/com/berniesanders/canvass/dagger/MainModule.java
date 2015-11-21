@@ -46,7 +46,7 @@ public class MainModule {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         rxPrefs = RxSharedPreferences.create(preferences);
 
-        config = new ConfigImpl();
+        config = new ConfigImpl(context);
     }
 
     @Provides

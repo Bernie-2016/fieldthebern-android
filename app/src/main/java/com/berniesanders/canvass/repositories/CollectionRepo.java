@@ -1,6 +1,7 @@
 package com.berniesanders.canvass.repositories;
 
 import android.content.Context;
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.Collection;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
@@ -31,16 +32,14 @@ public class CollectionRepo {
 
     final Gson gson;
     private final Context context;
-    private final Config config;
     private Collection collectionMemCache;
 
     private static final String JSON_FILE_PATH = "ftb.json";
 
     @Inject
-    public CollectionRepo(Gson gson, Context context, Config config) {
+    public CollectionRepo(Gson gson, Context context) {
         this.gson = gson;
         this.context = context;
-        this.config = config;
     }
 
     /**
@@ -138,7 +137,7 @@ public class CollectionRepo {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getFeelTheBernUrl())
+                .baseUrl(FTBApplication.getComponent().config().getFeelTheBernUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

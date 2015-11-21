@@ -1,5 +1,6 @@
 package com.berniesanders.canvass.repositories;
 
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
@@ -33,15 +34,12 @@ public class UserRepo {
     private final TokenRepo tokenRepo;
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
-    private final Config config;
-
 
     @Inject
-    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
-        this.config = config;
     }
 
     /**
@@ -112,7 +110,7 @@ public class UserRepo {
 //        });
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
+                .baseUrl(FTBApplication.getComponent().config().getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

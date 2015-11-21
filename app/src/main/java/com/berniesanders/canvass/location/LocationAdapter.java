@@ -53,13 +53,12 @@ public class LocationAdapter
         return Observable.create(new Observable.OnSubscribe<Location>() {
             @Override
             public void call(Subscriber<? super Location> subscriber) {
-                subscriber.onError(new LocationUnavailableException("test"));
-//                try {
-//                    subscriber.onNext(getLocation());
-//                    subscriber.onCompleted();
-//                } catch (LocationUnavailableException e) {
-//                    subscriber.onError(e);
-//                }
+                try {
+                    subscriber.onNext(getLocation());
+                    subscriber.onCompleted();
+                } catch (LocationUnavailableException e) {
+                    subscriber.onError(e);
+                }
 
            }
         });
@@ -90,14 +89,13 @@ public class LocationAdapter
         return Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
-                subscriber.onError(new AddressUnavailableException("test"));
-//                try {
-//                    String stateCode = getStateForLocation(getLocation());
-//                    subscriber.onNext(stateCode);
-//                    subscriber.onCompleted();
-//                } catch (LocationUnavailableException e) {
-//                    subscriber.onError(e);
-//                }
+                try {
+                    String stateCode = getStateForLocation(getLocation());
+                    subscriber.onNext(stateCode);
+                    subscriber.onCompleted();
+                } catch (LocationUnavailableException e) {
+                    subscriber.onError(e);
+                }
             }
         });
     }

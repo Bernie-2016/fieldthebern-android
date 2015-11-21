@@ -20,10 +20,6 @@ import rx.Observable;
  */
 public class TokenSpec {
 
-    private static final String CLIENT_ID = "cbe732e440995e8ae73dfb093de4b880f3a68346e4b1bf933e626599a090bdec";
-    private static final String CLIENT_SECRET = "30d732185171be840adff6e11aae9157614bb7be2da2d27100bcb7bc938ac369";
-
-
     LoginEmailRequest loginEmailRequest;
     LoginFacebookRequest loginFacebookRequest;
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.adapters.BaseViewHolder;
 import com.berniesanders.canvass.models.Video;
@@ -72,9 +73,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
             }
 
             thumbnail
-                    .initialize(thumbnail
-                                    .getContext()
-                                    .getString(R.string.googleApiKey),
+                    .initialize(FTBApplication.getComponent().config().getGoogleApiKey(),
                             new YouTubeThumbnailView.OnInitializedListener() {
                                 @Override
                                 public void onInitializationSuccess(YouTubeThumbnailView view,

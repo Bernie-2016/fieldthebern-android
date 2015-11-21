@@ -1,6 +1,7 @@
 package com.berniesanders.canvass.dagger;
 
 import com.berniesanders.canvass.MainActivity;
+import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.DialogController;
 import com.berniesanders.canvass.controllers.ErrorToastController;
@@ -44,4 +45,5 @@ public interface MainComponent {
     LocationAdapter locationAdapter();
     RxSharedPreferences rxPrefs();
     FacebookController facebookController();
+    Config config();
 }

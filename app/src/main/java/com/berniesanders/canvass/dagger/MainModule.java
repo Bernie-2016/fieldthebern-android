@@ -32,7 +32,6 @@ public class MainModule {
     private final Context context;
     private final Gson gson;
     private final RxSharedPreferences rxPrefs;
-    private final Config config;
 
     public MainModule(Context context) {
         this.context = context.getApplicationContext();
@@ -45,8 +44,6 @@ public class MainModule {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         rxPrefs = RxSharedPreferences.create(preferences);
-
-        config = new ConfigImpl(context);
     }
 
     @Provides
@@ -58,19 +55,19 @@ public class MainModule {
     @Provides
     @Singleton
     public CollectionRepo provideCollectionRepo() {
-        return new CollectionRepo(gson, context, config);
+        return new CollectionRepo(gson, context);
     }
 
     @Provides
     @Singleton
     public TokenRepo provideTokenRepo() {
-        return new TokenRepo(this.gson, rxPrefs, config);
+        return new TokenRepo(this.gson, rxPrefs);
     }
 
     @Provides
     @Singleton
     public UserRepo provideUserRepo(TokenRepo tokenRepo) {
-        return new UserRepo(gson, tokenRepo, rxPrefs, config);
+        return new UserRepo(gson, tokenRepo, rxPrefs);
     }
 
     @Provides
@@ -96,5 +93,11 @@ public class MainModule {
     @Singleton
     public LocationAdapter provideLocationAdapter(LocationManager locationManager) {
         return new LocationAdapter(context, locationManager);
+    }
+
+    @Provides
+    @Singleton
+    public Config provideConfig() {
+        return new ConfigImpl(context);
     }
 }

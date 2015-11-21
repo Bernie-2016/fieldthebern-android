@@ -1,6 +1,7 @@
 package com.berniesanders.canvass.repositories;
 
 import android.util.Base64;
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.Token;
@@ -31,14 +32,12 @@ public class TokenRepo {
     final Gson gson;
     private final OkHttpClient client = new OkHttpClient();
     private final RxSharedPreferences rxPrefs;
-    private final Config config;
 
 
     @Inject
-    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config) {
+    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs) {
         this.gson = gson;
         this.rxPrefs = rxPrefs;
-        this.config = config;
     }
 
     /**
@@ -70,7 +69,7 @@ public class TokenRepo {
         client.interceptors().add(interceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getCanvassUrl())
+                .baseUrl(FTBApplication.getComponent().config().getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
@@ -88,7 +87,8 @@ public class TokenRepo {
 
 
     private String getAuthString() {
-        String cred = this.config.getClientId() + ":" + this.config.getClientSecret();
+        Config config = FTBApplication.getComponent().config();
+        String cred = config.getClientId() + ":" + config.getClientSecret();
         byte[] data = new byte[0];
         try {
             data = cred.getBytes("UTF-8");

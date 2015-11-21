@@ -16,12 +16,14 @@ public class ConfigImpl implements Config {
 
     private final String CLIENT_ID;
     private final String CLIENT_SECRET;
+    private final String GOOGLE_API_KEY;
 
     public ConfigImpl(Context context) {
         BASE_URL = context.getString(R.string.baseUrl);
         CANVASS_URL = context.getString(R.string.canvassUrl);
         CLIENT_ID = context.getString(R.string.oauth2ClientId);
         CLIENT_SECRET = context.getString(R.string.oauth2ClientSecret);
+        GOOGLE_API_KEY = context.getString(R.string.googleApiKey);
     }
 
     @Override
@@ -42,5 +44,10 @@ public class ConfigImpl implements Config {
     @Override
     public String getClientSecret() {
         return CLIENT_SECRET;
+    }
+
+    @Override
+    public String getGoogleApiKey() {
+        return GOOGLE_API_KEY;
     }
 }

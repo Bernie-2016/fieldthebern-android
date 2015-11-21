@@ -28,32 +28,32 @@ public class ConfigImpl implements Config {
     }
 
     @Override
-    public String getBASE_URL() {
+    public String getBaseUrl() {
         return BASE_URL;
     }
 
     @Override
-    public String getCANVASS_URL() {
+    public String getCanvassUrl() {
         return CANVASS_URL;
     }
 
     @Override
-    public String getCLIENT_ID() {
+    public String getClientId() {
         return CLIENT_ID;
     }
 
     @Override
-    public String getCLIENT_SECRET() {
+    public String getClientSecret() {
         return CLIENT_SECRET;
     }
 
     @Override
-    public String getCOLLECTION_JSON_URL_STUB() {
+    public String getCollectionJsonUrlStub() {
         return COLLECTION_JSON_URL_STUB;
     }
 
     @Override
-    public String getPAGE_JSON_URL_STUB() {
+    public String getPageJsonUrlStub() {
         return PAGE_JSON_URL_STUB;
     }
 }

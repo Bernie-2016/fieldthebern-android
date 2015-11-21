@@ -2,7 +2,6 @@ package com.berniesanders.canvass.repositories;
 
 import android.util.Base64;
 import com.berniesanders.canvass.config.Config;
-import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.Token;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
@@ -71,7 +70,7 @@ public class TokenRepo {
         client.interceptors().add(interceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getCANVASS_URL())
+                .baseUrl(this.config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
@@ -89,7 +88,7 @@ public class TokenRepo {
 
 
     private String getAuthString() {
-        String cred = this.config.getCLIENT_ID() + ":" + this.config.getCLIENT_SECRET();
+        String cred = this.config.getClientId() + ":" + this.config.getClientSecret();
         byte[] data = new byte[0];
         try {
             data = cred.getBytes("UTF-8");

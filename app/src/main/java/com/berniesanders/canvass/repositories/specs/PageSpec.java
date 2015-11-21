@@ -4,7 +4,6 @@
 package com.berniesanders.canvass.repositories.specs;
 
 import com.berniesanders.canvass.config.Config;
-import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.models.Page;
 
@@ -32,7 +31,7 @@ public class PageSpec {
     public PageSpec(Page page) {
         this.page = page;
         this.id = String.valueOf(page.getData());
-        url = config.getPAGE_JSON_URL_STUB();
+        url = config.getPageJsonUrlStub();
     }
 
     public String id() {

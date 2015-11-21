@@ -4,7 +4,6 @@
 package com.berniesanders.canvass.repositories.specs;
 
 import com.berniesanders.canvass.config.Config;
-import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.models.Collection;
 
 import retrofit.http.GET;
@@ -24,7 +23,7 @@ public class CollectionSpec {
     private final String url;
 
     public CollectionSpec() {
-        url = config.getCOLLECTION_JSON_URL_STUB();
+        url = config.getCollectionJsonUrlStub();
     }
 
     public String url() {

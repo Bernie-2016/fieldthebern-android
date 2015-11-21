@@ -1,7 +1,6 @@
 package com.berniesanders.canvass.repositories;
 
 import com.berniesanders.canvass.config.Config;
-import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.User;
@@ -115,7 +114,7 @@ public class UserRepo {
 //        });
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCANVASS_URL())
+                .baseUrl(config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

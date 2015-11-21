@@ -1,15 +1,15 @@
 package com.berniesanders.canvass.config;
 
 public interface Config {
-    String getBASE_URL();
+    String getBaseUrl();
 
-    String getCANVASS_URL();
+    String getCanvassUrl();
 
-    String getCLIENT_ID();
+    String getClientId();
 
-    String getCLIENT_SECRET();
+    String getClientSecret();
 
-    String getCOLLECTION_JSON_URL_STUB();
+    String getCollectionJsonUrlStub();
 
-    String getPAGE_JSON_URL_STUB();
+    String getPageJsonUrlStub();
 }

@@ -97,11 +97,4 @@ public class MainModule {
     public LocationAdapter provideLocationAdapter(LocationManager locationManager) {
         return new LocationAdapter(context, locationManager);
     }
-
-    @Provides
-    @Singleton
-    public Config provideConfig() {
-        return new ConfigImpl();
-    }
-
 }

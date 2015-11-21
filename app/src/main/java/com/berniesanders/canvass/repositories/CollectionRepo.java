@@ -2,6 +2,7 @@ package com.berniesanders.canvass.repositories;
 
 import android.content.Context;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.config.UrlConfig;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
 import com.google.gson.Gson;
@@ -148,7 +149,7 @@ public class CollectionRepo {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UrlConfig.BASE_URL)
+                .baseUrl(context.getString(R.string.baseUrl))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

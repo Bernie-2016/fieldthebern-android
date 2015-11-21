@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.location.LocationAdapter;
@@ -69,7 +70,7 @@ public class MainModule {
     @Provides
     @Singleton
     public UserRepo provideUserRepo(TokenRepo tokenRepo) {
-        return new UserRepo(gson, tokenRepo, rxPrefs);
+        return new UserRepo(gson, tokenRepo, rxPrefs, context.getString(R.string.canvassUrl));
     }
 
     @Provides

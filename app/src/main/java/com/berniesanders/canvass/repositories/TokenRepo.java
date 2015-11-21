@@ -3,6 +3,7 @@ package com.berniesanders.canvass.repositories;
 import android.content.Context;
 import android.util.Base64;
 
+import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.config.UrlConfig;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.Token;
@@ -76,7 +77,7 @@ public class TokenRepo {
         client.interceptors().add(interceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UrlConfig.CANVASS_URL)
+                .baseUrl(context.getString(R.string.baseUrl))
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

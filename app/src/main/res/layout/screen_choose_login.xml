@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.canvass.views.ChooseLoginView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/bernie_dark_blue"
+    tools:context=".MainActivity"
+    >
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="@color/dark_blue2"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/login_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_email_white_24dp"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="16dp"
+        android:text="@string/login_email"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_above="@id/login_email"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/fb_blue"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/login_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_above="@id/login_email"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/facebook"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="16dp"
+        android:text="@string/login_facebook"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/no_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/login_facebook"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/no_account"
+        android:textAllCaps="false"
+        android:textColor="@color/b_light_blue2"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_centerHorizontal="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/no_account"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/logo_temp"
+            />
+    </LinearLayout>
+
+</com.berniesanders.canvass.views.ChooseLoginView>

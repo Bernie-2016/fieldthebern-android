@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.berniesanders.canvass.views.NavigationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_blue2"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="16dp">
+
+        <ImageView
+            android:id="@+id/drawer_header_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:src="@drawable/ic_face_24dp"/>
+
+        <TextView
+            android:id="@+id/drawer_header_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dp"
+            android:text="Bernie Sanders"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/drawer_header_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="bernie@sanders.com"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/drawer_listview"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/bernie_dark_blue"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"/>
+</com.berniesanders.canvass.views.NavigationView>

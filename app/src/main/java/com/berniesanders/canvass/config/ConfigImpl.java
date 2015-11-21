@@ -20,8 +20,8 @@ public class ConfigImpl implements Config {
     public ConfigImpl(Context context) {
         BASE_URL = context.getString(R.string.baseUrl);
         CANVASS_URL = context.getString(R.string.canvassUrl);
-        CLIENT_ID = context.getString(R.string.emailClientId);
-        CLIENT_SECRET = context.getString(R.string.emailClientSecret);
+        CLIENT_ID = context.getString(R.string.oauth2ClientId);
+        CLIENT_SECRET = context.getString(R.string.oauth2ClientSecret);
     }
 
     @Override

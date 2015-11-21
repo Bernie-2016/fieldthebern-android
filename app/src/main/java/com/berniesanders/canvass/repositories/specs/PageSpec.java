@@ -25,13 +25,13 @@ public class PageSpec {
     private final String id;
     private final String url;
     private final Page page;
-    @Inject
-    Config config;
+    private final Config config;
 
-    public PageSpec(Page page) {
+    public PageSpec(Page page, Config config) {
         this.page = page;
         this.id = String.valueOf(page.getData());
         url = config.getPageJsonUrlStub();
+        this.config = config;
     }
 
     public String id() {

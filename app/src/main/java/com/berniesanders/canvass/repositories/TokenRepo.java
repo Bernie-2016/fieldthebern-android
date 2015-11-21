@@ -31,14 +31,14 @@ public class TokenRepo {
     final Gson gson;
     private final OkHttpClient client = new OkHttpClient();
     private final RxSharedPreferences rxPrefs;
-    @Inject
-    Config config;
+    private final Config config;
 
 
     @Inject
-    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs) {
+    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config) {
         this.gson = gson;
         this.rxPrefs = rxPrefs;
+        this.config = config;
     }
 
     /**

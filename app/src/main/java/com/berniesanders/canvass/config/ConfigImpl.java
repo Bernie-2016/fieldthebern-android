@@ -15,7 +15,7 @@ public class ConfigImpl implements Config {
     private final String CLIENT_SECRET;
 
     //public static final String COLLECTION_JSON_URL_STUB = "index2.php";
-    private final String COLLECTION_JSON_URL_STUB;
+//    private final String COLLECTION_JSON_URL_STUB;
     private final String PAGE_JSON_URL_STUB;
 
     public ConfigImpl() {
@@ -23,12 +23,12 @@ public class ConfigImpl implements Config {
         CANVASS_URL = "http://api.groundgameapp-staging.com/";
         CLIENT_ID = "cbe732e440995e8ae73dfb093de4b880f3a68346e4b1bf933e626599a090bdec";
         CLIENT_SECRET = "30d732185171be840adff6e11aae9157614bb7be2da2d27100bcb7bc938ac369";
-        COLLECTION_JSON_URL_STUB = "";
+//        COLLECTION_JSON_URL_STUB = "";
         PAGE_JSON_URL_STUB = "page.php";
     }
 
     @Override
-    public String getBaseUrl() {
+    public String getFeelTheBernUrl() {
         return BASE_URL;
     }
 
@@ -47,10 +47,10 @@ public class ConfigImpl implements Config {
         return CLIENT_SECRET;
     }
 
-    @Override
-    public String getCollectionJsonUrlStub() {
-        return COLLECTION_JSON_URL_STUB;
-    }
+//    @Override
+//    public String getCollectionJsonUrlStub() {
+//        return COLLECTION_JSON_URL_STUB;
+//    }
 
     @Override
     public String getPageJsonUrlStub() {

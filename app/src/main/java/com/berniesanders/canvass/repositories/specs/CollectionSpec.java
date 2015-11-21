@@ -18,12 +18,11 @@ import javax.inject.Inject;
  */
 public class CollectionSpec {
 
-    @Inject
-    Config config;
-    private final String url;
+
+//    private final String url = Config.getCollectionJsonUrlStub();
+    private final String url = "";
 
     public CollectionSpec() {
-        url = config.getCollectionJsonUrlStub();
     }
 
     public String url() {

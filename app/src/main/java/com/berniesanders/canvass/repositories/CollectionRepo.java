@@ -1,28 +1,12 @@
 package com.berniesanders.canvass.repositories;
 
 import android.content.Context;
-
 import com.berniesanders.canvass.config.Config;
+import com.berniesanders.canvass.models.Collection;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
-
-import com.berniesanders.canvass.models.Collection;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
+import com.squareup.okhttp.*;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
@@ -35,6 +19,10 @@ import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.*;
+
 /**
  * Data repository for loading the tiles on the "home" page
  */
@@ -43,14 +31,13 @@ public class CollectionRepo {
 
     final Gson gson;
     private final Context context;
-    @Inject
-    Config config;
+    private final Config config;
     private Collection collectionMemCache;
 
     private static final String JSON_FILE_PATH = "ftb.json";
 
     @Inject
-    public CollectionRepo(Gson gson, Context context) {
+    public CollectionRepo(Gson gson, Context context, Config config) {
         this.gson = gson;
         this.context = context;
         this.config = config;
@@ -151,7 +138,7 @@ public class CollectionRepo {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getBaseUrl())
+                .baseUrl(this.config.getFeelTheBernUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

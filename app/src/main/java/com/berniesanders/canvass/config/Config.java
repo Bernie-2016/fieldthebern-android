@@ -1,7 +1,7 @@
 package com.berniesanders.canvass.config;
 
 public interface Config {
-    String getBaseUrl();
+    String getFeelTheBernUrl();
 
     String getCanvassUrl();
 
@@ -9,7 +9,7 @@ public interface Config {
 
     String getClientSecret();
 
-    String getCollectionJsonUrlStub();
+//    String getCollectionJsonUrlStub();
 
     String getPageJsonUrlStub();
 }

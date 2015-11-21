@@ -12,11 +12,6 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -24,6 +19,9 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Data repository for loading, creating users
@@ -35,15 +33,15 @@ public class UserRepo {
     private final TokenRepo tokenRepo;
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
-    @Inject
-    Config config;
+    private final Config config;
 
 
     @Inject
-    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs) {
+    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
+        this.config = config;
     }
 
     /**

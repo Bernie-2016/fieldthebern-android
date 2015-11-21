@@ -2,7 +2,8 @@ package com.berniesanders.canvass.repositories;
 
 import android.content.Context;
 
-import com.berniesanders.canvass.config.UrlConfig;
+import com.berniesanders.canvass.config.Config;
+import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -43,6 +44,8 @@ public class CollectionRepo {
 
     final Gson gson;
     private final Context context;
+    @Inject
+    Config config;
     private Collection collectionMemCache;
 
     private static final String JSON_FILE_PATH = "ftb.json";
@@ -51,6 +54,7 @@ public class CollectionRepo {
     public CollectionRepo(Gson gson, Context context) {
         this.gson = gson;
         this.context = context;
+        this.config = config;
     }
 
     /**
@@ -148,7 +152,7 @@ public class CollectionRepo {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UrlConfig.BASE_URL)
+                .baseUrl(this.config.getBASE_URL())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

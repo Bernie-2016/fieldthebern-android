@@ -1,9 +1,9 @@
 package com.berniesanders.canvass.repositories;
 
-import com.berniesanders.canvass.config.UrlConfig;
+import com.berniesanders.canvass.config.Config;
+import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
-import com.berniesanders.canvass.models.Token;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.models.UserAttributes;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
@@ -36,6 +36,8 @@ public class UserRepo {
     private final TokenRepo tokenRepo;
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
+    @Inject
+    Config config;
 
 
     @Inject
@@ -113,7 +115,7 @@ public class UserRepo {
 //        });
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UrlConfig.CANVASS_URL)
+                .baseUrl(config.getCANVASS_URL())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

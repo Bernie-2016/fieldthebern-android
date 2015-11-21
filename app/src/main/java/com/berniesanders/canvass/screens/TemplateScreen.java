@@ -133,7 +133,7 @@ public class TemplateScreen extends FlowPathBase {
 //            ActionBarService
 //                    .getActionbarController(getView())
 //                    .setMainImage(null)
-//                    .setConfig(new ActionBarController.Config("actionbar title", menu));
+//                    .setConfig(new ActionBarController.ConfigImpl("actionbar title", menu));
 //        }
 
         /**

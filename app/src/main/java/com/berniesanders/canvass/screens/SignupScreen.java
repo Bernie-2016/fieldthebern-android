@@ -123,6 +123,10 @@ public class SignupScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+
+            if (userAttributes.isFacebookUser()) {
+                getView().showFacebook(userAttributes);
+            }
         }
 
 

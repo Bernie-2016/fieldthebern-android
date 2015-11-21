@@ -38,6 +38,14 @@ public class User {
         public UserRelationships getRelationships() {
             return relationships;
         }
+
+        public void setAttributes(UserAttributes attributes) {
+            this.attributes = attributes;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
     }
 
 

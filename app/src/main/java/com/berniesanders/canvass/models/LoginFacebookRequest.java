@@ -7,9 +7,29 @@ public class LoginFacebookRequest {
 
     private final String username = "facebook";
     //<facebook_access_token>
-    private final String password;
+    private String password;
 
-    public LoginFacebookRequest(String token) {
+    public LoginFacebookRequest() {
+    }
+
+//    public String getGrantType() {
+//        return grant_type;
+//    }
+
+    /**
+     * email
+     */
+    public String username() {
+        return username;
+    }
+
+    public String password() {
+        return password;
+    }
+
+
+    public LoginFacebookRequest password(String token) {
         this.password = token;
+        return this;
     }
 }

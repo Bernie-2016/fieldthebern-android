@@ -69,7 +69,7 @@ public class FacebookController extends Presenter<FacebookController.Activity> {
         LoginManager.getInstance()
                 .logInWithReadPermissions(
                         getView().getActivity(),
-                        Arrays.asList("public_profile"));
+                        Arrays.asList("public_profile", "email", "user_friends"));
     }
 
     public void setupFacebookAuth() {

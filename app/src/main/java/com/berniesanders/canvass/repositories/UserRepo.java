@@ -1,9 +1,8 @@
 package com.berniesanders.canvass.repositories;
 
-import com.berniesanders.canvass.config.UrlConfig;
+import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
-import com.berniesanders.canvass.models.Token;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.models.UserAttributes;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
@@ -13,11 +12,6 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -25,6 +19,9 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Data repository for loading, creating users
@@ -36,13 +33,15 @@ public class UserRepo {
     private final TokenRepo tokenRepo;
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
+    private final Config config;
 
 
     @Inject
-    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs) {
+    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
+        this.config = config;
     }
 
     /**
@@ -113,7 +112,7 @@ public class UserRepo {
 //        });
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UrlConfig.CANVASS_URL)
+                .baseUrl(config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)

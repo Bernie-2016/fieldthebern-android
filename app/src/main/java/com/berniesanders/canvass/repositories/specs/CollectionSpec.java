@@ -3,12 +3,14 @@
  */
 package com.berniesanders.canvass.repositories.specs;
 
-import com.berniesanders.canvass.config.UrlConfig;
+import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.Collection;
 
 import retrofit.http.GET;
 import retrofit.http.Path;
 import rx.Observable;
+
+import javax.inject.Inject;
 
 /**
  * Used to configure/filter a request to the data layer repository
@@ -16,7 +18,9 @@ import rx.Observable;
  */
 public class CollectionSpec {
 
-    private final String url = UrlConfig.COLLECTION_JSON_URL_STUB;
+
+//    private final String url = Config.getCollectionJsonUrlStub();
+    private final String url = "";
 
     public CollectionSpec() {
     }

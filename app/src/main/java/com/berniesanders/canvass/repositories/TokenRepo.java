@@ -1,9 +1,7 @@
 package com.berniesanders.canvass.repositories;
 
-import android.content.Context;
 import android.util.Base64;
-
-import com.berniesanders.canvass.config.UrlConfig;
+import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.Token;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
@@ -12,12 +10,6 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
-import java.io.UnsupportedEncodingException;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -25,26 +17,28 @@ import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.UnsupportedEncodingException;
+
 /**
  * Data repository for oauth2
  */
 @Singleton
 public class TokenRepo {
 
-    private static final String CLIENT_ID = "cbe732e440995e8ae73dfb093de4b880f3a68346e4b1bf933e626599a090bdec";
-    private static final String CLIENT_SECRET = "30d732185171be840adff6e11aae9157614bb7be2da2d27100bcb7bc938ac369";
 
     final Gson gson;
-    private final Context context;
     private final OkHttpClient client = new OkHttpClient();
     private final RxSharedPreferences rxPrefs;
+    private final Config config;
 
 
     @Inject
-    public TokenRepo(Gson gson, Context context, RxSharedPreferences rxPrefs) {
+    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config) {
         this.gson = gson;
-        this.context = context;
         this.rxPrefs = rxPrefs;
+        this.config = config;
     }
 
     /**
@@ -76,7 +70,7 @@ public class TokenRepo {
         client.interceptors().add(interceptor);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(UrlConfig.CANVASS_URL)
+                .baseUrl(this.config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
@@ -94,7 +88,7 @@ public class TokenRepo {
 
 
     private String getAuthString() {
-        String cred = CLIENT_ID + ":" + CLIENT_SECRET;
+        String cred = this.config.getClientId() + ":" + this.config.getClientSecret();
         byte[] data = new byte[0];
         try {
             data = cred.getBytes("UTF-8");

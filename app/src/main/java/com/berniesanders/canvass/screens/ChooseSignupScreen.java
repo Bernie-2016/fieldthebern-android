@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
+import com.berniesanders.canvass.controllers.FacebookService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
 import mortar.ViewPresenter;
+import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -107,8 +109,18 @@ public class ChooseSignupScreen extends FlowPathBase {
 
         @OnClick(R.id.sign_up_facebook)
         void signUpFacebook() {
-            Flow.get(getView().getContext())
-                    .set(new SignupScreen(new UserAttributes().setAsFacebookUser()));
+
+            FacebookService
+                    .get(getView())
+                    .loginWithFacebook(new Action0() {
+                        @Override
+                        public void call() {
+                            Timber.v("Action0.call()");
+                        }
+                    });
+
+//            Flow.get(getView().getContext())
+//                    .set(new SignupScreen(new UserAttributes().setAsFacebookUser()));
         }
 
         @OnClick(R.id.have_an_account)

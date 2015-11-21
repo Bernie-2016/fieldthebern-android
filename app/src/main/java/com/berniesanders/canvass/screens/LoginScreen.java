@@ -7,6 +7,7 @@ import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.LoginView;
 
@@ -27,9 +28,12 @@ import timber.log.Timber;
 @Layout(R.layout.screen_login)
 public class LoginScreen extends FlowPathBase {
 
+    private final User user;
+
     /**
      */
-    public LoginScreen() {
+    public LoginScreen(User user) {
+        this.user = user;
     }
 
     /**

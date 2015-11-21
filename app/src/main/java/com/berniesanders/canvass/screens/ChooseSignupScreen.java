@@ -7,6 +7,7 @@ import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.models.UserAttributes;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.ChooseSignupView;
 
@@ -100,12 +101,14 @@ public class ChooseSignupScreen extends FlowPathBase {
 
         @OnClick(R.id.sign_up_email)
         void signUpEmail() {
-            Flow.get(getView().getContext()).set(new SignupScreen());
+            Flow.get(getView().getContext())
+                    .set(new SignupScreen(new UserAttributes()));
         }
 
         @OnClick(R.id.sign_up_facebook)
         void signUpFacebook() {
-            Flow.get(getView().getContext()).set(new SignupScreen());
+            Flow.get(getView().getContext())
+                    .set(new SignupScreen(new UserAttributes().setAsFacebookUser()));
         }
 
         @OnClick(R.id.have_an_account)

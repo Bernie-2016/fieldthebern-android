@@ -4,10 +4,11 @@ package com.berniesanders.canvass.controllers;
  *
  */
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.berniesanders.canvass.dagger.FtbActivityScope;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -32,7 +33,7 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
         void lockDrawer();
         void unlockDrawer();
         void setMainImage(String url);
-        Context getActivity();
+        AppCompatActivity getActivity();
     }
 
     public static class Config {
@@ -165,25 +166,10 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
     public static class ActionBarModule {
 
         @Provides
-        @FtbActivityScope
+        @Singleton
         ActionBarController provideActionBarOwner() {
             return new ActionBarController();
         }
     }
 
-    /*
-        @Module
-    public static class ActionBarModule {
-        private static ActionBarOwner actionBarOwner;
-        public ActionBarModule() {
-            actionBarOwner = new ActionBarOwner();
-        }
-
-        @Provides
-        @FtbActivityScope
-        ActionBarOwner provideActionBarOwner() {
-            return actionBarOwner;
-        }
-    }
-     */
 }

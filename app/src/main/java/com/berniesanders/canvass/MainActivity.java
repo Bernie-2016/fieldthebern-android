@@ -29,8 +29,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.berniesanders.canvass.config.Actions;
-import com.berniesanders.canvass.dagger.ActivityComponent;
-import com.berniesanders.canvass.dagger.DaggerActivityComponent;
+import com.berniesanders.canvass.controllers.DialogController;
+import com.berniesanders.canvass.controllers.DialogService;
+import com.berniesanders.canvass.controllers.ErrorToastController;
+import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.models.ApiItem;
@@ -40,8 +42,8 @@ import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.GsonParceler;
 import com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame;
-import com.berniesanders.canvass.screens.ChooseSignupScreen;
 import com.berniesanders.canvass.screens.CollectionScreen;
+import com.berniesanders.canvass.screens.InitialScreen;
 import com.berniesanders.canvass.screens.PageScreen;
 import com.berniesanders.canvass.views.PaletteTransformation;
 import com.facebook.FacebookSdk;
@@ -70,7 +72,11 @@ import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
 
 @FtbActivityScope
-public class MainActivity extends AppCompatActivity implements ActionBarController.Activity, Flow.Dispatcher {
+public class MainActivity extends AppCompatActivity
+        implements
+        ActionBarController.Activity,
+        DialogController.Activity,
+        Flow.Dispatcher {
 
     private MortarScope activityScope;
     private FlowDelegate flowDelegate;
@@ -78,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     SearchView searchView;
     private ActionBarController.MenuAction actionBarMenuAction;
     private ActionBarDrawerToggle drawerToggle;
+    private InitialScreen initialScreen;
 
     @Bind(R.id.container_main)
     MortarScreenSwitcherFrame container;
@@ -109,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Inject
     ActionBarController actionBarController;
 
+    @Inject
+    ErrorToastController errorToastController;
+
+    @Inject
+    DialogController dialogController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -136,25 +148,14 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         return super.getSystemService(name);
     }
 
-    ActivityComponent activityComponent;
-    private ActivityComponent createComponent() {
-
-        if (activityComponent==null) {
-            activityComponent = DaggerActivityComponent.builder()
-                    .mainComponent(FTBApplication.getComponent())
-                    .actionBarModule(new ActionBarController.ActionBarModule())
-                    .build();
-        }
-
-        return activityComponent;
-    }
 
     FlowDelegate.NonConfigurationInstance nonConfig;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        createComponent().inject(this);
+        initialScreen = new InitialScreen();
+        FTBApplication.getComponent().inject(this);
+        FTBApplication.getComponent().inject(initialScreen);
         FacebookSdk.sdkInitialize(getApplicationContext());
         initActivityScope();
 
@@ -189,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
 
         handleIntent(getIntent());
 
+        dialogController.takeView(this);
         actionBarController.takeView(this);
     }
 
@@ -210,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
                     .withService(ActionBarService.NAME, actionBarController)
+                    .withService(ErrorToastService.NAME, errorToastController)
+                    .withService(DialogService.NAME, dialogController)
                     .build(getScopeName());
         }
     }
@@ -219,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
         if (savedInstanceState != null && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
             return History.from(savedInstanceState, parceler);
         }
-        return History.single(new ChooseSignupScreen());
+        return History.single(initialScreen.get());
     }
 
 
@@ -250,10 +254,10 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     @Override
     protected void onDestroy() {
         actionBarController.dropView(this);
-        actionBarController.setConfig(null);
+        dialogController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
-        if (activityScope != null) {
+        if (isFinishing() && activityScope != null) {
             activityScope.destroy();
             activityScope = null;
         }
@@ -439,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements ActionBarControll
     }
 
     @Override
-    public Context getActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
 

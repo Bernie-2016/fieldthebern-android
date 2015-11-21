@@ -41,6 +41,7 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.android.support:palette-v7:23.1.0'
     compile 'com.google.android.gms:play-services-maps:8.3.0'
+    compile 'com.google.android.gms:play-services-location:8.3.0'
 
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
@@ -68,6 +69,8 @@ dependencies {
     compile 'com.commit451:PhotoView:1.2.4'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.10'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    compile 'com.squareup.okhttp:logging-interceptor:2.6.0-SNAPSHOT'
+    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
 
     testCompile ('com.squareup.assertj:assertj-android:1.1.1') {
         exclude group: 'com.android.support', module: 'support-annotations'

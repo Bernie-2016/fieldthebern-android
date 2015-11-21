@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.models.UserAttributes;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.screens.SignupScreen;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -40,6 +42,10 @@ public class SignupView extends RelativeLayout {
 
     @Bind(R.id.password)
     AppCompatEditText password;
+
+
+    @Bind(R.id.user_photo)
+    ImageView userImageView;
 
 
     public SignupView(Context context) {
@@ -89,9 +95,16 @@ public class SignupView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    public void showFacebook() {
+    public void showFacebook(UserAttributes userAttributes) {
         password.setVisibility(View.GONE);
         email.setVisibility(View.GONE);
+
+        firstName.setText(userAttributes.getFirstName());
+        lastName.setText(userAttributes.getLastName());
+
+        Picasso.with(getContext())
+                .load(userAttributes.getPhotoLargeUrl())
+                .into(userImageView);
     }
 
     public UserAttributes getInput(UserAttributes userAttributes) {

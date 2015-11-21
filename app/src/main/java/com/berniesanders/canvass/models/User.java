@@ -7,7 +7,7 @@ public class User {
 
     public static final String PREF_NAME = "User.Pref";
 
-    Data data;
+    Data data = new Data();
 
     public Data getData() {
         return data;
@@ -33,6 +33,14 @@ public class User {
 
         public UserRelationships getRelationships() {
             return relationships;
+        }
+
+        public void setAttributes(UserAttributes attributes) {
+            this.attributes = attributes;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
     }
 

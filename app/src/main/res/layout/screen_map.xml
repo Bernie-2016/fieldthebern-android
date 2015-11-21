@@ -64,7 +64,7 @@ android:layout_height="match_parent" >
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="Nearest Address"
+                android:text="@string/nearest_address"
                 android:textSize="12sp"
                 />
             <TextView
@@ -72,7 +72,7 @@ android:layout_height="match_parent" >
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="123 Main St."
+                android:text="@string/example_address"
                 android:textSize="24sp"
                 />
             <TextView
@@ -80,7 +80,7 @@ android:layout_height="match_parent" >
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="Leaning Bernie"
+                android:text="@string/leaning_bernie"
                 />
         </LinearLayout>
 

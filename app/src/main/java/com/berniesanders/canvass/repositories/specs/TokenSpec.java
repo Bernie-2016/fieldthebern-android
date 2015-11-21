@@ -70,7 +70,9 @@ public class TokenSpec {
         @POST("oauth/token")
         Observable<Token> loginFacebook(
                 @Header("Authorization") String authString,
-                @Body LoginFacebookRequest loginFacebookRequest);
+                @Field("grant_type") String grantType,
+                @Field("username") String username,
+                @Field("password") String password);
 
     }
 }

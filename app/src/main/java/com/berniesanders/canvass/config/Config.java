@@ -8,8 +8,4 @@ public interface Config {
     String getClientId();
 
     String getClientSecret();
-
-//    String getCollectionJsonUrlStub();
-
-    String getPageJsonUrlStub();
 }

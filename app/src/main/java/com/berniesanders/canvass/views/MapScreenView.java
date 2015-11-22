@@ -1,18 +1,20 @@
 package com.berniesanders.canvass.views;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Location;
-import android.location.LocationManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.controllers.LocationService;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.mortar.HandlesBack;
 import com.berniesanders.canvass.screens.AddAddressScreen;
@@ -29,6 +31,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -38,6 +41,12 @@ import butterknife.OnClick;
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContext;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -48,9 +57,25 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     MapFragment mapFragment;
     GoogleMap googleMap;
     WeakReference<Activity> activityWeakReference;
+    Subscription cameraSubscription;
+    Subscription locationSubscription;
+    Subscription geocodeSubscription;
+
+    Observer<Location> locationObserver;
+
+    Address address;
 
     @Bind(R.id.address_btn)
     FloatingActionButton fab;
+
+    @Bind(R.id.address)
+    TextView addressTextView;
+
+    @Bind(R.id.pin_drop)
+    ImageView pinDrop;
+
+    @Bind(R.id.progressBar)
+    ProgressBar progressBar;
 
     @Inject
     MapScreen.Presenter presenter;
@@ -118,8 +143,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                     Timber.v("OnMapReadyCallback");
                     MapScreenView.this.googleMap = gmap;
                     gmap.setMyLocationEnabled(true);
-                    gmap.moveCamera(CameraUpdateFactory
-                            .newCameraPosition(getCurrentLocationCam()));
+                    setCameraPosition(gmap);
                 }
             });
         }
@@ -167,36 +191,137 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
             activityWeakReference.clear();
         }
+
+        unsubscribe();
+    }
+
+    private void unsubscribe() {
+
+        if (cameraSubscription != null) {
+            cameraSubscription.unsubscribe();
+        }
+        if (locationSubscription != null) {
+            locationSubscription.unsubscribe();
+        }
+        if (geocodeSubscription != null) {
+            geocodeSubscription.unsubscribe();
+        }
+    }
+
+    private void setCameraPosition(final GoogleMap map) {
+
+        locationObserver = new Observer<Location>() {
+            @Override
+            public void onCompleted() {
+                Timber.v("setCameraPosition onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "setCameraPosition onError");
+            }
+
+            @Override
+            public void onNext(Location location) {
+                map.moveCamera(CameraUpdateFactory
+                        .newCameraPosition(getCameraPosition(location)));
+
+                cameraSubscription = watchCamera(map)
+                        .subscribeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .debounce(1, TimeUnit.SECONDS)
+                        .subscribe(cameraObserver);
+            }
+        };
+
+        locationSubscription = LocationService.get(this)
+                .get()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(locationObserver);
     }
 
 
-    //TODO implement actual location code
-    CameraPosition getCurrentLocationCam() {
+    Observer<CameraPosition> cameraObserver = new Observer<CameraPosition>() {
+        @Override
+        public void onCompleted() {
 
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(activityWeakReference.get(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(activityWeakReference.get(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            //return null //TODO;
-            Timber.e("location permission error");
-            return null;
         }
 
+        @Override
+        public void onError(Throwable e) {
+            Timber.e(e, "onError");
+        }
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        @Override
+        public void onNext(CameraPosition cameraPosition) {
+            Timber.v("onNext");
+            LatLng latLng = cameraPosition.target;
+
+            geocodeSubscription = LocationService.get(MapScreenView.this)
+                    .reverseGeocode(latLng)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(geocodeObserver);
+        }
+    };
+
+    Observer<Address> geocodeObserver = new Observer<Address>() {
+
+        @Override
+        public void onCompleted() {
+            Timber.v("geocodeObserver onCompleted");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Timber.e(e, "geocodeObserver onError");
+        }
+
+        @Override
+        public void onNext(Address address) {
+            Timber.v("geocodeObserver onNext");
+            MapScreenView.this.address = address;
+            addressTextView.setText(address.getAddressLine(0));
+            progressBar.setVisibility(View.GONE);
+            pinDrop.setVisibility(View.VISIBLE);
+        }
+    };
+
+    private CameraPosition getCameraPosition(Location location) {
         return new CameraPosition
                 .Builder()
                 .target(new LatLng(location.getLatitude(), location.getLongitude()))
                 .zoom(18f)
                 .build();
+    }
 
+
+
+    private Observable<CameraPosition> watchCamera(final GoogleMap map) {
+
+        return Observable.create(new Observable.OnSubscribe<CameraPosition>() {
+
+            @Override
+            public void call(final Subscriber<? super CameraPosition> subscriber) {
+
+                GoogleMap.OnCameraChangeListener camChangeListener =
+                        new GoogleMap.OnCameraChangeListener() {
+
+                            @Override
+                            public void onCameraChange(CameraPosition camPosition) {
+                                Timber.v("onCameraChange");
+                                address = null;
+                                addressTextView.setText("");
+                                progressBar.setVisibility(View.VISIBLE);
+                                pinDrop.setVisibility(View.GONE);
+                                subscriber.onNext(camPosition);
+                            }
+                        };
+
+                map.setOnCameraChangeListener(camChangeListener);
+            }
+        });
     }
 
     @Override

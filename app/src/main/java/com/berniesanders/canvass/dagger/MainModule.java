@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.config.ConfigImpl;
 import com.berniesanders.canvass.controllers.ErrorToastController;
-import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.models.ApiItem;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.parsing.CollectionDeserializer;
@@ -57,6 +56,13 @@ public class MainModule {
 
     @Provides
     @Singleton
+    public Context provideContext() {
+        return context;
+    }
+
+
+    @Provides
+    @Singleton
     public CollectionRepo provideCollectionRepo() {
         return new CollectionRepo(gson, context, config);
     }
@@ -92,9 +98,4 @@ public class MainModule {
         return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    @Provides
-    @Singleton
-    public LocationAdapter provideLocationAdapter(LocationManager locationManager) {
-        return new LocationAdapter(context, locationManager);
-    }
 }

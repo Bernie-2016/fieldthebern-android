@@ -44,19 +44,32 @@ android:layout_height="match_parent" >
         android:padding="8dp"
         android:orientation="horizontal"
         >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_pin_drop_white_48dp"
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            />
+            >
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:indeterminate="true"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
+            <ImageView
+                android:id="@+id/pin_drop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_pin_drop_white_48dp"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="8dp"
             >
 
             <TextView
@@ -80,7 +93,6 @@ android:layout_height="match_parent" >
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:text="@string/leaning_bernie"
                 />
         </LinearLayout>
 

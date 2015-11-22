@@ -9,7 +9,6 @@ import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.controllers.LocationController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
-import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.TokenRepo;
 import com.berniesanders.canvass.repositories.UserRepo;
@@ -47,7 +46,6 @@ public interface MainComponent {
 
     ActionBarController actionBarController();
     DialogController dialogController();
-    LocationAdapter locationAdapter();
     RxSharedPreferences rxPrefs();
     FacebookController facebookController();
     LocationController locationController();

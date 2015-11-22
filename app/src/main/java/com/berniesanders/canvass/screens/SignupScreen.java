@@ -7,11 +7,11 @@ import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.controllers.ErrorToastService;
+import com.berniesanders.canvass.controllers.LocationService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.dagger.MainComponent;
-import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.models.UserAttributes;
@@ -94,7 +94,6 @@ public class SignupScreen extends FlowPathBase {
     public interface Component {
         void inject(SignupView t);
         UserRepo userRepo();
-        LocationAdapter locationAdapter();
     }
 
     @FtbScreenScope
@@ -104,7 +103,6 @@ public class SignupScreen extends FlowPathBase {
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
-        private final LocationAdapter locationAdapter;
 
         private String stateCode;
         private Location location;
@@ -115,10 +113,9 @@ public class SignupScreen extends FlowPathBase {
         private boolean locationRequestCompleted = false;
 
         @Inject
-        Presenter(UserRepo repo, UserAttributes userAttributes, LocationAdapter locationAdapter) {
+        Presenter(UserRepo repo, UserAttributes userAttributes) {
             this.repo = repo;
             this.userAttributes = userAttributes;
-            this.locationAdapter = locationAdapter;
         }
 
         @Override
@@ -200,8 +197,8 @@ public class SignupScreen extends FlowPathBase {
         };
 
         private void requestLocation() {
-            stateCodeSubscription = locationAdapter.getAddress().subscribe(stateCodeObserver);
-            locationSubscription = locationAdapter.get().subscribe(locationObserver);;
+            stateCodeSubscription = LocationService.get(getView()).getAddress().subscribe(stateCodeObserver);
+            locationSubscription = LocationService.get(getView()).get().subscribe(locationObserver);;
         }
 
         private void createEmailUser() {

@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.berniesanders.canvass.exceptions.AddressUnavailableException;
 import com.berniesanders.canvass.exceptions.LocationUnavailableException;
 import com.berniesanders.canvass.location.StateConverter;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -123,6 +124,21 @@ public class LocationController extends Presenter<LocationController.Activity> {
         });
     }
 
+    public Observable<Address> geocode(final LatLng latLng) {
+
+        return Observable.create(new Observable.OnSubscribe<Address>() {
+            @Override
+            public void call(Subscriber<? super Address> subscriber) {
+                try {
+                    Address address = getAddressForLocation(latLng.latitude, latLng.longitude);
+                    subscriber.onNext(address);
+                    subscriber.onCompleted();
+                } catch (LocationUnavailableException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
 
     //////////////////////////////////// Location ////////////////////////////////////////
 
@@ -152,6 +168,14 @@ public class LocationController extends Presenter<LocationController.Activity> {
 
 
     private String getStateForLocation(Location location) throws AddressUnavailableException {
+        return StateConverter.getStateCode(getAddressForLocation(location).getAdminArea());
+    }
+
+    private Address getAddressForLocation(Location location) throws AddressUnavailableException {
+        return getAddressForLocation(location.getLatitude(), location.getLongitude());
+    }
+
+    private Address getAddressForLocation(double lat, double lng) throws AddressUnavailableException {
         // Errors could still arise from using the Geocoder (for example, if there is no
         // connectivity, or if the Geocoder is given illegal location data). Or, the Geocoder may
         // simply not have an address for a location. In all these cases, we communicate with the
@@ -170,11 +194,9 @@ public class LocationController extends Presenter<LocationController.Activity> {
             // Using getFromLocation() returns an array of Addresses for the area immediately
             // surrounding the given latitude and longitude. The results are a best guess and are
             // not guaranteed to be accurate.
-            addresses = geocoder.getFromLocation(
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, we get just a single address.
-                    1);
+            // In this sample, we get just a single address.
+            addresses = geocoder.getFromLocation(lat, lng, 1);
+
         } catch (IOException | IllegalArgumentException ioException) {
             throw new AddressUnavailableException();
         }
@@ -188,9 +210,8 @@ public class LocationController extends Presenter<LocationController.Activity> {
             if (address == null || StringUtils.isBlank(address.getAdminArea())){
                 throw new AddressUnavailableException("address or state code was null/blank");
             }
+
+            return address;
         }
-
-
-        return StateConverter.getStateCode(address.getAdminArea());
     }
 }

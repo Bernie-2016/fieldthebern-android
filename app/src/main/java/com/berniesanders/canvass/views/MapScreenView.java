@@ -2,10 +2,15 @@ package com.berniesanders.canvass.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Address;
 import android.location.Location;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.controllers.ActionBarService;
@@ -39,6 +44,7 @@ import flow.path.PathContext;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -51,9 +57,25 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     MapFragment mapFragment;
     GoogleMap googleMap;
     WeakReference<Activity> activityWeakReference;
+    Subscription cameraSubscription;
+    Subscription locationSubscription;
+    Subscription geocodeSubscription;
+
+    Observer<Location> locationObserver;
+
+    Address address;
 
     @Bind(R.id.address_btn)
     FloatingActionButton fab;
+
+    @Bind(R.id.address)
+    TextView addressTextView;
+
+    @Bind(R.id.pin_drop)
+    ImageView pinDrop;
+
+    @Bind(R.id.progressBar)
+    ProgressBar progressBar;
 
     @Inject
     MapScreen.Presenter presenter;
@@ -169,6 +191,21 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
             activityWeakReference.clear();
         }
+
+        unsubscribe();
+    }
+
+    private void unsubscribe() {
+
+        if (cameraSubscription != null) {
+            cameraSubscription.unsubscribe();
+        }
+        if (locationSubscription != null) {
+            locationSubscription.unsubscribe();
+        }
+        if (geocodeSubscription != null) {
+            geocodeSubscription.unsubscribe();
+        }
     }
 
     private void setCameraPosition(final GoogleMap map) {
@@ -189,7 +226,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                 map.moveCamera(CameraUpdateFactory
                         .newCameraPosition(getCameraPosition(location)));
 
-                watchCamera(map)
+                cameraSubscription = watchCamera(map)
                         .subscribeOn(AndroidSchedulers.mainThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .debounce(1, TimeUnit.SECONDS)
@@ -197,14 +234,13 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             }
         };
 
-        LocationService.get(this)
+        locationSubscription = LocationService.get(this)
                 .get()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(locationObserver);
     }
 
-    Observer<Location> locationObserver;
 
     Observer<CameraPosition> cameraObserver = new Observer<CameraPosition>() {
         @Override
@@ -220,6 +256,35 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         @Override
         public void onNext(CameraPosition cameraPosition) {
             Timber.v("onNext");
+            LatLng latLng = cameraPosition.target;
+
+            geocodeSubscription = LocationService.get(MapScreenView.this)
+                    .geocode(latLng)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(geocodeObserver);
+        }
+    };
+
+    Observer<Address> geocodeObserver = new Observer<Address>() {
+
+        @Override
+        public void onCompleted() {
+            Timber.v("geocodeObserver onCompleted");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Timber.e(e, "geocodeObserver onError");
+        }
+
+        @Override
+        public void onNext(Address address) {
+            Timber.v("geocodeObserver onNext");
+            MapScreenView.this.address = address;
+            addressTextView.setText(address.getAddressLine(0));
+            progressBar.setVisibility(View.GONE);
+            pinDrop.setVisibility(View.VISIBLE);
         }
     };
 
@@ -243,12 +308,16 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                 GoogleMap.OnCameraChangeListener camChangeListener =
                         new GoogleMap.OnCameraChangeListener() {
 
-                    @Override
-                    public void onCameraChange(CameraPosition camPosition) {
-                        Timber.v("onCameraChange");
-                        subscriber.onNext(camPosition);
-                    }
-                };
+                            @Override
+                            public void onCameraChange(CameraPosition camPosition) {
+                                Timber.v("onCameraChange");
+                                address = null;
+                                addressTextView.setText("");
+                                progressBar.setVisibility(View.VISIBLE);
+                                pinDrop.setVisibility(View.GONE);
+                                subscriber.onNext(camPosition);
+                            }
+                        };
 
                 map.setOnCameraChangeListener(camChangeListener);
             }

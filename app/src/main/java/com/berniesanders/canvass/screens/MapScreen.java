@@ -145,6 +145,7 @@ public class MapScreen extends FlowPathBase {
         @Override
         public void dropView(MapScreenView view) {
             super.dropView(view);
+            dropListeners(view);
         }
 
         @Override
@@ -153,12 +154,18 @@ public class MapScreen extends FlowPathBase {
             Timber.v("onEnterScope: %s", scope);
         }
 
+        private void dropListeners(MapScreenView mapScreenView) {
+            mapScreenView.setOnAddressChangeListener(null);
+            mapScreenView.setOnCameraChangeListener(null);
+        }
+
         @OnClick(R.id.address_btn)
         void onAddAddressClick() {
             //unfortunate hack for saving state in flow after navigation
             ((MapScreen) Path.get(getView().getContext())).cameraPosition = cameraPosition;
             ((MapScreen) Path.get(getView().getContext())).address = address;
             Flow.get(getView()).set(new AddAddressScreen(address));
+            dropListeners(getView());
         }
     }
 }

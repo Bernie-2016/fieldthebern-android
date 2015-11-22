@@ -33,7 +33,7 @@
 
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
     <string name="bernie_sanders">Bernie Sanders</string>
-    <string name="correct_address_reminder">Correct the Address below before you knock on the door.\nRemember: enter an apartment number if there is one</string>
+    <string name="correct_address_reminder">Correct the Address below before you knock on the door.</string>
     <string name="adding_new_person">Adding a new person</string>
     <string name="who_spoken_to">Who did you talk to?</string>
     <string name="bernie_email">bernie@sanders.com</string>

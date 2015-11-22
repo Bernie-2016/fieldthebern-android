@@ -1,10 +1,13 @@
 package com.berniesanders.canvass.dagger;
 
+import android.content.Context;
+
 import com.berniesanders.canvass.MainActivity;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.DialogController;
 import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.FacebookController;
+import com.berniesanders.canvass.controllers.LocationController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.location.LocationAdapter;
 import com.berniesanders.canvass.repositories.CollectionRepo;
@@ -23,10 +26,12 @@ import dagger.Component;
 @Singleton
 @Component(
         modules = {
-        ActionBarController.ActionBarModule.class,
-        DialogController.DialogModule.class,
-        FacebookController.FacebookModule.class,
-        MainModule.class}
+            MainModule.class,
+            ActionBarController.ActionBarModule.class,
+            DialogController.DialogModule.class,
+            FacebookController.FacebookModule.class,
+            LocationController.LocationModule.class
+        }
 )
 public interface MainComponent {
     void inject(SearchMatrixCursor smc);
@@ -38,10 +43,12 @@ public interface MainComponent {
     CollectionRepo collectionRepo();
     TokenRepo tokenRepo();
     UserRepo userRepo();
+    Context context();
 
     ActionBarController actionBarController();
     DialogController dialogController();
     LocationAdapter locationAdapter();
     RxSharedPreferences rxPrefs();
     FacebookController facebookController();
+    LocationController locationController();
 }

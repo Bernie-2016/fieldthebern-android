@@ -35,6 +35,8 @@ import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.controllers.FacebookService;
+import com.berniesanders.canvass.controllers.LocationController;
+import com.berniesanders.canvass.controllers.LocationService;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.models.ApiItem;
@@ -134,6 +136,9 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     FacebookController facebookController;
+
+    @Inject
+    LocationController locationController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -236,6 +241,7 @@ public class MainActivity extends AppCompatActivity
                     .withService(ErrorToastService.NAME, errorToastController)
                     .withService(DialogService.NAME, dialogController)
                     .withService(FacebookService.NAME, facebookController)
+                    .withService(LocationService.NAME, locationController)
                     .build(getScopeName());
         }
     }

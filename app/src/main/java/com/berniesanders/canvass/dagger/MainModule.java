@@ -57,6 +57,13 @@ public class MainModule {
 
     @Provides
     @Singleton
+    public Context provideContext() {
+        return context;
+    }
+
+
+    @Provides
+    @Singleton
     public CollectionRepo provideCollectionRepo() {
         return new CollectionRepo(gson, context, config);
     }

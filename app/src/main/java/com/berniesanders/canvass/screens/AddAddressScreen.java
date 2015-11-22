@@ -1,5 +1,6 @@
 package com.berniesanders.canvass.screens;
 
+import android.location.Address;
 import android.os.Bundle;
 
 import com.berniesanders.canvass.R;
@@ -27,7 +28,10 @@ import timber.log.Timber;
 public class AddAddressScreen extends FlowPathBase {
 
 
-    public AddAddressScreen() {
+    private final Address address;
+
+    public AddAddressScreen(Address address) {
+        this.address = address;
     }
 
     @Override

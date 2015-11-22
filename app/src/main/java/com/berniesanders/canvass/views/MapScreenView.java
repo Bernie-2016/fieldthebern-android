@@ -259,7 +259,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             LatLng latLng = cameraPosition.target;
 
             geocodeSubscription = LocationService.get(MapScreenView.this)
-                    .geocode(latLng)
+                    .reverseGeocode(latLng)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(geocodeObserver);

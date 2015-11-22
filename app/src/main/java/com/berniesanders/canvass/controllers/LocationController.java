@@ -124,7 +124,7 @@ public class LocationController extends Presenter<LocationController.Activity> {
         });
     }
 
-    public Observable<Address> geocode(final LatLng latLng) {
+    public Observable<Address> reverseGeocode(final LatLng latLng) {
 
         return Observable.create(new Observable.OnSubscribe<Address>() {
             @Override

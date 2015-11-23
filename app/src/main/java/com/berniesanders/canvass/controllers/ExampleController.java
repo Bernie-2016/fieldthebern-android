@@ -18,7 +18,7 @@ import timber.log.Timber;
 import static mortar.bundler.BundleService.getBundleService;
 
 /**
- * Provides a route to coordinate facebook auth with the MainActivity
+ * Provides a way to coordinate with the MainActivity
  */
 public class ExampleController extends Presenter<ExampleController.Activity> {
 

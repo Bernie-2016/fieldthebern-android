@@ -11,7 +11,7 @@ android:layout_height="match_parent"
 
 
 <TextView
-    android:id="@+id/tv_current_matrix"
+    android:id="@+id/example_textView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|center_horizontal"

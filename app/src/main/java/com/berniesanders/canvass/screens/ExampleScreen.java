@@ -30,6 +30,9 @@ public class ExampleScreen extends FlowPathBase {
      *
      * Example:
      * Flow.get(context).set(new ExampleScreen("Some Data To Pass");
+     *
+     * Note:
+     * Generally common types like "String" are not injected because injection works based on type
      */
     public ExampleScreen(String someData) {
         this.someData = someData;
@@ -40,6 +43,9 @@ public class ExampleScreen extends FlowPathBase {
      * This component will inject the presenter on the view, and dependencies/module on the presenter.
      * You can pass data (someData) from the Screen to its Presenter through this component.
      * Remember you must run the gradle 'build' class for Dagger to generate to component code
+     *
+     * Note:
+     * Generally common types like "String" are not injected because injection works based on type
      */
     @Override
     public Object createComponent() {

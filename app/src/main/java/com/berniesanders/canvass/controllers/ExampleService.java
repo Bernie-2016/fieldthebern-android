@@ -8,7 +8,7 @@ import android.view.View;
  */
 public class ExampleService {
 
-    public static final String NAME = "ExampleController.NAME";
+    public static final String NAME = "ExampleService.NAME";
 
     public static ExampleController get(Context context) {
         //noinspection ResourceType

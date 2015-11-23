@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
- * Example mortar screen.
+ * Example mortar view.
  * Change what it extends as needed. Any View/Layout type is fine to extend
  */
 public class ExampleView extends FrameLayout {
@@ -56,7 +56,6 @@ public class ExampleView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         if (isInEditMode()) { return; }
-        Timber.v("onFinishInflate");
         //ButterKnife.bind(this, this);
     }
 

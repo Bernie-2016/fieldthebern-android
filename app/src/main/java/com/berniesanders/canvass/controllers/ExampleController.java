@@ -52,7 +52,7 @@ public class ExampleController extends Presenter<ExampleController.Activity> {
     }
 
     /**
-     * Used to inject this singleton present onto the Activity.
+     * Used to inject this singleton presenter/controller onto the Activity.
      * Add the module to the MainComponent, then create a field on the MainActivity
      * Then you can add the "service" to access this presenter/controller
      * in MainActivity.initActivityScope()

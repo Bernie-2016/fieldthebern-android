@@ -1,25 +1,14 @@
 package com.berniesanders.canvass.views;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatButton;
-import android.text.Html;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.screens.HomeScreen;
-import com.berniesanders.canvass.screens.Main;
-import com.berniesanders.canvass.screens.MapScreen;
-import com.berniesanders.canvass.screens.TemplateScreen;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
-import butterknife.BindString;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import flow.Flow;
 import timber.log.Timber;
 
 /**

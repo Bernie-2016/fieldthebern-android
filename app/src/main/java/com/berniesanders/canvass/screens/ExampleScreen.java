@@ -5,12 +5,10 @@ import android.os.Bundle;
 import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
-import com.berniesanders.canvass.controllers.ActionBarController;
-import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
 import com.berniesanders.canvass.mortar.FlowPathBase;
-import com.berniesanders.canvass.views.TemplateView;
+import com.berniesanders.canvass.views.ExampleView;
 
 import javax.inject.Inject;
 
@@ -22,8 +20,8 @@ import timber.log.Timber;
  * Example for creating new Mortar Screen that helps explain how it all works.  
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_template)
-public class TemplateScreen extends FlowPathBase {
+@Layout(R.layout.screen_example)
+public class ExampleScreen extends FlowPathBase {
 
     private final String someData;
 
@@ -31,9 +29,12 @@ public class TemplateScreen extends FlowPathBase {
      * Constructor called by Flow throughout the app
      *
      * Example:
-     * Flow.get(context).set(new TemplateScreen("Some Data To Pass");
+     * Flow.get(context).set(new ExampleScreen("Some Data To Pass");
+     *
+     * Note:
+     * Generally common types like "String" are not injected because injection works based on type
      */
-    public TemplateScreen(String someData) {
+    public ExampleScreen(String someData) {
         this.someData = someData;
     }
 
@@ -42,31 +43,34 @@ public class TemplateScreen extends FlowPathBase {
      * This component will inject the presenter on the view, and dependencies/module on the presenter.
      * You can pass data (someData) from the Screen to its Presenter through this component.
      * Remember you must run the gradle 'build' class for Dagger to generate to component code
+     *
+     * Note:
+     * Generally common types like "String" are not injected because injection works based on type
      */
     @Override
     public Object createComponent() {
-        return DaggerTemplateScreen_Component
+        return DaggerExampleScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
-                .templateModule(new TemplateModule(someData)) //pass data to the presenter here
+                .exampleModule(new ExampleModule(someData)) //pass data to the presenter here
                 .build();
     }
 
     @Override
     public String getScopeName() {
-        return TemplateScreen.class.getName();
+        return ExampleScreen.class.getName();
     }
 
 
     @dagger.Module
-    class TemplateModule {
+    class ExampleModule {
 
         private final String someDataToInject;
 
         /**
          * pass variables to the component that will then be injected to the presenter
          */
-        public TemplateModule(String someDataToInject) {
+        public ExampleModule(String someDataToInject) {
             this.someDataToInject = someDataToInject;
         }
 
@@ -81,15 +85,15 @@ public class TemplateScreen extends FlowPathBase {
      * The view will injected itself using this component on inflate.
      * Expose anything you want injected to the presenter here
      * Only use "dependencies = MainComponent.class" if you need something from the main component
-     * Only use "modules = TemplateModule.class" if you need a module
+     * Only use "modules = ExampleModule.class" if you need a module
      */
     @FtbScreenScope
-    @dagger.Component(modules = TemplateModule.class, dependencies = MainComponent.class)
+    @dagger.Component(modules = ExampleModule.class, dependencies = MainComponent.class)
     public interface Component {
         /**
-         * injection target = the view (TemplateView) to have the presented injected on it
+         * injection target = the view (ExampleView) to have the presented injected on it
          */
-        void inject(TemplateView t);
+        void inject(ExampleView t);
 
         // Expose anything you want injected to the presenter here
         // such as Gson from the MainComponent
@@ -98,7 +102,7 @@ public class TemplateScreen extends FlowPathBase {
     }
 
     @FtbScreenScope
-    static public class Presenter extends ViewPresenter<TemplateView> {
+    static public class Presenter extends ViewPresenter<ExampleView> {
 
         /**
          * Since the presenter is static it should survive rotation
@@ -106,7 +110,7 @@ public class TemplateScreen extends FlowPathBase {
         private final String someInjectedData;
 
         /**
-         * When the view is inflated, this presented is automatically injected to the TemplateView
+         * When the view is inflated, this presented is automatically injected to the ExampleView
          * Constructor parameters here are injected automatically
          */
         @Inject
@@ -149,10 +153,10 @@ public class TemplateScreen extends FlowPathBase {
          * You can save state with hack, (restore it the same way by reading the field).
          * objects saved with be "parceled" by gson. Example:
          *
-         * ((TemplateScreen)Path.get(view.getContext())).somePublicField = "Something you want to save"
+         * ((ExampleScreen)Path.get(view.getContext())).somePublicField = "Something you want to save"
          */
         @Override
-        public void dropView(TemplateView view) {
+        public void dropView(ExampleView view) {
             super.dropView(view);
         }
 

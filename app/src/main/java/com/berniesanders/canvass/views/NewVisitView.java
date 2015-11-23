@@ -2,7 +2,6 @@ package com.berniesanders.canvass.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.berniesanders.canvass.R;
@@ -10,7 +9,6 @@ import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.screens.AddPersonScreen;
 import com.berniesanders.canvass.screens.NewVisitScreen;
 import com.berniesanders.canvass.screens.ScoreScreen;
-import com.berniesanders.canvass.screens.TemplateScreen;
 
 import javax.inject.Inject;
 

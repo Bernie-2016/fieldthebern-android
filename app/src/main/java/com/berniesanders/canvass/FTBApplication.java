@@ -68,6 +68,7 @@ public class FTBApplication extends Application {
                 .dialogModule(new DialogController.DialogModule())
                 .build();
 
+//How to set a default application font
 //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
 //                .setDefaultFontPath("fonts/Dosis-Regular.otf")
 //                .setFontAttrId(R.attr.fontPath)
@@ -81,6 +82,7 @@ public class FTBApplication extends Application {
         return bus;
     }
 
+    //TODO this is a bit of an anti-pattern
     public static MainComponent getComponent() {
         return component;
     }

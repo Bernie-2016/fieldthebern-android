@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blue500">#2196F3</color>
+    <color name="bernie_dark_blue">#0066b8</color>
+    <color name="bernie_translucent_dark_blue">#990066b8</color>
+    <color name="bernie_green">#20c361</color>
+    <color name="bernie_red">#f55b5b</color>
     <color name="white">#fff</color>
+    <color name="dark_blue2">#338ce1</color> <!-- not an official color, but matches the iOS app -->
+    <color name="light_blue2">#57a4ea</color> <!-- not an official color, but matches the iOS app -->
+
+    <color name="b_light_blue2">#8fc5f6</color> <!-- not an official color -->
+    <color name="b_light_blue">#448fcc</color> <!-- not an official color-->
+
+    <color name="bernie_light_blue">#53a1e1</color>
+    <color name="bernie_grey">#d2dae3</color>
+    <color name="fb_blue">#3b5998</color>
 </resources>

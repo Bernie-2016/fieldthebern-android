@@ -9,5 +9,6 @@
           fontPath="fonts/Dosis-SemiBold.otf"
           android:textSize="20sp"
           style="@style/PageMargins"
+          android:textIsSelectable="true"
     />
 

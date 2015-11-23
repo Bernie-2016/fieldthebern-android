@@ -10,5 +10,6 @@
           android:textSize="36sp"
           android:textColor="@android:color/black"
           style="@style/PageMargins"
+          android:textIsSelectable="true"
     />
 

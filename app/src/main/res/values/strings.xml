@@ -1,4 +1,71 @@
 <resources>
     <string name="app_name">Feel The Bern</string>
+    <string name="search_hint">Search Feel The Bern</string>
+    <string name="add_address">Add address</string>
+    <string name="add_person">Add person</string>
+    <string name="score">Score!</string>
+    <string name="points">POINTS</string>
+    <string name="back_to_map">Back to map</string>
+    <string name="for_knocking">+5 for knocking</string>
+    <string name="for_updating">+10 for updating %s\'s info</string>
+    <string name="new_visit">New visit</string>
+    <string name="submit_visit_details">Submit visit details</string>
+    <string name="start_visit_btn">Start visit</string>
     <string name="bullet_point">\u2022</string>
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="screen_home_issues">Issues</string>
+    <string name="screen_home_canvass">Canvass</string>
+    <string name="main_issues_screen_title">Issues</string>
+    <string name="signup_facebook">Sign up with Facebook</string>
+    <string name="signup_email">Sign up with email</string>
+    <string name="have_an_account">Have an account? Login.</string>
+    <string name="login_facebook">Login with Facebook</string>
+    <string name="login_email">Login with email</string>
+    <string name="no_account">No account? Sign up.</string>
+
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_title">Login</string>
+    <string name="signup_title">Sign up</string>
+
+    <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
+    <string name="bernie_sanders">Bernie Sanders</string>
+    <string name="correct_address_reminder">Correct the Address below before you knock on the door.</string>
+    <string name="adding_new_person">Adding a new person</string>
+    <string name="who_spoken_to">Who did you talk to?</string>
+    <string name="bernie_email">bernie@sanders.com</string>
+    <string name="example_address">123 Main St.</string>
+    <string name="address">Address</string>
+    <string name="apartment_number">Apt / Suite / Etc.</string>
+    <string name="nearest_address">Nearest Address</string>
+    <string name="remind_add_apt">Remember: enter an apartment number if there is one</string>
+    <string name="party">Party</string>
+    <string name="no_one_home">No one was home</string>
+    <string name="asked_to_leave">I was asked to leave</string>
+    <string name="ready_to_knock">Ready to knock?</string>
+    <string name="supports">Supports</string>
+    <string name="how_interested_in_bernie">How interested in bernie?</string>
+    <string name="done_talking">Done talking?</string>
+
+
+    <string-array name="party">
+          <item>(select party)</item>
+          <item>Democrat</item>
+          <item>Republican</item>
+          <item>Independent</item>
+          <item>Undeclared</item>
+          <item>Other</item>
+    </string-array>
+
+    <string-array name="interest">
+        <item>(select support level)</item>
+        <item>Strongly for Bernie</item>
+        <item>Leaning for Bernie</item>
+        <item>Undecided</item>
+        <item>Leaning against Bernie</item>
+        <item>Strongly against Bernie</item>
+    </string-array>
 </resources>

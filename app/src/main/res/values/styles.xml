@@ -1,7 +1,19 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimaryDark">@color/dark_blue2</item>
+        <item name="colorPrimary">@color/bernie_dark_blue</item>
+        <item name="colorAccent">@color/dark_blue2</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorControlNormal">@color/dark_blue2</item>
+        <!-- You can also set colorControlNormal, colorSwitchThumbNormal. -->
+        <item name="android:textColorHint">@color/b_light_blue2</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+    </style>
 
     <style name="PageMargins" parent="AppTheme">
         <item name="android:layout_marginTop">8dp</item>
@@ -9,5 +21,6 @@
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
     </style>
+
 
 </resources>

@@ -31,6 +31,6 @@ public class ConfigImplTest {
         when(context.getPackageManager()).thenReturn(manager);
 
         Config config = new ConfigImpl(context);
-        assertEquals(config.getUserAgent(), "FieldTheBern/1.0.0-7");
+        assertEquals(config.getUserAgent(), "FieldTheBern/1.0.0-b7");
     }
 }

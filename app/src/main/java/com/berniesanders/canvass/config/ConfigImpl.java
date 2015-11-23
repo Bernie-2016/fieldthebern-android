@@ -35,7 +35,7 @@ public class ConfigImpl implements Config {
         String version = "dev";
         try {
             PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            version = packageInfo.versionName + "-" + packageInfo.versionCode;
+            version = packageInfo.versionName + "-b" + packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             // do nothing
         }

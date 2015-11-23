@@ -21,6 +21,7 @@ public class ConfigImplTest {
         PackageManager manager = mock(PackageManager.class);
         PackageInfo info = mock(PackageInfo.class);
         info.versionName = "1.0.0";
+        info.versionCode = 7;
         when(manager.getPackageInfo("packageName", 0)).thenReturn(info);
         when(context.getString(R.string.baseUrl)).thenReturn("baseUrl");
         when(context.getString(R.string.canvassUrl)).thenReturn("canvaseUrl");
@@ -30,6 +31,6 @@ public class ConfigImplTest {
         when(context.getPackageManager()).thenReturn(manager);
 
         Config config = new ConfigImpl(context);
-        assertEquals(config.getUserAgent(), "FieldTheBern/1.0.0");
+        assertEquals(config.getUserAgent(), "FieldTheBern/1.0.0-7");
     }
 }

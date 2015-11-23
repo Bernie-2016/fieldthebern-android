@@ -1,6 +1,7 @@
 package com.berniesanders.canvass.config;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
@@ -31,11 +32,12 @@ public class ConfigImpl implements Config {
         CLIENT_SECRET = context.getString(R.string.oauth2ClientSecret);
 
         String name = "FieldTheBern";
-        String version = null;
+        String version = "dev";
         try {
-            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            version = packageInfo.versionName + "-" + packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            version = "dev";
+            // do nothing
         }
 
         LinkedList<String> comments = new LinkedList<>();

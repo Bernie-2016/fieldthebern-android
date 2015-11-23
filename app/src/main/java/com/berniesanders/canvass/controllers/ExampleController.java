@@ -20,7 +20,7 @@ import static mortar.bundler.BundleService.getBundleService;
 /**
  * Provides a route to coordinate facebook auth with the MainActivity
  */
-public class TemplateController extends Presenter<TemplateController.Activity> {
+public class ExampleController extends Presenter<ExampleController.Activity> {
 
     public interface Activity {
         AppCompatActivity getActivity();
@@ -28,7 +28,7 @@ public class TemplateController extends Presenter<TemplateController.Activity> {
 
     // package private
     // only instantiated via the TemplateControllerModule dagger module inner class below
-    TemplateController() {
+    ExampleController() {
     }
 
     @Override
@@ -57,8 +57,8 @@ public class TemplateController extends Presenter<TemplateController.Activity> {
 
         @Provides
         @Singleton
-        TemplateController provideTemplateController() {
-            return new TemplateController();
+        ExampleController provideTemplateController() {
+            return new ExampleController();
         }
     }
 }

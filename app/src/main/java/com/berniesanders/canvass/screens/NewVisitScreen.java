@@ -2,22 +2,18 @@ package com.berniesanders.canvass.screens;
 
 import android.os.Bundle;
 
-import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
-import com.berniesanders.canvass.dagger.MainComponent;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.NewVisitView;
-import com.berniesanders.canvass.views.TemplateView;
 
 import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
-import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;

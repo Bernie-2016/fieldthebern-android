@@ -11,13 +11,11 @@ import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.AddPersonView;
-import com.berniesanders.canvass.views.TemplateView;
 
 import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
-import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;

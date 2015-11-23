@@ -11,6 +11,7 @@ import com.berniesanders.canvass.models.ApiItem;
 import com.berniesanders.canvass.models.Content;
 import com.berniesanders.canvass.parsing.CollectionDeserializer;
 import com.berniesanders.canvass.parsing.PageContentDeserializer;
+import com.berniesanders.canvass.repositories.AddressRepo;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.TokenRepo;
 import com.berniesanders.canvass.repositories.UserRepo;
@@ -77,6 +78,12 @@ public class MainModule {
     @Singleton
     public UserRepo provideUserRepo(TokenRepo tokenRepo) {
         return new UserRepo(gson, tokenRepo, rxPrefs, config);
+    }
+
+    @Provides
+    @Singleton
+    public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
+        return new AddressRepo(gson, tokenRepo, rxPrefs, config);
     }
 
     @Provides

@@ -32,8 +32,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class RequestSingleAddress {
 
-    double latitude;
-    double longitude;
+    Double latitude;
+    Double longitude;
     @SerializedName("street1")
     String street1;
     @SerializedName("street2")
@@ -44,38 +44,65 @@ public class RequestSingleAddress {
     @SerializedName("zip")
     String zip;
 
+    public Double latitude() {
+        return this.latitude;
+    }
 
-    public RequestSingleAddress latitude(double latitude) {
+    public Double longitude() {
+        return this.longitude;
+    }
+
+    public String street1() {
+        return this.street1;
+    }
+
+    public String street2() {
+        return this.street2;
+    }
+
+    public String city() {
+        return this.city;
+    }
+
+    public String state() {
+        return this.state;
+    }
+
+    public String zip() {
+        return this.zip;
+    }
+
+    public RequestSingleAddress latitude(final double latitude) {
         this.latitude = latitude;
         return this;
     }
 
-    public RequestSingleAddress longitude(double longitude) {
+    public RequestSingleAddress longitude(final double longitude) {
         this.longitude = longitude;
         return this;
     }
 
-    public RequestSingleAddress street1(String street1) {
+    public RequestSingleAddress street1(final String street1) {
         this.street1 = street1;
         return this;
     }
 
-    public RequestSingleAddress street2(String street2) {
+    public RequestSingleAddress street2(final String street2) {
         this.street2 = street2;
         return this;
     }
 
-    public RequestSingleAddress city(String city) {
+    public RequestSingleAddress city(final String city) {
         this.city = city;
         return this;
     }
 
-    public RequestSingleAddress state(String state) {
+    public RequestSingleAddress state(final String state) {
         this.state = state;
         return this;
     }
 
-    public RequestSingleAddress zip(String zip) {
+    public RequestSingleAddress zip(final String zip) {
         this.zip = zip;
         return this;
     }

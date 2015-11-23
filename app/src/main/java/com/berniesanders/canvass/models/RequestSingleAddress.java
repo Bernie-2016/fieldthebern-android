@@ -1,0 +1,96 @@
+/*
+ * Made with love by volunteers
+ * Copyright 2015 FeelTheBern.org, BernieSanders.com, Coderly,
+ * and the volunteers that wrote this code
+ * License: GNU AGPLv3 - https://gnu.org/licenses/agpl.html
+ */
+package com.berniesanders.canvass.models;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * request format
+ * {
+ *     latitude: <latitude>,
+ *     longitude: <longitude>,
+ *     street1: <street1>,
+ *     street2: <street2>,
+ *     city: <city>,
+ *     state: <state>,
+ *     zip: <zip>
+ * }
+ *
+ *
+ * Not all search parameters are required.
+ * latitude and longitude are optional
+ * At least one of the street_ parameters is required
+ * If there is no zip_code, both city and state_code are required.
+ * If there is a zip_code, neither city nor state_code are required.
+ *
+ * Responds with a single address matched and retrieved from the database.
+ *
+ */
+public class RequestSingleAddress {
+
+    double latitude;
+    double longitude;
+    @SerializedName("street1")
+    String street1;
+    @SerializedName("street2")
+    String street2;
+    String city;
+    @SerializedName("state")
+    String state;
+    @SerializedName("zip")
+    String zip;
+
+
+    public RequestSingleAddress latitude(double latitude) {
+        this.latitude = latitude;
+        return this;
+    }
+
+    public RequestSingleAddress longitude(double longitude) {
+        this.longitude = longitude;
+        return this;
+    }
+
+    public RequestSingleAddress street1(String street1) {
+        this.street1 = street1;
+        return this;
+    }
+
+    public RequestSingleAddress street2(String street2) {
+        this.street2 = street2;
+        return this;
+    }
+
+    public RequestSingleAddress city(String city) {
+        this.city = city;
+        return this;
+    }
+
+    public RequestSingleAddress state(String state) {
+        this.state = state;
+        return this;
+    }
+
+    public RequestSingleAddress zip(String zip) {
+        this.zip = zip;
+        return this;
+    }
+
+
+    @Override
+    public String toString() {
+        return "RequestSingleAddress{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", street1='" + street1 + '\'' +
+                ", street2='" + street2 + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip='" + zip + '\'' +
+                '}';
+    }
+}

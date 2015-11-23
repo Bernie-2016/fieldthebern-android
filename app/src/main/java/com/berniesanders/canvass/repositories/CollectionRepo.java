@@ -3,6 +3,7 @@ package com.berniesanders.canvass.repositories;
 import android.content.Context;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.Collection;
+import com.berniesanders.canvass.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.canvass.repositories.specs.CollectionSpec;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -122,6 +123,7 @@ public class CollectionRepo {
         Timber.v("getFromHttp()");
 
         OkHttpClient client = new OkHttpClient();
+        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
         client.interceptors().add(new Interceptor() {
             @Override
             public Response intercept(Interceptor.Chain chain) throws IOException {

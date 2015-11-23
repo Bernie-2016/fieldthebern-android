@@ -4,6 +4,7 @@ import android.util.Base64;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.Token;
+import com.berniesanders.canvass.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
@@ -39,6 +40,7 @@ public class TokenRepo {
         this.gson = gson;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
     }
 
     /**

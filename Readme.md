@@ -56,11 +56,11 @@ A quick primer on how we're using mortar and flow.
 
 These three files show the usage of mortar and flow as blank templates with just the boilerplate stuff in them and some javadocs to explain what is going on.
 
-[views/ExampleView.java](https://github.com/Bernie-2016/fieldthebern-android/blob/develop/app/src/main/java/com/berniesanders/canvass/views/ExampleView.java)
+[views/ExampleView.java](app/src/main/java/com/berniesanders/canvass/views/ExampleView.java)
 
-[screens/ExampleScreen.java](https://github.com/Bernie-2016/fieldthebern-android/blob/develop/app/src/main/java/com/berniesanders/canvass/screens/ExampleScreen.java)
+[screens/ExampleScreen.java](app/src/main/java/com/berniesanders/canvass/screens/ExampleScreen.java)
 
-[res/layout/screen_example.xml](https://github.com/Bernie-2016/fieldthebern-android/blob/develop/app/src/main/res/layout/screen_example.xml)
+[res/layout/screen_example.xml](app/src/main/res/layout/screen_example.xml)
 
 How screen navigation and dependency injection works in our app with flow and mortar:
 
@@ -100,9 +100,9 @@ protected void onLoad(Bundle savedInstanceState) {
 More example code showing how our 'controllers' work can be found in these two example files:
 
 
-[controllers/ExampleController.java](https://github.com/Bernie-2016/fieldthebern-android/blob/develop/app/src/main/java/com/berniesanders/canvass/controllers/ExampleController.java)
+[controllers/ExampleController.java](app/src/main/java/com/berniesanders/canvass/controllers/ExampleController.java)
 
-[controllers/ExampleService.java](https://github.com/Bernie-2016/fieldthebern-android/blob/develop/app/src/main/java/com/berniesanders/canvass/controllers/ExampleService.java)
+[controllers/ExampleService.java](app/src/main/java/com/berniesanders/canvass/controllers/ExampleService.java)
 
 
 

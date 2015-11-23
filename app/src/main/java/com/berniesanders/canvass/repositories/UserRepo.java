@@ -5,6 +5,7 @@ import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.models.UserAttributes;
+import com.berniesanders.canvass.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
 import com.berniesanders.canvass.repositories.specs.UserSpec;
 import com.f2prateek.rx.preferences.Preference;
@@ -42,6 +43,7 @@ public class UserRepo {
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
     }
 
     /**

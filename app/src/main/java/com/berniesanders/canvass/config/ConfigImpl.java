@@ -39,9 +39,6 @@ public class ConfigImpl implements Config {
         }
 
         LinkedList<String> comments = new LinkedList<>();
-        if(Build.VERSION.BASE_OS != null) {
-            comments.add(Build.VERSION.BASE_OS);
-        }
         if(Build.VERSION.RELEASE != null) {
             comments.add("Android " + Build.VERSION.RELEASE);
         }

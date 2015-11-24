@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BernieBlueButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/dark_blue2</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

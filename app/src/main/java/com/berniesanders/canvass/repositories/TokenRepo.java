@@ -45,6 +45,16 @@ public class TokenRepo {
 
     /**
      */
+    public Token get() {
+        Timber.v("get()");
+
+        //TODO: re-auth based on the type of user?
+        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+        return gson.fromJson(tokenPref.get(), Token.class);
+    }
+
+    /**
+     */
     public Observable<Token> loginEmail(final TokenSpec spec) {
         Timber.v("loginEmail()");
 

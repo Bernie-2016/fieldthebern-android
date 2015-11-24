@@ -1,5 +1,7 @@
 package com.berniesanders.canvass.models;
 
+import android.support.annotation.NonNull;
+
 /**
  *
  */
@@ -7,8 +9,9 @@ public class User {
 
     public static final String PREF_NAME = "User.Pref";
 
-    Data data;
+    Data data = new Data();
 
+    @NonNull
     public Data getData() {
         return data;
     }
@@ -20,13 +23,14 @@ public class User {
     public static class Data {
         int id;
         String type;
-        UserAttributes attributes;
+        UserAttributes attributes = new UserAttributes();
         UserRelationships relationships;
 
         public int getId() {
             return id;
         }
-
+        
+        @NonNull
         public UserAttributes getAttributes() {
             return attributes;
         }

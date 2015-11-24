@@ -51,7 +51,7 @@ public class TokenRepo {
         //TODO: re-auth based on the type of user?
         Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
 
-        if (tokenPref==null || tokenPref.get() == null) { return null; }
+        if (tokenPref.get() == null) { return null; }
         return gson.fromJson(tokenPref.get(), Token.class);
     }
 

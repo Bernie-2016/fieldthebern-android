@@ -16,6 +16,8 @@ import javax.inject.Inject;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Module;
+import dagger.Provides;
 import flow.Flow;
 import mortar.ViewPresenter;
 import timber.log.Timber;
@@ -55,14 +57,26 @@ public class LoginScreen extends FlowPathBase {
 
     @dagger.Module
     class Module {
+        private final User user;
+
+        Module(User user) {
+            this.user = user;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public User provideUser() {
+            return user;
+        }
     }
 
     /**
      */
     @FtbScreenScope
-    @dagger.Component
+    @dagger.Component(modules = Module.class)
     public interface Component {
         void inject(LoginView t);
+        User user();
     }
 
     @FtbScreenScope
@@ -70,8 +84,11 @@ public class LoginScreen extends FlowPathBase {
 
         @BindString(R.string.login_title) String screenTitleString;
 
+        private final User user;
+
         @Inject
-        Presenter() {
+        Presenter(User user) {
+            this.user = user;
         }
 
         @Override

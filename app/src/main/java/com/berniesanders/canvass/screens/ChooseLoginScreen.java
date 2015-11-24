@@ -7,6 +7,7 @@ import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.views.ChooseLoginView;
 
@@ -100,7 +101,8 @@ public class ChooseLoginScreen extends FlowPathBase {
 
         @OnClick(R.id.login_email)
         void loginEmail() {
-            Flow.get(getView().getContext()).set(new LoginScreen(null));
+            //TODO see if there is already a saved user?
+            Flow.get(getView().getContext()).set(new LoginScreen(new User()));
         }
 
         //TODO: pass a pre-crafted user?

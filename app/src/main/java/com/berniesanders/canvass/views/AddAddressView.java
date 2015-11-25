@@ -61,6 +61,7 @@ public class AddAddressView extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (isInEditMode()) { return; }
         presenter.takeView(this);
     }
 

@@ -92,7 +92,7 @@ public class TokenRepo {
      * Might be best to pass the spec through to this method...?
      */
     private Observable<Token> loginFacebook(final LoginFacebookRequest loginFacebookRequest) {
-        Timber.v("logging in facebokk....");
+        Timber.v("logging in facebook....");
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

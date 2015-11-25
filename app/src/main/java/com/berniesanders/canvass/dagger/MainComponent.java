@@ -10,6 +10,7 @@ import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.controllers.LocationController;
 import com.berniesanders.canvass.controllers.ProgressDialogController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
+import com.berniesanders.canvass.repositories.AddressRepo;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.TokenRepo;
 import com.berniesanders.canvass.repositories.UserRepo;
@@ -52,4 +53,5 @@ public interface MainComponent {
     FacebookController facebookController();
     LocationController locationController();
     ProgressDialogController progressDialogController();
+    AddressRepo addressRepo();
 }

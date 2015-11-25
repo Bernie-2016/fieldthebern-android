@@ -17,7 +17,7 @@
         android:textColor="@color/white"
         android:textSize="40sp"/>
 
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/screen_home_issues"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"

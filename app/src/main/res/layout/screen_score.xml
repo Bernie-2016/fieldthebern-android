@@ -82,16 +82,8 @@
 
     </LinearLayout>
 
-    <View
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
+    <Button
+        android:theme="@style/BernieBlueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
@@ -99,7 +91,6 @@
         android:gravity="center"
         android:text="@string/back_to_map"
         android:textColor="@android:color/white"
-        android:background="?attr/selectableItemBackground"
         android:textSize="22sp"
         android:textAllCaps="false"
         />

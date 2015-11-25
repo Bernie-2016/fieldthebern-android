@@ -28,4 +28,9 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="FacebookBlueButton" parent="BernieBlueButton">
+        <item name="colorButtonNormal">@color/fb_blue</item>
+    </style>
+
+
 </resources>

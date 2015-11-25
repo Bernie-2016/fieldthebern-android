@@ -124,22 +124,12 @@
         </FrameLayout>
     </LinearLayout>
 
-    <View
-        android:id="@+id/submit"
+    <Button
+        android:theme="@style/BernieBlueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:background="?attr/selectableItemBackground"
-        android:layout_margin="16dp"
-        android:gravity="center"
         android:text="@string/add_person"
         android:textColor="@android:color/white"
         android:textSize="22sp"

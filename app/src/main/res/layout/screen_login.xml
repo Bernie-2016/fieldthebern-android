@@ -70,21 +70,13 @@
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/login_email"
+        android:theme="@style/BernieBlueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackground"
         android:drawablePadding="14dp"
         android:gravity="center"
         android:paddingLeft="16dp"
@@ -92,7 +84,6 @@
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:textStyle="normal"
         />
 
 </com.berniesanders.canvass.views.LoginView>

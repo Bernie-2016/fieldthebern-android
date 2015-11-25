@@ -11,22 +11,13 @@
     tools:context=".MainActivity"
     >
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/sign_up_email"
+        android:theme="@style/BernieBlueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/ic_email_white_24dp"
         android:drawablePadding="14dp"
         android:gravity="center_vertical|left"
@@ -35,30 +26,17 @@
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:textStyle="normal"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_above="@id/sign_up_email"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/fb_blue"
-        />
-
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/sign_up_facebook"
+        android:theme="@style/FacebookBlueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_above="@id/sign_up_email"
-        android:layout_marginBottom="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/facebook"
         android:drawablePadding="14dp"
         android:gravity="center_vertical|left"
@@ -69,7 +47,7 @@
         android:textSize="18sp"
         android:textStyle="normal"
         />
-    <android.support.v7.widget.AppCompatButton
+    <Button
         android:id="@+id/have_an_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

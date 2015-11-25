@@ -53,11 +53,11 @@
                 android:layout_margin="8dp"
                 >
 
-                <android.support.v7.widget.AppCompatButton
+                <Button
                     android:id="@+id/add_person"
+                    android:theme="@style/BernieBlueButton"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:background="?attr/selectableItemBackground"
                     android:drawableLeft="@drawable/ic_person_add_white_36dp"
                     android:drawablePadding="8dp"
                     android:gravity="left|center_vertical"
@@ -65,14 +65,7 @@
                     android:text="@string/add_person"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:background="@color/dark_blue2"
-                    />
+                    android:textSize="18sp" />
             </FrameLayout>
 
         </LinearLayout>
@@ -127,23 +120,15 @@
             android:layout_gravity="center_vertical"
             >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/large_button_height"
-                android:background="@color/dark_blue2"
-                />
-
-            <android.support.v7.widget.AppCompatButton
+            <Button
+                android:theme="@style/BernieBlueButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/large_button_height"
                 android:id="@+id/submit"
-                android:background="?attr/selectableItemBackground"
                 android:text="@string/submit_visit_details"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"
-                android:textStyle="normal"
-                android:gravity="center"
                 />
         </FrameLayout>
     </LinearLayout>

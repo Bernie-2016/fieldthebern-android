@@ -4,94 +4,75 @@
   -->
 <com.berniesanders.canvass.views.ScoreView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@color/bernie_dark_blue"
-    >
+    tools:background="@color/bernie_dark_blue">
 
-    <LinearLayout
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/screen_score_gif"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/bernie_ellen"/>
+
+    <ImageView
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/mask"/>
+
+    <FrameLayout
+        android:id="@+id/points_container"
         android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_below="@id/screen_score_gif"
+        android:layout_gravity="center_horizontal"
+        android:clipChildren="false"/>
+
+    <TextView
+        android:id="@+id/points_label"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <!-- bernie dancing animation-->
+        android:layout_below="@id/points_container"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/points"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
 
-        <FrameLayout
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:layout_gravity="center_horizontal"
-            >
-        <pl.droidsonroids.gif.GifImageView
-            android:layout_width="240dp"
-            android:layout_height="240dp"
-            android:src="@drawable/bernie_ellen"
-            />
-            <ImageView
-                android:layout_width="240dp"
-                android:layout_height="240dp"
-                android:src="@drawable/mask"/>
-        </FrameLayout>
+    <TextView
+        android:id="@+id/for_knocking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/for_updating"
+        android:layout_below="@id/points_label"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/for_knocking"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
 
-        <FrameLayout
-            android:id="@+id/points_container"
-            android:layout_width="match_parent"
-            android:layout_height="96dp"
-            android:layout_gravity="center_horizontal"
-            android:clipChildren="false"
-            >
-
-        </FrameLayout>
-
-
-        <TextView
-            android:id="@+id/points_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:text="@string/points"
-            android:layout_gravity="center_horizontal"
-            android:textStyle="bold"
-            android:textSize="18sp"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_horizontal"
-            android:gravity="left"
-            >
-            <TextView
-                android:id="@+id/for_knocking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:text="@string/for_knocking"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/for_updating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:text="@string/for_updating"
-                android:textSize="16sp"/>
-        </LinearLayout>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/for_updating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/for_knocking"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/for_updating"
+        android:textColor="@android:color/white"/>
 
     <Button
-        android:theme="@style/BernieBlueButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:gravity="center"
         android:text="@string/back_to_map"
+        android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="22sp"
-        android:textAllCaps="false"
-        />
+        android:theme="@style/BernieBlueButton"/>
 </com.berniesanders.canvass.views.ScoreView>

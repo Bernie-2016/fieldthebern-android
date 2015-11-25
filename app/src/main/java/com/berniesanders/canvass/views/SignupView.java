@@ -96,11 +96,10 @@ public class SignupView extends RelativeLayout {
     }
 
     public void showFacebook(UserAttributes userAttributes) {
-        password.setVisibility(View.GONE);
-        email.setVisibility(View.GONE);
 
         firstName.setText(userAttributes.getFirstName());
         lastName.setText(userAttributes.getLastName());
+        email.setText(userAttributes.getEmail());
 
         Picasso.with(getContext())
                 .load(userAttributes.getPhotoLargeUrl())
@@ -109,18 +108,11 @@ public class SignupView extends RelativeLayout {
 
     public UserAttributes getInput(UserAttributes userAttributes) {
 
-        if (userAttributes.isFacebookUser()) {
-            userAttributes
-                    .firstName(firstName.getText().toString())
-                    .lastName(lastName.getText().toString());
-        } else {
-            userAttributes
+        return userAttributes
                     .email(email.getText().toString())
                     .password(password.getText().toString())
                     .firstName(firstName.getText().toString())
                     .lastName(lastName.getText().toString());
-        }
-        return userAttributes;
     }
 
 }

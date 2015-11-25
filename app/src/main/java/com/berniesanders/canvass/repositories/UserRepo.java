@@ -72,9 +72,10 @@ public class UserRepo {
                             .subscribe();
                 } else {
                     LoginFacebookRequest loginFacebookRequest = new LoginFacebookRequest()
+                            .username(userAttributes.getEmail())
                             .password(userAttributes.getPassword());
                     tokenRepo
-                            .loginFacebook(new TokenSpec().facebook(loginFacebookRequest))
+                    .loginFacebook(new TokenSpec().facebook(loginFacebookRequest))
                             .subscribeOn(Schedulers.io())
                             .subscribe();
                 }
@@ -131,11 +132,11 @@ public class UserRepo {
         UserSpec.UserEndpoint endpoint =
                 retrofit.create(UserSpec.UserEndpoint.class);
 
-        if (user.getData().getAttributes().isFacebookUser()) {
-            User facebookUser = new User();
-            facebookUser.getData().setAttributes(user.getData().getAttributes());
-            return Observable.just(facebookUser);
-        }
+//        if (user.getData().getAttributes().isFacebookUser()) {
+//            User facebookUser = new User();
+//            facebookUser.getData().attributes(user.getData().getAttributes());
+//            return Observable.just(facebookUser);
+//        }
 
         return endpoint.create(user);
     }

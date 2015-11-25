@@ -132,11 +132,6 @@ public class UserRepo {
         UserSpec.UserEndpoint endpoint =
                 retrofit.create(UserSpec.UserEndpoint.class);
 
-//        if (user.getData().getAttributes().isFacebookUser()) {
-//            User facebookUser = new User();
-//            facebookUser.getData().attributes(user.getData().getAttributes());
-//            return Observable.just(facebookUser);
-//        }
 
         return endpoint.create(user);
     }

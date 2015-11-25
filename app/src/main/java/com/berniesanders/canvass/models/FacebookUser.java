@@ -76,8 +76,10 @@ public class FacebookUser {
         return new UserAttributes()
                 .firstName(firstName)
                 .lastName(lastName)
-                .password(AccessToken.getCurrentAccessToken().getToken())
-                .photoLargeUrl(picture.data.url)
-                .setAsFacebookUser();
+                .facebookId(id)
+                .facebookAccessToken(AccessToken.getCurrentAccessToken().getToken())
+                .email(email)
+                .photoLargeUrl(picture.data.url) //TODO need to base64 encode
+                .setAsFacebookUser(id);
     }
 }

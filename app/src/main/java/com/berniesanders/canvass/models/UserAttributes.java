@@ -27,12 +27,17 @@ public class UserAttributes {
     @SerializedName("base_64_photo_data")
     String base64PhotoData;
 
+    @SerializedName("facebook_access_token")
+    String facebookAccessToken;
+
+    @SerializedName("facebook_id")
+    String facebookId;
 
     public boolean isFacebookUser() {
-        return FACEBOOK_USERNAME.equals(email);
+        return (facebookId!=null);
     }
-    public UserAttributes setAsFacebookUser() {
-        email = FACEBOOK_USERNAME;
+    public UserAttributes setAsFacebookUser(String facebookId) {
+        this.facebookId = facebookId;
         return this;
     }
 
@@ -126,6 +131,24 @@ public class UserAttributes {
         return this;
     }
 
+    public String facebookId() {
+        return this.facebookId;
+    }
+
+    public String facebookAccessToken() {
+        return this.facebookAccessToken;
+    }
+
+    public UserAttributes facebookId(final String facebookId) {
+        this.facebookId = facebookId;
+        return this;
+    }
+
+    public UserAttributes facebookAccessToken(final String facebookAccessToken) {
+        this.facebookAccessToken = facebookAccessToken;
+        return this;
+    }
+
 
     @Override
     public String toString() {
@@ -140,6 +163,8 @@ public class UserAttributes {
                 ", photoThumbUrl='" + photoThumbUrl + '\'' +
                 ", photoLargeUrl='" + photoLargeUrl + '\'' +
                 ", (base64PhotoData!=null)='" + (base64PhotoData!=null) + '\'' +
+                ", facebookAccessToken='" + facebookAccessToken + '\'' +
+                ", facebookId='" + facebookId + '\'' +
                 '}';
     }
 }

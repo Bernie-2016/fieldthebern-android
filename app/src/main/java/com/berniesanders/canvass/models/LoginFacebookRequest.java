@@ -5,7 +5,7 @@ package com.berniesanders.canvass.models;
  */
 public class LoginFacebookRequest {
 
-    private final String username = "facebook";
+    private String username;
     //<facebook_access_token>
     private String password;
 
@@ -30,6 +30,11 @@ public class LoginFacebookRequest {
 
     public LoginFacebookRequest password(String token) {
         this.password = token;
+        return this;
+    }
+
+    public LoginFacebookRequest username(String email) {
+        this.username = email;
         return this;
     }
 }

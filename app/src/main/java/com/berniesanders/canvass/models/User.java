@@ -18,30 +18,48 @@ public class User {
     }
 
     public static class Data {
-        int id;
+        Integer id;
         String type;
         UserAttributes attributes;
         UserRelationships relationships;
 
-        public int getId() {
-            return id;
+        public Integer id() {
+            return this.id;
         }
 
-        public UserAttributes getAttributes() {
-            return attributes;
+        public String type() {
+            return this.type;
         }
 
-        public UserRelationships getRelationships() {
-            return relationships;
+        public UserAttributes attributes() {
+            return this.attributes;
         }
 
-        public void setAttributes(UserAttributes attributes) {
-            this.attributes = attributes;
+        public UserRelationships relationships() {
+            return this.relationships;
         }
 
-        public void setId(int id) {
+        public Data id(final Integer id) {
             this.id = id;
+            return this;
         }
+
+        public Data type(final String type) {
+            this.type = type;
+            return this;
+        }
+
+        public Data attributes(final UserAttributes attributes) {
+            this.attributes = attributes;
+            return this;
+        }
+
+        public Data relationships(final UserRelationships relationships) {
+            this.relationships = relationships;
+            return this;
+        }
+
+
     }
 
 

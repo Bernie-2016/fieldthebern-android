@@ -40,7 +40,7 @@ public class MainModule {
         gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
 
-        gson = gsonBuilder.setPrettyPrinting().create();
+        gson = gsonBuilder.create();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         rxPrefs = RxSharedPreferences.create(preferences);

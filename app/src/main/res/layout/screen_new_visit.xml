@@ -4,8 +4,10 @@
   -->
 <com.berniesanders.canvass.views.NewVisitView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@color/bernie_dark_blue"
     >
 
     <LinearLayout
@@ -41,16 +43,12 @@
             android:textSize="16sp"
             />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/large_button_height"
-            android:layout_margin="8dp"
-            >
             <Button
                 android:id="@+id/add_person"
                 android:theme="@style/BernieBlueButton"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/large_button_height"
+                android:layout_margin="8dp"
                 android:drawableLeft="@drawable/ic_person_add_white_36dp"
                 android:drawablePadding="8dp"
                 android:gravity="left|center_vertical"
@@ -60,7 +58,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 />
-        </FrameLayout>
 
 
         <android.support.v7.widget.SwitchCompat

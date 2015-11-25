@@ -61,17 +61,17 @@
         android:textStyle="normal"
         android:layout_centerHorizontal="true"
         />
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/have_an_account"
-        android:gravity="center"
         >
         <ImageView
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:src="@drawable/logo_temp"
+            android:layout_gravity="center"
             />
-    </LinearLayout>
+    </FrameLayout>
 
 </com.berniesanders.canvass.views.ChooseSignupView>

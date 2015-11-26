@@ -101,9 +101,10 @@ public class SignupView extends RelativeLayout {
         lastName.setText(userAttributes.getLastName());
         email.setText(userAttributes.getEmail());
 
-        Picasso.with(getContext())
-                .load(userAttributes.getPhotoLargeUrl())
-                .into(userImageView);
+    }
+
+    public ImageView getUserImageView() {
+        return userImageView;
     }
 
     public UserAttributes getInput(UserAttributes userAttributes) {

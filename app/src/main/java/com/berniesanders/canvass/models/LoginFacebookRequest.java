@@ -5,16 +5,18 @@ package com.berniesanders.canvass.models;
  */
 public class LoginFacebookRequest {
 
+    private final String grant_type = "password";
+
     private String username;
-    //<facebook_access_token>
+
     private String password;
 
     public LoginFacebookRequest() {
     }
 
-//    public String getGrantType() {
-//        return grant_type;
-//    }
+    public String getGrantType() {
+        return grant_type;
+    }
 
     /**
      * email

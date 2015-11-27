@@ -110,7 +110,7 @@ public class TokenRepo {
 
         return endpoint.loginFacebook(
                 getAuthString(),
-                "password",
+                loginFacebookRequest.getGrantType(),
                 loginFacebookRequest.username(),
                 loginFacebookRequest.password());
     }
@@ -137,7 +137,7 @@ public class TokenRepo {
 
         return endpoint.loginEmail(
                 getAuthString(),
-                "password",
+                loginEmailRequest.getGrantType(),
                 loginEmailRequest.username(),
                 loginEmailRequest.password());
     }

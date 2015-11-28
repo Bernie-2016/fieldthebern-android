@@ -1,7 +1,4 @@
 apply plugin: 'com.android.application'
-// This does not break the build when Android Studio is missing the JRebel for Android plugin.
-//apply plugin: 'com.zeroturnaround.jrebel.android'
-//apply plugin: 'com.stanfy.android.apt'
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -9,7 +6,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.berniesanders.canvass"
+        applicationId "com.berniesanders.fieldthebern"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 3

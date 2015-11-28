@@ -23,9 +23,15 @@ public class AddTokenInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer " + tokenRepo.get().accessToken())
-                .build();
-        return chain.proceed(request);
+
+        String token = tokenRepo.get().accessToken();
+
+        Request.Builder builder = chain.request().newBuilder();
+
+        if (token != null) {
+            builder.addHeader("Authorization", "Bearer " + token);
+        }
+
+        return chain.proceed(builder.build());
     }
 }

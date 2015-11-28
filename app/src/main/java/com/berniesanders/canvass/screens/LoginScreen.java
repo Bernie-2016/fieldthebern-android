@@ -1,23 +1,38 @@
 package com.berniesanders.canvass.screens;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
+import com.berniesanders.canvass.FTBApplication;
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.annotations.Layout;
+import com.berniesanders.canvass.controllers.ErrorToastService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
+import com.berniesanders.canvass.dagger.MainComponent;
+import com.berniesanders.canvass.models.LoginEmailRequest;
+import com.berniesanders.canvass.models.Token;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.mortar.FlowPathBase;
+import com.berniesanders.canvass.repositories.TokenRepo;
+import com.berniesanders.canvass.repositories.specs.TokenSpec;
 import com.berniesanders.canvass.views.LoginView;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Module;
+import dagger.Provides;
 import flow.Flow;
 import mortar.ViewPresenter;
+import retrofit.HttpException;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -42,6 +57,8 @@ public class LoginScreen extends FlowPathBase {
     public Object createComponent() {
         return DaggerLoginScreen_Component
                 .builder()
+                .mainComponent(FTBApplication.getComponent())
+                .module(new Module(user))
                 .build();
     }
 
@@ -55,14 +72,26 @@ public class LoginScreen extends FlowPathBase {
 
     @dagger.Module
     class Module {
+        private final User user;
+
+        Module(User user) {
+            this.user = user;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public User provideUser() {
+            return user;
+        }
     }
 
     /**
      */
     @FtbScreenScope
-    @dagger.Component
+    @dagger.Component(modules = Module.class, dependencies = MainComponent.class)
     public interface Component {
         void inject(LoginView t);
+        User user();
     }
 
     @FtbScreenScope
@@ -70,8 +99,19 @@ public class LoginScreen extends FlowPathBase {
 
         @BindString(R.string.login_title) String screenTitleString;
 
+        private final User user;
+        private final TokenRepo tokenRepo;
+
+        @Bind(R.id.password)
+        EditText passwordEditText;
+
+        @Bind(R.id.email)
+        EditText emailEditText;
+
         @Inject
-        Presenter() {
+        Presenter(User user, TokenRepo tokenRepo) {
+            this.user = user;
+            this.tokenRepo = tokenRepo;
         }
 
         @Override
@@ -99,11 +139,47 @@ public class LoginScreen extends FlowPathBase {
         @Override
         public void dropView(LoginView view) {
             super.dropView(view);
+            ButterKnife.unbind(this);
         }
 
         @OnClick(R.id.login_email)
         void loginEmail() {
-            Flow.get(getView().getContext()).set(new HomeScreen());
+
+            if (!user.getData().getAttributes().isFacebookUser()) {
+
+                TokenSpec spec = new TokenSpec()
+                        .email(new LoginEmailRequest()
+                                .password(passwordEditText.getText().toString())
+                                .username(emailEditText.getText().toString()));
+
+                tokenRepo
+                        .loginEmail(spec)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+            }
+
         }
+
+        Observer<Token> observer = new Observer<Token>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("loginEmail done.");
+                Flow.get(getView().getContext()).set(new HomeScreen());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "loginEmail error");
+                if (e instanceof HttpException) {
+                    ErrorToastService.get(getView()).showApiError(e);
+                }
+            }
+
+            @Override
+            public void onNext(Token token) {
+                Timber.d("loginEmail onNext: %s", token.toString());
+            }
+        };
     }
 }

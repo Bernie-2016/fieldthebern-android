@@ -25,7 +25,6 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.Module;
 import dagger.Provides;
 import flow.Flow;
 import mortar.ViewPresenter;
@@ -145,7 +144,7 @@ public class LoginScreen extends FlowPathBase {
         @OnClick(R.id.login_email)
         void loginEmail() {
 
-            if (!user.getData().getAttributes().isFacebookUser()) {
+            if (!user.getData().attributes().isFacebookUser()) {
 
                 TokenSpec spec = new TokenSpec()
                         .email(new LoginEmailRequest()

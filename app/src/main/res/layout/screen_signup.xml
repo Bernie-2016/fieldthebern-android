@@ -2,7 +2,7 @@
 <!--
   ~ Copyright 2015 FeelTheBern.org
   -->
-<com.berniesanders.canvass.views.SignupView
+<com.berniesanders.fieldthebern.views.SignupView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -139,4 +139,4 @@
         android:textStyle="normal"
         />
 
-</com.berniesanders.canvass.views.SignupView>
+</com.berniesanders.fieldthebern.views.SignupView>

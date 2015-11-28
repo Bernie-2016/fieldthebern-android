@@ -2,7 +2,7 @@
 <!--
   ~ Copyright 2015 FeelTheBern.org
   -->
-<com.berniesanders.canvass.views.ScoreView
+<com.berniesanders.fieldthebern.views.ScoreView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -103,4 +103,4 @@
         android:textSize="22sp"
         android:textAllCaps="false"
         />
-</com.berniesanders.canvass.views.ScoreView>
+</com.berniesanders.fieldthebern.views.ScoreView>

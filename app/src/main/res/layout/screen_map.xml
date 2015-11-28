@@ -2,7 +2,7 @@
 <!--
   ~ Copyright 2015 FeelTheBern.org
   -->
-<com.berniesanders.canvass.views.MapScreenView
+<com.berniesanders.fieldthebern.views.MapScreenView
 xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -97,4 +97,4 @@ android:layout_height="match_parent" >
         </LinearLayout>
 
     </LinearLayout>
-</com.berniesanders.canvass.views.MapScreenView>
+</com.berniesanders.fieldthebern.views.MapScreenView>

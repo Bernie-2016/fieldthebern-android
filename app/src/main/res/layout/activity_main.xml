@@ -63,11 +63,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <!-- Your Scrollable View -->
-    <com.berniesanders.canvass.mortar.MortarScreenSwitcherFrame
+    <com.berniesanders.fieldthebern.mortar.MortarScreenSwitcherFrame
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.berniesanders.canvass.MainActivity"
+        tools:context="com.berniesanders.fieldthebern.MainActivity"
         android:id="@+id/container_main"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:background="@color/bernie_dark_blue"

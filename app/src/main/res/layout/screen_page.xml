@@ -3,7 +3,7 @@
   ~ Copyright 2015 FeelTheBern.org
   -->
 
-<com.berniesanders.canvass.views.PageView
+<com.berniesanders.fieldthebern.views.PageView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

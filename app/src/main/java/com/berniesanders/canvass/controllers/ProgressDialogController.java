@@ -4,7 +4,6 @@ package com.berniesanders.canvass.controllers;
  *
  */
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +19,11 @@ import timber.log.Timber;
 import static mortar.bundler.BundleService.getBundleService;
 
 /**
- * Provides a way to coordinate with the MainActivity
+ * This is mostly just a tool for our toolbox.
+ *
+ * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+ * For example, when the user clicks a submit button, we should replace that with the loading
+ * progress spinning wheel instead of using a dialog.
  */
 public class ProgressDialogController extends Presenter<ProgressDialogController.Activity> {
 
@@ -31,6 +34,11 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
     ProgressDialog dialog;
 
     /**
+     * This is mostly just a tool for our toolbox.
+     *
+     * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+     * For example, when the user clicks a submit button, we should replace that with the loading
+     * progress spinning wheel instead of using a dialog.
      */
     ProgressDialogController() {
     }
@@ -67,6 +75,12 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
     /**
      * Shows a dialog.  Caller is responsible for calling show again after rotation if the
      * dialog needs to remain visible
+     *
+     * This is mostly just a tool for our toolbox.
+     *
+     * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+     * For example, when the user clicks a submit button, we should replace that with the loading
+     * progress spinning wheel instead of using a dialog.
      */
     public void show(int titleResID, int messageResID) {
         if (getView()==null) {
@@ -81,6 +95,12 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
     /**
      * Shows a dialog.  Caller is responsible for calling show again after rotation if the
      * dialog needs to remain visible
+     *
+     * This is mostly just a tool for our toolbox.
+     *
+     * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+     * For example, when the user clicks a submit button, we should replace that with the loading
+     * progress spinning wheel instead of using a dialog.
      */
     public void show(String title, String message) {
         if (getView()==null) {

@@ -21,7 +21,7 @@ import static mortar.bundler.BundleService.getBundleService;
 /**
  * This is mostly just a tool for our toolbox.
  *
- * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+ * Ideally, when showing a "progress spinning wheel" it should be shown in-page or in-context.
  * For example, when the user clicks a submit button, we should replace that with the loading
  * progress spinning wheel instead of using a dialog.
  */
@@ -36,7 +36,7 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
     /**
      * This is mostly just a tool for our toolbox.
      *
-     * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+     * Ideally, when showing a "progress spinning wheel" it should be shown in-page or in-context.
      * For example, when the user clicks a submit button, we should replace that with the loading
      * progress spinning wheel instead of using a dialog.
      */
@@ -78,7 +78,7 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
      *
      * This is mostly just a tool for our toolbox.
      *
-     * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+     * Ideally, when showing a "progress spinning wheel" it should be shown in-page or in-context.
      * For example, when the user clicks a submit button, we should replace that with the loading
      * progress spinning wheel instead of using a dialog.
      */
@@ -98,7 +98,7 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
      *
      * This is mostly just a tool for our toolbox.
      *
-     * Ideally, when showing a "progress spinning wheel" it should be show in-page or in-context.
+     * Ideally, when showing a "progress spinning wheel" it should be shown in-page or in-context.
      * For example, when the user clicks a submit button, we should replace that with the loading
      * progress spinning wheel instead of using a dialog.
      */

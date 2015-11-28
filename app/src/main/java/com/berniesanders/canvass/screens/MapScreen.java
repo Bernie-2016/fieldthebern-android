@@ -9,9 +9,17 @@ import com.berniesanders.canvass.annotations.Layout;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.dagger.MainComponent;
+import com.berniesanders.canvass.location.StateConverter;
+import com.berniesanders.canvass.models.ApiAddress;
+import com.berniesanders.canvass.models.RequestMultipleAddresses;
+import com.berniesanders.canvass.models.RequestSingleAddress;
 import com.berniesanders.canvass.mortar.FlowPathBase;
+import com.berniesanders.canvass.repositories.AddressRepo;
+import com.berniesanders.canvass.repositories.specs.AddressSpec;
 import com.berniesanders.canvass.views.MapScreenView;
 import com.google.android.gms.maps.model.CameraPosition;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -21,6 +29,8 @@ import flow.Flow;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import rx.Observer;
+import rx.Subscription;
 import timber.log.Timber;
 
 /**
@@ -57,6 +67,7 @@ public class MapScreen extends FlowPathBase {
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(MapScreenView t);
+        AddressRepo addressRepo();
     }
 
     @FtbScreenScope
@@ -64,13 +75,15 @@ public class MapScreen extends FlowPathBase {
 
         public static final String CAMERA_POSITION = "camera_position";
         public static final String ADDRESS = "address";
+        private final AddressRepo addressRepo;
 
         private CameraPosition cameraPosition;
         private Address address;
 
 
         @Inject
-        Presenter() {
+        Presenter(AddressRepo addressRepo) {
+            this.addressRepo = addressRepo;
         }
 
         @Override
@@ -111,6 +124,15 @@ public class MapScreen extends FlowPathBase {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 Presenter.this.cameraPosition = cameraPosition;
+
+                Subscription multiAddressSubscription = addressRepo.getMultiple(
+                        new AddressSpec()
+                            .multipleAddresses(
+                                    new RequestMultipleAddresses()
+                                            .latitude(cameraPosition.target.latitude)
+                                            .longitude(cameraPosition.target.longitude)
+                                            .radius(100)))
+                        .subscribe(multiAddressObserver);
             }
         };
 
@@ -118,6 +140,54 @@ public class MapScreen extends FlowPathBase {
             @Override
             public void onAddressChange(Address address) {
                 Presenter.this.address = address;
+
+                Subscription singleAddressSubscription = addressRepo.getSingle(
+                        new AddressSpec()
+                                .singleAddress(
+                                        new RequestSingleAddress()
+                                                //.latitude(cameraPosition.target.latitude)
+                                                //.longitude(cameraPosition.target.longitude)
+                                                .street1(address.getAddressLine(0))
+                                                //.street2("Apt #1")
+                                                .city(address.getLocality())
+                                                .state(StateConverter.getStateCode(address.getAdminArea()))
+                                                .zip(address.getPostalCode())))
+                        .subscribe(singleAddressObserver);
+            }
+        };
+
+        Observer<List<ApiAddress>> multiAddressObserver = new Observer<List<ApiAddress>>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<ApiAddress> apiAddresses) {
+                Timber.v("multiAddressObserver onNext \n%s", apiAddresses );
+            }
+        };
+
+
+        Observer<ApiAddress> singleAddressObserver = new Observer<ApiAddress>() {
+            @Override
+            public void onCompleted() {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(ApiAddress apiAddresses) {
+                Timber.v("singleAddressObserver onNext \n%s", apiAddresses );
             }
         };
 

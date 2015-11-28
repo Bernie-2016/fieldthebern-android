@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.berniesanders.canvass.R;
 import com.berniesanders.canvass.models.UserAttributes;
 import com.berniesanders.canvass.mortar.DaggerService;
 import com.berniesanders.canvass.screens.SignupScreen;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -40,6 +42,10 @@ public class SignupView extends RelativeLayout {
 
     @Bind(R.id.password)
     AppCompatEditText password;
+
+
+    @Bind(R.id.user_photo)
+    ImageView userImageView;
 
 
     public SignupView(Context context) {
@@ -89,25 +95,25 @@ public class SignupView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    public void showFacebook() {
-        password.setVisibility(View.GONE);
-        email.setVisibility(View.GONE);
+    public void showFacebook(UserAttributes userAttributes) {
+
+        firstName.setText(userAttributes.getFirstName());
+        lastName.setText(userAttributes.getLastName());
+        email.setText(userAttributes.getEmail());
+
+    }
+
+    public ImageView getUserImageView() {
+        return userImageView;
     }
 
     public UserAttributes getInput(UserAttributes userAttributes) {
 
-        if (userAttributes.isFacebookUser()) {
-            userAttributes
-                    .firstName(firstName.getText().toString())
-                    .lastName(lastName.getText().toString());
-        } else {
-            userAttributes
+        return userAttributes
                     .email(email.getText().toString())
                     .password(password.getText().toString())
                     .firstName(firstName.getText().toString())
                     .lastName(lastName.getText().toString());
-        }
-        return userAttributes;
     }
 
 }

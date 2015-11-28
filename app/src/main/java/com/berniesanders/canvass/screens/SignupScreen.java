@@ -1,5 +1,7 @@
 package com.berniesanders.canvass.screens;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -12,6 +14,7 @@ import com.berniesanders.canvass.dagger.FtbScreenScope;
 import com.berniesanders.canvass.controllers.ActionBarController;
 import com.berniesanders.canvass.controllers.ActionBarService;
 import com.berniesanders.canvass.dagger.MainComponent;
+import com.berniesanders.canvass.media.SaveImageTarget;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.models.UserAttributes;
@@ -19,6 +22,7 @@ import com.berniesanders.canvass.mortar.FlowPathBase;
 import com.berniesanders.canvass.repositories.UserRepo;
 import com.berniesanders.canvass.repositories.specs.UserSpec;
 import com.berniesanders.canvass.views.SignupView;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -103,6 +107,7 @@ public class SignupScreen extends FlowPathBase {
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
+        Bitmap userBitmap;
 
         private String stateCode;
         private Location location;
@@ -123,8 +128,50 @@ public class SignupScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+
+            if (userAttributes.isFacebookUser()) {
+                getView().showFacebook(userAttributes);
+                loadPhoto();
+            }
+
+            //call in case the photo loads while rotating
+            showPhotoIfExists();
         }
 
+        private void showPhotoIfExists() {
+
+            if (userBitmap==null) { return; } //nothing to show
+
+            if (getView() == null) { //nowhere to show
+                Timber.w("showPhotoIfExists called but no photo was attached");
+                return;
+            }
+
+            getView()
+                    .getUserImageView()
+                    .setImageDrawable(
+                            new BitmapDrawable(getView().getContext().getResources(),
+                                    userBitmap));
+        }
+
+        private void loadPhoto() {
+            Picasso.with(getView().getContext())
+                    .load(userAttributes.getPhotoLargeUrl())
+                    .into(new SaveImageTarget(onLoad));
+        }
+
+
+
+        SaveImageTarget.OnLoad onLoad = new SaveImageTarget.OnLoad() {
+
+            @Override
+            public void onLoad(Bitmap bitmap, String encodedString) {
+                userBitmap = bitmap;
+                Timber.v("onLoad encodedString.length() = %d", encodedString.length());
+                userAttributes.base64PhotoData(encodedString);
+                showPhotoIfExists();
+            }
+        };
 
         void setActionBar() {
             ActionBarService

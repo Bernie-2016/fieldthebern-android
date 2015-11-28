@@ -3,6 +3,7 @@ package com.berniesanders.canvass.repositories;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.CreateUserRequest;
 import com.berniesanders.canvass.models.LoginEmailRequest;
+import com.berniesanders.canvass.models.LoginFacebookRequest;
 import com.berniesanders.canvass.models.User;
 import com.berniesanders.canvass.models.UserAttributes;
 import com.berniesanders.canvass.repositories.interceptors.UserAgentInterceptor;
@@ -69,6 +70,14 @@ public class UserRepo {
                             .loginEmail(new TokenSpec().email(loginEmailRequest))
                             .subscribeOn(Schedulers.io())
                             .subscribe();
+                } else {
+                    LoginFacebookRequest loginFacebookRequest = new LoginFacebookRequest()
+                            .username(userAttributes.getEmail())
+                            .password(userAttributes.getPassword());
+                    tokenRepo
+                            .loginFacebook(new TokenSpec().facebook(loginFacebookRequest))
+                            .subscribeOn(Schedulers.io())
+                            .subscribe();
                 }
 
                 Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
@@ -122,6 +131,7 @@ public class UserRepo {
 
         UserSpec.UserEndpoint endpoint =
                 retrofit.create(UserSpec.UserEndpoint.class);
+
 
         return endpoint.create(user);
     }

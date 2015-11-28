@@ -3,6 +3,7 @@ package com.berniesanders.canvass.repositories;
 import android.util.Base64;
 import com.berniesanders.canvass.config.Config;
 import com.berniesanders.canvass.models.LoginEmailRequest;
+import com.berniesanders.canvass.models.LoginFacebookRequest;
 import com.berniesanders.canvass.models.Token;
 import com.berniesanders.canvass.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.canvass.repositories.specs.TokenSpec;
@@ -71,7 +72,48 @@ public class TokenRepo {
         });
     }
 
+    /**
+     */
+    public Observable<Token> loginFacebook(final TokenSpec spec) {
+        Timber.v("loginFacebook()");
 
+        return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
+            @Override
+            public Token call(Token token) {
+
+                Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+                tokenPref.set(gson.toJson(token));
+                return token;
+            }
+        });
+    }
+
+    /**
+     * Might be best to pass the spec through to this method...?
+     */
+    private Observable<Token> loginFacebook(final LoginFacebookRequest loginFacebookRequest) {
+        Timber.v("logging in facebook....");
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        client.interceptors().add(interceptor);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(this.config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        TokenSpec.TokenEndpoint endpoint =
+                retrofit.create(TokenSpec.TokenEndpoint.class);
+
+        return endpoint.loginFacebook(
+                getAuthString(),
+                loginFacebookRequest.getGrantType(),
+                loginFacebookRequest.username(),
+                loginFacebookRequest.password());
+    }
 
     /**
      * Might be best to pass the spec through to this method...?
@@ -95,7 +137,7 @@ public class TokenRepo {
 
         return endpoint.loginEmail(
                 getAuthString(),
-                "password",
+                loginEmailRequest.getGrantType(),
                 loginEmailRequest.username(),
                 loginEmailRequest.password());
     }

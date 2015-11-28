@@ -29,14 +29,10 @@ public class User {
         public Integer id() {
             return this.id;
         }
-        
-        @NonNull
-        public UserAttributes getAttributes() {
-            return attributes;
-        }
 
+        @NonNull
         public UserAttributes attributes() {
-            return this.attributes;
+            return attributes;
         }
 
         public UserRelationships relationships() {

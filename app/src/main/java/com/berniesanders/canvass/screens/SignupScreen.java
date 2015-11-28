@@ -107,6 +107,7 @@ public class SignupScreen extends FlowPathBase {
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
+        Bitmap userBitmap;
 
         private String stateCode;
         private Location location;
@@ -133,7 +134,24 @@ public class SignupScreen extends FlowPathBase {
                 loadPhoto();
             }
 
+            //call in case the photo loads while rotating
+            showPhotoIfExists();
+        }
 
+        private void showPhotoIfExists() {
+
+            if (userBitmap==null) { return; } //nothing to show
+
+            if (getView() == null) { //nowhere to show
+                Timber.w("showPhotoIfExists called but no photo was attached");
+                return;
+            }
+
+            getView()
+                    .getUserImageView()
+                    .setImageDrawable(
+                            new BitmapDrawable(getView().getContext().getResources(),
+                                    userBitmap));
         }
 
         private void loadPhoto() {
@@ -142,19 +160,16 @@ public class SignupScreen extends FlowPathBase {
                     .into(new SaveImageTarget(onLoad));
         }
 
+
+
         SaveImageTarget.OnLoad onLoad = new SaveImageTarget.OnLoad() {
+
             @Override
             public void onLoad(Bitmap bitmap, String encodedString) {
-
+                userBitmap = bitmap;
                 Timber.v("onLoad encodedString.length() = %d", encodedString.length());
-
-                getView()
-                        .getUserImageView()
-                        .setImageDrawable(
-                                new BitmapDrawable(getView().getContext().getResources(),
-                                        bitmap));
-
                 userAttributes.base64PhotoData(encodedString);
+                showPhotoIfExists();
             }
         };
 

@@ -75,7 +75,7 @@ public class UserRepo {
                             .username(userAttributes.getEmail())
                             .password(userAttributes.getPassword());
                     tokenRepo
-                    .loginFacebook(new TokenSpec().facebook(loginFacebookRequest))
+                            .loginFacebook(new TokenSpec().facebook(loginFacebookRequest))
                             .subscribeOn(Schedulers.io())
                             .subscribe();
                 }

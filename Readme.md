@@ -33,13 +33,19 @@ Feel free to reach out on Slack if you have questions!
 
 ##Building
 
-You will need a **YouTube API key** and **Google Maps Android API Key**.  
-Follow the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
+Because all these API keys are based on your debug key, you will need to ask for a 
+valid `debug.keystore` from the current app developers.  
 
-Both APIs use the same key, just add both to your application in the Google API Console.
+All these keys **must** be generated with the same `debug.keystore`
 
-You will also need to setup **Facebook App** to get the App ID.  You only need to create an app in "developer" mode.  
-Follow the instructions here: [Facebook Login for Android](https://developers.facebook.com/docs/facebook-login/android)
+You will need a **YouTube API key** and **Google Maps Android API Key**. 
+Easiest way to get the Google API keys would be to ask a current **fieldthebern-android** developer.
+ 
+You can also set up your own API keys (for YouTube and Google Maps) by following the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
+Both APIs use the same key, just add both to your application in the Google API Console.  
+
+In order to have the app work with **Facebook** you will need to ask us for the Facebook App ID.  
+You cannot setup your own facebook app because it needs to use the same app as the **fieldthebern-api**
 
 Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  
 ```xml

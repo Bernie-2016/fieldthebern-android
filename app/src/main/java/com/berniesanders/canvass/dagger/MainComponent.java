@@ -8,6 +8,7 @@ import com.berniesanders.canvass.controllers.DialogController;
 import com.berniesanders.canvass.controllers.ErrorToastController;
 import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.controllers.LocationController;
+import com.berniesanders.canvass.controllers.ProgressDialogController;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.repositories.CollectionRepo;
 import com.berniesanders.canvass.repositories.TokenRepo;
@@ -29,6 +30,7 @@ import dagger.Component;
             ActionBarController.ActionBarModule.class,
             DialogController.DialogModule.class,
             FacebookController.FacebookModule.class,
+            ProgressDialogController.ProgressDialogModule.class,
             LocationController.LocationModule.class
         }
 )
@@ -49,4 +51,5 @@ public interface MainComponent {
     RxSharedPreferences rxPrefs();
     FacebookController facebookController();
     LocationController locationController();
+    ProgressDialogController progressDialogController();
 }

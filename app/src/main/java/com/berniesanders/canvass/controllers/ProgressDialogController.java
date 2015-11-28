@@ -77,7 +77,7 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
         show(getView().getActivity().getString(titleResID),
                 getView().getActivity().getString(messageResID));
     }
-    
+
     /**
      * Shows a dialog.  Caller is responsible for calling show again after rotation if the
      * dialog needs to remain visible

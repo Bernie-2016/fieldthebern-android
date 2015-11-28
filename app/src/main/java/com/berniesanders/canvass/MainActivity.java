@@ -37,6 +37,8 @@ import com.berniesanders.canvass.controllers.FacebookController;
 import com.berniesanders.canvass.controllers.FacebookService;
 import com.berniesanders.canvass.controllers.LocationController;
 import com.berniesanders.canvass.controllers.LocationService;
+import com.berniesanders.canvass.controllers.ProgressDialogController;
+import com.berniesanders.canvass.controllers.ProgressDialogService;
 import com.berniesanders.canvass.dagger.FtbActivityScope;
 import com.berniesanders.canvass.db.SearchMatrixCursor;
 import com.berniesanders.canvass.models.ApiItem;
@@ -140,6 +142,9 @@ public class MainActivity extends AppCompatActivity
     @Inject
     LocationController locationController;
 
+    @Inject
+    ProgressDialogController progessDialogController;
+
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
 
@@ -242,6 +247,7 @@ public class MainActivity extends AppCompatActivity
                     .withService(DialogService.NAME, dialogController)
                     .withService(FacebookService.NAME, facebookController)
                     .withService(LocationService.NAME, locationController)
+                    .withService(ProgressDialogService.NAME, progessDialogController)
                     .build(getScopeName());
         }
     }

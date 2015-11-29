@@ -41,9 +41,13 @@ public class ErrorToastController {
         String firstErrorKey = errorMap.keySet().iterator().next();
         String firstErrorValue = errorMap.values().iterator().next();
 
-        Toast.makeText(context,
-                firstErrorKey + " " + firstErrorValue,
-                Toast.LENGTH_SHORT)
+        showText(firstErrorKey + " " + firstErrorValue);
+    }
+
+
+    public void showText(String text) {
+
+        Toast.makeText(context, text, Toast.LENGTH_SHORT)
                 .show();
     }
 }

@@ -46,14 +46,14 @@ public final class Token implements Parcelable {
 
     /**
      * time_of_creation_as_integer
-     * ms since epoch...?
+     * seconds since epoch...?
      */
     @SerializedName("created_at")
     private long created;
 
 
     public boolean isExpired(long currentTimeMs) {
-        return (currentTimeMs >= created + (expires*1000));
+        return (currentTimeMs >= ((created + expires) * 1000));
     }
 
     public String accessToken() {

@@ -3,11 +3,13 @@ package com.berniesanders.fieldthebern.screens;
 import android.location.Address;
 import android.os.Bundle;
 
+import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.AddAddressView;
 
@@ -15,6 +17,7 @@ import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
@@ -38,6 +41,8 @@ public class AddAddressScreen extends FlowPathBase {
     public Object createComponent() {
         return DaggerAddAddressScreen_Component
                 .builder()
+                .mainComponent(FTBApplication.getComponent())
+                .module(new Module(address))
                 .build();
     }
 
@@ -47,27 +52,41 @@ public class AddAddressScreen extends FlowPathBase {
     }
 
 
-//    @Module
-//    class Module {
-//
-//    }
+    @dagger.Module
+    class Module {
+
+        private final Address address;
+
+        Module(Address address) {
+            this.address = address;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public Address provideAddress() {
+            return address;
+        }
+    }
 
     @FtbScreenScope
-    @dagger.Component
+    @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
     public interface Component {
         void inject(AddAddressView t);
+        Address address();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<AddAddressView> {
 
+        private final Address address;
         @BindString(android.R.string.cancel) String cancel;
 
         @BindString(R.string.add_address) String addAddress;
 
 
         @Inject
-        Presenter() {
+        Presenter(Address address) {
+            this.address = address;
         }
 
         @Override

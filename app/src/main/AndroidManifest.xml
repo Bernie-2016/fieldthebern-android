@@ -43,6 +43,10 @@
                      android:authorities="com.berniesanders.fieldthebern.providers.SearchProvider"
                      android:exported="false"
             />
+
+    <meta-data
+        android:name="com.bugsnag.android.API_KEY"
+        android:value="@string/bugsnagApiKey"/>
     </application>
 
 </manifest>

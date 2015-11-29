@@ -57,13 +57,30 @@ public class DialogController extends Presenter<DialogController.Activity> {
     }
 
     public static class DialogConfig {
-        private final int titleResId;
-        private final int msgResId;
+        private String title;
+        private String message;
         private DialogAction[] actions;
 
-        public DialogConfig(int titleResId, int msgResId) {
-            this.titleResId = titleResId;
-            this.msgResId = msgResId;
+        public DialogConfig() {
+        }
+
+
+        public String title() {
+            return this.title;
+        }
+
+        public String message() {
+            return this.message;
+        }
+
+        public DialogConfig title(final String title) {
+            this.title = title;
+            return this;
+        }
+
+        public DialogConfig message(final String message) {
+            this.message = message;
+            return this;
         }
 
         public DialogConfig withActions(DialogAction... actions) {
@@ -160,8 +177,8 @@ public class DialogController extends Presenter<DialogController.Activity> {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder
-                    .setTitle(config.titleResId)
-                    .setMessage(config.msgResId)
+                    .setTitle(config.title())
+                    .setMessage(config.message())
                     .setPositiveButton(
                             config.actions[0].label(),
                             createClickListener(0));

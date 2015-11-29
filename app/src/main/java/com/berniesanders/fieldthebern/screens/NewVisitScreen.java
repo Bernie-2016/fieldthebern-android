@@ -2,19 +2,23 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 
+import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.NewVisitView;
+import com.google.android.gms.common.api.Api;
 
 import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
@@ -48,6 +52,8 @@ public class NewVisitScreen extends FlowPathBase {
     public Object createComponent() {
         return DaggerNewVisitScreen_Component
                 .builder()
+                .mainComponent(FTBApplication.getComponent())
+                .module(new Module(apiAddress))
                 .build();
     }
 
@@ -62,28 +68,41 @@ public class NewVisitScreen extends FlowPathBase {
     }
 
 
-//    @dagger.Module
-//    class Module {
-//    }
+    @dagger.Module
+    class Module {
+        private final ApiAddress apiAddress;
+
+        Module(ApiAddress apiAddress) {
+            this.apiAddress = apiAddress;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public ApiAddress provideApiAddress() {
+            return apiAddress;
+        }
+    }
 
     /**
      */
     @FtbScreenScope
-    @dagger.Component
+    @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
     public interface Component {
         void inject(NewVisitView t);
-
+        ApiAddress apiAddress();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<NewVisitView> {
 
-        @BindString(android.R.string.cancel) String cancel;
+        private final ApiAddress apiAddress;
 
+        @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
 
         @Inject
-        Presenter() {
+        Presenter(ApiAddress apiAddress) {
+            this.apiAddress = apiAddress;
         }
 
         @Override
@@ -109,7 +128,7 @@ public class NewVisitScreen extends FlowPathBase {
                     .showToolbar()
                     .closeAppbar()
                     .setMainImage(null)
-                    .setConfig(new ActionBarController.Config(newVisit, menu));
+                    .setConfig(new ActionBarController.Config(apiAddress.attributes().street1(), menu));
         }
 
         @Override

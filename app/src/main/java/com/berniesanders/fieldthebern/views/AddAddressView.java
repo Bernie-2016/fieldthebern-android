@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.views;
 
 import android.content.Context;
 import android.location.Address;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -32,7 +33,7 @@ public class AddAddressView extends RelativeLayout {
     EditText addressEditText;
 
     @Bind(R.id.apartment)
-    EditText aparetmentEditText;
+    EditText apartmentEditText;
 
     public AddAddressView(Context context) {
         super(context);
@@ -90,5 +91,13 @@ public class AddAddressView extends RelativeLayout {
             address.setAddressLine(0, addressEditText.getText().toString());
         }
         return address;
+    }
+
+    @Nullable
+    public String getApartment() {
+        if (apartmentEditText.getText()==null) {
+            return null;
+        }
+        return apartmentEditText.getText().toString();
     }
 }

@@ -14,7 +14,12 @@ import com.berniesanders.fieldthebern.controllers.DialogController.DialogConfig;
 import com.berniesanders.fieldthebern.controllers.DialogService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.location.StateConverter;
+import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.AddressRepo;
+import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
 
 import javax.inject.Inject;
@@ -26,6 +31,8 @@ import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
+import rx.Observer;
+import rx.Subscription;
 import rx.functions.Action0;
 import timber.log.Timber;
 
@@ -78,12 +85,14 @@ public class AddAddressScreen extends FlowPathBase {
     public interface Component {
         void inject(AddAddressView t);
         Address address();
+        AddressRepo addressRepo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<AddAddressView> {
 
         private Address address;
+        private final AddressRepo addressRepo;
         @BindString(android.R.string.cancel) String cancel;
 
         @BindString(R.string.add_address) String screenTitle;
@@ -92,8 +101,9 @@ public class AddAddressScreen extends FlowPathBase {
 
 
         @Inject
-        Presenter(Address address) {
+        Presenter(Address address, AddressRepo addressRepo) {
             this.address = address;
+            this.addressRepo = addressRepo;
         }
 
         @Override
@@ -140,11 +150,12 @@ public class AddAddressScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         public void startNewVisit() {
             address = getView().getAddress();
+            String apartment = getView().getApartment() == null ? "" : getView().getApartment();
 
             String formattedAddress = String.format(
                     confirmBody,
                     address.getAddressLine(0),
-                    address.getAddressLine(1));
+                    apartment);
 
             DialogAction confirmAction = new DialogAction()
                     .label(android.R.string.ok)
@@ -152,7 +163,7 @@ public class AddAddressScreen extends FlowPathBase {
                         @Override
                         public void call() {
                             Timber.d("ok button click");
-                            Flow.get(getView()).set(new NewVisitScreen());
+                            loadAddressFromApi();
                         }
                     });
 
@@ -174,5 +185,38 @@ public class AddAddressScreen extends FlowPathBase {
                                 .withActions(confirmAction, cancelAction)
                     );
         }
+
+        private void loadAddressFromApi() {
+
+            Subscription singleAddressSubscription = addressRepo.getSingle(
+                    new AddressSpec()
+                            .singleAddress(
+                                    new RequestSingleAddress()
+                                            .street1(address.getAddressLine(0))
+                                            .street2(getView().getApartment())
+                                            .city(address.getLocality())
+                                            .state(StateConverter.getStateCode(address.getAdminArea()))
+                                            .zip(address.getPostalCode())))
+                    .subscribe(singleAddressObserver);
+
+        }
+
+        Observer<ApiAddress> singleAddressObserver = new Observer<ApiAddress>() {
+            @Override
+            public void onCompleted() {
+                Timber.v("singleAddressObserver onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "singleAddressObserver onError");
+            }
+
+            @Override
+            public void onNext(ApiAddress apiAddresses) {
+                Timber.v("singleAddressObserver onNext \n%s", apiAddresses );
+                Flow.get(getView()).set(new NewVisitScreen(apiAddresses));
+            }
+        };
     }
 }

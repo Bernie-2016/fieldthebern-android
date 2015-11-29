@@ -1,7 +1,9 @@
 package com.berniesanders.fieldthebern.views;
 
 import android.content.Context;
+import android.location.Address;
 import android.util.AttributeSet;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.berniesanders.fieldthebern.R;
@@ -11,6 +13,7 @@ import com.berniesanders.fieldthebern.screens.NewVisitScreen;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
@@ -23,6 +26,13 @@ public class AddAddressView extends RelativeLayout {
 
     @Inject
     AddAddressScreen.Presenter presenter;
+    private Address address;
+
+    @Bind(R.id.address)
+    EditText addressEditText;
+
+    @Bind(R.id.apartment)
+    EditText aparetmentEditText;
 
     public AddAddressView(Context context) {
         super(context);
@@ -70,9 +80,15 @@ public class AddAddressView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    @OnClick(R.id.submit)
-    public void startNewVisit() {
-        Flow.get(this).set(new NewVisitScreen());
+    public void setAddress(Address address) {
+        this.address = address;
+        addressEditText.setText(address.getAddressLine(0));
     }
 
+    public Address getAddress() {
+        if (addressEditText.getText()!=null) {
+            address.setAddressLine(0, addressEditText.getText().toString());
+        }
+        return address;
+    }
 }

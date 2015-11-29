@@ -24,6 +24,7 @@ import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.dagger.DaggerMainComponent;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.dagger.MainModule;
+import com.bugsnag.android.Bugsnag;
 import com.squareup.otto.Bus;
 
 import com.berniesanders.fieldthebern.mortar.DaggerService;
@@ -62,6 +63,7 @@ public class FTBApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+        Bugsnag.init(this);
         component = DaggerMainComponent.builder()
                 .mainModule(new MainModule(getApplicationContext()))
                 .actionBarModule(new ActionBarController.ActionBarModule())

@@ -93,13 +93,13 @@ public class TokenTest {
     }
 
     @Test
-    public void testIsExpired_validFor1hr59mins() {
+    public void testIsExpired_validFor_1hr_59m_59s_999ms() {
         final long now = 1447745123000L;
         final long nowSecondsSinceEpoch = 1447745123;//value from api
         final int expiresInSeconds = 7200; //2hrs
 
 
-        long twoHoursInTheFuture = now + TWO_HOURS_MILLIS-2;
+        long twoHoursInTheFuture = now + TWO_HOURS_MILLIS-1;
 
         Token token = new Token()
                 .created(nowSecondsSinceEpoch)

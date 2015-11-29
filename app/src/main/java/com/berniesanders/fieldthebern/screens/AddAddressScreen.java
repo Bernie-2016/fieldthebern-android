@@ -158,7 +158,6 @@ public class AddAddressScreen extends FlowPathBase {
 
             DialogAction cancelAction = new DialogAction()
                     .label(android.R.string.cancel)
-                    .setAsDismiss()
                     .action(new Action0() {
                         @Override
                         public void call() {

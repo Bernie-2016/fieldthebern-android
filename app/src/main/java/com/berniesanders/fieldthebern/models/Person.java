@@ -27,7 +27,7 @@ import com.google.gson.annotations.SerializedName;
  *     }
  * }
  */
-public class Person {
+public class Person extends CanvasData{
 
     Integer id; //null if we're creating a new person in the db
     String type;

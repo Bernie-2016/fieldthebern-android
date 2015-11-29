@@ -6,6 +6,11 @@
  */
 package com.berniesanders.fieldthebern.models;
 
+import android.location.Address;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.berniesanders.fieldthebern.location.StateConverter;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -36,9 +41,20 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ApiAddress {
 
-    long id;
+    Long id; // should be null when sending a new address to the db
     String type;
-    Attributes attributes;
+    Attributes attributes = new Attributes();
+
+    @NonNull
+    public static ApiAddress from(@NonNull Address address, @Nullable String apartment) {
+        return new ApiAddress()
+                .attributes(new Attributes()
+                        .street1(address.getAddressLine(0))
+                        .street2(apartment)
+                        .city(address.getLocality())
+                        .state(StateConverter.getStateCode(address.getAdminArea()))
+                        .zip(address.getPostalCode()));
+    }
 
     public static class Attributes {
         double longitude;
@@ -153,11 +169,11 @@ public class ApiAddress {
 
     }
 
-    public long id() {
+    public Long id() {
         return id;
     }
 
-    public void id(long id) {
+    public void id(Long id) {
         this.id = id;
     }
 
@@ -173,8 +189,9 @@ public class ApiAddress {
         return attributes;
     }
 
-    public void attributes(Attributes attributes) {
+    public ApiAddress attributes(Attributes attributes) {
         this.attributes = attributes;
+        return this;
     }
 
     @Override

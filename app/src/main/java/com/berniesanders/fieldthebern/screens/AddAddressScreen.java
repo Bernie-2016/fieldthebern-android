@@ -12,6 +12,8 @@ import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.DialogController.DialogAction;
 import com.berniesanders.fieldthebern.controllers.DialogController.DialogConfig;
 import com.berniesanders.fieldthebern.controllers.DialogService;
+import com.berniesanders.fieldthebern.controllers.ErrorToastController;
+import com.berniesanders.fieldthebern.controllers.ErrorToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.StateConverter;
@@ -22,6 +24,8 @@ import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import butterknife.BindString;
@@ -31,9 +35,12 @@ import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
+import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -197,8 +204,9 @@ public class AddAddressScreen extends FlowPathBase {
                                             .city(address.getLocality())
                                             .state(StateConverter.getStateCode(address.getAdminArea()))
                                             .zip(address.getPostalCode())))
+                    .observeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(singleAddressObserver);
-
         }
 
         Observer<ApiAddress> singleAddressObserver = new Observer<ApiAddress>() {
@@ -207,9 +215,40 @@ public class AddAddressScreen extends FlowPathBase {
                 Timber.v("singleAddressObserver onCompleted");
             }
 
+
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "singleAddressObserver onError");
+
+                if (e instanceof HttpException) {
+
+                    HttpException httpe = (HttpException) e;
+
+                    if (httpe.code() == 404) {
+                        //address was not found in db, proceed with visit
+                        Flow.get(getView()).set( new NewVisitScreen(
+                                        ApiAddress.from(address, getView().getApartment())));
+
+                    } else if (httpe.code() == 400) {
+                        //address was found in db, but not specific enough
+                        //ask user for more info
+                        //TODO use the error service to parse raw json
+                        //TODO probably better to show a dialog here than a toast
+                            String errorBodyString = null;
+                        try {
+                            errorBodyString = httpe.response().errorBody().string();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        ErrorToastService.get(getView()).showText(""+errorBodyString);
+                    } else {
+                        ErrorToastService.get(getView()).showText((e.getMessage()));
+                        Timber.e(e, "singleAddressObserver onError");
+                    }
+                } else {
+                    //wtf
+                    ErrorToastService.get(getView()).showText((e.getMessage()));
+                    Timber.e(e, "singleAddressObserver onError");
+                }
             }
 
             @Override

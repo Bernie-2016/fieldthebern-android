@@ -62,9 +62,9 @@ A quick primer on how we're using mortar and flow.
 
 These three files show the usage of mortar and flow as blank templates with just the boilerplate stuff in them and some javadocs to explain what is going on.
 
-[ExampleView.java](app/src/main/java/com/berniesanders/canvass/views/ExampleView.java)
+[ExampleView.java](app/src/main/java/com/berniesanders/fieldthebern/views/ExampleView.java)
 
-[ExampleScreen.java](app/src/main/java/com/berniesanders/canvass/screens/ExampleScreen.java)
+[ExampleScreen.java](app/src/main/java/com/berniesanders/fieldthebern/screens/ExampleScreen.java)
 
 [screen_example.xml](app/src/main/res/layout/screen_example.xml)
 
@@ -106,9 +106,9 @@ protected void onLoad(Bundle savedInstanceState) {
 More example code showing how our 'controllers' work can be found in these two example files:
 
 
-[ExampleController.java](app/src/main/java/com/berniesanders/canvass/controllers/ExampleController.java)
+[ExampleController.java](app/src/main/java/com/berniesanders/fieldthebern/controllers/ExampleController.java)
 
-[ExampleService.java](app/src/main/java/com/berniesanders/canvass/controllers/ExampleService.java)
+[ExampleService.java](app/src/main/java/com/berniesanders/fieldthebern/controllers/ExampleService.java)
 
 
 

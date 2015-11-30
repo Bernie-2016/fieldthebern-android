@@ -30,13 +30,14 @@ import com.google.gson.annotations.SerializedName;
 public class Person extends CanvasData{
 
     Integer id; //null if we're creating a new person in the db
-    String type;
+    String type = "person";
     Attributes attributes = new Attributes();
 
     public Integer id() {
         return this.id;
     }
 
+    @Override
     public String type() {
         return this.type;
     }
@@ -49,7 +50,8 @@ public class Person extends CanvasData{
         this.id = id;
         return this;
     }
-
+    
+    @Override
     public Person type(final String type) {
         this.type = type;
         return this;

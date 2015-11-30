@@ -42,7 +42,7 @@ import com.google.gson.annotations.SerializedName;
 public class ApiAddress extends CanvasData {
 
     Long id; // should be null when sending a new address to the db
-    String type;
+    String type = "address";
     Attributes attributes = new Attributes();
 
     @NonNull
@@ -173,16 +173,20 @@ public class ApiAddress extends CanvasData {
         return id;
     }
 
-    public void id(Long id) {
+    public ApiAddress id(Long id) {
         this.id = id;
+        return this;
     }
 
+    @Override
     public String type() {
         return type;
     }
 
-    public void type(String type) {
+    @Override
+    public ApiAddress type(String type) {
         this.type = type;
+        return this;
     }
 
     public Attributes attributes() {

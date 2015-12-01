@@ -1,6 +1,8 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
+import android.widget.CompoundButton;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -16,6 +18,7 @@ import com.google.android.gms.common.api.Api;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import dagger.Provides;
@@ -100,6 +103,15 @@ public class NewVisitScreen extends FlowPathBase {
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
 
+        boolean noOneHome = false;
+        boolean askedToLeave = false;
+
+        @Bind(R.id.no_one_home)
+        SwitchCompat noOneHomeSwitch;
+
+        @Bind(R.id.asked_to_leave)
+        SwitchCompat askedToLeaveSwitch;
+
         @Inject
         Presenter(ApiAddress apiAddress) {
             this.apiAddress = apiAddress;
@@ -110,8 +122,61 @@ public class NewVisitScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+            initSwitches();
+            setSwitchListeners();
         }
 
+        /**
+         * If user rotated the device, be sure the switches match our boolean values
+         */
+        private void initSwitches() {
+            noOneHomeSwitch.setChecked(noOneHome);
+            askedToLeaveSwitch.setChecked(askedToLeave);
+        }
+
+        private void setSwitchListeners() {
+            noOneHomeSwitch.setOnCheckedChangeListener(noOneHomeListener);
+            askedToLeaveSwitch.setOnCheckedChangeListener(askedToLeaveListener);
+        }
+
+        private void clearSwitchListeners() {
+            noOneHomeSwitch.setOnCheckedChangeListener(null);
+            askedToLeaveSwitch.setOnCheckedChangeListener(null);
+        }
+
+        CompoundButton.OnCheckedChangeListener noOneHomeListener =
+                new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                noOneHome = isChecked;
+
+                //if no one was home, can't have been asked to leave
+                if (isChecked) {
+                    clearSwitchListeners();
+                    askedToLeaveSwitch.setChecked(false);
+                    askedToLeave = false;
+                    setSwitchListeners();
+                }
+            }
+        };
+
+        CompoundButton.OnCheckedChangeListener askedToLeaveListener =
+                new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                askedToLeave = isChecked;
+
+                //if asked to leave, someone must have been home
+                if (isChecked) {
+                    clearSwitchListeners();
+                    noOneHomeSwitch.setChecked(false);
+                    noOneHome = false;
+                    setSwitchListeners();
+                }
+            }
+        };
 
         void setActionBar() {
             ActionBarController.MenuAction menu =
@@ -138,6 +203,8 @@ public class NewVisitScreen extends FlowPathBase {
         @Override
         public void dropView(NewVisitView view) {
             super.dropView(view);
+            clearSwitchListeners();
+            ButterKnife.unbind(this);
         }
 
     }

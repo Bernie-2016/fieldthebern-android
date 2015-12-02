@@ -1,6 +1,7 @@
 package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.Visit;
+import com.berniesanders.fieldthebern.models.VisitResult;
 
 import retrofit.http.Body;
 import retrofit.http.POST;
@@ -20,6 +21,6 @@ public class VisitSpec {
     public interface VisitEndpoint {
 
         @POST("visits")
-        Observable<Visit> submit(@Body Visit visit);
+        Observable<VisitResult> submit(@Body Visit visit);
     }
 }

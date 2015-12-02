@@ -150,7 +150,7 @@ public class VisitResult {
                 return this.createdAt;
             }
         }
-        
+
 
         public static class Relationships {
             // links the visit to the user who created it

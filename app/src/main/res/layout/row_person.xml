@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                tools:context=".MainActivity"
+                tools:background="@color/bernie_dark_blue"
+    >
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/canvassed_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="4dp"/>
+
+    <TextView
+        android:id="@+id/person"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/canvassed_checkbox"
+        android:textColor="@android:color/white"
+        tools:text="Bernie Fan"
+        android:textSize="24sp"
+        android:layout_margin="4dp"/>
+
+    <ImageView
+        android:id="@+id/party"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_toRightOf="@id/canvassed_checkbox"
+        android:layout_below="@id/person"
+        tools:src="@drawable/ic_email_white_24dp"
+        android:layout_margin="4dp"/>
+
+    <TextView
+        android:id="@+id/interest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/party"
+        android:layout_below="@id/person"
+        tools:text="Strongly for Bernie"
+        android:textColor="@android:color/white"
+        android:padding="8dp"/>
+
+    <View
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_margin="0dp"
+        android:background="@color/dark_blue2"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/edit"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="?attr/selectableItemBackground"
+        android:layout_margin="0dp"
+        android:gravity="center"
+        android:text="@string/edit"
+        android:textColor="@android:color/white"
+        android:textAllCaps="false"
+        />
+</RelativeLayout>

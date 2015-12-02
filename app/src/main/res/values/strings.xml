@@ -3,6 +3,7 @@
     <string name="search_hint">Search Feel The Bern</string>
     <string name="add_address">Add address</string>
     <string name="add_person">Add person</string>
+    <string name="edit">Edit</string>
     <string name="score">Score!</string>
     <string name="points">POINTS</string>
     <string name="back_to_map">Back to map</string>

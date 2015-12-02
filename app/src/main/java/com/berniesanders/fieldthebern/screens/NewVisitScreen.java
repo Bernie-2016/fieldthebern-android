@@ -7,6 +7,7 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 
@@ -29,9 +30,12 @@ import timber.log.Timber;
 public class NewVisitScreen extends FlowPathBase {
 
 
+    private final ApiAddress apiAddress;
+
     /**
      */
-    public NewVisitScreen() {
+    public NewVisitScreen(ApiAddress apiAddress) {
+        this.apiAddress = apiAddress;
     }
 
     /**

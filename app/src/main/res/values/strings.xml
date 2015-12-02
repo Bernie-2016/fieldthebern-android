@@ -49,6 +49,8 @@
     <string name="supports">Supports</string>
     <string name="how_interested_in_bernie">How interested in bernie?</string>
     <string name="done_talking">Done talking?</string>
+    <string name="are_you_sure_address_correct">Confirm Address</string>
+    <string name="are_you_sure_address_body">Are you sure the address is correct?\n\n%1$s\n%2$s</string>
 
 
     <string-array name="party">

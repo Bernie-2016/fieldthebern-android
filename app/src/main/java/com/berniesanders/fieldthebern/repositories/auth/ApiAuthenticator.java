@@ -52,6 +52,8 @@ public class ApiAuthenticator implements Authenticator {
         // Refresh access token using a synchronous api request
         // TODO this is not the right code to do a refresh
         // TODO implement refresh
+        Timber.d("authenticating");
+
         Token token = tokenRepo.get();
         return response.request().newBuilder()
                 .header("Authorization", "Bearer " + token.accessToken())

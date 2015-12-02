@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,13 +10,12 @@ import java.util.List;
  */
 public class Visit {
 
-    Attributes attributes;
+    Attributes attributes = new Attributes();
 
     /**
      * Mix of ApiAddress and Person objects
-     * TODO: need custom serializer
      */
-    List<CanvasData> included;
+    List<CanvasData> included = new ArrayList<>();
 
     public Attributes attributes() {
         return this.attributes;
@@ -36,7 +36,28 @@ public class Visit {
     }
 
 
+    public void start() {
+        attributes.startTime = System.currentTimeMillis();
+    }
+
+    public void stop() {
+        attributes.finishTime = System.currentTimeMillis();
+        attributes.duration((int) ((attributes.finishTime - attributes.startTime)/1000));
+    }
+
+
+
     public static class Attributes {
+
+        /**
+         * Milliseconds since epoch
+         */
+        transient long startTime;
+
+        /**
+         * Milliseconds since epoch
+         */
+        transient long finishTime;
 
         /**
          * Visit duration in seconds

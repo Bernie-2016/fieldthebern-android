@@ -41,32 +41,42 @@
             android:textSize="16sp"
             />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/large_button_height"
-            android:layout_margin="8dp"
-            >
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/add_person"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/large_button_height"
-                android:background="?attr/selectableItemBackground"
-                android:drawableLeft="@drawable/ic_person_add_white_36dp"
-                android:drawablePadding="8dp"
-                android:gravity="left|center_vertical"
-                android:padding="8dp"
-                android:text="@string/add_person"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                />
+        <LinearLayout
+            android:id="@+id/person_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            />
 
-            <View
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/large_button_height"
-                android:background="@color/dark_blue2"
-                />
-        </FrameLayout>
+                android:layout_margin="8dp"
+                >
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/add_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/large_button_height"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableLeft="@drawable/ic_person_add_white_36dp"
+                    android:drawablePadding="8dp"
+                    android:gravity="left|center_vertical"
+                    android:padding="8dp"
+                    android:text="@string/add_person"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/large_button_height"
+                    android:background="@color/dark_blue2"
+                    />
+            </FrameLayout>
+
+
+
 
 
         <android.support.v7.widget.SwitchCompat

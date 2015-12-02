@@ -118,7 +118,7 @@ public class AddPersonScreen extends FlowPathBase {
             super.dropView(view);
         }
 
-        @OnClick(R.id.add_person)
+        @OnClick(R.id.submit)
         public void addPerson() {
             visitRepo.addPerson(getView().getPerson());
             Flow.get(getView()).goBack();

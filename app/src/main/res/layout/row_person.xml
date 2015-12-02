@@ -5,6 +5,8 @@
                 android:layout_height="72dp"
                 tools:context=".MainActivity"
                 tools:background="@color/bernie_dark_blue"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
     >
 
     <android.support.v7.widget.AppCompatCheckBox

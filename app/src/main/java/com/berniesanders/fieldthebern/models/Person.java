@@ -29,6 +29,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Person extends CanvassData {
 
+    public static final String TYPE = "person";
+
     Integer id; //null if we're creating a new person in the db
     String type = "person";
     Attributes attributes = new Attributes();

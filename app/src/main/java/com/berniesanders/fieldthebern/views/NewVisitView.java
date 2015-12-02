@@ -2,13 +2,23 @@ package com.berniesanders.fieldthebern.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.berniesanders.fieldthebern.R;
+import com.berniesanders.fieldthebern.models.CanvassData;
+import com.berniesanders.fieldthebern.models.Person;
+import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
@@ -24,6 +34,9 @@ public class NewVisitView extends RelativeLayout {
      */
     @Inject
     NewVisitScreen.Presenter presenter;
+
+    @Bind(R.id.person_container)
+    ViewGroup personContainer;
 
     public NewVisitView(Context context) {
         super(context);
@@ -65,6 +78,7 @@ public class NewVisitView extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (isInEditMode()) {return;}
         presenter.takeView(this);
     }
 
@@ -72,6 +86,39 @@ public class NewVisitView extends RelativeLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+    }
+
+    public void showPeople(final Visit visit) {
+
+        personContainer.removeAllViews();
+
+        for (CanvassData canvassItem : visit.included()) {
+            if(canvassItem.type().equals(Person.TYPE)) {
+                showPerson((Person) canvassItem);
+            }
+        }
+    }
+
+    private void showPerson(Person person) {
+        View personRow = LayoutInflater
+                .from(getContext())
+                .inflate(R.layout.row_person, personContainer, false);
+
+        TextView personName = (TextView) personRow.findViewById(R.id.person);
+        ImageView partyIcon = (ImageView) personRow.findViewById(R.id.party);
+        TextView supportLevel = (TextView) personRow.findViewById(R.id.interest);
+        //personRow.findViewById(R.id.edit)
+
+        personName.setText(
+                person.attributes().firstName()
+                + " "
+                + person.attributes().lastName());
+
+        //TODO: canvass response is the machine readable format, this is not correct for i18n
+        supportLevel.setText(person.attributes().canvassResponse());
+
+
+        personContainer.addView(personRow);
     }
 
 }

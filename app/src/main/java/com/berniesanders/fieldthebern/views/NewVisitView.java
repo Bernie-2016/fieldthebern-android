@@ -4,17 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
-import com.berniesanders.fieldthebern.screens.AddPersonScreen;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
-import com.berniesanders.fieldthebern.screens.ScoreScreen;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import flow.Flow;
 import timber.log.Timber;
 
 /**
@@ -79,13 +74,4 @@ public class NewVisitView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    @OnClick(R.id.add_person)
-    public void addPerson() {
-        Flow.get(this).set(new AddPersonScreen());
-    }
-
-    @OnClick(R.id.submit)
-    public void score() {
-        Flow.get(this).set(new ScoreScreen());
-    }
 }

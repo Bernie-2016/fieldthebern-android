@@ -12,7 +12,7 @@ import android.support.annotation.StringDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class CanvasResponse {
+public class CanvassResponse {
 
     // list of accepted constants
     // 'Unknown'|'Asked to leave'|'Strongly for'|'Leaning for'|

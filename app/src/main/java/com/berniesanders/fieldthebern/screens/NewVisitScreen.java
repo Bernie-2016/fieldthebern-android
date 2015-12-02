@@ -12,7 +12,9 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 import com.google.android.gms.common.api.Api;
 
@@ -21,6 +23,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.Provides;
 import flow.Flow;
 import flow.History;
@@ -93,12 +96,15 @@ public class NewVisitScreen extends FlowPathBase {
     public interface Component {
         void inject(NewVisitView t);
         ApiAddress apiAddress();
+        VisitRepo visitRepo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<NewVisitView> {
 
         private final ApiAddress apiAddress;
+        private final VisitRepo visitRepo;
+        Visit visit;
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
@@ -113,8 +119,14 @@ public class NewVisitScreen extends FlowPathBase {
         SwitchCompat askedToLeaveSwitch;
 
         @Inject
-        Presenter(ApiAddress apiAddress) {
+        Presenter(ApiAddress apiAddress, VisitRepo visitRepo) {
             this.apiAddress = apiAddress;
+            this.visitRepo = visitRepo;
+
+            if (!visitRepo.inProgress()) {
+                visitRepo.start(apiAddress);
+            }
+            visit = visitRepo.get();
         }
 
         @Override
@@ -207,5 +219,14 @@ public class NewVisitScreen extends FlowPathBase {
             ButterKnife.unbind(this);
         }
 
+        @OnClick(R.id.add_person)
+        public void addPerson() {
+            Flow.get(getView()).set(new AddPersonScreen());
+        }
+
+        @OnClick(R.id.submit)
+        public void score() {
+            Flow.get(getView()).set(new ScoreScreen());
+        }
     }
 }

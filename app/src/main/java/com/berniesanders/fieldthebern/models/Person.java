@@ -27,7 +27,7 @@ import com.google.gson.annotations.SerializedName;
  *     }
  * }
  */
-public class Person extends CanvasData{
+public class Person extends CanvassData {
 
     Integer id; //null if we're creating a new person in the db
     String type = "person";
@@ -147,7 +147,7 @@ public class Person extends CanvasData{
             return this;
         }
 
-        public Attributes canvassResponse(@CanvasResponse.Response final String canvassResponse) {
+        public Attributes canvassResponse(@CanvassResponse.Response final String canvassResponse) {
             this.canvassResponse = canvassResponse;
             return this;
         }

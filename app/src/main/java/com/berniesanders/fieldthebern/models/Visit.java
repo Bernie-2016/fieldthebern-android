@@ -15,13 +15,13 @@ public class Visit {
     /**
      * Mix of ApiAddress and Person objects
      */
-    List<CanvasData> included = new ArrayList<>();
+    List<CanvassData> included = new ArrayList<>();
 
     public Attributes attributes() {
         return this.attributes;
     }
 
-    public List<CanvasData> included() {
+    public List<CanvassData> included() {
         return this.included;
     }
 
@@ -30,7 +30,7 @@ public class Visit {
         return this;
     }
 
-    public Visit included(final List<CanvasData> included) {
+    public Visit included(final List<CanvassData> included) {
         this.included = included;
         return this;
     }

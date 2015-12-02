@@ -166,7 +166,50 @@ public class ApiAddress extends CanvasData {
             return this;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
+            Attributes that = (Attributes) o;
+
+            if (Double.compare(that.longitude, longitude) != 0) return false;
+            if (Double.compare(that.latitude, latitude) != 0) return false;
+            if (street1 != null ? !street1.equals(that.street1) : that.street1 != null)
+                return false;
+            if (street2 != null ? !street2.equals(that.street2) : that.street2 != null)
+                return false;
+            if (city != null ? !city.equals(that.city) : that.city != null) return false;
+            if (state != null ? !state.equals(that.state) : that.state != null) return false;
+            if (zip != null ? !zip.equals(that.zip) : that.zip != null) return false;
+            if (visitedAt != null ? !visitedAt.equals(that.visitedAt) : that.visitedAt != null) {
+                return false;
+            }
+            if (bestCanvassResponse != null ? !bestCanvassResponse.equals(that.bestCanvassResponse) : that.bestCanvassResponse != null) {
+                return false;
+            }
+            return !(lastCanvassResponse != null ? !lastCanvassResponse.equals(that.lastCanvassResponse) : that.lastCanvassResponse != null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result;
+            long temp;
+            temp = Double.doubleToLongBits(longitude);
+            result = (int) (temp ^ (temp >>> 32));
+            temp = Double.doubleToLongBits(latitude);
+            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            result = 31 * result + (street1 != null ? street1.hashCode() : 0);
+            result = 31 * result + (street2 != null ? street2.hashCode() : 0);
+            result = 31 * result + (city != null ? city.hashCode() : 0);
+            result = 31 * result + (state != null ? state.hashCode() : 0);
+            result = 31 * result + (zip != null ? zip.hashCode() : 0);
+            result = 31 * result + (visitedAt != null ? visitedAt.hashCode() : 0);
+            result = 31 * result + (bestCanvassResponse != null ? bestCanvassResponse.hashCode() : 0);
+            result = 31 * result + (lastCanvassResponse != null ? lastCanvassResponse.hashCode() : 0);
+            return result;
+        }
     }
 
     public Long id() {
@@ -205,5 +248,26 @@ public class ApiAddress extends CanvasData {
                 ", type='" + type + '\'' +
                 ", attributes=" + attributes.toString() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ApiAddress that = (ApiAddress) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        return !(attributes != null ? !attributes.equals(that.attributes) : that.attributes != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+        return result;
     }
 }

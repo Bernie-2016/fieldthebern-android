@@ -59,7 +59,7 @@
                     android:layout_height="@dimen/large_button_height"
                     android:background="?attr/selectableItemBackground"
                     android:drawableLeft="@drawable/ic_person_add_white_36dp"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="12dp"
                     android:gravity="left|center_vertical"
                     android:padding="8dp"
                     android:text="@string/add_person"

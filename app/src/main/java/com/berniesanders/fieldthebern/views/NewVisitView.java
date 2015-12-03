@@ -1,5 +1,6 @@
 package com.berniesanders.fieldthebern.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.R;
+import com.berniesanders.fieldthebern.media.PartyIcon;
 import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Visit;
@@ -99,6 +101,7 @@ public class NewVisitView extends RelativeLayout {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void showPerson(Person person) {
         View personRow = LayoutInflater
                 .from(getContext())
@@ -107,7 +110,10 @@ public class NewVisitView extends RelativeLayout {
         TextView personName = (TextView) personRow.findViewById(R.id.person);
         ImageView partyIcon = (ImageView) personRow.findViewById(R.id.party);
         TextView supportLevel = (TextView) personRow.findViewById(R.id.interest);
-        //personRow.findViewById(R.id.edit)
+
+        //personRow.findViewById(R.id.edit) //edit btn
+
+        partyIcon.setImageResource(PartyIcon.get(person.attributes().party()));
 
         personName.setText(
                 person.attributes().firstName()
@@ -116,7 +122,6 @@ public class NewVisitView extends RelativeLayout {
 
         //TODO: canvass response is the machine readable format, this is not correct for i18n
         supportLevel.setText(person.attributes().canvassResponse());
-
 
         personContainer.addView(personRow);
     }

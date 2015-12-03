@@ -106,6 +106,7 @@ public class Person extends CanvassData {
             return this.previouslyParticipated;
         }
 
+        @Party.Affiliation
         public String party() {
             return this.party;
         }

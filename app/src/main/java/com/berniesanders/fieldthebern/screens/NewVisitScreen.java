@@ -136,6 +136,7 @@ public class NewVisitScreen extends FlowPathBase {
             setActionBar();
             initSwitches();
             setSwitchListeners();
+            getView().showPeople(visit);
         }
 
         /**

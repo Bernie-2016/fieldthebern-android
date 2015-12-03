@@ -70,10 +70,25 @@
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/no_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/no_account"
+        android:textAllCaps="false"
+        android:textColor="@color/b_light_blue2"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/no_account"
         android:layout_margin="16dp"
         android:background="@color/dark_blue2"
         />
@@ -82,7 +97,7 @@
         android:id="@+id/login_email"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/no_account"
         android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
         android:drawablePadding="14dp"
@@ -94,5 +109,7 @@
         android:textSize="18sp"
         android:textStyle="normal"
         />
+
+
 
 </com.berniesanders.fieldthebern.views.LoginView>

@@ -111,6 +111,7 @@ public class Person extends CanvassData {
             return this.party;
         }
 
+        @CanvassResponse.Response
         public String canvassResponse() {
             return this.canvassResponse;
         }

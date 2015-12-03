@@ -44,4 +44,36 @@ public class CanvassResponseEvaluator {
             return CanvassResponse.UNKNOWN;
         }
     }
+
+    /**
+     * Returns the user displayable string based off the supplied response
+     *
+     * <item>(select support level)</item>
+     * <item>Strongly for Bernie</item>
+     * <item>Leaning for Bernie</item>
+     * <item>Undecided</item>
+     * <item>Leaning against Bernie</item>
+     * <item>Strongly against Bernie</item>
+     *
+     * TODO better way to do this?!
+     */
+    public static String getText(@CanvassResponse.Response final String response, final String[] textArray) {
+
+        switch (response) {
+            case CanvassResponse.UNKNOWN:
+                return textArray[0];
+            case CanvassResponse.STRONGLY_FOR:
+                return textArray[1];
+            case CanvassResponse.LEANING_FOR:
+                return textArray[2];
+            case CanvassResponse.UNDECIDED:
+                return textArray[3];
+            case CanvassResponse.LEANING_AGAINST:
+                return textArray[4];
+            case CanvassResponse.STRONGLY_AGAINST:
+                return textArray[5];
+            default:
+                throw new IllegalArgumentException("unknown response");
+        }
+    }
 }

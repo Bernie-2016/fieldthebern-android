@@ -13,9 +13,11 @@ import android.widget.TextView;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.media.PartyIcon;
 import com.berniesanders.fieldthebern.models.CanvassData;
+import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
+import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
 
 import javax.inject.Inject;
@@ -121,7 +123,9 @@ public class NewVisitView extends RelativeLayout {
                 + person.attributes().lastName());
 
         //TODO: canvass response is the machine readable format, this is not correct for i18n
-        supportLevel.setText(person.attributes().canvassResponse());
+        supportLevel.setText(CanvassResponseEvaluator
+                .getText(person.attributes().canvassResponse(),
+                        getContext().getResources().getStringArray(R.array.interest)));
 
         personContainer.addView(personRow);
     }

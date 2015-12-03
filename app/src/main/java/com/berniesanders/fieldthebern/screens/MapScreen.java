@@ -7,6 +7,7 @@ import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.ErrorToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.StateConverter;
@@ -232,6 +233,13 @@ public class MapScreen extends FlowPathBase {
 
         @OnClick(R.id.address_btn)
         void onAddAddressClick() {
+            if (address==null) {
+                ErrorToastService
+                        .get(getView())
+                        .showText(getView().getResources().getString(R.string.err_address_not_loaded));
+                return;
+            }
+
             //unfortunate hack for saving state in flow after navigation
             ((MapScreen) Path.get(getView().getContext())).cameraPosition = cameraPosition;
             ((MapScreen) Path.get(getView().getContext())).address = address;

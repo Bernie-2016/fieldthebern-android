@@ -58,7 +58,7 @@
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/add_person"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
+                    android:layout_height="56dp"
                     android:background="?attr/selectableItemBackground"
                     android:drawableLeft="@drawable/ic_person_add_white_24dp"
                     android:drawablePadding="12dp"

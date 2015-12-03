@@ -9,6 +9,8 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.models.Score;
+import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.ScoreView;
 
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import dagger.Provides;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -27,9 +30,13 @@ import timber.log.Timber;
 @Layout(R.layout.screen_score)
 public class ScoreScreen extends FlowPathBase {
 
+    private final VisitResult visitResult;
+
     /**
+     * @param visitResult
      */
-    public ScoreScreen() {
+    public ScoreScreen(VisitResult visitResult) {
+        this.visitResult = visitResult;
     }
 
     /**
@@ -52,23 +59,38 @@ public class ScoreScreen extends FlowPathBase {
 
     @dagger.Module
     class Module {
+
+        private final VisitResult visitResult;
+
+        public Module(VisitResult visitResult) {
+            this.visitResult = visitResult;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public VisitResult provideVisitResult() {
+            return visitResult;
+        }
     }
 
     /**
      */
     @FtbScreenScope
-    @dagger.Component(dependencies = MainComponent.class)
+    @dagger.Component(modules = Module.class, dependencies = MainComponent.class)
     public interface Component {
         void inject(ScoreView t);
+        VisitResult visitResult();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<ScoreView> {
 
+        private final VisitResult visitResult;
         @BindString(R.string.score) String screenTitleString;
 
         @Inject
-        Presenter() {
+        Presenter(VisitResult visitResult) {
+            this.visitResult = visitResult;
         }
 
         @Override
@@ -76,8 +98,14 @@ public class ScoreScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
-            getView().animateScore();
-            getView().animateLabels();
+
+            Score score = visitResult.data().relationships().score();
+            int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
+            getView().animateScore(points);
+            getView().animateLabels(
+                    score.attributes().pointsForKnock(),
+                    score.attributes().pointsForUpdates(),
+                    visitResult.data().relationships().user().getData().attributes().getFirstName()); //looks like swift?
         }
 
 

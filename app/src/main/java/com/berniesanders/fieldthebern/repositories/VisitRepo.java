@@ -85,7 +85,7 @@ public class VisitRepo {
     /**
      *
      */
-    public Observable<VisitResult> submit(final VisitSpec spec) {
+    public Observable<VisitResult> submit() {
         Timber.v("submit()");
 
         Retrofit retrofit = new Retrofit.Builder()

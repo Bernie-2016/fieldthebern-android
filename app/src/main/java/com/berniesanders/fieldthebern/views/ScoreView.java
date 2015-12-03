@@ -3,6 +3,8 @@ package com.berniesanders.fieldthebern.views;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,9 +99,14 @@ public class ScoreView extends RelativeLayout {
         Flow.get(this).setHistory(History.single(new MapScreen()), Flow.Direction.REPLACE);
     }
 
-    public void animateScore() {
+    public void animateScore(int pointTotal) {
 
-        final int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        //final int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        final int[] values = new int[pointTotal+1];
+
+        for(int i=0; i <=pointTotal; i++) {
+            values[i] = i;
+        }
 
         ValueAnimator valueAnimator = ValueAnimator
                 .ofInt(values)
@@ -144,7 +151,14 @@ public class ScoreView extends RelativeLayout {
         valueAnimator.start();
     }
 
-    public void animateLabels() {
+    public void animateLabels(int poinstForKnocking, int pointsForUpdating, String personName) {
+
+        Spanned sp = Html.fromHtml( getResources().getString(R.string.for_knocking, poinstForKnocking));
+        Spanned sp2 = Html.fromHtml( getResources().getString(R.string.for_updating, pointsForUpdating, personName));
+
+        forKnocking.setText(sp);
+        forUpdating.setText(sp2);
+
         forKnocking.setX(forKnocking.getX() + 300);
         forUpdating.setX(forUpdating.getX() + 300);
         //pointsLabel.setX(pointsLabel.getX() - 300);

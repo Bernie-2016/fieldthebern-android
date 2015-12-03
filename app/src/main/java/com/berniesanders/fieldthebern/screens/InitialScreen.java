@@ -28,8 +28,12 @@ public class InitialScreen {
 //Temp commented out logic until login is completed
 
         Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+        String userString = userPref.get();
+        User user = null;
 
-        User user = gson.fromJson(userPref.get(), User.class);
+        if(userString!=null) {
+            user = gson.fromJson(userPref.get(), User.class);
+        }
 
         if (user != null) { // user has registered previously
             Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
@@ -39,13 +43,14 @@ public class InitialScreen {
 
                 if (token.isExpired(System.currentTimeMillis())) {
                     //TODO try to auth with the token?
-                    return new ChooseLoginScreen();
+
+                    return new LoginScreen(user);
                 }
 
                 return new HomeScreen();
             }
 
-            return new ChooseLoginScreen();
+            return new LoginScreen(new User());
         }
 
         return new ChooseSignupScreen();

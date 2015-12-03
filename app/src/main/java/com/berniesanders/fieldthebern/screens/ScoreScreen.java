@@ -46,6 +46,7 @@ public class ScoreScreen extends FlowPathBase {
         return DaggerScoreScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent())
+                .module(new Module(visitResult))
                 .build();
     }
 

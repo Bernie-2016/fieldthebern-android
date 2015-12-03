@@ -151,9 +151,9 @@ public class ScoreView extends RelativeLayout {
         valueAnimator.start();
     }
 
-    public void animateLabels(int poinstForKnocking, int pointsForUpdating, String personName) {
+    public void animateLabels(int pointsForKnocking, int pointsForUpdating, String personName) {
 
-        Spanned sp = Html.fromHtml( getResources().getString(R.string.for_knocking, poinstForKnocking));
+        Spanned sp = Html.fromHtml( getResources().getString(R.string.for_knocking, pointsForKnocking));
         Spanned sp2 = Html.fromHtml( getResources().getString(R.string.for_updating, pointsForUpdating, personName));
 
         forKnocking.setText(sp);

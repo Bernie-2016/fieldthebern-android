@@ -216,6 +216,7 @@ public class MapScreen extends FlowPathBase {
         public void dropView(MapScreenView view) {
             super.dropView(view);
             dropListeners(view);
+            ButterKnife.unbind(this);
         }
 
         @Override

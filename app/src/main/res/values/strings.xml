@@ -3,6 +3,7 @@
     <string name="search_hint">Search Feel The Bern</string>
     <string name="add_address">Add address</string>
     <string name="add_person">Add person</string>
+    <string name="edit">Edit</string>
     <string name="score">Score!</string>
     <string name="points">POINTS</string>
     <string name="back_to_map">Back to map</string>
@@ -53,7 +54,7 @@
     <string name="are_you_sure_address_body">Are you sure the address is correct?\n\n%1$s\n%2$s</string>
     <string name="err_address_not_loaded">Address not loaded yet</string>
 
-
+    <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">
           <item>(select party)</item>
           <item>Democrat</item>
@@ -63,6 +64,7 @@
           <item>Other</item>
     </string-array>
 
+    <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="interest">
         <item>(select support level)</item>
         <item>Strongly for Bernie</item>

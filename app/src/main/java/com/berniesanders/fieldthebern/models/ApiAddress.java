@@ -39,10 +39,12 @@ import com.google.gson.annotations.SerializedName;
  * NOTE: 'best_canvass_response' and 'last_canvass_response' respond with
  * 'not_yet_visited' and 'unknown' respectively when the address hasn't been canvassed previously.
  */
-public class ApiAddress extends CanvasData {
+public class ApiAddress extends CanvassData {
+
+    public static final String TYPE = "address";
 
     Long id; // should be null when sending a new address to the db
-    String type = "address";
+    String type = TYPE;
     Attributes attributes = new Attributes();
 
     @NonNull

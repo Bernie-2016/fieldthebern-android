@@ -49,6 +49,7 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="24sp"
+                android:inputType="textPersonName"
                 />
 
         </android.support.design.widget.TextInputLayout>
@@ -67,6 +68,7 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="24sp"
+                android:inputType="textPersonName"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -92,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:spinnerMode="dialog"
-                android:text="@string/apartment_number"
                 android:textColor="@android:color/white"
                 android:textSize="24sp"
                 />
@@ -125,7 +126,6 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
@@ -134,6 +134,7 @@
         />
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"

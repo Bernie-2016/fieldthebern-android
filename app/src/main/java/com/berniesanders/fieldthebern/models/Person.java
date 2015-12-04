@@ -27,7 +27,9 @@ import com.google.gson.annotations.SerializedName;
  *     }
  * }
  */
-public class Person extends CanvasData{
+public class Person extends CanvassData {
+
+    public static final String TYPE = "person";
 
     Integer id; //null if we're creating a new person in the db
     String type = "person";
@@ -104,10 +106,12 @@ public class Person extends CanvasData{
             return this.previouslyParticipated;
         }
 
+        @Party.Affiliation
         public String party() {
             return this.party;
         }
 
+        @CanvassResponse.Response
         public String canvassResponse() {
             return this.canvassResponse;
         }
@@ -147,7 +151,7 @@ public class Person extends CanvasData{
             return this;
         }
 
-        public Attributes canvassResponse(@CanvasResponse.Response final String canvassResponse) {
+        public Attributes canvassResponse(@CanvassResponse.Response final String canvassResponse) {
             this.canvassResponse = canvassResponse;
             return this;
         }

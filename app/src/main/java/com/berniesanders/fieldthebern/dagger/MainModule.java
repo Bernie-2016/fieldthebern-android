@@ -15,6 +15,7 @@ import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
+import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -103,6 +104,12 @@ public class MainModule {
     @Singleton
     public LocationManager provideLocationManager() {
         return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
+        return new VisitRepo(gson, tokenRepo, rxPrefs, config);
     }
 
 }

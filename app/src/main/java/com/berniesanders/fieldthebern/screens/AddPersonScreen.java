@@ -10,12 +10,14 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.AddPersonView;
 
 import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
@@ -63,16 +65,20 @@ public class AddPersonScreen extends FlowPathBase {
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(AddPersonView t);
+        VisitRepo visitRepo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<AddPersonView> {
-        @BindString(android.R.string.cancel) String cancel;
 
+        private final VisitRepo visitRepo;
+
+        @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.add_person) String addPerson;
 
         @Inject
-        Presenter() {
+        Presenter(VisitRepo visitRepo) {
+            this.visitRepo = visitRepo;
         }
 
         @Override
@@ -110,6 +116,12 @@ public class AddPersonScreen extends FlowPathBase {
         @Override
         public void dropView(AddPersonView view) {
             super.dropView(view);
+        }
+
+        @OnClick(R.id.submit)
+        public void addPerson() {
+            visitRepo.addPerson(getView().getPerson());
+            Flow.get(getView()).goBack();
         }
 
     }

@@ -65,16 +65,21 @@ import java.util.List;
 public class VisitResult {
 
     Data data = new Data();
+    List<Score> included = new ArrayList<>(); // Data for the associated score object.
 
     public Data data() {
         return data;
+    }
+
+    public List<Score> included() {
+        return this.included;
     }
 
     public static class Data {
 
         Relationships relationships = new Relationships();
         Attributes attributes = new Attributes();
-        List<Score> included = new ArrayList<>(); // Data for the associated score object.
+
 
         public Relationships relationships() {
             return this.relationships;
@@ -84,9 +89,6 @@ public class VisitResult {
             return this.attributes;
         }
 
-        public List<Score> included() {
-            return this.included;
-        }
 
 
         public static class Attributes {

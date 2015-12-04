@@ -99,7 +99,7 @@ public class ScoreView extends RelativeLayout {
         Flow.get(this).setHistory(History.single(new MapScreen()), Flow.Direction.REPLACE);
     }
 
-    public void animateScore(int pointTotal) {
+    public void animateScore(final int pointTotal) {
 
         //final int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
         final int[] values = new int[pointTotal+1];
@@ -118,7 +118,6 @@ public class ScoreView extends RelativeLayout {
                         TextView pointstextView1 = (TextView) LayoutInflater
                                 .from(getContext())
                                 .inflate(R.layout.points, pointsContainer, false);
-                        Timber.v("onAnimationUpdate");
                         int val = (int) animation.getAnimatedValue();
                         pointstextView1.setText(String.valueOf(val));
 
@@ -140,7 +139,7 @@ public class ScoreView extends RelativeLayout {
 
                         pointsContainer.addView(pointstextView1);
 
-                        if (val < 15) {
+                        if (val < pointTotal) {
                             ObjectAnimator fadeIn = ObjectAnimator
                                     .ofFloat(pointstextView1, View.ALPHA, 0f, 1f, 0f)
                                     .setDuration(duration/2);

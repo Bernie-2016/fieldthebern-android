@@ -252,7 +252,7 @@ public class NewVisitScreen extends FlowPathBase {
 
             @Override
             public void onNext(VisitResult visitResult) {
-                Flow.get(getView()).set(new ScoreScreen(visitResult));
+                Flow.get(getView()).set(new ScoreScreen(visitResult, visit));
             }
         };
     }

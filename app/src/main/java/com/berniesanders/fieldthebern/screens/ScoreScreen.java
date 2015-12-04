@@ -9,7 +9,9 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Score;
+import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.ScoreView;
@@ -31,12 +33,15 @@ import timber.log.Timber;
 public class ScoreScreen extends FlowPathBase {
 
     private final VisitResult visitResult;
+    private final Visit visit;
 
     /**
      * @param visitResult
+     * @param visit
      */
-    public ScoreScreen(VisitResult visitResult) {
+    public ScoreScreen(VisitResult visitResult, Visit visit) {
         this.visitResult = visitResult;
+        this.visit = visit;
     }
 
     /**
@@ -46,7 +51,7 @@ public class ScoreScreen extends FlowPathBase {
         return DaggerScoreScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent())
-                .module(new Module(visitResult))
+                .module(new Module(visitResult, visit))
                 .build();
     }
 
@@ -62,15 +67,23 @@ public class ScoreScreen extends FlowPathBase {
     class Module {
 
         private final VisitResult visitResult;
+        private final Visit visit;
 
-        public Module(VisitResult visitResult) {
+        public Module(VisitResult visitResult, Visit visit) {
             this.visitResult = visitResult;
+            this.visit = visit;
         }
 
         @Provides
         @FtbScreenScope
         public VisitResult provideVisitResult() {
             return visitResult;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public Visit provideVisit() {
+            return visit;
         }
     }
 
@@ -81,17 +94,20 @@ public class ScoreScreen extends FlowPathBase {
     public interface Component {
         void inject(ScoreView t);
         VisitResult visitResult();
+        Visit visit();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<ScoreView> {
 
         private final VisitResult visitResult;
+        private final Visit visit;
         @BindString(R.string.score) String screenTitleString;
 
         @Inject
-        Presenter(VisitResult visitResult) {
+        Presenter(VisitResult visitResult, Visit visit) {
             this.visitResult = visitResult;
+            this.visit = visit;
         }
 
         @Override
@@ -100,13 +116,16 @@ public class ScoreScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
 
-            Score score = visitResult.data().relationships().score();
+            //TODO This doesn't account for who the canvasser actually talked to, we just grab the first name
+            Person person = (Person) visit.included().get(1);
+
+            Score score = visitResult.included().get(0);
             int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
             getView().animateScore(points);
             getView().animateLabels(
                     score.attributes().pointsForKnock(),
                     score.attributes().pointsForUpdates(),
-                    visitResult.data().relationships().user().getData().attributes().getFirstName()); //looks like swift?
+                    person.attributes().firstName()); //looks like swift?
         }
 
 

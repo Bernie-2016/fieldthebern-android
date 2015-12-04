@@ -5,10 +5,10 @@ import android.os.Bundle;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
-import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
+import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Score;
 import com.berniesanders.fieldthebern.models.Visit;
@@ -116,24 +116,30 @@ public class ScoreScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
 
-            String firstName = null;
-            try {
-                // TODO This doesn't account for who the canvasser actually talked to,
-                // we just grab the first name
-                Person person = (Person) visit.included().get(1);
-                firstName = person.attributes().firstName();
-            } catch (ArrayIndexOutOfBoundsException e) {
-                //this can happen if someone asked us to leave without giving their name
-                Timber.e(e, "no person update found");
-            }
+            //let the gif load a bit
+            getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    String firstName = null;
+                    try {
+                        // TODO This doesn't account for who the canvasser actually talked to,
+                        // we just grab the first name
+                        Person person = (Person) visit.included().get(1);
+                        firstName = person.attributes().firstName();
+                    } catch (IndexOutOfBoundsException e) {
+                        //this can happen if someone asked us to leave without giving their name
+                        Timber.e(e, "no person update found");
+                    }
 
-            Score score = visitResult.included().get(0);
-            int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
-            getView().animateScore(points);
-            getView().animateLabels(
-                    score.attributes().pointsForKnock(),
-                    score.attributes().pointsForUpdates(),
-                    firstName);
+                    Score score = visitResult.included().get(0);
+                    int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
+                    getView().animateScore(points);
+                    getView().animateLabels(
+                            score.attributes().pointsForKnock(),
+                            score.attributes().pointsForUpdates(),
+                            firstName);
+                }
+            });
         }
 
 

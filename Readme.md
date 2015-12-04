@@ -6,8 +6,8 @@ This app under development. The goal is to provide a tool for grassroots organiz
 
 Issue info is provided by [FeelTheBern.org](http://FeelTheBern.org)
 
-[Video of the iOS version](http://cl.ly/113H0T2u350V)  
-
+[Video of the iOS version under development](http://cl.ly/113H0T2u350V)  
+[Video of the Android version under development](https://vid.me/UA6J)  
 
 ##Code architecture
 

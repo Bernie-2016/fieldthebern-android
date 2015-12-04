@@ -13,6 +13,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.Visit;
+import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
@@ -28,7 +29,11 @@ import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -105,6 +110,7 @@ public class NewVisitScreen extends FlowPathBase {
         private final ApiAddress apiAddress;
         private final VisitRepo visitRepo;
         Visit visit;
+        Subscription visitSubscription;
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
@@ -227,7 +233,27 @@ public class NewVisitScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         public void score() {
-            Flow.get(getView()).set(new ScoreScreen());
+            visitSubscription = visitRepo.submit()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(visitResultObserver);
         }
+
+        Observer<VisitResult> visitResultObserver = new Observer<VisitResult>() {
+            @Override
+            public void onCompleted() {
+                Timber.v("visitResultObserver.onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "error submitting visit");
+            }
+
+            @Override
+            public void onNext(VisitResult visitResult) {
+                Flow.get(getView()).set(new ScoreScreen(visitResult, visit));
+            }
+        };
     }
 }

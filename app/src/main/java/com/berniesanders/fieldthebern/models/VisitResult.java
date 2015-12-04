@@ -18,78 +18,42 @@ import java.util.List;
  *
  * // response format
 {
-   data: {
-      attributes: {
-           duration_sec: <duration_in_seconds>,
-           total_points: <total_points>,
-           created_at: <date_and_time_of_creation>
-      },
-      relationships: {
-         // links the visit to the user who created it
-         user: {
-             data: {
-               id: <user_id>,
-               type: 'users'
-           }
-         }
-         // tracks when and in what way the address was updated by the visit
-         address_update: {
-             data: {
-               id: <address_update_id>,
-               type: 'address_updates'
-             }
-         },
-         // tracks the address that was updated
-         address: {
-             data: {
-               id: <address_id>,
-               type: 'addresses'
-             }
-         }
-         // tracks when, in what way and which people were updated by the visit
-         person_updates: {
-             data: [
-                 // once for each updated or created person
-                 {
-                   id: <person_update_id>,
-                   type: 'person_updates'
-                 }
-             ]
-         }
-         // tracks people updated by the visit
-         people: {
-             data: [
-                 // once for each updated or created person
-                 {
-                   id: <person_id>,
-                   type: 'people'
-                 }
-             ],
-         //tracks the associated score
-         score: {
-             data: {
-               id: <score_id>,
-               type: 'scores'
-             }
-           }
-         }
-      },
-      included: [
-         // Data for the associated score object.
-         {
-             id: <score_id>
-             type: 'scores',
-             attributes: {
-                 points_for_updates: <points_for_updates>,
-                 points_for_knock: <points_for_knock>
-             },
-             relationships: {
-                 visit: {
-                     data: { id: <visit_id>, type: 'visits' } }
-                 }
-         }
-      ]
-   }
+	"data":
+	{
+		"id":"116",
+		"type":"visits",
+		"attributes":
+		{
+			"total_points":15.0,
+			"duration_sec":0,
+			"created_at":"2015-12-03T23:39:49.177Z"
+		},
+		"relationships":{
+		"user":{"data":{"id":"42","type":"users"}},
+		"score":{"data":{"id":"79","type":"scores"}},
+		"address_update":{"data":{"id":"89","type":"address_updates"}},
+		"address":{"data":{"id":"56","type":"addresses"}},
+		"person_updates":{"data":[{"id":"85","type":"person_updates"}]},
+		"people":{"data":[{"id":"43","type":"people"}]}}
+	},
+	"included":[
+		{
+			"id":"79",
+			"type":"scores",
+			"attributes":
+			{
+				"points_for_updates":10,
+				"points_for_knock":5
+			},
+			"relationships":
+			{
+				"visit":
+				{
+					"data":{"id":"116","type":"visits"}
+				}
+			}
+		}
+	]
 }
  */
 
@@ -101,16 +65,21 @@ import java.util.List;
 public class VisitResult {
 
     Data data = new Data();
+    List<Score> included = new ArrayList<>(); // Data for the associated score object.
 
     public Data data() {
         return data;
+    }
+
+    public List<Score> included() {
+        return this.included;
     }
 
     public static class Data {
 
         Relationships relationships = new Relationships();
         Attributes attributes = new Attributes();
-        List<Score> included = new ArrayList<>(); // Data for the associated score object.
+
 
         public Relationships relationships() {
             return this.relationships;
@@ -120,9 +89,6 @@ public class VisitResult {
             return this.attributes;
         }
 
-        public List<Score> included() {
-            return this.included;
-        }
 
 
         public static class Attributes {
@@ -134,7 +100,7 @@ public class VisitResult {
             int totalPoints;
 
             //<date_and_time_of_creation>
-            //TODO what format is this?
+            //ISO-8601  2015-12-03T23:19:48.480Z
             @SerializedName("created_at")
             String createdAt;
 
@@ -165,10 +131,10 @@ public class VisitResult {
 
             // tracks when, in what way and which people were updated by the visit
             @SerializedName("person_updates")
-            List<Person> personUpdates;
+            PersonUpdates personUpdates;
 
             // tracks people updated by the visit
-            List<Person> people;
+            PeopleUpdates people;
 
             //tracks the associated score
             Score score;
@@ -185,16 +151,24 @@ public class VisitResult {
                 return this.address;
             }
 
-            public List<Person> personUpdates() {
+            public PersonUpdates personUpdates() {
                 return this.personUpdates;
             }
 
-            public List<Person> people() {
+            public PeopleUpdates people() {
                 return this.people;
             }
 
             public Score score() {
                 return this.score;
+            }
+
+            public static class PersonUpdates {
+                List<Person> data;
+            }
+
+            public static class PeopleUpdates {
+                List<Person> data;
             }
         }
 

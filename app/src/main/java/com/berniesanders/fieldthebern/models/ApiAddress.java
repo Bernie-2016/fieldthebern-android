@@ -41,7 +41,7 @@ import com.google.gson.annotations.SerializedName;
  */
 public class ApiAddress extends CanvassData {
 
-    public static final String TYPE = "address";
+    public static final String TYPE = "addresses";
 
     Long id; // should be null when sending a new address to the db
     String type = TYPE;

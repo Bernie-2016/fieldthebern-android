@@ -29,10 +29,10 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Person extends CanvassData {
 
-    public static final String TYPE = "person";
+    public static final String TYPE = "people";
 
     Integer id; //null if we're creating a new person in the db
-    String type = "person";
+    String type = TYPE;
     Attributes attributes = new Attributes();
 
     public Integer id() {

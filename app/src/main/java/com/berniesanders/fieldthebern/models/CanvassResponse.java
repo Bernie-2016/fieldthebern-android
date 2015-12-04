@@ -32,12 +32,12 @@ public class CanvassResponse {
     //Declare the annotation
     public @interface Response{}
 
-    public static final String UNKNOWN = "Unknown";
-    public static final String ASKED_TO_LEAVE = "Asked to leave";
-    public static final String STRONGLY_FOR = "Strongly for";
-    public static final String LEANING_FOR = "Leaning for";
-    public static final String UNDECIDED = "Undecided";
-    public static final String LEANING_AGAINST = "Leaning against";
-    public static final String STRONGLY_AGAINST = "Strongly against";
+    public static final String UNKNOWN = "unknown";
+    public static final String ASKED_TO_LEAVE = "asked_to_leave";
+    public static final String STRONGLY_FOR = "strongly_for";
+    public static final String LEANING_FOR = "leaning_for";
+    public static final String UNDECIDED = "undecided";
+    public static final String LEANING_AGAINST = "leaning_against";
+    public static final String STRONGLY_AGAINST = "strongly_against";
 
 }

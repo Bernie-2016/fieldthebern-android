@@ -32,6 +32,8 @@ import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -133,6 +135,8 @@ public class MapScreen extends FlowPathBase {
                                             .latitude(cameraPosition.target.latitude)
                                             .longitude(cameraPosition.target.longitude)
                                             .radius(100)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(multiAddressObserver);
             }
         };
@@ -153,6 +157,8 @@ public class MapScreen extends FlowPathBase {
                                                 .city(address.getLocality())
                                                 .state(StateConverter.getStateCode(address.getAdminArea()))
                                                 .zip(address.getPostalCode())))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(singleAddressObserver);
             }
         };
@@ -165,7 +171,7 @@ public class MapScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
-
+                Timber.e(e, "multiAddressObserver onError");
             }
 
             @Override
@@ -183,7 +189,7 @@ public class MapScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
-
+                Timber.e(e, "singleAddressObserver onError");
             }
 
             @Override

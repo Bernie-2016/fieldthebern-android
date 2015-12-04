@@ -19,7 +19,7 @@ public class CanvassDataSerializer implements JsonSerializer<CanvassData> {
     @Override
     public JsonElement serialize(CanvassData src, Type typeOfSrc, JsonSerializationContext context) {
 
-        if ("address".equals(src.type())) {
+        if (ApiAddress.TYPE.equals(src.type())) {
             return context.serialize(src, ApiAddress.class);
         } else {  //("person".equals(type))
             return context.serialize(src, Page.class);

@@ -3,6 +3,8 @@ package com.berniesanders.fieldthebern.views;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,9 +99,14 @@ public class ScoreView extends RelativeLayout {
         Flow.get(this).setHistory(History.single(new MapScreen()), Flow.Direction.REPLACE);
     }
 
-    public void animateScore() {
+    public void animateScore(final int pointTotal) {
 
-        final int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        //final int[] values = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+        final int[] values = new int[pointTotal+1];
+
+        for(int i=0; i <=pointTotal; i++) {
+            values[i] = i;
+        }
 
         ValueAnimator valueAnimator = ValueAnimator
                 .ofInt(values)
@@ -111,7 +118,6 @@ public class ScoreView extends RelativeLayout {
                         TextView pointstextView1 = (TextView) LayoutInflater
                                 .from(getContext())
                                 .inflate(R.layout.points, pointsContainer, false);
-                        Timber.v("onAnimationUpdate");
                         int val = (int) animation.getAnimatedValue();
                         pointstextView1.setText(String.valueOf(val));
 
@@ -133,7 +139,7 @@ public class ScoreView extends RelativeLayout {
 
                         pointsContainer.addView(pointstextView1);
 
-                        if (val < 15) {
+                        if (val < pointTotal) {
                             ObjectAnimator fadeIn = ObjectAnimator
                                     .ofFloat(pointstextView1, View.ALPHA, 0f, 1f, 0f)
                                     .setDuration(duration/2);
@@ -144,16 +150,29 @@ public class ScoreView extends RelativeLayout {
         valueAnimator.start();
     }
 
-    public void animateLabels() {
-        forKnocking.setX(forKnocking.getX() + 300);
-        forUpdating.setX(forUpdating.getX() + 300);
-        //pointsLabel.setX(pointsLabel.getX() - 300);
+
+    /**
+     * Animates the labels.  Pass null for personName if no person was updated.
+     */
+    public void animateLabels(int pointsForKnocking, int pointsForUpdating, String personName) {
+
+        Spanned sp = Html.fromHtml( getResources().getString(R.string.for_knocking, pointsForKnocking));
+        Spanned sp2 = Html.fromHtml( getResources().getString(R.string.for_updating, pointsForUpdating, personName));
+
         forKnocking.setAlpha(0);
         forUpdating.setAlpha(0);
         pointsLabel.setAlpha(0);
 
+        forKnocking.setText(sp);
+        forKnocking.setX(forKnocking.getX() + 300);
         forKnocking.animate().alpha(1).xBy(-300).setDuration(300).setStartDelay(1300).start();
-        forUpdating.animate().alpha(1).xBy(-300).setDuration(300).setStartDelay(1400).start();
+
+        if (personName!=null) {
+            forUpdating.setText(sp2);
+            forUpdating.setX(forUpdating.getX() + 300);
+            forUpdating.animate().alpha(1).xBy(-300).setDuration(300).setStartDelay(1400).start();
+        }
+
         pointsLabel.animate().alpha(1).setDuration(300).setStartDelay(200).start();
     }
 }

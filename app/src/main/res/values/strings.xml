@@ -7,8 +7,8 @@
     <string name="score">Score!</string>
     <string name="points">POINTS</string>
     <string name="back_to_map">Back to map</string>
-    <string name="for_knocking">+5 for knocking</string>
-    <string name="for_updating">+10 for updating %s\'s info</string>
+    <string name="for_knocking"><b>+%d</b> for knocking</string>
+    <string name="for_updating"><b>+%d</b> for updating <b>%s\'s</b> info</string>
     <string name="new_visit">New visit</string>
     <string name="submit_visit_details">Submit visit details</string>
     <string name="start_visit_btn">Start visit</string>

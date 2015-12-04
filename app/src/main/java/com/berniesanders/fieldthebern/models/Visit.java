@@ -10,23 +10,23 @@ import java.util.List;
  */
 public class Visit {
 
-    Attributes attributes = new Attributes();
+    Data data = new Data();
 
     /**
      * Mix of ApiAddress and Person objects
      */
     List<CanvassData> included = new ArrayList<>();
 
-    public Attributes attributes() {
-        return this.attributes;
-    }
-
     public List<CanvassData> included() {
         return this.included;
     }
 
+    public Attributes attributes() {
+        return data.attributes;
+    }
+
     public Visit attributes(final Attributes attributes) {
-        this.attributes = attributes;
+        data.attributes = attributes;
         return this;
     }
 
@@ -37,15 +37,18 @@ public class Visit {
 
 
     public void start() {
-        attributes.startTime = System.currentTimeMillis();
+        data.attributes.startTime = System.currentTimeMillis();
     }
 
     public void stop() {
-        attributes.finishTime = System.currentTimeMillis();
-        attributes.duration((int) ((attributes.finishTime - attributes.startTime)/1000));
+        data.attributes.finishTime = System.currentTimeMillis();
+        data.attributes.duration((int) ((data.attributes.finishTime - data.attributes.startTime)/1000));
     }
 
 
+    public static class Data {
+        Attributes attributes = new Attributes();
+    }
 
     public static class Attributes {
 
@@ -73,8 +76,5 @@ public class Visit {
             this.duration = duration;
             return this;
         }
-
     }
-
-
 }

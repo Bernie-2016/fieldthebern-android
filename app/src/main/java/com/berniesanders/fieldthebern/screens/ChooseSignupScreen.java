@@ -5,15 +5,18 @@ import android.os.Bundle;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.FacebookService;
-import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.FacebookService;
+import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.FacebookUser;
+import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.ChooseSignupView;
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -73,17 +76,20 @@ public class ChooseSignupScreen extends FlowPathBase {
     public interface Component {
         void inject(ChooseSignupView t);
         Gson gson();
+        RxSharedPreferences rxPrefs();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<ChooseSignupView> {
 
         private final Gson gson;
+        private final RxSharedPreferences rxPrefs;
         @BindString(R.string.signup_title) String screenTitleString;
 
         @Inject
-        Presenter(Gson gson) {
+        Presenter(Gson gson, RxSharedPreferences rxPrefs) {
             this.gson = gson;
+            this.rxPrefs = rxPrefs;
         }
 
         @Override
@@ -159,9 +165,15 @@ public class ChooseSignupScreen extends FlowPathBase {
 
         @OnClick(R.id.have_an_account)
         void haveAccount() {
-            Flow.get(getView().getContext()).set(new ChooseLoginScreen());
-        }
 
+            Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+            String userString = userPref.get();
+
+            //if we have any store user info we can start with that
+            User user = (userString == null) ? new User() : gson.fromJson(userString, User.class);
+
+            Flow.get(getView().getContext()).set(new LoginScreen(user));
+        }
 
     }
 }

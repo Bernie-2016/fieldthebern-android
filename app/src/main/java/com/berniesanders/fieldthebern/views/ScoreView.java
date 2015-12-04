@@ -150,23 +150,29 @@ public class ScoreView extends RelativeLayout {
         valueAnimator.start();
     }
 
+
+    /**
+     * Animates the labels.  Pass null for personName if no person was updated.
+     */
     public void animateLabels(int pointsForKnocking, int pointsForUpdating, String personName) {
 
         Spanned sp = Html.fromHtml( getResources().getString(R.string.for_knocking, pointsForKnocking));
         Spanned sp2 = Html.fromHtml( getResources().getString(R.string.for_updating, pointsForUpdating, personName));
 
-        forKnocking.setText(sp);
-        forUpdating.setText(sp2);
-
-        forKnocking.setX(forKnocking.getX() + 300);
-        forUpdating.setX(forUpdating.getX() + 300);
-        //pointsLabel.setX(pointsLabel.getX() - 300);
         forKnocking.setAlpha(0);
         forUpdating.setAlpha(0);
         pointsLabel.setAlpha(0);
 
+        forKnocking.setText(sp);
+        forKnocking.setX(forKnocking.getX() + 300);
         forKnocking.animate().alpha(1).xBy(-300).setDuration(300).setStartDelay(1300).start();
-        forUpdating.animate().alpha(1).xBy(-300).setDuration(300).setStartDelay(1400).start();
+
+        if (personName!=null) {
+            forUpdating.setText(sp2);
+            forUpdating.setX(forUpdating.getX() + 300);
+            forUpdating.animate().alpha(1).xBy(-300).setDuration(300).setStartDelay(1400).start();
+        }
+
         pointsLabel.animate().alpha(1).setDuration(300).setStartDelay(200).start();
     }
 }

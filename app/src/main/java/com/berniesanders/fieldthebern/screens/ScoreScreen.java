@@ -116,8 +116,16 @@ public class ScoreScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
 
-            //TODO This doesn't account for who the canvasser actually talked to, we just grab the first name
-            Person person = (Person) visit.included().get(1);
+            String firstName = null;
+            try {
+                // TODO This doesn't account for who the canvasser actually talked to,
+                // we just grab the first name
+                Person person = (Person) visit.included().get(1);
+                firstName = person.attributes().firstName();
+            } catch (ArrayIndexOutOfBoundsException e) {
+                //this can happen if someone asked us to leave without giving their name
+                Timber.e(e, "no person update found");
+            }
 
             Score score = visitResult.included().get(0);
             int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
@@ -125,7 +133,7 @@ public class ScoreScreen extends FlowPathBase {
             getView().animateLabels(
                     score.attributes().pointsForKnock(),
                     score.attributes().pointsForUpdates(),
-                    person.attributes().firstName()); //looks like swift?
+                    firstName);
         }
 
 

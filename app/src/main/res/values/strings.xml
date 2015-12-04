@@ -51,6 +51,7 @@
     <string name="done_talking">Done talking?</string>
     <string name="are_you_sure_address_correct">Confirm Address</string>
     <string name="are_you_sure_address_body">Are you sure the address is correct?\n\n%1$s\n%2$s</string>
+    <string name="err_address_not_loaded">Address not loaded yet</string>
 
 
     <string-array name="party">

@@ -83,7 +83,6 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/submit"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
@@ -92,6 +91,7 @@
         />
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/back_to_map"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"

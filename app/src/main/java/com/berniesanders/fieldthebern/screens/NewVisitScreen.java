@@ -205,6 +205,7 @@ public class NewVisitScreen extends FlowPathBase {
                                 @Override
                                 public void call() {
                                     Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
+                                    visitRepo.clear();
                                 }
                             });
             ActionBarService
@@ -253,6 +254,7 @@ public class NewVisitScreen extends FlowPathBase {
             @Override
             public void onNext(VisitResult visitResult) {
                 Flow.get(getView()).set(new ScoreScreen(visitResult, visit));
+                visitRepo.clear();
             }
         };
     }

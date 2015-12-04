@@ -20,8 +20,13 @@ import javax.inject.Inject;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dagger.Provides;
+import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -159,7 +164,17 @@ public class ScoreScreen extends FlowPathBase {
         @Override
         public void dropView(ScoreView view) {
             super.dropView(view);
+            ButterKnife.unbind(this);
         }
 
+        @OnClick(R.id.back_to_map)
+        public void backToMap() {
+            getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    Flow.get(getView()).setHistory(History.single(new MapScreen()), Flow.Direction.BACKWARD);
+                }
+            });
+        }
     }
 }

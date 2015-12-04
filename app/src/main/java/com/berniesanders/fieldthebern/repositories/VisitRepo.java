@@ -95,8 +95,15 @@ public class VisitRepo {
                 .client(client)
                 .build();
 
-        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
+        visit.stop(); //stop the timer
 
+
+
+        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
         return endpoint.submit(visit);
+    }
+
+    public void clear() {
+        visit = null;
     }
 }

@@ -55,12 +55,15 @@ public class ApiAddress extends CanvassData {
                         .street2(apartment)
                         .city(address.getLocality())
                         .state(StateConverter.getStateCode(address.getAdminArea()))
-                        .zip(address.getPostalCode()));
+                        .zip(address.getPostalCode())
+                        .latitude(address.getLatitude())
+                        .longitude(address.getLongitude())
+                );
     }
 
     public static class Attributes {
-        double longitude;
-        double latitude;
+        Double longitude;
+        Double latitude;
         @SerializedName("street_1")
         String street1;
         @SerializedName("street_2")
@@ -78,11 +81,11 @@ public class ApiAddress extends CanvassData {
         String lastCanvassResponse;
 
 
-        public double longitude() {
+        public Double longitude() {
             return this.longitude;
         }
 
-        public double latitude() {
+        public Double latitude() {
             return this.latitude;
         }
 
@@ -118,12 +121,12 @@ public class ApiAddress extends CanvassData {
             return this.lastCanvassResponse;
         }
 
-        public Attributes longitude(final double longitude) {
+        public Attributes longitude(final Double longitude) {
             this.longitude = longitude;
             return this;
         }
 
-        public Attributes latitude(final double latitude) {
+        public Attributes latitude(final Double latitude) {
             this.latitude = latitude;
             return this;
         }
@@ -175,8 +178,11 @@ public class ApiAddress extends CanvassData {
 
             Attributes that = (Attributes) o;
 
-            if (Double.compare(that.longitude, longitude) != 0) return false;
-            if (Double.compare(that.latitude, latitude) != 0) return false;
+            if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) {
+                return false;
+            }
+            if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null)
+                return false;
             if (street1 != null ? !street1.equals(that.street1) : that.street1 != null)
                 return false;
             if (street2 != null ? !street2.equals(that.street2) : that.street2 != null)
@@ -196,12 +202,8 @@ public class ApiAddress extends CanvassData {
 
         @Override
         public int hashCode() {
-            int result;
-            long temp;
-            temp = Double.doubleToLongBits(longitude);
-            result = (int) (temp ^ (temp >>> 32));
-            temp = Double.doubleToLongBits(latitude);
-            result = 31 * result + (int) (temp ^ (temp >>> 32));
+            int result = longitude != null ? longitude.hashCode() : 0;
+            result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
             result = 31 * result + (street1 != null ? street1.hashCode() : 0);
             result = 31 * result + (street2 != null ? street2.hashCode() : 0);
             result = 31 * result + (city != null ? city.hashCode() : 0);

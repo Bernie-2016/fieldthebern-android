@@ -9,6 +9,8 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.models.Contact;
+import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.AddPersonView;
@@ -120,7 +122,16 @@ public class AddPersonScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         public void addPerson() {
-            visitRepo.addPerson(getView().getPerson());
+
+            Person testPerson = getView().getPerson();
+//            testPerson.attributes()
+//                    .email("nobody@example.com")
+//                    .preferredContact(Contact.EMAIL)
+//                    .previouslyParticipated(false);
+
+            Person realPerson = getView().getPerson();
+
+            visitRepo.addPerson(realPerson);
             Flow.get(getView()).goBack();
         }
 

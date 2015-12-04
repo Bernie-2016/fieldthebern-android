@@ -25,7 +25,7 @@ public class Contact {
 
     public @interface Method{}
 
-    public static final String EMAIL = "Unknown";
-    public static final String PHONE = "Unaffiliated";
+    public static final String EMAIL = "email";
+    public static final String PHONE = "phone";
 
 }

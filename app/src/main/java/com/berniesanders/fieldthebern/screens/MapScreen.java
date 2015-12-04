@@ -134,7 +134,7 @@ public class MapScreen extends FlowPathBase {
                                     new RequestMultipleAddresses()
                                             .latitude(cameraPosition.target.latitude)
                                             .longitude(cameraPosition.target.longitude)
-                                            .radius(100)))
+                                            .radius(1000)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(multiAddressObserver);

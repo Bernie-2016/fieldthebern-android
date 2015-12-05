@@ -1,7 +1,10 @@
 package com.berniesanders.fieldthebern.media;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
+import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 
 /*
@@ -24,21 +27,21 @@ public class ResponseColor {
      *
      * TODO better way to do this?!
      */
-    public static int getColor(@CanvassResponse.Response final String response) {
+    public static int getColor(@CanvassResponse.Response final String response, Context context) {
 
         switch (response) {
             case CanvassResponse.UNKNOWN:
-                return Color.DKGRAY;
+                return ContextCompat.getColor(context, R.color.bernie_grey);
             case CanvassResponse.STRONGLY_FOR:
-                return Color.BLUE;
+                return ContextCompat.getColor(context, R.color.bernie_dark_blue);
             case CanvassResponse.LEANING_FOR:
-                return Color.CYAN;
+                return ContextCompat.getColor(context, R.color.b_light_blue);
             case CanvassResponse.UNDECIDED:
-                return Color.GREEN;
+                return ContextCompat.getColor(context, R.color.bernie_green);
             case CanvassResponse.LEANING_AGAINST:
-                return Color.MAGENTA;
+                return ContextCompat.getColor(context, R.color.bernie_red);
             case CanvassResponse.STRONGLY_AGAINST:
-                return Color.RED;
+                return ContextCompat.getColor(context, R.color.bernie_red);
             default:
                 return Color.GRAY;
         }

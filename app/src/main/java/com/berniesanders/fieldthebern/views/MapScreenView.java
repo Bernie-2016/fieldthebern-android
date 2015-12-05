@@ -33,6 +33,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -76,6 +77,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     @Bind(R.id.address)
     TextView addressTextView;
 
+    @Bind(R.id.leaning)
+    TextView leaningTextView;
+
     @Bind(R.id.pin_drop)
     ImageView pinDrop;
 
@@ -87,6 +91,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     private OnCameraChange onCameraChangeListener;
     private OnAddressChange onAddressChangeListener;
     private CameraPosition cameraPosition;
+    private Map<String, ApiAddress> markerAddressMap = new HashMap<>();
 
     public MapScreenView(Context context) {
         super(context);
@@ -365,6 +370,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
     public void setAddress(Address address) {
         Timber.v("setAddress: %s", address.toString());
+        leaningTextView.setText("");
         this.address = address;
         addressTextView.setText(address.getAddressLine(0));
         progressBar.setVisibility(View.GONE);
@@ -390,7 +396,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
 
         googleMap.clear();
-
+        markerAddressMap.clear();
 
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_place_white_24dp);
 
@@ -398,18 +404,46 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
             Double lat = apiAddress.attributes().latitude();
             Double lng = apiAddress.attributes().longitude();
+
             if (lat!=null && lng !=null) {
-
                 String lastResponse = apiAddress.attributes().lastCanvassResponse();
-                Bitmap marker = colorBitmap(bmp, ResponseColor.getColor(lastResponse));
+                Bitmap icon = colorBitmap(bmp, ResponseColor.getColor(lastResponse, getContext()));
 
-                googleMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromBitmap(marker))
+                Marker marker = googleMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(icon))
                         .position(new LatLng(lat, lng))
                         .title(lastResponse));
+
+                markerAddressMap.put(marker.getId(), apiAddress );
             }
         }
+
+        googleMap.setOnMarkerClickListener(onMarkerClickListener);
     }
+
+    GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+
+            //stop watching the camera change while the map moves to the maker
+            googleMap.setOnCameraChangeListener(null);
+            cameraSubscription.unsubscribe();
+
+            //set the address manually
+            ApiAddress apiAddress = markerAddressMap.get(marker.getId());
+            setAddress(ApiAddress.to(apiAddress));//TODO we lose apartment info here...?
+            leaningTextView.setText(apiAddress.attributes().lastCanvassResponse());
+
+            //re-enable the camera watch
+            postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    connectCameraObservable(googleMap);
+                }
+            }, 3000);
+            return false;
+        }
+    };
 
     private Bitmap colorBitmap(final Bitmap bm, int color) {
 

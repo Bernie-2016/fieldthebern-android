@@ -14,6 +14,7 @@ import com.berniesanders.fieldthebern.location.StateConverter;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Not to be confused with android.location.Address
@@ -62,6 +63,20 @@ public class ApiAddress extends CanvassData {
                         .latitude(address.getLatitude())
                         .longitude(address.getLongitude())
                 );
+    }
+
+    @NonNull
+    public static Address to(@NonNull ApiAddress apiAddress) {
+
+        Address address = new Address(Locale.US);
+        address.setAddressLine(0, apiAddress.attributes().street1());
+        address.setLocality(apiAddress.attributes().city());
+        address.setAdminArea(apiAddress.attributes().state());
+        address.setPostalCode(apiAddress.attributes().zip());
+        address.setLatitude(apiAddress.attributes().latitude());
+        address.setLongitude(apiAddress.attributes().longitude());
+
+        return address;
     }
 
     public static class Relationships {

@@ -61,7 +61,7 @@ public class CanvassResponseEvaluator {
 
         switch (response) {
             case CanvassResponse.UNKNOWN:
-                return textArray[0];
+                return "unknown"; //TODO we need a string for this....
             case CanvassResponse.STRONGLY_FOR:
                 return textArray[1];
             case CanvassResponse.LEANING_FOR:
@@ -72,6 +72,8 @@ public class CanvassResponseEvaluator {
                 return textArray[4];
             case CanvassResponse.STRONGLY_AGAINST:
                 return textArray[5];
+            case CanvassResponse.ASKED_TO_LEAVE:
+                return "asked to leave"; //TODO we need a string for this....
             default:
                 throw new IllegalArgumentException("unknown response");
         }

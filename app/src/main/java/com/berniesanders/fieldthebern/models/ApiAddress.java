@@ -181,6 +181,7 @@ public class ApiAddress extends CanvassData {
             return this.visitedAt;
         }
 
+        @CanvassResponse.Response
         public String bestCanvassResponse() {
             return this.bestCanvassResponse;
         }

@@ -25,6 +25,7 @@ import com.berniesanders.fieldthebern.media.ResponseColor;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.mortar.HandlesBack;
+import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
 import com.berniesanders.fieldthebern.screens.MapScreen;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -406,13 +407,14 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             Double lng = apiAddress.attributes().longitude();
 
             if (lat!=null && lng !=null) {
-                String lastResponse = apiAddress.attributes().lastCanvassResponse();
+                String lastResponse = apiAddress.attributes().bestCanvassResponse();
                 Bitmap icon = colorBitmap(bmp, ResponseColor.getColor(lastResponse, getContext()));
 
                 Marker marker = googleMap.addMarker(new MarkerOptions()
                         .icon(BitmapDescriptorFactory.fromBitmap(icon))
                         .position(new LatLng(lat, lng))
-                        .title(lastResponse));
+                        .title(CanvassResponseEvaluator
+                                .getText(lastResponse, getResources().getStringArray(R.array.interest))));
 
                 markerAddressMap.put(marker.getId(), apiAddress );
             }
@@ -432,7 +434,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             //set the address manually
             ApiAddress apiAddress = markerAddressMap.get(marker.getId());
             setAddress(ApiAddress.to(apiAddress));//TODO we lose apartment info here...?
-            leaningTextView.setText(apiAddress.attributes().lastCanvassResponse());
+            leaningTextView.setText(CanvassResponseEvaluator.getText(
+                    apiAddress.attributes().bestCanvassResponse(),
+                    getResources().getStringArray(R.array.interest)));
 
             //re-enable the camera watch
             postDelayed(new Runnable() {

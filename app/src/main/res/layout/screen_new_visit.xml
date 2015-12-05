@@ -4,107 +4,13 @@
   -->
 <com.berniesanders.fieldthebern.views.NewVisitView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     tools:background="@color/bernie_dark_blue"
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="72dp"
-        android:orientation="vertical"
-        android:padding="8dp"
-        >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="2dp"
-            android:drawableLeft="@drawable/ic_clipboard"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/new_visit_check_off_and_update"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:padding="4dp"
-            android:text="@string/who_spoken_to"
-            android:textColor="@color/b_light_blue2"
-            android:textSize="16sp"
-            />
-
-        <LinearLayout
-            android:id="@+id/person_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/large_button_height"
-                android:layout_margin="8dp"
-                >
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/add_person"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/ic_person_add_white_24dp"
-                    android:drawablePadding="12dp"
-                    android:gravity="left|center_vertical"
-                    android:padding="8dp"
-                    android:text="@string/add_person"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
-            </FrameLayout>
-
-
-
-
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/no_one_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:singleLine="true"
-            android:text="@string/no_one_home"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            />
-
-        <android.support.v7.widget.SwitchCompat
-            android:id="@+id/asked_to_leave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:singleLine="true"
-            android:text="@string/asked_to_leave"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            />
-
-
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -130,15 +36,117 @@
         />
 
     <TextView
+        android:id="@+id/done_talking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/submit"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/done_talking"
         android:textColor="@color/b_light_blue2"
         android:textSize="16sp"
         />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/done_talking"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="72dp"
+            android:orientation="vertical"
+            android:padding="8dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:drawableLeft="@drawable/ic_clipboard"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:text="@string/new_visit_check_off_and_update"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="4dp"
+                android:text="@string/who_spoken_to"
+                android:textColor="@color/b_light_blue2"
+                android:textSize="16sp"
+                />
+
+            <LinearLayout
+                android:id="@+id/person_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/large_button_height"
+                android:layout_margin="8dp"
+                >
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/add_person"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableLeft="@drawable/ic_person_add_white_24dp"
+                    android:drawablePadding="12dp"
+                    android:gravity="left|center_vertical"
+                    android:padding="8dp"
+                    android:text="@string/add_person"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/dark_blue2"
+                    />
+            </FrameLayout>
+
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/no_one_home"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:singleLine="true"
+                android:text="@string/no_one_home"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/asked_to_leave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:singleLine="true"
+                android:text="@string/asked_to_leave"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                />
+
+
+        </LinearLayout>
+    </ScrollView>
 </com.berniesanders.fieldthebern.views.NewVisitView>

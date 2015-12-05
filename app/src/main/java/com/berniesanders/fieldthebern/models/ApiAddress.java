@@ -13,6 +13,8 @@ import android.support.annotation.Nullable;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
  * Not to be confused with android.location.Address
  *
@@ -46,6 +48,7 @@ public class ApiAddress extends CanvassData {
     Long id; // should be null when sending a new address to the db
     String type = TYPE;
     Attributes attributes = new Attributes();
+    Relationships relationships = new Relationships();//if only life were so easy
 
     @NonNull
     public static ApiAddress from(@NonNull Address address, @Nullable String apartment) {
@@ -59,6 +62,56 @@ public class ApiAddress extends CanvassData {
                         .latitude(address.getLatitude())
                         .longitude(address.getLongitude())
                 );
+    }
+
+    public static class Relationships {
+        @SerializedName("most_supportive_resident")
+        Person mostSupportiveResident;
+        @SerializedName("last_visited_by")
+        User lastVisitedBy;
+
+        public Person mostSupportiveResident() {
+            return this.mostSupportiveResident;
+        }
+
+        public User lastVisitedBy() {
+            return this.lastVisitedBy;
+        }
+
+        public Relationships mostSupportiveResident(final Person mostSupportiveResident) {
+            this.mostSupportiveResident = mostSupportiveResident;
+            return this;
+        }
+
+        public Relationships lastVisitedBy(final User lastVisitedBy) {
+            this.lastVisitedBy = lastVisitedBy;
+            return this;
+        }
+
+        public static class People {
+            List<Person> data;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Relationships that = (Relationships) o;
+
+            if (mostSupportiveResident != null ? !mostSupportiveResident.equals(that.mostSupportiveResident) : that.mostSupportiveResident != null) {
+                return false;
+            }
+            return !(lastVisitedBy != null ? !lastVisitedBy.equals(that.lastVisitedBy) : that.lastVisitedBy != null);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = mostSupportiveResident != null ? mostSupportiveResident.hashCode() : 0;
+            result = 31 * result + (lastVisitedBy != null ? lastVisitedBy.hashCode() : 0);
+            return result;
+        }
     }
 
     public static class Attributes {
@@ -117,6 +170,7 @@ public class ApiAddress extends CanvassData {
             return this.bestCanvassResponse;
         }
 
+        @CanvassResponse.Response
         public String lastCanvassResponse() {
             return this.lastCanvassResponse;
         }
@@ -245,13 +299,13 @@ public class ApiAddress extends CanvassData {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "ApiAddress{" +
-                "id=" + id +
-                ", type='" + type + '\'' +
-                ", attributes=" + attributes.toString() +
-                '}';
+    public Relationships relationships() {
+        return this.relationships;
+    }
+
+    public ApiAddress relationships(final Relationships relationships) {
+        this.relationships = relationships;
+        return this;
     }
 
     @Override
@@ -263,7 +317,10 @@ public class ApiAddress extends CanvassData {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        return !(attributes != null ? !attributes.equals(that.attributes) : that.attributes != null);
+        if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null) {
+            return false;
+        }
+        return !(relationships != null ? !relationships.equals(that.relationships) : that.relationships != null);
 
     }
 
@@ -272,6 +329,7 @@ public class ApiAddress extends CanvassData {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
+        result = 31 * result + (relationships != null ? relationships.hashCode() : 0);
         return result;
     }
 }

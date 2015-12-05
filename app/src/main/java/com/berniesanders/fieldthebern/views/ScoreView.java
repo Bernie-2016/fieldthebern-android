@@ -94,7 +94,7 @@ public class ScoreView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    @OnClick(R.id.submit)
+    @OnClick(R.id.back_to_map)
     public void score() {
         Flow.get(this).setHistory(History.single(new MapScreen()), Flow.Direction.REPLACE);
     }

@@ -2,6 +2,13 @@ package com.berniesanders.fieldthebern.views;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.location.Address;
 import android.location.Location;
 import android.util.AttributeSet;
@@ -14,6 +21,8 @@ import android.widget.TextView;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
+import com.berniesanders.fieldthebern.media.ResponseColor;
+import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.mortar.HandlesBack;
 import com.berniesanders.fieldthebern.screens.MapScreen;
@@ -21,13 +30,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -373,6 +385,41 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
     public void setOnAddressChangeListener(OnAddressChange onAddressChangeListener) {
         this.onAddressChangeListener = onAddressChangeListener;
+    }
+
+    public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
+
+        googleMap.clear();
+
+
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_place_white_24dp);
+
+        for(ApiAddress apiAddress : nearbyAddresses) {
+
+            Double lat = apiAddress.attributes().latitude();
+            Double lng = apiAddress.attributes().longitude();
+            if (lat!=null && lng !=null) {
+
+                String lastResponse = apiAddress.attributes().lastCanvassResponse();
+                Bitmap marker = colorBitmap(bmp, ResponseColor.getColor(lastResponse));
+
+                googleMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(marker))
+                        .position(new LatLng(lat, lng))
+                        .title(lastResponse));
+            }
+        }
+    }
+
+    private Bitmap colorBitmap(final Bitmap bm, int color) {
+
+        Paint paint = new Paint();
+        ColorFilter filter = new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN);
+        paint.setColorFilter(filter);
+        Bitmap copiedBitmap = bm.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(copiedBitmap);
+        canvas.drawBitmap(bm, 0, 0, paint);
+        return copiedBitmap;
     }
 
     public interface OnCameraChange {

@@ -14,6 +14,7 @@ import java.lang.annotation.RetentionPolicy;
 
 public class CanvassResponse {
 
+
     // list of accepted constants
     // 'Unknown'|'Asked to leave'|'Strongly for'|'Leaning for'|
     // 'Undecided'|'Leaning against'|'Strongly against'
@@ -24,7 +25,8 @@ public class CanvassResponse {
             LEANING_FOR,
             UNDECIDED,
             LEANING_AGAINST,
-            STRONGLY_AGAINST
+            STRONGLY_AGAINST,
+            NO_ONE_HOME
     })
 
     @Retention(RetentionPolicy.SOURCE)
@@ -39,5 +41,6 @@ public class CanvassResponse {
     public static final String UNDECIDED = "undecided";
     public static final String LEANING_AGAINST = "leaning_against";
     public static final String STRONGLY_AGAINST = "strongly_against";
+    public static final String NO_ONE_HOME = "not_home";
 
 }

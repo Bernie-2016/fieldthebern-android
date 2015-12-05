@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatSpinner;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
+import com.berniesanders.fieldthebern.models.Contact;
 import com.berniesanders.fieldthebern.models.Party;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
@@ -20,6 +22,8 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 /**
@@ -33,12 +37,27 @@ public class AddPersonView extends RelativeLayout {
 
     @Bind(R.id.party)
     AppCompatSpinner partySpinner;
+
     @Bind(R.id.interest)
     AppCompatSpinner interestSpinner;
+
     @Bind(R.id.first_name)
     EditText firstNameEditText;
+
     @Bind(R.id.last_name)
     EditText lastNameEditText;
+
+    @Bind(R.id.email)
+    EditText emailEditText;
+
+    @Bind(R.id.phone)
+    EditText phoneEditText;
+
+    @Bind(R.id.phone_checkbox)
+    CheckBox phoneCheckBox;
+
+    @Bind(R.id.email_checkbox)
+    CheckBox emailCheckBox;
 
     public AddPersonView(Context context) {
         super(context);
@@ -109,7 +128,8 @@ public class AddPersonView extends RelativeLayout {
     }
 
     public boolean isValid() {
-        return true;
+        //bit of half baked validation
+        return firstNameEditText.getText() != null;
     }
 
     public Person getPerson() {
@@ -120,9 +140,25 @@ public class AddPersonView extends RelativeLayout {
                 .firstName(firstNameEditText.getText().toString());
 
         if (lastNameEditText.getText() != null) {
-            person.attributes()
-                    .lastName(lastNameEditText.getText().toString());
+            person.attributes().lastName(lastNameEditText.getText().toString());
         }
+
+        if (phoneEditText.getText() != null) {
+            person.attributes().phone(phoneEditText.getText().toString());
+
+            if(phoneCheckBox.isChecked()) {
+                person.attributes().preferredContact(Contact.PHONE);
+            }
+        }
+
+        if (emailEditText.getText() != null) {
+            person.attributes().email(emailEditText.getText().toString());
+
+            if(emailCheckBox.isChecked()) {
+                person.attributes().preferredContact(Contact.EMAIL);
+            }
+        }
+        
         return person;
     }
 
@@ -138,5 +174,21 @@ public class AddPersonView extends RelativeLayout {
         String selectedItem = (String) partySpinner.getSelectedItem();
         String[] interest = getContext().getResources().getStringArray(R.array.party);
         return PartyEvaluator.getParty(selectedItem, interest);
+    }
+
+    @OnCheckedChanged(R.id.email_checkbox)
+    void onEmailChecked(boolean checked) {
+
+        if(checked) {
+            phoneCheckBox.setChecked(false);
+        }
+
+    }
+
+    @OnCheckedChanged(R.id.email_checkbox)
+    void onPhoneChecked(boolean checked) {
+        if(checked) {
+            emailCheckBox.setChecked(false);
+        }
     }
 }

@@ -12,6 +12,7 @@ import com.berniesanders.fieldthebern.views.ExampleView;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import dagger.Provides;
 import mortar.ViewPresenter;
 import timber.log.Timber;
@@ -127,6 +128,7 @@ public class ExampleScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
+            ButterKnife.bind(this, getView());
         }
 
 //        void setActionBar() {
@@ -158,6 +160,7 @@ public class ExampleScreen extends FlowPathBase {
         @Override
         public void dropView(ExampleView view) {
             super.dropView(view);
+            ButterKnife.unbind(this);
         }
 
     }

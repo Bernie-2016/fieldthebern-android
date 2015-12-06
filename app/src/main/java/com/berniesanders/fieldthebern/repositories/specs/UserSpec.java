@@ -9,6 +9,7 @@ import com.berniesanders.fieldthebern.models.User;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Headers;
+import retrofit.http.PATCH;
 import retrofit.http.POST;
 import retrofit.http.Path;
 import rx.Observable;
@@ -53,8 +54,8 @@ public class UserSpec {
         Observable<User> create(@Body CreateUserRequest createUserRequest);
 
         @Headers({"Content-Type:application/json"})
-        @POST("users/me")
-        Observable<User> update();
+        @PATCH("users/me")
+        Observable<User> update(@Body CreateUserRequest createUserRequest);
 
         @GET("users/{id}")
         Observable<User> get(@Path("id") int id);

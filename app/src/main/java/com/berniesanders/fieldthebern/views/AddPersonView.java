@@ -158,7 +158,7 @@ public class AddPersonView extends RelativeLayout {
                 person.attributes().preferredContact(Contact.EMAIL);
             }
         }
-        
+
         return person;
     }
 
@@ -185,7 +185,7 @@ public class AddPersonView extends RelativeLayout {
 
     }
 
-    @OnCheckedChanged(R.id.email_checkbox)
+    @OnCheckedChanged(R.id.phone_checkbox)
     void onPhoneChecked(boolean checked) {
         if(checked) {
             emailCheckBox.setChecked(false);

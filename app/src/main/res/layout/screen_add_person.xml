@@ -12,33 +12,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/add_person"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        />
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/submit"
         >
 
 
@@ -66,6 +44,7 @@
                 android:textSize="16sp"
                 />
 
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -80,7 +59,7 @@
                     android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@color/b_light_blue2"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -99,7 +78,7 @@
                     android:singleLine="true"
                     android:textColor="@android:color/white"
                     android:textColorHint="@color/b_light_blue2"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -144,7 +123,7 @@
                         android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textColorHint="@color/b_light_blue2"
-                        android:textSize="24sp"
+                        android:textSize="18sp"
                         />
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
@@ -179,16 +158,10 @@
                         android:singleLine="true"
                         android:textColor="@android:color/white"
                         android:textColorHint="@color/b_light_blue2"
-                        android:textSize="24sp"
+                        android:textSize="18sp"
                         />
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
-
-
-
-
-
-
 
 
             <TextView
@@ -214,7 +187,7 @@
                     android:singleLine="true"
                     android:spinnerMode="dialog"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     />
             </FrameLayout>
 
@@ -243,6 +216,31 @@
                     android:text="@string/how_interested_in_bernie"
                     />
             </FrameLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_button_height"
+                android:background="@color/dark_blue2"
+                />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/submit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_button_height"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="@string/add_person"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                />
+            </FrameLayout>
+
         </LinearLayout>
     </ScrollView>
 

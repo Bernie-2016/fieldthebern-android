@@ -14,11 +14,13 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.views.NavigationView;
+import com.berniesanders.fieldthebern.views.ProfileView;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import flow.Flow;
 import mortar.ViewPresenter;
 import timber.log.Timber;
@@ -153,5 +155,9 @@ public class NavigationScreen extends FlowPathBase {
             drawerListView=null;
         }
 
+        @OnClick(R.id.drawer_profile)
+        void onProfileClicked() {
+            Flow.get(getView().getContext()).set(new ProfileScreen(""));
+        }
     }
 }

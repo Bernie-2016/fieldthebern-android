@@ -77,5 +77,4 @@ public class NavigationView extends LinearLayout {
         super.onDetachedFromWindow();
         presenter.dropView(this);
     }
-
 }

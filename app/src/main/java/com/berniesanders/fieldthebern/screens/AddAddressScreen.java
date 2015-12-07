@@ -204,7 +204,7 @@ public class AddAddressScreen extends FlowPathBase {
                                             .city(address.getLocality())
                                             .state(StateConverter.getStateCode(address.getAdminArea()))
                                             .zip(address.getPostalCode())))
-                    .observeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(singleAddressObserver);
         }

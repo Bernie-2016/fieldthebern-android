@@ -46,7 +46,12 @@
                 android:gravity="center_horizontal"
                 android:layout_gravity="center"
                 />
-
+            <LinearLayout
+                android:id="@+id/person_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                />
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="64dp"
@@ -58,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/ic_person_add_white_36dp"
+                    android:drawableLeft="@drawable/ic_person_add_white_24dp"
                     android:drawablePadding="8dp"
                     android:gravity="left|center_vertical"
                     android:padding="8dp"

@@ -7,6 +7,7 @@ import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.ErrorToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.StateConverter;
@@ -31,6 +32,8 @@ import mortar.MortarScope;
 import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -131,7 +134,9 @@ public class MapScreen extends FlowPathBase {
                                     new RequestMultipleAddresses()
                                             .latitude(cameraPosition.target.latitude)
                                             .longitude(cameraPosition.target.longitude)
-                                            .radius(100)))
+                                            .radius(1000)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(multiAddressObserver);
             }
         };
@@ -152,6 +157,8 @@ public class MapScreen extends FlowPathBase {
                                                 .city(address.getLocality())
                                                 .state(StateConverter.getStateCode(address.getAdminArea()))
                                                 .zip(address.getPostalCode())))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(singleAddressObserver);
             }
         };
@@ -164,7 +171,7 @@ public class MapScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
-
+                Timber.e(e, "multiAddressObserver onError");
             }
 
             @Override
@@ -182,7 +189,7 @@ public class MapScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
-
+                Timber.e(e, "singleAddressObserver onError");
             }
 
             @Override
@@ -216,6 +223,7 @@ public class MapScreen extends FlowPathBase {
         public void dropView(MapScreenView view) {
             super.dropView(view);
             dropListeners(view);
+            ButterKnife.unbind(this);
         }
 
         @Override
@@ -231,6 +239,13 @@ public class MapScreen extends FlowPathBase {
 
         @OnClick(R.id.address_btn)
         void onAddAddressClick() {
+            if (address==null) {
+                ErrorToastService
+                        .get(getView())
+                        .showText(getView().getResources().getString(R.string.err_address_not_loaded));
+                return;
+            }
+
             //unfortunate hack for saving state in flow after navigation
             ((MapScreen) Path.get(getView().getContext())).cameraPosition = cameraPosition;
             ((MapScreen) Path.get(getView().getContext())).address = address;

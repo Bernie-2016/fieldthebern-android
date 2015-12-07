@@ -15,6 +15,7 @@ import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
+import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.screens.InitialScreen;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
@@ -56,4 +57,5 @@ public interface MainComponent {
     LocationController locationController();
     ProgressDialogController progressDialogController();
     AddressRepo addressRepo();
+    VisitRepo visitRepo();
 }

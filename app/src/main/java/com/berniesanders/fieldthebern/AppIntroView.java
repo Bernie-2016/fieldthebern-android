@@ -4,31 +4,31 @@ package com.berniesanders.fieldthebern;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.adapters.CustomPagerAdapter;
+import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
+import com.berniesanders.fieldthebern.screens.LoginScreen;
+import com.berniesanders.fieldthebern.screens.MapScreen;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import flow.Flow;
+import flow.History;
 import me.relex.circleindicator.CircleIndicator;
 
-/**
- * Example mortar view.
- * Change what it extends as needed. Any View/Layout type is fine to extend
- */
 public class AppIntroView extends FrameLayout {
 
     @Bind(R.id.viewpager)
     ViewPager viewPager;
     @Bind(R.id.circleIndicator)
     CircleIndicator circleIndicator;
-    /**
-     * Make sure you are pointing at the correct presenter type
-     * YourScreen.Presenter
-     */
+
     @Inject
     AppIntroScreen.Presenter presenter;
 
@@ -47,11 +47,6 @@ public class AppIntroView extends FrameLayout {
         injectSelf(context);
     }
 
-
-    /**
-     * This is how the presenter is injected on to this view.
-     * Important to note component type is how the DaggerService finds the right component
-     */
     private void injectSelf(Context context) {
         if (isInEditMode()) {
             return;
@@ -80,5 +75,9 @@ public class AppIntroView extends FrameLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+    }
+    @OnClick(R.id.doneButton)
+    public void done() {
+        Flow.get(this).setHistory(History.single(new LoginScreen(new User())), Flow.Direction.REPLACE);
     }
 }

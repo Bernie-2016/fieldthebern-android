@@ -6,6 +6,8 @@ import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
+import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
+import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
@@ -44,7 +46,14 @@ public class UserRepo {
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
+        client.interceptors().add(new AddTokenInterceptor(tokenRepo));
+        client.interceptors().add(loggingInterceptor);
+        client.setAuthenticator(new ApiAuthenticator(tokenRepo));
     }
 
     /**

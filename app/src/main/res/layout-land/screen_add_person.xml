@@ -60,6 +60,7 @@
                         android:textColor="@android:color/white"
                         android:textColorHint="@color/b_light_blue2"
                         android:textSize="24sp"
+                        android:inputType="textPersonName|textCapWords"
                         />
 
                 </android.support.design.widget.TextInputLayout>
@@ -78,6 +79,7 @@
                         android:textColor="@android:color/white"
                         android:textColorHint="@color/b_light_blue2"
                         android:textSize="24sp"
+                        android:inputType="textPersonName|textCapWords"
                         />
                 </android.support.design.widget.TextInputLayout>
                 </LinearLayout>

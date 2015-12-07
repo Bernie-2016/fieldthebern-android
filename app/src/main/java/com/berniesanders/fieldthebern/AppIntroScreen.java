@@ -3,6 +3,8 @@ package com.berniesanders.fieldthebern;
 import android.os.Bundle;
 
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
@@ -14,24 +16,11 @@ import mortar.ViewPresenter;
 import timber.log.Timber;
 
 
-/**
- * Example for creating new Mortar Screen that helps explain how it all works.
- * Set the @Layout annotation to the resource id of the layout for the screen
- */
 @Layout(R.layout.app_intro)
 public class AppIntroScreen extends FlowPathBase {
 
     private final String someData;
 
-    /**
-     * Constructor called by Flow throughout the app
-     *
-     * Example:
-     * Flow.get(context).set(new ExampleScreen("Some Data To Pass");
-     *
-     * Note:
-     * Generally common types like "String" are not injected because injection works based on type
-     */
     public AppIntroScreen(String someData) {
         this.someData = someData;
     }
@@ -93,10 +82,6 @@ public class AppIntroScreen extends FlowPathBase {
          */
         void inject(AppIntroView t);
 
-        // Expose anything you want injected to the presenter here
-        // such as Gson from the MainComponent
-
-        // Gson exposeGson();
     }
 
     @FtbScreenScope
@@ -125,18 +110,18 @@ public class AppIntroScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
+            setActionBar();
         }
 
-//        void setActionBar() {
-//            ActionBarController.MenuAction menu =
-//                    new ActionBarController
-//                            .MenuAction()
-//                            .setIsSearch();
-//            ActionBarService
-//                    .getActionbarController(getView())
-//                    .setMainImage(null)
-//                    .setConfig(new ActionBarController.Config("actionbar title", menu));
-//        }
+        void setActionBar() {
+            ActionBarService
+                    .getActionbarController(getView())
+                    .showToolbar()
+                    .closeAppbar()
+                    .lockDrawer()
+                    .setMainImage(null)
+                    .setConfig(new ActionBarController.Config(someInjectedData, null));
+        }
 
         /**
          * Called on rotation only

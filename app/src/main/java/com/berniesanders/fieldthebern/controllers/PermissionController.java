@@ -57,8 +57,9 @@ public class PermissionController extends Presenter<PermissionController.Activit
 
 
 
-    public void requestPermission(Action0 onComplete) {
-        this.onComplete = onComplete;
+    public void requestPermission() {
+        //Action0 onComplete
+        //this.onComplete = onComplete;
         if ( Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
@@ -74,7 +75,8 @@ public class PermissionController extends Presenter<PermissionController.Activit
      *                     android.content.pm.PackageManager.PERMISSION_DENIED.
      */
     public void onResult(int reqCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        onComplete.call();
+        //onComplete.call();
+        Timber.v("permission result...");
     }
 
     /**

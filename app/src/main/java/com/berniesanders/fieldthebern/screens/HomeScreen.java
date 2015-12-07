@@ -84,16 +84,7 @@ public class HomeScreen extends FlowPathBase {
 
             PermissionService
                     .get(getView())
-                    .requestPermission(new Action0() {
-                @Override
-                public void call() {
-                    Toast.makeText(
-                            getView().getContext(),
-                            "permission callback",
-                            Toast.LENGTH_SHORT)
-                            .show();
-                }
-            });
+                    .requestPermission();
         }
 
         /**

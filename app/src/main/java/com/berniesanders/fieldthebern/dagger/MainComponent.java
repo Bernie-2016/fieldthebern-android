@@ -8,6 +8,7 @@ import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.ErrorToastController;
 import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.LocationController;
+import com.berniesanders.fieldthebern.controllers.PermissionController;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogController;
 import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
@@ -33,7 +34,8 @@ import dagger.Component;
             DialogController.DialogModule.class,
             FacebookController.FacebookModule.class,
             ProgressDialogController.ProgressDialogModule.class,
-            LocationController.LocationModule.class
+            LocationController.LocationModule.class,
+            PermissionController.PermissionModule.class
         }
 )
 public interface MainComponent {

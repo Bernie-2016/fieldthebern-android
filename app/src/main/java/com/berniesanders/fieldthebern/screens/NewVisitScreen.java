@@ -12,6 +12,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
@@ -109,7 +110,6 @@ public class NewVisitScreen extends FlowPathBase {
 
         private final ApiAddress apiAddress;
         private final VisitRepo visitRepo;
-        Visit visit;
         Subscription visitSubscription;
 
         @BindString(android.R.string.cancel) String cancel;
@@ -132,7 +132,7 @@ public class NewVisitScreen extends FlowPathBase {
             if (!visitRepo.inProgress()) {
                 visitRepo.start(apiAddress);
             }
-            visit = visitRepo.get();
+
         }
 
         @Override
@@ -142,7 +142,7 @@ public class NewVisitScreen extends FlowPathBase {
             setActionBar();
             initSwitches();
             setSwitchListeners();
-            getView().showPeople(visit);
+            getView().showPeople(visitRepo.get());
         }
 
         /**
@@ -234,6 +234,17 @@ public class NewVisitScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         public void score() {
+
+            if(noOneHome) {
+                ((ApiAddress) visitRepo.get().included().get(0))
+                        .attributes()
+                        .bestCanvassResponse(CanvassResponse.NO_ONE_HOME);
+            } else if(askedToLeave) {
+                ((ApiAddress) visitRepo.get().included().get(0))
+                        .attributes()
+                        .bestCanvassResponse(CanvassResponse.ASKED_TO_LEAVE);
+            }
+
             visitSubscription = visitRepo.submit()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -253,7 +264,7 @@ public class NewVisitScreen extends FlowPathBase {
 
             @Override
             public void onNext(VisitResult visitResult) {
-                Flow.get(getView()).set(new ScoreScreen(visitResult, visit));
+                Flow.get(getView()).set(new ScoreScreen(visitResult, visitRepo.get()));
                 visitRepo.clear();
             }
         };

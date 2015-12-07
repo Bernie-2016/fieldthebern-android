@@ -28,6 +28,8 @@
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="preferred_contact">Prefer</string>
     <string name="password">Password</string>
     <string name="login_title">Login</string>
     <string name="signup_title">Sign up</string>

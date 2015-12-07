@@ -63,7 +63,7 @@ public class FTBApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-//        Bugsnag.init(this);
+        Bugsnag.init(this);
         component = DaggerMainComponent.builder()
                 .mainModule(new MainModule(getApplicationContext()))
                 .actionBarModule(new ActionBarController.ActionBarModule())

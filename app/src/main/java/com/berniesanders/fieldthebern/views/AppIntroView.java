@@ -1,18 +1,16 @@
-package com.berniesanders.fieldthebern;
+package com.berniesanders.fieldthebern.views;
 
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
+import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.CustomPagerAdapter;
-import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
+import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.screens.ChooseSignupScreen;
-import com.berniesanders.fieldthebern.screens.LoginScreen;
-import com.berniesanders.fieldthebern.screens.MapScreen;
 
 import javax.inject.Inject;
 

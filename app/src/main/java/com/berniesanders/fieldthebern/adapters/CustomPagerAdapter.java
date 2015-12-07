@@ -10,27 +10,27 @@ import com.berniesanders.fieldthebern.R;
 
 public class CustomPagerAdapter extends PagerAdapter {
 
-    private Context mContext;
+    private Context context;
 
     public CustomPagerAdapter(Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public Object instantiateItem(ViewGroup collection, int position) {
 
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(context);
         ViewGroup layout = null;
 
         switch (position) {
             case 0:
-                layout = (ViewGroup) inflater.inflate(R.layout.app_into_page_1, collection, false);
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_1, collection, false);
                 break;
             case 1:
-                layout = (ViewGroup) inflater.inflate(R.layout.app_into_page_2, collection, false);
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_2, collection, false);
                 break;
             case 2:
-                layout = (ViewGroup) inflater.inflate(R.layout.app_into_page_3, collection, false);
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_3, collection, false);
                 break;
         }
 

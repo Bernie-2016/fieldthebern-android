@@ -1,6 +1,5 @@
 package com.berniesanders.fieldthebern.screens;
 
-import com.berniesanders.fieldthebern.AppIntroScreen;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.f2prateek.rx.preferences.Preference;

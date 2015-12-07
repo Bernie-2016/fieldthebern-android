@@ -2,7 +2,7 @@ package com.berniesanders.fieldthebern.dagger;
 
 import android.content.Context;
 
-import com.berniesanders.fieldthebern.AppIntroScreen;
+import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.MainActivity;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.DialogController;

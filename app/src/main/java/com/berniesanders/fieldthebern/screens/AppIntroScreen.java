@@ -1,7 +1,10 @@
-package com.berniesanders.fieldthebern;
+package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 
+import com.berniesanders.fieldthebern.views.AppIntroView;
+import com.berniesanders.fieldthebern.FTBApplication;
+import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;

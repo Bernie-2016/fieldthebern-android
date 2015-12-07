@@ -42,8 +42,12 @@ public class ResponseColor {
                 return ContextCompat.getColor(context, R.color.bernie_red);
             case CanvassResponse.STRONGLY_AGAINST:
                 return ContextCompat.getColor(context, R.color.bernie_red);
+            case CanvassResponse.ASKED_TO_LEAVE:
+                return ContextCompat.getColor(context, R.color.bernie_red);
+            case CanvassResponse.NO_ONE_HOME:
+                return ContextCompat.getColor(context, R.color.bernie_grey);
             default:
-                return Color.GRAY;
+                return Color.WHITE;
         }
     }
 }

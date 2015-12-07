@@ -74,6 +74,8 @@ public class CanvassResponseEvaluator {
                 return textArray[5];
             case CanvassResponse.ASKED_TO_LEAVE:
                 return "asked to leave"; //TODO we need a string for this....
+            case CanvassResponse.NO_ONE_HOME:
+                return "No one home"; //TODO we need a string for this....
             default:
                 throw new IllegalArgumentException("unknown response");
         }

@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity
     LocationController locationController;
 
     @Inject
-    ProgressDialogController progessDialogController;
+    ProgressDialogController progressDialogController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity
                     .withService(DialogService.NAME, dialogController)
                     .withService(FacebookService.NAME, facebookController)
                     .withService(LocationService.NAME, locationController)
-                    .withService(ProgressDialogService.NAME, progessDialogController)
+                    .withService(ProgressDialogService.NAME, progressDialogController)
                     .build(getScopeName());
         }
     }

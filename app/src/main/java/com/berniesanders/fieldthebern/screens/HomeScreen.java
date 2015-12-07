@@ -1,9 +1,11 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
@@ -17,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
 import mortar.ViewPresenter;
+import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -78,6 +81,19 @@ public class HomeScreen extends FlowPathBase {
                     .closeAppbar()
                     .unlockDrawer()
                     .setConfig(new ActionBarController.Config(screenTitle, null));
+
+            PermissionService
+                    .get(getView())
+                    .requestPermission(new Action0() {
+                @Override
+                public void call() {
+                    Toast.makeText(
+                            getView().getContext(),
+                            "permission callback",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
         }
 
         /**

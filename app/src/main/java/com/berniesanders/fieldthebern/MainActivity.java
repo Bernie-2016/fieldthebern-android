@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.view.GravityCompat;
@@ -37,6 +38,8 @@ import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.FacebookService;
 import com.berniesanders.fieldthebern.controllers.LocationController;
 import com.berniesanders.fieldthebern.controllers.LocationService;
+import com.berniesanders.fieldthebern.controllers.PermissionController;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogController;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.dagger.FtbActivityScope;
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarController.Activity,
         DialogController.Activity,
         FacebookController.Activity,
+        PermissionController.Activity,
         Flow.Dispatcher {
 
     private MortarScope activityScope;
@@ -139,6 +143,9 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     ProgressDialogController progressDialogController;
+
+    @Inject
+    PermissionController permissionController;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -212,6 +219,7 @@ public class MainActivity extends AppCompatActivity
         dialogController.takeView(this);
         actionBarController.takeView(this);
         facebookController.takeView(this);
+        permissionController.takeView(this);
     }
 
     @Override
@@ -219,7 +227,15 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         facebookController.onActivityResult(requestCode, resultCode, data);
     }
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        permissionController.onResult(requestCode, permissions, grantResults);
 
+    }
     private void setupDrawerToggle() {
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.setDrawerListener(drawerToggle);
@@ -243,6 +259,7 @@ public class MainActivity extends AppCompatActivity
                     .withService(FacebookService.NAME, facebookController)
                     .withService(LocationService.NAME, locationController)
                     .withService(ProgressDialogService.NAME, progressDialogController)
+                    .withService(PermissionService.NAME, permissionController)
                     .build(getScopeName());
         }
     }
@@ -285,6 +302,7 @@ public class MainActivity extends AppCompatActivity
         actionBarController.dropView(this);
         dialogController.dropView(this);
         facebookController.dropView(this);
+        permissionController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
         if (isFinishing() && activityScope != null) {

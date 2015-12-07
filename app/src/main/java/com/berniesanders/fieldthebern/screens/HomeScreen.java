@@ -1,14 +1,15 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.PermissionService;
-import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
+import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.views.HomeView;
 
@@ -19,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
 import mortar.ViewPresenter;
-import rx.functions.Action0;
 import timber.log.Timber;
 
 /**
@@ -105,7 +105,21 @@ public class HomeScreen extends FlowPathBase {
 
         @OnClick(R.id.screen_home_canvass)
         void onCanvassClicked() {
-            Flow.get(getView().getContext()).set(new MapScreen());
+
+            if (PermissionService.get(getView()).isGranted()) {
+                Flow.get(getView().getContext()).set(new MapScreen());
+            } else {
+                // Display a SnackBar with an explanation and a button to trigger the request.
+                Snackbar.make(getView(), R.string.permission_contacts_rationale,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(android.R.string.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                PermissionService.get(getView()).requestPermission();
+                            }
+                        })
+                        .show();
+            }
         }
 
         @OnClick(R.id.screen_home_issues)

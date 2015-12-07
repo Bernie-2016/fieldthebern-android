@@ -55,15 +55,21 @@ public class PermissionController extends Presenter<PermissionController.Activit
         super.dropView(view);
     }
 
+    public boolean isGranted() {
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
+
+            return false;
+        }
+        return true;
+    }
 
 
     public void requestPermission() {
         //Action0 onComplete
         //this.onComplete = onComplete;
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
-
+        if (!isGranted()) {
             String[] permissions = {ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
             ActivityCompat.requestPermissions(getView().getActivity(), permissions, REQ_CODE_PERMISSIONS);
         }

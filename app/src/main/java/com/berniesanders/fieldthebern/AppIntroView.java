@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import com.berniesanders.fieldthebern.adapters.CustomPagerAdapter;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
+import com.berniesanders.fieldthebern.screens.ChooseSignupScreen;
 import com.berniesanders.fieldthebern.screens.LoginScreen;
 import com.berniesanders.fieldthebern.screens.MapScreen;
 
@@ -78,6 +79,6 @@ public class AppIntroView extends FrameLayout {
     }
     @OnClick(R.id.doneButton)
     public void done() {
-        Flow.get(this).setHistory(History.single(new LoginScreen(new User())), Flow.Direction.REPLACE);
+        Flow.get(this).setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
     }
 }

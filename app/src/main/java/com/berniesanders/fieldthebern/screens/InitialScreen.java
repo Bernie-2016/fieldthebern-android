@@ -1,5 +1,6 @@
 package com.berniesanders.fieldthebern.screens;
 
+import com.berniesanders.fieldthebern.AppIntroScreen;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 
@@ -45,6 +46,6 @@ public class InitialScreen {
 //            return new LoginScreen(user);
 //        }
 
-        return new ChooseSignupScreen();
+        return new AppIntroScreen("data");
     }
 }

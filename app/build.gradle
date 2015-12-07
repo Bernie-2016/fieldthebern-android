@@ -69,6 +69,7 @@ dependencies {
     compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
     compile 'com.bugsnag:bugsnag-android:3.2.6'
+    compile 'me.relex:circleindicator:1.1.6@aar'
 
     testCompile ('com.squareup.assertj:assertj-android:1.1.1') {
         exclude group: 'com.android.support', module: 'support-annotations'

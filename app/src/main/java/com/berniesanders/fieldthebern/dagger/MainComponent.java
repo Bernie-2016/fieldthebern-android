@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.dagger;
 
 import android.content.Context;
 
+import com.berniesanders.fieldthebern.AppIntroScreen;
 import com.berniesanders.fieldthebern.MainActivity;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.DialogController;
@@ -39,6 +40,7 @@ public interface MainComponent {
     void inject(SearchMatrixCursor smc);
     void inject(MainActivity mainActivity);
     void inject(InitialScreen initialScreen);
+    void inject(AppIntroScreen appIntroScreen);
 
     Gson gson();
     ErrorToastController errorToastController();

@@ -12,6 +12,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.RequestMultipleAddresses;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
@@ -163,7 +164,7 @@ public class MapScreen extends FlowPathBase {
             }
         };
 
-        Observer<List<ApiAddress>> multiAddressObserver = new Observer<List<ApiAddress>>() {
+        Observer<MultiAddressResponse> multiAddressObserver = new Observer<MultiAddressResponse>() {
             @Override
             public void onCompleted() {
 
@@ -175,8 +176,12 @@ public class MapScreen extends FlowPathBase {
             }
 
             @Override
-            public void onNext(List<ApiAddress> apiAddresses) {
-                Timber.v("multiAddressObserver onNext \n%s", apiAddresses );
+            public void onNext(MultiAddressResponse multiAddressResponse) {
+                Timber.v("multiAddressObserver onNext \n%s", multiAddressResponse );
+
+                List<ApiAddress> nearbyAddresses = multiAddressResponse.addresses();
+
+                getView().setNearbyAddresses(nearbyAddresses);
             }
         };
 
@@ -189,7 +194,7 @@ public class MapScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "singleAddressObserver onError");
+                Timber.w("singleAddressObserver onError: %s", e.getMessage());
             }
 
             @Override

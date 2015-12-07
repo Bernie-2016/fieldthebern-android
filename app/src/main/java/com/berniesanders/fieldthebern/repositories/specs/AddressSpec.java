@@ -7,10 +7,9 @@
 package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.RequestMultipleAddresses;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
-
-import java.util.List;
 
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -52,9 +51,9 @@ public class AddressSpec {
     public interface AddressEndpoint {
 
         @GET("addresses")
-        Observable<List<ApiAddress>> getMultiple(@Query("latitude") Double latitude,
-                                                 @Query("longitude") Double longitude,
-                                                 @Query("radius") Integer radius);
+        Observable<MultiAddressResponse> getMultiple(@Query("latitude") Double latitude,
+                                                     @Query("longitude") Double longitude,
+                                                     @Query("radius") Integer radius);
 
         @GET("addresses")
         Observable<ApiAddress> getSingle(@Query("latitude") Double latitude,

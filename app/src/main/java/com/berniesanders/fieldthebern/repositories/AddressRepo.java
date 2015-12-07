@@ -8,6 +8,7 @@ package com.berniesanders.fieldthebern.repositories;
 
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -16,8 +17,6 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -62,7 +61,7 @@ public class AddressRepo {
     /**
      *
      */
-    public Observable<List<ApiAddress>> getMultiple(final AddressSpec spec) {
+    public Observable<MultiAddressResponse> getMultiple(final AddressSpec spec) {
         Timber.v("getMultiple()");
 
         Retrofit retrofit = new Retrofit.Builder()

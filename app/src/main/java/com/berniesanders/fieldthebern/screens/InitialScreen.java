@@ -1,5 +1,6 @@
 package com.berniesanders.fieldthebern.screens;
 
+import com.berniesanders.fieldthebern.AppIntroScreen;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.f2prateek.rx.preferences.Preference;
@@ -31,7 +32,7 @@ public class InitialScreen {
         String userString = userPref.get();
         User user = null;
 
-        if(userString!=null) {
+        if (userString != null) {
             user = gson.fromJson(userPref.get(), User.class);
         }
 
@@ -52,7 +53,6 @@ public class InitialScreen {
 
             return new LoginScreen(new User());
         }
-
-        return new ChooseSignupScreen();
+        return new AppIntroScreen("Test");
     }
 }

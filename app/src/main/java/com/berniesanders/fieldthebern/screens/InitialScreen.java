@@ -52,6 +52,6 @@ public class InitialScreen {
 
             return new LoginScreen(new User());
         }
-        return new AppIntroScreen("Test");
+        return new AppIntroScreen();
     }
 }

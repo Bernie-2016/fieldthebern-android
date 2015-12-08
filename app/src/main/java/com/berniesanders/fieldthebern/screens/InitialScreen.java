@@ -52,6 +52,12 @@ public class InitialScreen {
 
             return new LoginScreen(new User());
         }
-        return new AppIntroScreen();
+
+        boolean hasSeenIntro = rxPrefs.getBoolean(User.PREF_SEEN_APP_INTRO, false).get();
+        if (hasSeenIntro) {
+            return new ChooseSignupScreen();
+        } else {
+            return new AppIntroScreen();
+        }
     }
 }

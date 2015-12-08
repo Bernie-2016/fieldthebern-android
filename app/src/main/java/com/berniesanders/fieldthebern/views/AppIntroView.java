@@ -8,9 +8,11 @@ import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.CustomPagerAdapter;
+import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.screens.ChooseSignupScreen;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 
 import javax.inject.Inject;
 
@@ -30,6 +32,8 @@ public class AppIntroView extends FrameLayout {
 
     @Inject
     AppIntroScreen.Presenter presenter;
+    @Inject
+    RxSharedPreferences rxPrefs;
 
     public AppIntroView(Context context) {
         super(context);
@@ -78,5 +82,7 @@ public class AppIntroView extends FrameLayout {
     @OnClick(R.id.doneButton)
     public void done() {
         Flow.get(this).setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
+        rxPrefs.getBoolean(User.PREF_SEEN_APP_INTRO).set(true);
+
     }
 }

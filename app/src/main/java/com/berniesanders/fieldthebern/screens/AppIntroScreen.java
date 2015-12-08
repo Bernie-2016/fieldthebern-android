@@ -46,10 +46,6 @@ public class AppIntroScreen extends FlowPathBase {
         public AppIntroModule() {
         }
 
-        @Provides
-        String provideSomeData() {
-            return "";
-        }
     }
 
     @FtbScreenScope

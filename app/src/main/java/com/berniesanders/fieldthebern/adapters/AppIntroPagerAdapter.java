@@ -8,39 +8,39 @@ import android.view.ViewGroup;
 
 import com.berniesanders.fieldthebern.R;
 
-public class CustomPagerAdapter extends PagerAdapter {
+public class AppIntroPagerAdapter extends PagerAdapter {
 
     private Context context;
 
-    public CustomPagerAdapter(Context context) {
+    public AppIntroPagerAdapter(Context context) {
         this.context = context;
     }
 
     @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
+    public Object instantiateItem(ViewGroup viewGroup, int position) {
 
         LayoutInflater inflater = LayoutInflater.from(context);
         ViewGroup layout = null;
 
         switch (position) {
             case 0:
-                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_1, collection, false);
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_1, viewGroup, false);
                 break;
             case 1:
-                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_2, collection, false);
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_2, viewGroup, false);
                 break;
             case 2:
-                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_3, collection, false);
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_3, viewGroup, false);
                 break;
         }
 
-        collection.addView(layout);
+        viewGroup.addView(layout);
         return layout;
     }
 
     @Override
-    public void destroyItem(ViewGroup collection, int position, Object view) {
-        collection.removeView((View) view);
+    public void destroyItem(ViewGroup viewGroup, int position, Object view) {
+        viewGroup.removeView((View) view);
     }
 
     @Override

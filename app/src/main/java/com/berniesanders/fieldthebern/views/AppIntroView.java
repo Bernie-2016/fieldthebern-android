@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.R;
-import com.berniesanders.fieldthebern.adapters.CustomPagerAdapter;
+import com.berniesanders.fieldthebern.adapters.AppIntroPagerAdapter;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.AppIntroScreen;
@@ -64,7 +64,7 @@ public class AppIntroView extends FrameLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this, this);
-        viewPager.setAdapter(new CustomPagerAdapter(getContext()));
+        viewPager.setAdapter(new AppIntroPagerAdapter(getContext()));
         circleIndicator.setViewPager(viewPager);
     }
 

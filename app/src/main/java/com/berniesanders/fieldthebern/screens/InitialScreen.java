@@ -31,7 +31,7 @@ public class InitialScreen {
         String userString = userPref.get();
         User user = null;
 
-        if(userString!=null) {
+        if (userString != null) {
             user = gson.fromJson(userPref.get(), User.class);
         }
 
@@ -53,6 +53,11 @@ public class InitialScreen {
             return new LoginScreen(new User());
         }
 
-        return new ChooseSignupScreen();
+        boolean hasSeenIntro = rxPrefs.getBoolean(User.PREF_SEEN_APP_INTRO, false).get();
+        if (hasSeenIntro) {
+            return new ChooseSignupScreen();
+        } else {
+            return new AppIntroScreen();
+        }
     }
 }

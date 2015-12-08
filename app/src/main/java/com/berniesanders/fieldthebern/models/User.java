@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 public class User {
 
     public static final String PREF_NAME = "User.Pref";
+    public static final String PREF_SEEN_APP_INTRO = "Use.SeenAppIntro";
 
     Data data = new Data();
 

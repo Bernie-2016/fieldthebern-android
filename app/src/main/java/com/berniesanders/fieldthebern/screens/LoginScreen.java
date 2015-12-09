@@ -6,10 +6,10 @@ import android.widget.EditText;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.ErrorToastService;
-import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.ErrorToastService;
+import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.Token;
@@ -180,5 +180,10 @@ public class LoginScreen extends FlowPathBase {
                 Timber.d("loginEmail onNext: %s", token.toString());
             }
         };
+
+        @OnClick(R.id.no_account)
+        void haveAccount() {
+            Flow.get(getView().getContext()).set(new ChooseSignupScreen());
+        }
     }
 }

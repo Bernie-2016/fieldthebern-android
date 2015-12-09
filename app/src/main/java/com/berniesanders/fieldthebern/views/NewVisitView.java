@@ -18,12 +18,14 @@ import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
+import com.berniesanders.fieldthebern.screens.AddPersonScreen;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import flow.Flow;
 import timber.log.Timber;
 
 /**
@@ -128,6 +130,20 @@ public class NewVisitView extends RelativeLayout {
                         getContext().getResources().getStringArray(R.array.interest)));
 
         personContainer.addView(personRow);
+
+        personRow.setTag(person);
+        personRow.findViewById(R.id.edit).setOnClickListener(onClickListener);
+    }
+
+    OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            editPerson((Person) v.getTag());
+        }
+    };
+
+    void editPerson(Person person) {
+        Flow.get(this).set(new AddPersonScreen(person));
     }
 
 }

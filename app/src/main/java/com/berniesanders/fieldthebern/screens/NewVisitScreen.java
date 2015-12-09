@@ -229,7 +229,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         @OnClick(R.id.add_person)
         public void addPerson() {
-            Flow.get(getView()).set(new AddPersonScreen());
+            Flow.get(getView()).set(new AddPersonScreen(null));
         }
 
         @OnClick(R.id.submit)

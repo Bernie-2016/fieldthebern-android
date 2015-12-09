@@ -1,6 +1,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
@@ -34,9 +36,13 @@ import timber.log.Timber;
 @Layout(R.layout.screen_add_person)
 public class AddPersonScreen extends FlowPathBase {
 
+    @Nullable
+    private final Person personToEdit;
+
     /**
      */
-    public AddPersonScreen() {
+    public AddPersonScreen(@Nullable Person personToEdit) {
+        this.personToEdit = personToEdit;
     }
 
     /**
@@ -46,6 +52,7 @@ public class AddPersonScreen extends FlowPathBase {
         return DaggerAddPersonScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent())
+                .module(new Module(personToEdit))
                 .build();
     }
 
@@ -59,12 +66,23 @@ public class AddPersonScreen extends FlowPathBase {
 
     @dagger.Module
     class Module {
+        private final Person personToEdit;
+
+        public Module(Person personToEdit) {
+            this.personToEdit = personToEdit;
+        }
+
+        @Provides
+        @FtbScreenScope
+        public Person providePerson() {
+            return personToEdit;
+        }
     }
 
     /**
      */
     @FtbScreenScope
-    @dagger.Component(dependencies = MainComponent.class)
+    @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
     public interface Component {
         void inject(AddPersonView t);
         VisitRepo visitRepo();
@@ -74,13 +92,15 @@ public class AddPersonScreen extends FlowPathBase {
     static public class Presenter extends ViewPresenter<AddPersonView> {
 
         private final VisitRepo visitRepo;
+        private final Person personToEdit;
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.add_person) String addPerson;
 
         @Inject
-        Presenter(VisitRepo visitRepo) {
+        Presenter(VisitRepo visitRepo, Person personToEdit) {
             this.visitRepo = visitRepo;
+            this.personToEdit = personToEdit;
         }
 
         @Override

@@ -8,12 +8,10 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
-import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.DialogController.DialogAction;
 import com.berniesanders.fieldthebern.controllers.DialogController.DialogConfig;
 import com.berniesanders.fieldthebern.controllers.DialogService;
-import com.berniesanders.fieldthebern.controllers.ErrorToastController;
-import com.berniesanders.fieldthebern.controllers.ErrorToastService;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.StateConverter;
@@ -239,14 +237,14 @@ public class AddAddressScreen extends FlowPathBase {
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
-                        ErrorToastService.get(getView()).showText(""+errorBodyString);
+                        ToastService.get(getView()).toast(""+errorBodyString);
                     } else {
-                        ErrorToastService.get(getView()).showText((e.getMessage()));
+                        ToastService.get(getView()).toast((e.getMessage()));
                         Timber.e(e, "singleAddressObserver onError");
                     }
                 } else {
                     //wtf
-                    ErrorToastService.get(getView()).showText((e.getMessage()));
+                    ToastService.get(getView()).toast((e.getMessage()));
                     Timber.e(e, "singleAddressObserver onError");
                 }
             }

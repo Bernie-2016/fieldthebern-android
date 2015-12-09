@@ -32,8 +32,8 @@ import android.widget.ImageView;
 import com.berniesanders.fieldthebern.config.Actions;
 import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.DialogService;
-import com.berniesanders.fieldthebern.controllers.ErrorToastController;
-import com.berniesanders.fieldthebern.controllers.ErrorToastService;
+import com.berniesanders.fieldthebern.controllers.ToastController;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.FacebookService;
 import com.berniesanders.fieldthebern.controllers.LocationController;
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity
     ActionBarController actionBarController;
 
     @Inject
-    ErrorToastController errorToastController;
+    ToastController toastController;
 
     @Inject
     DialogController dialogController;
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity
             activityScope = buildChild(getApplicationContext()) //
                     .withService(BundleServiceRunner.SERVICE_NAME, new BundleServiceRunner())
                     .withService(ActionBarService.NAME, actionBarController)
-                    .withService(ErrorToastService.NAME, errorToastController)
+                    .withService(ToastService.NAME, toastController)
                     .withService(DialogService.NAME, dialogController)
                     .withService(FacebookService.NAME, facebookController)
                     .withService(LocationService.NAME, locationController)

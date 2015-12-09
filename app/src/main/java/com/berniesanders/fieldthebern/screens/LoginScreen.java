@@ -8,9 +8,10 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
-import com.berniesanders.fieldthebern.controllers.ErrorToastService;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
@@ -171,7 +172,7 @@ public class LoginScreen extends FlowPathBase {
             public void onError(Throwable e) {
                 Timber.e(e, "loginEmail error");
                 if (e instanceof HttpException) {
-                    ErrorToastService.get(getView()).showApiError(e);
+                    ToastService.get(getView()).toast(ErrorResponse.parseErrorResponse(e));
                 }
             }
 

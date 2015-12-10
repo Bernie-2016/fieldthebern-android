@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mortar.ViewPresenter;
 import rx.Observable;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -163,15 +164,9 @@ public class ProfileScreen extends FlowPathBase {
             user.getData().attributes().lastName(lastName);
             spec.create(new CreateUserRequest());
             spec.update(user);
-            final Observable<User> update = userRepo.update(spec);
-
-            // Cannot subscribe on main thread, run in new thread
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    update.subscribe();
-                }
-            }).start();
+            userRepo.update(spec)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe();
         }
     }
 }

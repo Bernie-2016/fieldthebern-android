@@ -105,30 +105,21 @@ public class UserRepo {
 
     public Observable<User> update(final UserSpec spec) {
         Timber.v("Calling update");
-        Observable<User> me = getMe();
-        me = me.map(new Func1<User, User>() {
-            @Override
-            public User call(User user) {
-                Timber.v("getMe map");
-                String firstName = spec.user().getData().attributes().getFirstName();
-                String lastName = spec.user().getData().attributes().getLastName();
-
-                user.getData().attributes()
-                        .firstName(firstName)
-                        .lastName(lastName);
-                return user;
-            }
-        });
-
-        me = me.flatMap(new Func1<User, Observable<User>>() {
-            @Override
-            public Observable<User> call(User user) {
-                Timber.v("getMe flatmap");
-                CreateUserRequest request = spec.getCreateUserRequest()
-                        .withAttributes(user.getData().attributes());
-                return update(request);
-            }
-        });
+        Observable<User> me = getMe()
+                .flatMap(new Func1<User, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(User user) {
+                        Timber.v("getMe flatmap");
+                        String firstName = spec.user().getData().attributes().getFirstName();
+                        String lastName = spec.user().getData().attributes().getLastName();
+                        user.getData().attributes()
+                                .firstName(firstName)
+                                .lastName(lastName);
+                        CreateUserRequest request = spec.getCreateUserRequest()
+                                .withAttributes(user.getData().attributes());
+                        return update(request);
+                    }
+                });
 
         Timber.v("Calling update finished");
         return me;

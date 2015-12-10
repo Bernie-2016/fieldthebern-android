@@ -132,8 +132,64 @@ public class AddPersonView extends RelativeLayout {
         return firstNameEditText.getText() != null;
     }
 
-    public Person getPerson() {
-        Person person = new Person();
+
+    @CanvassResponse.Response
+    private String getCanvassResponse() {
+        String selectedItem = (String) interestSpinner.getSelectedItem();
+        String[] interest = getContext().getResources().getStringArray(R.array.interest);
+        return CanvassResponseEvaluator.getResponse(selectedItem, interest);
+    }
+
+    @Party.Affiliation
+    private String getParty() {
+        String selectedItem = (String) partySpinner.getSelectedItem();
+        String[] partyArray = getContext().getResources().getStringArray(R.array.party);
+        return PartyEvaluator.getParty(selectedItem, partyArray);
+    }
+
+    private void setParty(@Party.Affiliation String party) {
+        String[] partyArray = getContext().getResources().getStringArray(R.array.party);
+        String partyText = PartyEvaluator.getText(party, partyArray);
+        for(int i = 0; i < partyArray.length; i++) {
+            if (partyText.equals(partyArray[i])) {
+                partySpinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void setCanvassResponse(@CanvassResponse.Response String response) {
+        String[] interest = getContext().getResources().getStringArray(R.array.interest);
+        String textResponse = CanvassResponseEvaluator.getText(response, interest);
+        for(int i = 0; i < interest.length; i++) {
+            if (textResponse.equals(interest[i])) {
+                interestSpinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    @OnCheckedChanged(R.id.email_checkbox)
+    void onEmailChecked(boolean checked) {
+
+        if(checked) {
+            phoneCheckBox.setChecked(false);
+        }
+
+    }
+
+    @OnCheckedChanged(R.id.phone_checkbox)
+    void onPhoneChecked(boolean checked) {
+        if(checked) {
+            emailCheckBox.setChecked(false);
+        }
+    }
+
+    /**
+     * updatePerson(person) sets the fields on the Person object you pass
+     * to the values currently being displayed
+     */
+    public void updatePerson(Person person) {
         person.attributes()
                 .canvassResponse(getCanvassResponse())
                 .party(getParty())
@@ -158,37 +214,44 @@ public class AddPersonView extends RelativeLayout {
                 person.attributes().preferredContact(Contact.EMAIL);
             }
         }
-
-        return person;
     }
 
-    @CanvassResponse.Response
-    private String getCanvassResponse() {
-        String selectedItem = (String) interestSpinner.getSelectedItem();
-        String[] interest = getContext().getResources().getStringArray(R.array.interest);
-        return CanvassResponseEvaluator.getResponse(selectedItem, interest);
-    }
+    /**
+     * shows, you know, like, a Person
+     */
+    public void showPerson(Person person) {
 
-    @Party.Affiliation
-    private String getParty() {
-        String selectedItem = (String) partySpinner.getSelectedItem();
-        String[] interest = getContext().getResources().getStringArray(R.array.party);
-        return PartyEvaluator.getParty(selectedItem, interest);
-    }
+        Person.Attributes personAttributes = person.attributes();
 
-    @OnCheckedChanged(R.id.email_checkbox)
-    void onEmailChecked(boolean checked) {
-
-        if(checked) {
-            phoneCheckBox.setChecked(false);
+        //yay! null checks
+        if (personAttributes.firstName() != null) {
+            firstNameEditText.setText(personAttributes.firstName());
         }
 
-    }
+        if (personAttributes.lastName() != null) {
+            lastNameEditText.setText(personAttributes.lastName());
+        }
 
-    @OnCheckedChanged(R.id.phone_checkbox)
-    void onPhoneChecked(boolean checked) {
-        if(checked) {
-            emailCheckBox.setChecked(false);
+        if (personAttributes.phone() != null) {
+            phoneEditText.setText(personAttributes.phone());
+        }
+
+        if (personAttributes.email() != null) {
+            emailEditText.setText(personAttributes.email());
+        }
+
+        if (personAttributes.party() != null) {
+            setParty(personAttributes.party());
+        }
+
+        if (personAttributes.canvassResponse() != null) {
+            setCanvassResponse(personAttributes.canvassResponse());
+        }
+
+        if (personAttributes.preferredContact().equals(Contact.EMAIL)) {
+            emailCheckBox.setChecked(true);
+        } else if (personAttributes.preferredContact().equals(Contact.PHONE)) {
+            phoneCheckBox.setChecked(true);
         }
     }
 }

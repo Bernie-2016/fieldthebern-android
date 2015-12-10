@@ -131,8 +131,8 @@ public class NewVisitView extends RelativeLayout {
 
         personContainer.addView(personRow);
 
-        personRow.setTag(person);
         personRow.findViewById(R.id.edit).setOnClickListener(onClickListener);
+        personRow.findViewById(R.id.edit).setTag(person);
     }
 
     OnClickListener onClickListener = new OnClickListener() {

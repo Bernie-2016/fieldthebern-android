@@ -50,7 +50,7 @@ public class UserRepo {
 //        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
 //            @Override
 //            public void log(String message) {
-//                Timber.e(message);
+//                Timber.v(message);
 //            }
 //        };
 //        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
@@ -104,12 +104,12 @@ public class UserRepo {
     }
 
     public Observable<User> update(final UserSpec spec) {
-        Timber.e("Calling update");
+        Timber.v("Calling update");
         Observable<User> me = getMe();
         me = me.map(new Func1<User, User>() {
             @Override
             public User call(User user) {
-                Timber.e("getMe map");
+                Timber.v("getMe map");
                 String firstName = spec.user().getData().attributes().getFirstName();
                 String lastName = spec.user().getData().attributes().getLastName();
 
@@ -123,14 +123,14 @@ public class UserRepo {
         me = me.flatMap(new Func1<User, Observable<User>>() {
             @Override
             public Observable<User> call(User user) {
-                Timber.e("getMe flatmap");
+                Timber.v("getMe flatmap");
                 CreateUserRequest request = spec.getCreateUserRequest()
                         .withAttributes(user.getData().attributes());
                 return update(request);
             }
         });
 
-        Timber.e("Calling update finished");
+        Timber.v("Calling update finished");
         return me;
     }
 
@@ -172,7 +172,7 @@ public class UserRepo {
     }
 
     private Observable<User> getMe() {
-        Timber.e("getMe()");
+        Timber.v("getMe()");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))

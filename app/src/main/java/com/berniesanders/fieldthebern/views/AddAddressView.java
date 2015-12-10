@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import com.berniesanders.fieldthebern.R;
+import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.AddAddressScreen;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
@@ -27,7 +28,8 @@ public class AddAddressView extends RelativeLayout {
 
     @Inject
     AddAddressScreen.Presenter presenter;
-    private Address address;
+
+    private ApiAddress address;
 
     @Bind(R.id.address)
     EditText addressEditText;
@@ -81,23 +83,25 @@ public class AddAddressView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(ApiAddress address) {
         this.address = address;
-        addressEditText.setText(address.getAddressLine(0));
+        addressEditText.setText(address.attributes().street1());
+
+        if (address.attributes().street2() != null) {
+            apartmentEditText.setText(address.attributes().street2());
+        }
     }
 
-    public Address getAddress() {
+    public ApiAddress getAddress() {
+
         if (addressEditText.getText()!=null) {
-            address.setAddressLine(0, addressEditText.getText().toString());
+            address.attributes().street1(addressEditText.getText().toString());
         }
-        return address;
-    }
 
-    @Nullable
-    public String getApartment() {
-        if (apartmentEditText.getText()==null) {
-            return null;
+        if (apartmentEditText.getText()!=null) {
+            address.attributes().street2(apartmentEditText.getText().toString());
         }
-        return apartmentEditText.getText().toString();
+
+        return address;
     }
 }

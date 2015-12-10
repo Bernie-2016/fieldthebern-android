@@ -73,7 +73,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
     Observer<Location> locationObserver;
 
-    Address address;
+    ApiAddress address;
 
     @Bind(R.id.address)
     TextView addressTextView;
@@ -319,9 +319,11 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
         @Override
         public void onNext(Address address) {
-            setAddress(address);
+            MapScreenView.this.address = ApiAddress.from(address, address.getPremises());
+
+            setAddress(MapScreenView.this.address);
             if (onAddressChangeListener!=null) {
-                onAddressChangeListener.onAddressChange(address);
+                onAddressChangeListener.onAddressChange(MapScreenView.this.address);
             }
         }
     };
@@ -369,11 +371,11 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         return false;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(ApiAddress address) {
         Timber.v("setAddress: %s", address.toString());
         leaningTextView.setText("");
         this.address = address;
-        addressTextView.setText(address.getAddressLine(0));
+        addressTextView.setText(address.attributes().street1());
         progressBar.setVisibility(View.GONE);
         pinDrop.setVisibility(View.VISIBLE);
     }
@@ -429,11 +431,12 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
             //stop watching the camera change while the map moves to the maker
             googleMap.setOnCameraChangeListener(null);
-            cameraSubscription.unsubscribe();
+            unsubscribe();
 
             //set the address manually
             ApiAddress apiAddress = markerAddressMap.get(marker.getId());
-            setAddress(ApiAddress.to(apiAddress));//TODO we lose apartment info here...?
+            setAddress(apiAddress);
+            onAddressChangeListener.onAddressChange(apiAddress);
             leaningTextView.setText(CanvassResponseEvaluator.getText(
                     apiAddress.attributes().bestCanvassResponse(),
                     getResources().getStringArray(R.array.interest)));
@@ -465,6 +468,6 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public interface OnAddressChange {
-        void onAddressChange(Address address);
+        void onAddressChange(ApiAddress apiAddress);
     }
 }

@@ -50,9 +50,9 @@ import timber.log.Timber;
 public class AddAddressScreen extends FlowPathBase {
 
 
-    private final Address address;
+    private final ApiAddress address;
 
-    public AddAddressScreen(Address address) {
+    public AddAddressScreen(ApiAddress address) {
         this.address = address;
     }
 
@@ -74,15 +74,15 @@ public class AddAddressScreen extends FlowPathBase {
     @dagger.Module
     class Module {
 
-        private final Address address;
+        private final ApiAddress address;
 
-        Module(Address address) {
+        Module(ApiAddress address) {
             this.address = address;
         }
 
         @Provides
         @FtbScreenScope
-        public Address provideAddress() {
+        public ApiAddress provideAddress() {
             return address;
         }
     }
@@ -91,14 +91,14 @@ public class AddAddressScreen extends FlowPathBase {
     @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
     public interface Component {
         void inject(AddAddressView t);
-        Address address();
+        ApiAddress address();
         AddressRepo addressRepo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<AddAddressView> {
 
-        private Address address;
+        private ApiAddress address;
         private final AddressRepo addressRepo;
         @BindString(android.R.string.cancel) String cancel;
 
@@ -108,7 +108,7 @@ public class AddAddressScreen extends FlowPathBase {
 
 
         @Inject
-        Presenter(Address address, AddressRepo addressRepo) {
+        Presenter(ApiAddress address, AddressRepo addressRepo) {
             this.address = address;
             this.addressRepo = addressRepo;
         }
@@ -157,11 +157,11 @@ public class AddAddressScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         public void startNewVisit() {
             address = getView().getAddress();
-            String apartment = getView().getApartment() == null ? "" : getView().getApartment();
+            String apartment = (address.attributes().street2() == null) ? "" : address.attributes().street2();
 
             String formattedAddress = String.format(
                     confirmBody,
-                    address.getAddressLine(0),
+                    address.attributes().street1(),
                     apartment);
 
             DialogAction confirmAction = new DialogAction()
@@ -195,18 +195,11 @@ public class AddAddressScreen extends FlowPathBase {
 
         private void loadAddressFromApi() {
 
-            Subscription singleAddressSubscription = addressRepo.getSingle(
-                    new AddressSpec()
-                            .singleAddress(
-                                    new RequestSingleAddress()
-                                            .street1(address.getAddressLine(0))
-                                            .street2(getView().getApartment())
-                                            .city(address.getLocality())
-                                            .state(StateConverter.getStateCode(address.getAdminArea()))
-                                            .zip(address.getPostalCode())))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(singleAddressObserver);
+            Subscription singleAddressSubscription =
+                    addressRepo.getSingle(new AddressSpec().singleAddress(new RequestSingleAddress(address)))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(singleAddressObserver);
         }
 
         Observer<ApiAddress> singleAddressObserver = new Observer<ApiAddress>() {
@@ -225,8 +218,7 @@ public class AddAddressScreen extends FlowPathBase {
 
                     if (httpe.code() == 404) {
                         //address was not found in db, proceed with visit
-                        Flow.get(getView()).set( new NewVisitScreen(
-                                        ApiAddress.from(address, getView().getApartment())));
+                        Flow.get(getView()).set(new NewVisitScreen(address));
 
                     } else if (httpe.code() == 400) {
                         //address was found in db, but not specific enough

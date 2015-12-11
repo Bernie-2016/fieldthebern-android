@@ -46,7 +46,9 @@ public class Party {
     public static final String INDEPENDENT = "Independent";
 
 
-    //API apparently spits this out instead of the same format it takes above as input
+    //fixme API apparently spits this out instead of the same format it takes above as input
+    //fixme see https://github.com/Bernie-2016/fieldthebern-android/issues/187
+    //fixme work-around until fixed by API
     public static final String UNKNOWN_AFFILIATION          = "unknown_affiliation";
     public static final String UNAFFILIATED_AFFILIATION     = "unaffiliated_affiliation";
     public static final String UNDECLARED_AFFILIATION       = "undeclared_affiliation";

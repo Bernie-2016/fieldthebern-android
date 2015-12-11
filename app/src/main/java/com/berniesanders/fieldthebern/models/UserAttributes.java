@@ -1,11 +1,14 @@
 package com.berniesanders.fieldthebern.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  *
  */
-public class UserAttributes {
+public class UserAttributes implements Parcelable {
 
     public static final String FACEBOOK_USERNAME = "facebook";
 
@@ -150,6 +153,7 @@ public class UserAttributes {
     }
 
 
+
     @Override
     public String toString() {
         return "UserAttributes{" +
@@ -167,4 +171,53 @@ public class UserAttributes {
                 ", facebookId='" + facebookId + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.email);
+        dest.writeString(this.password);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
+        dest.writeString(this.stateCode);
+        dest.writeDouble(this.lat);
+        dest.writeDouble(this.lng);
+        dest.writeString(this.photoThumbUrl);
+        dest.writeString(this.photoLargeUrl);
+        dest.writeString(this.base64PhotoData);
+        dest.writeString(this.facebookAccessToken);
+        dest.writeString(this.facebookId);
+    }
+
+    public UserAttributes() {
+    }
+
+    protected UserAttributes(Parcel in) {
+        this.email = in.readString();
+        this.password = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.stateCode = in.readString();
+        this.lat = in.readDouble();
+        this.lng = in.readDouble();
+        this.photoThumbUrl = in.readString();
+        this.photoLargeUrl = in.readString();
+        this.base64PhotoData = in.readString();
+        this.facebookAccessToken = in.readString();
+        this.facebookId = in.readString();
+    }
+
+    public static final Parcelable.Creator<UserAttributes> CREATOR = new Parcelable.Creator<UserAttributes>() {
+        public UserAttributes createFromParcel(Parcel source) {
+            return new UserAttributes(source);
+        }
+
+        public UserAttributes[] newArray(int size) {
+            return new UserAttributes[size];
+        }
+    };
 }

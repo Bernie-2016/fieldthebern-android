@@ -1,68 +1,27 @@
 package com.berniesanders.fieldthebern.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 /**
  *
  */
-public class User {
+public class User implements Parcelable {
 
     public static final String PREF_NAME = "User.Pref";
     public static final String PREF_SEEN_APP_INTRO = "Use.SeenAppIntro";
 
-    Data data = new Data();
+    UserData data = new UserData();
 
     @NonNull
-    public Data getData() {
+    public UserData getData() {
         return data;
     }
 
-    public void setData(Data data) {
+    public void setData(UserData data) {
         this.data = data;
     }
-
-    public static class Data {
-        Integer id;
-        String type;
-        UserAttributes attributes = new UserAttributes();
-        UserRelationships relationships;
-
-        public Integer id() {
-            return this.id;
-        }
-
-        @NonNull
-        public UserAttributes attributes() {
-            return attributes;
-        }
-
-        public UserRelationships relationships() {
-            return this.relationships;
-        }
-
-        public Data id(final Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Data type(final String type) {
-            this.type = type;
-            return this;
-        }
-
-        public Data attributes(final UserAttributes attributes) {
-            this.attributes = attributes;
-            return this;
-        }
-
-        public Data relationships(final UserRelationships relationships) {
-            this.relationships = relationships;
-            return this;
-        }
-
-
-    }
-
 
     @Override
     public String toString() {
@@ -74,4 +33,31 @@ public class User {
                 '}';
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.data, 0);
+    }
+
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        this.data = in.readParcelable(UserData.class.getClassLoader());
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

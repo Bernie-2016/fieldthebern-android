@@ -45,6 +45,22 @@ public class RequestSingleAddress {
     @SerializedName("zip_code")
     String zip;
 
+    public RequestSingleAddress() {
+    }
+
+    public RequestSingleAddress(ApiAddress apiAddress) {
+
+        ApiAddress.Attributes attributes = apiAddress.attributes();
+
+        latitude = attributes.latitude();
+        longitude = attributes.longitude();
+        street1 = attributes.street1();
+        street2 = attributes.street2();
+        city = attributes.city();
+        state = attributes.state();
+        zip = attributes.zip();
+    }
+
     public Double latitude() {
         return this.latitude;
     }

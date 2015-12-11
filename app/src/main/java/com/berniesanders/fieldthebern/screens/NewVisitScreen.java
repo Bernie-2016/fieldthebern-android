@@ -236,10 +236,12 @@ public class NewVisitScreen extends FlowPathBase {
         public void score() {
 
             if(noOneHome) {
+                //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()
                         .bestCanvassResponse(CanvassResponse.NO_ONE_HOME);
             } else if(askedToLeave) {
+                //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()
                         .bestCanvassResponse(CanvassResponse.ASKED_TO_LEAVE);

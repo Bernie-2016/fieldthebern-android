@@ -8,6 +8,7 @@ package com.berniesanders.fieldthebern.repositories;
 
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
@@ -19,6 +20,8 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -70,9 +73,18 @@ public class VisitRepo {
     }
 
     public Visit start(final ApiAddress apiAddress) {
+
         visit = new Visit();
-        visit.included().add(apiAddress);
         visit.start();
+        visit.included().add(apiAddress);
+        List<CanvassData> included = apiAddress.included();
+
+        for(CanvassData canvassData : included) {
+            if (canvassData.type().equals(Person.TYPE)) {
+                addPerson((Person) canvassData);
+            }
+        }
+
         return visit;
     }
 

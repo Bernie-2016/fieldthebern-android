@@ -15,7 +15,10 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -23,9 +26,6 @@ import rx.Observable;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Data repository for loading, creating users
@@ -47,12 +47,18 @@ public class UserRepo {
         this.rxPrefs = rxPrefs;
         this.config = config;
 
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
+//            @Override
+//            public void log(String message) {
+//                Timber.v(message);
+//            }
+//        };
+//        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+//        loggingInterceptor.setLevel(Level.BODY);
+//        client.interceptors().add(loggingInterceptor);
 
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
         client.interceptors().add(new AddTokenInterceptor(tokenRepo));
-        client.interceptors().add(loggingInterceptor);
         client.setAuthenticator(new ApiAuthenticator(tokenRepo));
     }
 
@@ -97,6 +103,27 @@ public class UserRepo {
         });
     }
 
+    public Observable<User> update(final UserSpec spec) {
+        Timber.v("Calling update");
+        Observable<User> me = getMe()
+                .flatMap(new Func1<User, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(User user) {
+                        Timber.v("getMe flatmap");
+                        String firstName = spec.user().getData().attributes().getFirstName();
+                        String lastName = spec.user().getData().attributes().getLastName();
+                        user.getData().attributes()
+                                .firstName(firstName)
+                                .lastName(lastName);
+                        CreateUserRequest request = spec.getCreateUserRequest()
+                                .withAttributes(user.getData().attributes());
+                        return update(request);
+                    }
+                });
+
+        Timber.v("Calling update finished");
+        return me;
+    }
 
 
     /**
@@ -104,32 +131,6 @@ public class UserRepo {
      */
     private Observable<User> create(final CreateUserRequest user) {
         Timber.v("create()");
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(interceptor);
-//        client.setAuthenticator(new Authenticator() {
-//            @Override
-//            public Request authenticate(Proxy proxy, Response response) {
-////                System.out.println("Authenticating for response: " + response);
-////                System.out.println("Challenges: " + response.challenges());
-////                //String credential = Credentials.basic()
-////                return response.request().newBuilder()
-////                        .header("Authorization", credential)
-////                        .build();
-//
-//                // Refresh access token using a synchronous api request
-//                newAccessToken = service.refreshToken();
-//                return response.request().newBuilder()
-//                        .header("Authorization", newAccessToken)
-//                        .build();
-//            }
-//
-//            @Override
-//            public Request authenticateProxy(Proxy proxy, Response response) {
-//                return null; // Null indicates no attempt to authenticate.
-//            }
-//        });
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
@@ -145,4 +146,33 @@ public class UserRepo {
         return endpoint.create(user);
     }
 
+    private Observable<User> update(final CreateUserRequest user) {
+        Timber.v("update(CreateUserRequest)");
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        UserSpec.UserEndpoint endpoint =
+                retrofit.create(UserSpec.UserEndpoint.class);
+
+        return endpoint.update(user);
+    }
+
+    private Observable<User> getMe() {
+        Timber.v("getMe()");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        UserSpec.UserEndpoint endpoint =
+                retrofit.create(UserSpec.UserEndpoint.class);
+        return endpoint.getMe();
+    }
 }

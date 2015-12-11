@@ -2,14 +2,17 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.models.CreateUserRequest;
+import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.UserRepo;
+import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.ProfileView;
 
 import javax.inject.Inject;
@@ -17,30 +20,27 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import dagger.Provides;
 import mortar.ViewPresenter;
+import rx.Observable;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
- * Example for creating new Mortar Screen that helps explain how it all works.  
- * Set the @Layout annotation to the resource id of the layout for the screen
+ * Profile Screen for updating user profiles
  */
 @Layout(R.layout.screen_profile)
 public class ProfileScreen extends FlowPathBase {
 
-    private final String someData;
-
     /**
      * Constructor called by Flow throughout the app
-     *
+     * <p/>
      * Example:
      * Flow.get(context).set(new ExampleScreen("Some Data To Pass");
-     *
+     * <p/>
      * Note:
      * Generally common types like "String" are not injected because injection works based on type
      */
-    public ProfileScreen(String someData) {
-        this.someData = someData;
+    public ProfileScreen() {
     }
 
     /**
@@ -48,7 +48,7 @@ public class ProfileScreen extends FlowPathBase {
      * This component will inject the presenter on the view, and dependencies/module on the presenter.
      * You can pass data (someData) from the Screen to its Presenter through this component.
      * Remember you must run the gradle 'build' class for Dagger to generate to component code
-     *
+     * <p/>
      * Note:
      * Generally common types like "String" are not injected because injection works based on type
      */
@@ -57,7 +57,7 @@ public class ProfileScreen extends FlowPathBase {
         return DaggerProfileScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
-                .profileModule(new ProfileModule(someData)) //pass data to the presenter here
+                .profileModule(new ProfileModule()) //pass data to the presenter here
                 .build();
     }
 
@@ -70,18 +70,10 @@ public class ProfileScreen extends FlowPathBase {
     @dagger.Module
     class ProfileModule {
 
-        private final String someDataToInject;
-
         /**
          * pass variables to the component that will then be injected to the presenter
          */
-        public ProfileModule(String someDataToInject) {
-            this.someDataToInject = someDataToInject;
-        }
-
-        @Provides
-        String provideSomeData() {
-            return someDataToInject;
+        public ProfileModule() {
         }
     }
 
@@ -96,14 +88,13 @@ public class ProfileScreen extends FlowPathBase {
     @dagger.Component(modules = ProfileModule.class, dependencies = MainComponent.class)
     public interface Component {
         /**
-         * injection target = the view (ExampleView) to have the presented injected on it
+         * injection target = the view (ProfileView) to have the presented injected on it
          */
         void inject(ProfileView t);
 
-        // Expose anything you want injected to the presenter here
-        // such as Gson from the MainComponent
-
-        // Gson exposeGson();
+        // Expose UserRepo through injection
+        @SuppressWarnings("unused")
+        UserRepo userRepo();
     }
 
     @FtbScreenScope
@@ -112,7 +103,7 @@ public class ProfileScreen extends FlowPathBase {
         /**
          * Since the presenter is static it should survive rotation
          */
-        private final String someInjectedData;
+        private final UserRepo userRepo;
 
         @Bind(R.id.first_name)
         EditText firstNameEditText;
@@ -122,36 +113,25 @@ public class ProfileScreen extends FlowPathBase {
 
 
         /**
-         * When the view is inflated, this presented is automatically injected to the ExampleView
+         * When the view is inflated, this presented is automatically injected to the ProfileView
          * Constructor parameters here are injected automatically
          */
         @Inject
-        Presenter(String someInjectedData) {
-            this.someInjectedData = someInjectedData;
+        Presenter(UserRepo userRepo) {
+            this.userRepo = userRepo;
         }
 
         /**
          * called when the presenter and view are ready.
          * getView() will not be null
          *
-         * @param savedInstanceState  This bundle is only passed on rotation not passed on navigating back
+         * @param savedInstanceState This bundle is only passed on rotation not passed on navigating back
          */
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
         }
-
-//        void setActionBar() {
-//            ActionBarController.MenuAction menu =
-//                    new ActionBarController
-//                            .MenuAction()
-//                            .setIsSearch();
-//            ActionBarService
-//                    .getActionbarController(getView())
-//                    .setMainImage(null)
-//                    .setConfig(new ActionBarController.Config("actionbar title", menu));
-//        }
 
         /**
          * Called on rotation only
@@ -165,8 +145,8 @@ public class ProfileScreen extends FlowPathBase {
          * Last chance at the view before it is detached.
          * You can save state with hack, (restore it the same way by reading the field).
          * objects saved with be "parceled" by gson. Example:
-         *
-         * ((ExampleScreen)Path.get(view.getContext())).somePublicField = "Something you want to save"
+         * <p/>
+         * ((ProfileView)Path.get(view.getContext())).somePublicField = "Something you want to save"
          */
         @Override
         public void dropView(ProfileView view) {
@@ -178,8 +158,15 @@ public class ProfileScreen extends FlowPathBase {
         void onSaveProfileClicked() {
             String firstName = firstNameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
-            Toast hello = Toast.makeText(getView().getContext(), "Hello: " + firstName + " " + lastName, Toast.LENGTH_LONG);
-            hello.show();
+            UserSpec spec = new UserSpec();
+            User user = new User();
+            user.getData().attributes().firstName(firstName);
+            user.getData().attributes().lastName(lastName);
+            spec.create(new CreateUserRequest());
+            spec.update(user);
+            userRepo.update(spec)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe();
         }
     }
 }

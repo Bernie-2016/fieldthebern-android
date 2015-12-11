@@ -172,7 +172,7 @@ public class LoginScreen extends FlowPathBase {
             public void onError(Throwable e) {
                 Timber.e(e, "loginEmail error");
                 if (e instanceof HttpException) {
-                    ToastService.get(getView()).toast(ErrorResponse.parseErrorResponse(e));
+                    ToastService.get(getView()).toast(ErrorResponse.parse((HttpException) e));
                 }
             }
 

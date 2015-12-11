@@ -7,6 +7,22 @@ import java.io.IOException;
 
 import retrofit.HttpException;
 
+
+/**
+ * ErrorResponse
+ * <p/>
+ * JSON Format
+ * {
+ * "errors": [
+ * {
+ * "id": "DASHERIZED_CAPITALIZED_ERROR_NAME",
+ * "title": "User friendly error name",
+ * "detail": "Value of Error.message",
+ * "status": "HTTP_CODE_IN_INTEGER_FORMAT"
+ * }
+ * ]
+ * }
+ */
 public class ErrorResponse {
     public Error[] errors;
 
@@ -22,10 +38,10 @@ public class ErrorResponse {
         }
     }
 
-    public static String[] parseErrorResponse(Throwable throwable) {
+    public static String[] parse(HttpException throwable) {
         String body = null;
         try {
-            body = ((HttpException) throwable).response().errorBody().string();
+            body = throwable.response().errorBody().string();
         } catch (IOException e) {
             Bugsnag.notify(new Exception("Error parsing error response"));
         }

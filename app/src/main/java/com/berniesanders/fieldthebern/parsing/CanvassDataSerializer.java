@@ -26,8 +26,12 @@ public class CanvassDataSerializer implements JsonSerializer<CanvassData>, JsonD
 
         if (ApiAddress.TYPE.equals(src.type())) {
             return context.serialize(src, ApiAddress.class);
-        } else {  //("person".equals(type))
-            return context.serialize(src, Page.class);
+        } else  if (Person.TYPE.equals(src.type())) {
+            return context.serialize(src, Person.class);
+        } else  if (UserData.TYPE.equals(src.type())) {
+            return context.serialize(src, UserData.class);
+        } else {
+            return null;
         }
     }
 

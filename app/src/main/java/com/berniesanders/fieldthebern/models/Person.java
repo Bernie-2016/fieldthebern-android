@@ -35,7 +35,6 @@ public class Person extends CanvassData implements Parcelable {
     public static final String TYPE = "people";
 
     Integer id; //null if we're creating a new person in the db
-    String type = TYPE;
     Attributes attributes = new Attributes();
 
     public Integer id() {
@@ -44,7 +43,7 @@ public class Person extends CanvassData implements Parcelable {
 
     @Override
     public String type() {
-        return this.type;
+        return TYPE;
     }
 
     public Attributes attributes() {

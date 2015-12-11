@@ -10,11 +10,17 @@ package com.berniesanders.fieldthebern.models;
  * Wrapper class for an array of mixed items of Person and ApiAddress
  * see Visit
  */
-public abstract class CanvassData {
+public class CanvassData {
 
+    protected String type;
 
-    abstract public String type();
+    public String type() {
+        return type;
+    }
 
-    abstract public CanvassData type(final String type);
+    public CanvassData type(final String type){
+        this.type = type;
+        return this;
+    }
 
 }

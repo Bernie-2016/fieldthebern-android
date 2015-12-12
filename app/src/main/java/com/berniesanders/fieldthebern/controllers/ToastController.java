@@ -25,9 +25,7 @@ public class ToastController {
         this.context = context;
     }
 
-    public void bern(String... text) {
-        for (int i = 0; i < text.length; i++) {
-            Toast.makeText(context, text[i], Toast.LENGTH_LONG).show();
-        }
+    public void bern(String text) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 }

@@ -3,6 +3,7 @@ package com.berniesanders.fieldthebern.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.HomeScreen;
@@ -12,9 +13,8 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 /**
- * Created by Patrick on 11/9/2015.
  */
-public class HomeView extends LinearLayout {
+public class HomeView extends RelativeLayout {
 
 
     /**
@@ -46,6 +46,7 @@ public class HomeView extends LinearLayout {
      * Important to note component type is how the DaggerService finds the right component
      */
     private void injectSelf(Context context) {
+        if (isInEditMode()) { return; }
         DaggerService.<HomeScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
@@ -55,6 +56,7 @@ public class HomeView extends LinearLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        if (isInEditMode()) { return; }
         Timber.v("onFinishInflate");
     }
 

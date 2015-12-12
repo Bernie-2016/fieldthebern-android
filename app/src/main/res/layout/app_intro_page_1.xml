@@ -17,7 +17,6 @@
         android:gravity="center"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
         android:layout_margin="16dp"
         android:text="Welcome to Field the Bern."
         android:textAppearance="?android:attr/textAppearanceLarge"

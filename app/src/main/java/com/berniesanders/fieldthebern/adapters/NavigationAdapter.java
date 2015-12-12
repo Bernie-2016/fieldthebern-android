@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.R;
@@ -15,10 +16,11 @@ public class NavigationAdapter extends BaseAdapter {
 
 
     private final String[] items;
+    private final int[] icons;
 
-    public NavigationAdapter(String [] items) {
-
+    public NavigationAdapter(String [] items, int[] icons) {
         this.items = items;
+        this.icons = icons;
     }
 
     @Override
@@ -45,6 +47,8 @@ public class NavigationAdapter extends BaseAdapter {
                     .inflate(R.layout.drawer_list_item, parent, false);
         }
 
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
+        imageView.setImageResource(icons[position]);
         TextView textView = (TextView) convertView.findViewById(R.id.drawer_list_item_text);
         textView.setText(items[position]);
         return convertView;

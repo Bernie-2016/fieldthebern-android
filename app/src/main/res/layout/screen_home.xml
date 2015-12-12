@@ -1,31 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.berniesanders.fieldthebern.views.HomeView xmlns:android="http://schemas.android.com/apk/res/android"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="match_parent"
-                                               android:background="@color/bernie_dark_blue"
-                                               android:orientation="vertical"
-                                               android:weightSum="2">
+<com.berniesanders.fieldthebern.views.HomeView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bernie_dark_blue"
+    >
 
-    <Button
-        android:id="@+id/screen_home_canvass"
-        style="?android:attr/borderlessButtonStyle"
+    <View
+        android:id="@+id/canvass_btn_color"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_margin="16dp"
+        android:background="@color/dark_blue2"
+        android:layout_alignParentBottom="true"
+        />
+
+    <View
+        android:id="@+id/issues_btn_color"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/dark_blue2"
+        android:layout_above="@id/canvass_btn_color"
+        />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/screen_home_canvass"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_pin_drop_white_24dp"
+        android:gravity="left|center_vertical"
         android:text="@string/screen_home_canvass"
+        android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="40sp"/>
+        android:textSize="24sp"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="16dp"
+        android:drawablePadding="16dp"
+        />
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/screen_home_issues"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_height="@dimen/large_button_height"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_issues"
+        android:gravity="left|center_vertical"
+        android:layout_above="@id/canvass_btn_color"
         android:text="@string/screen_home_issues"
+        android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="40sp"/>
+        android:textSize="24sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+        android:paddingLeft="16dp"
+        android:drawablePadding="16dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/screen_home_issues"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_temp"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
 
 </com.berniesanders.fieldthebern.views.HomeView>

@@ -93,7 +93,7 @@ public class PhotoScreen extends FlowPathBase {
         void setActionBar() {
 
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .hideToolbar()
                     .closeAppbar();
         }

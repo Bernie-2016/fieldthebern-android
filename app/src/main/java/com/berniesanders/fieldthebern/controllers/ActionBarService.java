@@ -10,12 +10,12 @@ public class ActionBarService {
 
     public static final String NAME = "ActionBarService.NAME";
 
-    public static ActionBarController getActionbarController(Context context) {
+    public static ActionBarController get(Context context) {
         //noinspection ResourceType
         return (ActionBarController) context.getSystemService(NAME);
     }
 
-    public static ActionBarController getActionbarController(View v) {
-        return getActionbarController(v.getContext());
+    public static ActionBarController get(View v) {
+        return get(v.getContext());
     }
 }

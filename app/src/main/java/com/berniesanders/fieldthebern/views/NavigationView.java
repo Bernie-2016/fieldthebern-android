@@ -69,6 +69,7 @@ public class NavigationView extends LinearLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (isInEditMode()) { return; }
         presenter.takeView(this);
     }
 

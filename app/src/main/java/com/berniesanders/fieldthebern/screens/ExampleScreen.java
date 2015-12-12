@@ -137,7 +137,7 @@ public class ExampleScreen extends FlowPathBase {
 //                            .MenuAction()
 //                            .setIsSearch();
 //            ActionBarService
-//                    .getActionbarController(getView())
+//                    .get(getView())
 //                    .setMainImage(null)
 //                    .setConfig(new ActionBarController.Config("actionbar title", menu));
 //        }

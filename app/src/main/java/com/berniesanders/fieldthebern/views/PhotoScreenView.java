@@ -95,7 +95,7 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
         }
 
         ActionBarService
-                .getActionbarController(this)
+                .get(this)
                 .showToolbar();
         return false;
     }

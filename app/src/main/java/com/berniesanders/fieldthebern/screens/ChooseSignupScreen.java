@@ -102,7 +102,7 @@ public class ChooseSignupScreen extends FlowPathBase {
 
         void setActionBar() {
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .lockDrawer()
                     .closeAppbar()

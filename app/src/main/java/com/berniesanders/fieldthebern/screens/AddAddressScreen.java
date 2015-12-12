@@ -133,7 +133,7 @@ public class AddAddressScreen extends FlowPathBase {
                                 }
                             });
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .setMainImage(null)

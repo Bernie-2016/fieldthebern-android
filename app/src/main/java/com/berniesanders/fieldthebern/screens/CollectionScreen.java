@@ -107,13 +107,9 @@ public class CollectionScreen extends FlowPathBase {
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
                 ActionBarService
-                        .getActionbarController(getView())
+                        .get(getView())
                         .showToolbar();
-            } else {
-                ActionBarService
-                        .getActionbarController(getView())
-                        .openAppbar();
-            }
+            } 
 
             setActionBar();
         }
@@ -125,7 +121,8 @@ public class CollectionScreen extends FlowPathBase {
                             .setIsSearch();
 
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
+                    .openAppbar()
                     .setMainImage(collection.getImageUrlFull())
                     .setConfig(new ActionBarController.Config(collection.getTitle(), menu));
         }

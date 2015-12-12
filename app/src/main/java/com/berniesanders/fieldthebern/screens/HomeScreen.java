@@ -76,7 +76,7 @@ public class HomeScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .unlockDrawer()
@@ -107,7 +107,13 @@ public class HomeScreen extends FlowPathBase {
         void onCanvassClicked() {
 
             if (PermissionService.get(getView()).isGranted()) {
-                Flow.get(getView().getContext()).set(new MapScreen());
+                getView().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Flow.get(getView().getContext()).set(new MapScreen());
+                    }
+                });
+
             } else {
                 // Display a SnackBar with an explanation and a button to trigger the request.
                 Snackbar.make(getView(), R.string.permission_contacts_rationale,
@@ -124,7 +130,12 @@ public class HomeScreen extends FlowPathBase {
 
         @OnClick(R.id.screen_home_issues)
         void onIssuesClicked() {
-            Flow.get(getView().getContext()).set(new Main());
+            getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    Flow.get(getView().getContext()).set(new Main());
+                }
+            });
         }
 
     }

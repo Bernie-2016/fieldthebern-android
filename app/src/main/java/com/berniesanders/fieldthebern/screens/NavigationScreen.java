@@ -103,7 +103,11 @@ public class NavigationScreen extends FlowPathBase {
 
         private void createNavigationDrawer() {
 
-            drawerListView.setAdapter(new NavigationAdapter(new String[]{"Canvassing", "Issues"}));
+            drawerListView.setAdapter(new NavigationAdapter(
+                    //TODO externalize
+                    new String[]{"Canvassing", "Issues"},
+                    new int[] {R.drawable.ic_pin_drop_white_24dp, R.drawable.ic_issues
+                    }));
 
             drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

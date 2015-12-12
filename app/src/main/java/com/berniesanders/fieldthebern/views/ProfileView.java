@@ -60,6 +60,7 @@ public class ProfileView extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (isInEditMode()) { return; }
         presenter.takeView(this);
     }
 

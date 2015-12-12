@@ -6,6 +6,7 @@
     android:layout_gravity="start"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bernie_dark_blue"
     >
 
     <LinearLayout
@@ -30,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="2dp"
-            tools:text="@string/bernie_sanders"
+            android:text="@string/app_name"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"

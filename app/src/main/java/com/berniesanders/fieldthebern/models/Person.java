@@ -303,10 +303,12 @@ public class Person extends CanvassData implements Parcelable {
     }
 
     public Person() {
+        type = TYPE;
     }
 
     protected Person(Parcel in) {
         super(in);
+        type = TYPE;
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.type = in.readString();
         this.attributes = in.readParcelable(Attributes.class.getClassLoader());

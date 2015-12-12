@@ -64,6 +64,14 @@ public class Person extends CanvassData {
         return this;
     }
 
+    public String fullName() {
+
+        String first = (attributes.firstName == null) ? "" : attributes.firstName;
+        String last = (attributes.lastName == null) ? "" : attributes.lastName;
+
+        return first + " " + last;
+    }
+
 
     public static class Attributes {
 

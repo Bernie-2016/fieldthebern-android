@@ -3,6 +3,8 @@
     <string name="search_hint">Search Feel The Bern</string>
     <string name="add_address">Add address</string>
     <string name="add_person">Add person</string>
+    <string name="edit_person">Edit person</string>
+    <string name="editing_person">Editing: %s</string>
     <string name="edit">Edit</string>
     <string name="score">Score!</string>
     <string name="points">POINTS</string>
@@ -33,6 +35,7 @@
     <string name="password">Password</string>
     <string name="login_title">Login</string>
     <string name="signup_title">Sign up</string>
+    <string name="done">Done</string>
 
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
     <string name="bernie_sanders">Bernie Sanders</string>

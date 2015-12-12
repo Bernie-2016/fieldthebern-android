@@ -1,6 +1,9 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -17,9 +20,11 @@ import com.berniesanders.fieldthebern.views.AddPersonView;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
@@ -34,9 +39,13 @@ import timber.log.Timber;
 @Layout(R.layout.screen_add_person)
 public class AddPersonScreen extends FlowPathBase {
 
+    @Nullable
+    private final Person personToEdit;
+
     /**
      */
-    public AddPersonScreen() {
+    public AddPersonScreen(@Nullable Person personToEdit) {
+        this.personToEdit = personToEdit;
     }
 
     /**
@@ -46,6 +55,7 @@ public class AddPersonScreen extends FlowPathBase {
         return DaggerAddPersonScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent())
+                .module(new Module(personToEdit))
                 .build();
     }
 
@@ -59,12 +69,24 @@ public class AddPersonScreen extends FlowPathBase {
 
     @dagger.Module
     class Module {
+        private final Person personToEdit;
+
+        public Module(Person personToEdit) {
+            this.personToEdit = personToEdit;
+        }
+
+        @Provides
+        @FtbScreenScope
+        @Nullable
+        public Person providePerson() {
+            return personToEdit;
+        }
     }
 
     /**
      */
     @FtbScreenScope
-    @dagger.Component(dependencies = MainComponent.class)
+    @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
     public interface Component {
         void inject(AddPersonView t);
         VisitRepo visitRepo();
@@ -74,13 +96,22 @@ public class AddPersonScreen extends FlowPathBase {
     static public class Presenter extends ViewPresenter<AddPersonView> {
 
         private final VisitRepo visitRepo;
+        private final Person personToEdit;
+
+        @Bind(R.id.submit)
+        Button submitButton;
+        @Bind(R.id.instructions_label)
+        TextView instructionsLabel;
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.add_person) String addPerson;
+        @BindString(R.string.edit_person) String editPerson;
+        @BindString(R.string.editing_person) String editing;
 
         @Inject
-        Presenter(VisitRepo visitRepo) {
+        Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
             this.visitRepo = visitRepo;
+            this.personToEdit = personToEdit;
         }
 
         @Override
@@ -88,8 +119,16 @@ public class AddPersonScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+            if(personToEdit!=null) {
+                getView().showPerson(personToEdit);
+                submitButton.setText(R.string.done);
+                instructionsLabel.setText(String.format(editing, personToEdit.fullName()));
+            }
         }
 
+        String getScreenTitle() {
+            return (personToEdit==null) ? addPerson : editPerson;
+        }
 
         void setActionBar() {
             ActionBarController.MenuAction menu =
@@ -108,7 +147,7 @@ public class AddPersonScreen extends FlowPathBase {
                     .showToolbar()
                     .closeAppbar()
                     .setMainImage(null)
-                    .setConfig(new ActionBarController.Config(addPerson, menu));
+                    .setConfig(new ActionBarController.Config(getScreenTitle(), menu));
         }
 
         @Override
@@ -118,20 +157,25 @@ public class AddPersonScreen extends FlowPathBase {
         @Override
         public void dropView(AddPersonView view) {
             super.dropView(view);
+
+            if(personToEdit!=null) {
+                // update on dropView to keep our personToEdit in sync
+                // with the values displayed in the view
+                view.updatePerson(personToEdit);
+            }
         }
 
         @OnClick(R.id.submit)
         public void addPerson() {
 
-            Person testPerson = getView().getPerson();
-//            testPerson.attributes()
-//                    .email("nobody@example.com")
-//                    .preferredContact(Contact.EMAIL)
-//                    .previouslyParticipated(false);
+            if (personToEdit==null) {
+                Person person = new Person();
+                getView().updatePerson(person);
+                visitRepo.addPerson(person);
+            } else {
+                getView().updatePerson(personToEdit);
+            }
 
-            Person realPerson = getView().getPerson();
-
-            visitRepo.addPerson(realPerson);
             Flow.get(getView()).goBack();
         }
 

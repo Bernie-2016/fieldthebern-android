@@ -45,4 +45,38 @@ public class PartyEvaluator {
             return Party.UNKNOWN;
         }
     }
+
+    /**
+     * Returns the API compatible response that maps to the selected string
+     *
+     *   <item>(select party)</item>
+     *   <item>Democrat</item>
+     *   <item>Republican</item>
+     *   <item>Independent</item>
+     *   <item>Undeclared</item>
+     *   <item>Other</item>
+     *
+     * TODO better way to do this?!
+    */
+
+    public static String getText(@Party.Affiliation String apiPary, String[] partyArray) {
+
+        switch (apiPary) {
+            case Party.UNKNOWN:
+                return partyArray[0];
+            case Party.DEMOCRAT:
+                return partyArray[1];
+            case Party.REPUBLICAN:
+                return partyArray[2];
+            case Party.INDEPENDENT:
+                return partyArray[3];
+            case Party.UNDECLARED:
+                return partyArray[4];
+            case Party.UNAFFILIATED:
+                return partyArray[5];
+            default:
+                Timber.e("PartyEvaluator.getText() called with unmapped party?");
+                return partyArray[0];
+        }
+    }
 }

@@ -230,21 +230,21 @@ public class AddAddressScreen extends FlowPathBase {
                         //address was found in db, but not specific enough
                         //ask user for more info
                         //TODO use the error service to parse raw json
-                        //TODO probably better to show a dialog here than a toast
+                        //TODO probably better to show a dialog here than a bern
                             String errorBodyString = null;
                         try {
                             errorBodyString = httpe.response().errorBody().string();
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
-                        ToastService.get(getView()).toast(""+errorBodyString);
+                        ToastService.get(getView()).bern(""+errorBodyString);
                     } else {
-                        ToastService.get(getView()).toast((e.getMessage()));
+                        ToastService.get(getView()).bern((e.getMessage()));
                         Timber.e(e, "singleAddressObserver onError");
                     }
                 } else {
                     //wtf
-                    ToastService.get(getView()).toast((e.getMessage()));
+                    ToastService.get(getView()).bern((e.getMessage()));
                     Timber.e(e, "singleAddressObserver onError");
                 }
             }

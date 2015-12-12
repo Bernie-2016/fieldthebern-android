@@ -247,7 +247,7 @@ public class MapScreen extends FlowPathBase {
             if (address==null) {
                 ToastService
                         .get(getView())
-                        .toast(getView().getResources().getString(R.string.err_address_not_loaded));
+                        .bern(getView().getResources().getString(R.string.err_address_not_loaded));
                 return;
             }
 

@@ -287,7 +287,7 @@ public class SignupScreen extends FlowPathBase {
             public void onError(Throwable e) {
                 Timber.e(e, "createUserRequest error");
                 if (e instanceof HttpException) {
-                    ToastService.get(getView()).toast(ErrorResponse.parse((HttpException) e));
+                    ToastService.get(getView()).bern(ErrorResponse.parse((HttpException) e));
                 }
             }
 

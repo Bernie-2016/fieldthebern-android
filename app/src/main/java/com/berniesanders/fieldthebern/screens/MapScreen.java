@@ -44,7 +44,7 @@ import timber.log.Timber;
 public class MapScreen extends FlowPathBase {
 
     public CameraPosition cameraPosition;
-    public Address address;
+    public ApiAddress address;
 
     public MapScreen() {
     }
@@ -82,7 +82,7 @@ public class MapScreen extends FlowPathBase {
         private final AddressRepo addressRepo;
 
         private CameraPosition cameraPosition;
-        private Address address;
+        private ApiAddress address;
 
 
         @Inject
@@ -144,20 +144,11 @@ public class MapScreen extends FlowPathBase {
 
         MapScreenView.OnAddressChange onAddressChange = new MapScreenView.OnAddressChange() {
             @Override
-            public void onAddressChange(Address address) {
+            public void onAddressChange(ApiAddress address) {
                 Presenter.this.address = address;
 
-                Subscription singleAddressSubscription = addressRepo.getSingle(
-                        new AddressSpec()
-                                .singleAddress(
-                                        new RequestSingleAddress()
-                                                //.latitude(cameraPosition.target.latitude)
-                                                //.longitude(cameraPosition.target.longitude)
-                                                .street1(address.getAddressLine(0))
-                                                //.street2("Apt #1")
-                                                .city(address.getLocality())
-                                                .state(StateConverter.getStateCode(address.getAdminArea()))
-                                                .zip(address.getPostalCode())))
+                Subscription singleAddressSubscription = addressRepo
+                        .getSingle(new AddressSpec().singleAddress(new RequestSingleAddress(address)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(singleAddressObserver);

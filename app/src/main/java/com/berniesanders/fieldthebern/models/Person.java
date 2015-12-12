@@ -7,6 +7,9 @@
 package com.berniesanders.fieldthebern.models;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -27,7 +30,7 @@ import com.google.gson.annotations.SerializedName;
  *     }
  * }
  */
-public class Person extends CanvassData {
+public class Person extends CanvassData implements Parcelable {
 
     public static final String TYPE = "people";
 
@@ -73,7 +76,7 @@ public class Person extends CanvassData {
     }
 
 
-    public static class Attributes {
+    public static class Attributes implements Parcelable {
 
         @SerializedName("first_name")
         String firstName;
@@ -213,6 +216,47 @@ public class Person extends CanvassData {
             result = 31 * result + (canvassResponse != null ? canvassResponse.hashCode() : 0);
             return result;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.firstName);
+            dest.writeString(this.lastName);
+            dest.writeString(this.email);
+            dest.writeString(this.phone);
+            dest.writeString(this.preferredContact);
+            dest.writeByte(previouslyParticipated ? (byte) 1 : (byte) 0);
+            dest.writeString(this.party);
+            dest.writeString(this.canvassResponse);
+        }
+
+        public Attributes() {
+        }
+
+        protected Attributes(Parcel in) {
+            this.firstName = in.readString();
+            this.lastName = in.readString();
+            this.email = in.readString();
+            this.phone = in.readString();
+            this.preferredContact = in.readString();
+            this.previouslyParticipated = in.readByte() != 0;
+            this.party = in.readString();
+            this.canvassResponse = in.readString();
+        }
+
+        public static final Creator<Attributes> CREATOR = new Creator<Attributes>() {
+            public Attributes createFromParcel(Parcel source) {
+                return new Attributes(source);
+            }
+
+            public Attributes[] newArray(int size) {
+                return new Attributes[size];
+            }
+        };
     }
 
     @Override
@@ -244,4 +288,36 @@ public class Person extends CanvassData {
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         return result;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeString(this.type);
+        dest.writeParcelable(this.attributes, flags);
+    }
+
+    public Person() {
+    }
+
+    protected Person(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.type = in.readString();
+        this.attributes = in.readParcelable(Attributes.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Person> CREATOR = new Parcelable.Creator<Person>() {
+        public Person createFromParcel(Parcel source) {
+            return new Person(source);
+        }
+
+        public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
 }

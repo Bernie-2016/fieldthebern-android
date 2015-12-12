@@ -7,6 +7,8 @@
 package com.berniesanders.fieldthebern.models;
 
 import android.location.Address;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -42,7 +44,7 @@ import java.util.Locale;
  * NOTE: 'best_canvass_response' and 'last_canvass_response' respond with
  * 'not_yet_visited' and 'unknown' respectively when the address hasn't been canvassed previously.
  */
-public class ApiAddress extends CanvassData {
+public class ApiAddress extends CanvassData implements Parcelable {
 
     public static final String TYPE = "addresses";
 
@@ -79,7 +81,7 @@ public class ApiAddress extends CanvassData {
         return address;
     }
 
-    public static class Relationships {
+    public static class Relationships implements Parcelable {
         @SerializedName("most_supportive_resident")
         Person mostSupportiveResident;
         @SerializedName("last_visited_by")
@@ -127,9 +129,39 @@ public class ApiAddress extends CanvassData {
             result = 31 * result + (lastVisitedBy != null ? lastVisitedBy.hashCode() : 0);
             return result;
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeParcelable(this.mostSupportiveResident, flags);
+            dest.writeParcelable(this.lastVisitedBy, flags);
+        }
+
+        public Relationships() {
+        }
+
+        protected Relationships(Parcel in) {
+            this.mostSupportiveResident = in.readParcelable(Person.class.getClassLoader());
+            this.lastVisitedBy = in.readParcelable(User.class.getClassLoader());
+        }
+
+        public static final Creator<Relationships> CREATOR = new Creator<Relationships>() {
+            public Relationships createFromParcel(Parcel source) {
+                return new Relationships(source);
+            }
+
+            public Relationships[] newArray(int size) {
+                return new Relationships[size];
+            }
+        };
     }
 
-    public static class Attributes {
+    public static class Attributes implements Parcelable {
         Double longitude;
         Double latitude;
         @SerializedName("street_1")
@@ -241,6 +273,8 @@ public class ApiAddress extends CanvassData {
             return this;
         }
 
+
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -284,6 +318,51 @@ public class ApiAddress extends CanvassData {
             result = 31 * result + (lastCanvassResponse != null ? lastCanvassResponse.hashCode() : 0);
             return result;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeValue(this.longitude);
+            dest.writeValue(this.latitude);
+            dest.writeString(this.street1);
+            dest.writeString(this.street2);
+            dest.writeString(this.city);
+            dest.writeString(this.state);
+            dest.writeString(this.zip);
+            dest.writeString(this.visitedAt);
+            dest.writeString(this.bestCanvassResponse);
+            dest.writeString(this.lastCanvassResponse);
+        }
+
+        public Attributes() {
+        }
+
+        protected Attributes(Parcel in) {
+            this.longitude = (Double) in.readValue(Double.class.getClassLoader());
+            this.latitude = (Double) in.readValue(Double.class.getClassLoader());
+            this.street1 = in.readString();
+            this.street2 = in.readString();
+            this.city = in.readString();
+            this.state = in.readString();
+            this.zip = in.readString();
+            this.visitedAt = in.readString();
+            this.bestCanvassResponse = in.readString();
+            this.lastCanvassResponse = in.readString();
+        }
+
+        public static final Creator<Attributes> CREATOR = new Creator<Attributes>() {
+            public Attributes createFromParcel(Parcel source) {
+                return new Attributes(source);
+            }
+
+            public Attributes[] newArray(int size) {
+                return new Attributes[size];
+            }
+        };
     }
 
     public Long id() {
@@ -348,4 +427,38 @@ public class ApiAddress extends CanvassData {
         result = 31 * result + (relationships != null ? relationships.hashCode() : 0);
         return result;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(this.id);
+        dest.writeString(this.type);
+        dest.writeParcelable(this.attributes, flags);
+        dest.writeParcelable(this.relationships, flags);
+    }
+
+    public ApiAddress() {
+    }
+
+    protected ApiAddress(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.type = in.readString();
+        this.attributes = in.readParcelable(Attributes.class.getClassLoader());
+        this.relationships = in.readParcelable(Relationships.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ApiAddress> CREATOR = new Parcelable.Creator<ApiAddress>() {
+        public ApiAddress createFromParcel(Parcel source) {
+            return new ApiAddress(source);
+        }
+
+        public ApiAddress[] newArray(int size) {
+            return new ApiAddress[size];
+        }
+    };
 }

@@ -11,6 +11,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.VisitResult;
@@ -260,6 +261,9 @@ public class NewVisitScreen extends FlowPathBase {
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "error submitting visit");
+                if (AuthFailRedirect.redirectOnFailure(e, getView())) {
+                    return;
+                }
             }
 
             @Override

@@ -14,6 +14,7 @@ import com.berniesanders.fieldthebern.controllers.DialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
@@ -210,6 +211,10 @@ public class AddAddressScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
+
+                if (AuthFailRedirect.redirectOnFailure(e, getView())) {
+                    return;
+                }
 
                 if (e instanceof HttpException) {
 

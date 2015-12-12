@@ -1,6 +1,5 @@
 package com.berniesanders.fieldthebern.screens;
 
-import android.location.Address;
 import android.os.Bundle;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -10,13 +9,15 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.location.StateConverter;
+import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.RequestMultipleAddresses;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.MapScreenView;
@@ -32,6 +33,7 @@ import flow.Flow;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
+import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -73,6 +75,7 @@ public class MapScreen extends FlowPathBase {
     public interface Component {
         void inject(MapScreenView t);
         AddressRepo addressRepo();
+        ErrorResponseParser errorResponseParser();
     }
 
     @FtbScreenScope
@@ -81,14 +84,16 @@ public class MapScreen extends FlowPathBase {
         public static final String CAMERA_POSITION = "camera_position";
         public static final String ADDRESS = "address";
         private final AddressRepo addressRepo;
+        private final ErrorResponseParser errorResponseParser;
 
         private CameraPosition cameraPosition;
         private ApiAddress address;
 
 
         @Inject
-        Presenter(AddressRepo addressRepo) {
+        Presenter(AddressRepo addressRepo, ErrorResponseParser errorResponseParser) {
             this.addressRepo = addressRepo;
+            this.errorResponseParser = errorResponseParser;
         }
 
         @Override
@@ -130,13 +135,12 @@ public class MapScreen extends FlowPathBase {
             public void onCameraChange(CameraPosition cameraPosition) {
                 Presenter.this.cameraPosition = cameraPosition;
 
-                Subscription multiAddressSubscription = addressRepo.getMultiple(
-                        new AddressSpec()
-                            .multipleAddresses(
-                                    new RequestMultipleAddresses()
-                                            .latitude(cameraPosition.target.latitude)
-                                            .longitude(cameraPosition.target.longitude)
-                                            .radius(1000)))
+                Subscription multiAddressSubscription = addressRepo
+                        .getMultiple(
+                                new AddressSpec().multipleAddresses(new RequestMultipleAddresses()
+                                        .latitude(cameraPosition.target.latitude)
+                                        .longitude(cameraPosition.target.longitude)
+                                        .radius(1000)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(multiAddressObserver);
@@ -165,6 +169,9 @@ public class MapScreen extends FlowPathBase {
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "multiAddressObserver onError");
+                if (AuthFailRedirect.redirectOnFailure(e, getView())) {
+                    return;
+                }
             }
 
             @Override
@@ -187,6 +194,16 @@ public class MapScreen extends FlowPathBase {
             @Override
             public void onError(Throwable e) {
                 Timber.w("singleAddressObserver onError: %s", e.getMessage());
+
+                if (AuthFailRedirect.redirectOnFailure(e, getView())) {
+                    return;
+                }
+
+
+                if (e instanceof HttpException) {
+                    ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
+                    ToastService.get(getView()).bern(errorResponse.getAllDetails());
+                }
             }
 
             @Override

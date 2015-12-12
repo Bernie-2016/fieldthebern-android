@@ -8,7 +8,9 @@ import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.config.ConfigImpl;
 import com.berniesanders.fieldthebern.controllers.ToastController;
 import com.berniesanders.fieldthebern.models.ApiItem;
+import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.Content;
+import com.berniesanders.fieldthebern.parsing.CanvassDataSerializer;
 import com.berniesanders.fieldthebern.parsing.CollectionDeserializer;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.PageContentDeserializer;
@@ -42,7 +44,7 @@ public class MainModule {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
-
+        gsonBuilder.registerTypeAdapter(CanvassData.class, new CanvassDataSerializer());
         gson = gsonBuilder.create();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

@@ -9,6 +9,7 @@ package com.berniesanders.fieldthebern.repositories;
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
+import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -83,7 +84,7 @@ public class AddressRepo {
     /**
      *
      */
-    public Observable<ApiAddress> getSingle(final AddressSpec spec) {
+    public Observable<SingleAddressResponse> getSingle(final AddressSpec spec) {
         Timber.v("getSingle()");
 
         Retrofit retrofit = new Retrofit.Builder()

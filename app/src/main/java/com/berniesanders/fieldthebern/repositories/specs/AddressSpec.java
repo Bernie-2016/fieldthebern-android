@@ -10,6 +10,7 @@ import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.RequestMultipleAddresses;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
+import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 
 import retrofit.http.GET;
 import retrofit.http.Query;
@@ -56,13 +57,13 @@ public class AddressSpec {
                                                      @Query("radius") Integer radius);
 
         @GET("addresses")
-        Observable<ApiAddress> getSingle(@Query("latitude") Double latitude,
-                                         @Query("longitude") Double longitude,
-                                         @Query("street_1") String street1,
-                                         @Query("street_2") String street2,
-                                         @Query("city") String city,
-                                         @Query("state_code") String state,
-                                         @Query("zip_code") String zip
+        Observable<SingleAddressResponse> getSingle(@Query("latitude") Double latitude,
+                                                    @Query("longitude") Double longitude,
+                                                    @Query("street_1") String street1,
+                                                    @Query("street_2") String street2,
+                                                    @Query("city") String city,
+                                                    @Query("state_code") String state,
+                                                    @Query("zip_code") String zip
                                          );
     }
 }

@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,13 +50,14 @@ public class ApiAddress extends CanvassData implements Parcelable {
     public static final String TYPE = "addresses";
 
     Long id; // should be null when sending a new address to the db
-    String type = TYPE;
     Attributes attributes = new Attributes();
     Relationships relationships = new Relationships();//if only life were so easy
+    List<CanvassData> included = new ArrayList<>();
 
     @NonNull
     public static ApiAddress from(@NonNull Address address, @Nullable String apartment) {
         return new ApiAddress()
+                .type(ApiAddress.TYPE)
                 .attributes(new Attributes()
                         .street1(address.getAddressLine(0))
                         .street2(apartment)
@@ -376,7 +378,7 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
     @Override
     public String type() {
-        return type;
+        return TYPE;
     }
 
     @Override
@@ -403,6 +405,15 @@ public class ApiAddress extends CanvassData implements Parcelable {
         return this;
     }
 
+    public List<CanvassData> included() {
+        return this.included;
+    }
+
+    public ApiAddress included(final List<CanvassData> included) {
+        this.included = included;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -415,7 +426,10 @@ public class ApiAddress extends CanvassData implements Parcelable {
         if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null) {
             return false;
         }
-        return !(relationships != null ? !relationships.equals(that.relationships) : that.relationships != null);
+        if (relationships != null ? !relationships.equals(that.relationships) : that.relationships != null) {
+            return false;
+        }
+        return !(included != null ? !included.equals(that.included) : that.included != null);
 
     }
 
@@ -425,7 +439,19 @@ public class ApiAddress extends CanvassData implements Parcelable {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
         result = 31 * result + (relationships != null ? relationships.hashCode() : 0);
+        result = 31 * result + (included != null ? included.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "ApiAddress{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", attributes=" + attributes +
+                ", relationships=" + relationships +
+                ", included=" + included +
+                '}';
     }
 
 
@@ -436,23 +462,28 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeValue(this.id);
         dest.writeString(this.type);
-        dest.writeParcelable(this.attributes, flags);
-        dest.writeParcelable(this.relationships, flags);
+        dest.writeParcelable(this.attributes, 0);
+        dest.writeParcelable(this.relationships, 0);
+        dest.writeList(this.included);
     }
 
     public ApiAddress() {
     }
 
     protected ApiAddress(Parcel in) {
+        super(in);
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.type = in.readString();
         this.attributes = in.readParcelable(Attributes.class.getClassLoader());
         this.relationships = in.readParcelable(Relationships.class.getClassLoader());
+        this.included = new ArrayList<CanvassData>();
+        in.readList(this.included, List.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<ApiAddress> CREATOR = new Parcelable.Creator<ApiAddress>() {
+    public static final Creator<ApiAddress> CREATOR = new Creator<ApiAddress>() {
         public ApiAddress createFromParcel(Parcel source) {
             return new ApiAddress(source);
         }

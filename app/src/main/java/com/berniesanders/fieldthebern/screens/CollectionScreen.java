@@ -109,11 +109,7 @@ public class CollectionScreen extends FlowPathBase {
                 ActionBarService
                         .get(getView())
                         .showToolbar();
-            } else {
-                ActionBarService
-                        .get(getView())
-                        .openAppbar();
-            }
+            } 
 
             setActionBar();
         }
@@ -126,6 +122,7 @@ public class CollectionScreen extends FlowPathBase {
 
             ActionBarService
                     .get(getView())
+                    .openAppbar()
                     .setMainImage(collection.getImageUrlFull())
                     .setConfig(new ActionBarController.Config(collection.getTitle(), menu));
         }

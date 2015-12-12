@@ -13,7 +13,6 @@ import com.berniesanders.fieldthebern.views.AppIntroView;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -69,7 +68,7 @@ public class AppIntroScreen extends FlowPathBase {
 
         void setActionBar() {
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .hideToolbar()
                     .closeAppbar()
                     .lockDrawer();

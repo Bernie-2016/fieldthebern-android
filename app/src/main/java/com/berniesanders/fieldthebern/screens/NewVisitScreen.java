@@ -13,12 +13,10 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
-import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
-import com.google.android.gms.common.api.Api;
 
 import javax.inject.Inject;
 
@@ -209,7 +207,7 @@ public class NewVisitScreen extends FlowPathBase {
                                 }
                             });
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .setMainImage(null)

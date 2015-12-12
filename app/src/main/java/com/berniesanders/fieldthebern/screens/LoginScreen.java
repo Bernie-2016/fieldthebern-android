@@ -128,7 +128,7 @@ public class LoginScreen extends FlowPathBase {
 
         void setActionBar() {
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .lockDrawer()

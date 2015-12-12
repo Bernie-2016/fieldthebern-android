@@ -25,8 +25,6 @@ import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -150,7 +148,7 @@ public class ScoreScreen extends FlowPathBase {
 
         void setActionBar() {
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .setMainImage(null)

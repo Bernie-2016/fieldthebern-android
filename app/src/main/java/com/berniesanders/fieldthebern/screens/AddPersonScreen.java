@@ -12,7 +12,6 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
-import com.berniesanders.fieldthebern.models.Contact;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -143,7 +142,7 @@ public class AddPersonScreen extends FlowPathBase {
                                 }
                             });
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .setMainImage(null)

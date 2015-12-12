@@ -206,7 +206,7 @@ public class MapScreen extends FlowPathBase {
         void setActionBar() {
 
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .hideToolbar()
                     .closeAppbar()
                     .setMainImage(null);

@@ -76,7 +76,7 @@ public class HomeScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .showToolbar()
                     .closeAppbar()
                     .unlockDrawer()

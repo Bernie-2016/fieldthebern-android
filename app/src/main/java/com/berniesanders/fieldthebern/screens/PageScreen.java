@@ -114,11 +114,11 @@ public class PageScreen extends FlowPathBase {
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
                 ActionBarService
-                        .getActionbarController(getView())
+                        .get(getView())
                         .showToolbar();
             } else {
                 ActionBarService
-                        .getActionbarController(getView())
+                        .get(getView())
                         .openAppbar();
             }
         }
@@ -129,7 +129,7 @@ public class PageScreen extends FlowPathBase {
                             .MenuAction()
                             .setIsSearch();
             ActionBarService
-                    .getActionbarController(getView())
+                    .get(getView())
                     .setMainImage(page.getImageUrlFull())
                     .setConfig(new ActionBarController.Config(page.getTitle(), menu));
         }

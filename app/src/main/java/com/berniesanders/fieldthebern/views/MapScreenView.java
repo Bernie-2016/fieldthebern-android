@@ -364,7 +364,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     public boolean onBackPressed() {
 
         ActionBarService
-                .getActionbarController(this)
+                .get(this)
                 .showToolbar();
         return false;
     }

@@ -82,8 +82,6 @@ public class Main extends FlowPathBase {
         private Collection collection;
         Parcelable recyclerViewState;
 
-        ActionBarController actionBarController;
-
         @BindString(R.string.main_issues_screen_title) String issuesScreenTitle;
 
         private static final String BUNDLE_RECYCLER_LAYOUT = "Main.recycler.layout";
@@ -98,9 +96,7 @@ public class Main extends FlowPathBase {
 
             ButterKnife.bind(this, getView());
 
-            actionBarController = ActionBarService.getActionbarController(getView());
-
-            actionBarController.showToolbar();
+            ActionBarService.get(getView()).showToolbar();
 
             try {
                 if (savedInstanceState != null ) {
@@ -143,6 +139,8 @@ public class Main extends FlowPathBase {
             if (recyclerViewState!=null) {
                 getView().getLayoutManager().onRestoreInstanceState(recyclerViewState);
             }
+
+            ActionBarService.get(getView()).closeAppbar();
 
         }
 
@@ -199,7 +197,7 @@ public class Main extends FlowPathBase {
                             .MenuAction()
                             .setIsSearch();
 
-            actionBarController
+            ActionBarService.get(getView())
                     .setMainImage(null)
                     .openAppbar()
                     .setConfig(new ActionBarController.Config(issuesScreenTitle, menu));

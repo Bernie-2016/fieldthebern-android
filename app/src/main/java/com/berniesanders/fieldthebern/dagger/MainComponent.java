@@ -2,11 +2,12 @@ package com.berniesanders.fieldthebern.dagger;
 
 import android.content.Context;
 
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.MainActivity;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.DialogController;
-import com.berniesanders.fieldthebern.controllers.ErrorToastController;
+import com.berniesanders.fieldthebern.controllers.ToastController;
 import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.LocationController;
 import com.berniesanders.fieldthebern.controllers.PermissionController;
@@ -46,7 +47,7 @@ public interface MainComponent {
     void inject(AppIntroScreen appIntroScreen);
 
     Gson gson();
-    ErrorToastController errorToastController();
+    ToastController toastController();
     CollectionRepo collectionRepo();
     TokenRepo tokenRepo();
     UserRepo userRepo();
@@ -60,4 +61,5 @@ public interface MainComponent {
     ProgressDialogController progressDialogController();
     AddressRepo addressRepo();
     VisitRepo visitRepo();
+    ErrorResponseParser errorParser();
 }

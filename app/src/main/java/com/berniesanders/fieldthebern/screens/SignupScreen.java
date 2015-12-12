@@ -8,7 +8,7 @@ import android.os.Bundle;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.ErrorToastService;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
@@ -16,9 +16,11 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
+import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.SignupView;
@@ -98,6 +100,7 @@ public class SignupScreen extends FlowPathBase {
     public interface Component {
         void inject(SignupView t);
         UserRepo userRepo();
+        ErrorResponseParser errorParser();
     }
 
     @FtbScreenScope
@@ -107,6 +110,7 @@ public class SignupScreen extends FlowPathBase {
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
+        private final ErrorResponseParser errorResponseParser;
         Bitmap userBitmap;
 
         private String stateCode;
@@ -118,9 +122,10 @@ public class SignupScreen extends FlowPathBase {
         private boolean locationRequestCompleted = false;
 
         @Inject
-        Presenter(UserRepo repo, UserAttributes userAttributes) {
+        Presenter(UserRepo repo, UserAttributes userAttributes, ErrorResponseParser errorResponseParser) {
             this.repo = repo;
             this.userAttributes = userAttributes;
+            this.errorResponseParser = errorResponseParser;
         }
 
         @Override
@@ -286,7 +291,8 @@ public class SignupScreen extends FlowPathBase {
             public void onError(Throwable e) {
                 Timber.e(e, "createUserRequest error");
                 if (e instanceof HttpException) {
-                    ErrorToastService.get(getView()).showApiError(e);
+                    ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
+                    ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
             }
 

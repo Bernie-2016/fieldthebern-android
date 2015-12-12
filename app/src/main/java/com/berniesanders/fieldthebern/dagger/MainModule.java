@@ -6,10 +6,11 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.config.ConfigImpl;
-import com.berniesanders.fieldthebern.controllers.ErrorToastController;
+import com.berniesanders.fieldthebern.controllers.ToastController;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.Content;
 import com.berniesanders.fieldthebern.parsing.CollectionDeserializer;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.PageContentDeserializer;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
@@ -89,8 +90,8 @@ public class MainModule {
 
     @Provides
     @Singleton
-    public ErrorToastController provideErrorToastController() {
-        return new ErrorToastController(context, gson);
+    public ToastController provideToastController() {
+        return new ToastController(context);
     }
 
     @Provides
@@ -110,6 +111,12 @@ public class MainModule {
     @Singleton
     public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
         return new VisitRepo(gson, tokenRepo, rxPrefs, config);
+    }
+
+    @Provides
+    @Singleton
+    public ErrorResponseParser provideErrorParser() {
+        return new ErrorResponseParser(gson);
     }
 
 }

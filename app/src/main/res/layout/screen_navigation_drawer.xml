@@ -4,13 +4,15 @@
     android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <LinearLayout
         android:id="@+id/drawer_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/light_blue2"
+        android:background="@color/bernie_darker_blue"
         android:orientation="vertical"
         android:paddingBottom="16dp"
         android:paddingLeft="16dp"
@@ -21,14 +23,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
-            android:src="@drawable/ic_face_24dp"/>
+            android:src="@drawable/ic_face_white_48dp"/>
 
         <TextView
             android:id="@+id/drawer_header_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="2dp"
-            android:text="@string/bernie_sanders"
+            tools:text="@string/bernie_sanders"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
@@ -38,7 +40,7 @@
             android:id="@+id/drawer_header_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/bernie_email"
+            tools:text="@string/bernie_email"
             android:textSize="14sp"
             android:textColor="@android:color/white"
             />

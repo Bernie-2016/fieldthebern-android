@@ -16,6 +16,7 @@ import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.berniesanders.fieldthebern.views.LoginView;
@@ -92,6 +93,7 @@ public class LoginScreen extends FlowPathBase {
     public interface Component {
         void inject(LoginView t);
         User user();
+        ErrorResponseParser errorParser();
     }
 
     @FtbScreenScope
@@ -101,6 +103,7 @@ public class LoginScreen extends FlowPathBase {
 
         private final User user;
         private final TokenRepo tokenRepo;
+        private final ErrorResponseParser errorResponseParser;
 
         @Bind(R.id.password)
         EditText passwordEditText;
@@ -109,9 +112,10 @@ public class LoginScreen extends FlowPathBase {
         EditText emailEditText;
 
         @Inject
-        Presenter(User user, TokenRepo tokenRepo) {
+        Presenter(User user, TokenRepo tokenRepo, ErrorResponseParser errorResponseParser) {
             this.user = user;
             this.tokenRepo = tokenRepo;
+            this.errorResponseParser = errorResponseParser;
         }
 
         @Override
@@ -172,7 +176,8 @@ public class LoginScreen extends FlowPathBase {
             public void onError(Throwable e) {
                 Timber.e(e, "loginEmail error");
                 if (e instanceof HttpException) {
-                    ToastService.get(getView()).bern(ErrorResponse.parse((HttpException) e));
+                    ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
+                    ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
             }
 

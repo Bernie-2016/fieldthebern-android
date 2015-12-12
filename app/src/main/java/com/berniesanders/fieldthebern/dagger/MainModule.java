@@ -10,6 +10,7 @@ import com.berniesanders.fieldthebern.controllers.ToastController;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.Content;
 import com.berniesanders.fieldthebern.parsing.CollectionDeserializer;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.PageContentDeserializer;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
@@ -110,6 +111,12 @@ public class MainModule {
     @Singleton
     public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
         return new VisitRepo(gson, tokenRepo, rxPrefs, config);
+    }
+
+    @Provides
+    @Singleton
+    public ErrorResponseParser provideErrorParser() {
+        return new ErrorResponseParser(gson);
     }
 
 }

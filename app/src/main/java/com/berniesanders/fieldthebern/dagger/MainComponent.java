@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.dagger;
 
 import android.content.Context;
 
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.MainActivity;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
@@ -60,4 +61,5 @@ public interface MainComponent {
     ProgressDialogController progressDialogController();
     AddressRepo addressRepo();
     VisitRepo visitRepo();
+    ErrorResponseParser errorParser();
 }

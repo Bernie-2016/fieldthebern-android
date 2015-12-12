@@ -1,11 +1,8 @@
 package com.berniesanders.fieldthebern.models;
 
-import com.bugsnag.android.Bugsnag;
-import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.util.List;
 
-import retrofit.HttpException;
 
 
 /**
@@ -24,7 +21,7 @@ import retrofit.HttpException;
  * }
  */
 public class ErrorResponse {
-    public Error[] errors;
+    public List<Error> errors;
 
     public static class Error {
         public String id;
@@ -38,23 +35,15 @@ public class ErrorResponse {
         }
     }
 
-    public static String[] parse(HttpException throwable) {
-        String body = null;
-        try {
-            body = throwable.response().errorBody().string();
-        } catch (IOException e) {
-            Bugsnag.notify(new Exception("Error parsing error response"));
+
+    public String getAllDetails() {
+        StringBuilder sb = new StringBuilder();
+        for (Error error : errors) {
+            sb.append(error.detail);
+            sb.append("\n");
         }
-        Gson gson = new Gson();
-
-        ErrorResponse response = gson.fromJson(body, ErrorResponse.class);
-        String[] returnVal = new String[response.errors.length];
-
-        for (int i = 0; i < returnVal.length; i++) {
-            returnVal[i] = response.errors[i].toString();
-        }
-
-        return returnVal;
-
+        //remove the extra blank line
+        sb.delete(sb.lastIndexOf("\n"), sb.length());
+        return sb.toString();
     }
 }

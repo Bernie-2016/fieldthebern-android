@@ -19,6 +19,7 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
+import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
@@ -202,7 +203,7 @@ public class AddAddressScreen extends FlowPathBase {
                         .subscribe(singleAddressObserver);
         }
 
-        Observer<ApiAddress> singleAddressObserver = new Observer<ApiAddress>() {
+        Observer<SingleAddressResponse> singleAddressObserver = new Observer<SingleAddressResponse>() {
             @Override
             public void onCompleted() {
                 Timber.v("singleAddressObserver onCompleted");
@@ -243,10 +244,13 @@ public class AddAddressScreen extends FlowPathBase {
                 }
             }
 
+
             @Override
-            public void onNext(ApiAddress apiAddresses) {
-                Timber.v("singleAddressObserver onNext \n%s", apiAddresses );
-                Flow.get(getView()).set(new NewVisitScreen(apiAddresses));
+            public void onNext(SingleAddressResponse response) {
+                Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s", response.addresses().get(0) );
+                address = response.addresses().get(0);
+                address.included(response.included());
+                Flow.get(getView()).set(new NewVisitScreen(address));
             }
         };
     }

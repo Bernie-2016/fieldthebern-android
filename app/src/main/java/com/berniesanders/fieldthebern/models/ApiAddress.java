@@ -462,6 +462,7 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeValue(this.id);
         dest.writeString(this.type);
         dest.writeParcelable(this.attributes, 0);
@@ -473,6 +474,7 @@ public class ApiAddress extends CanvassData implements Parcelable {
     }
 
     protected ApiAddress(Parcel in) {
+        super(in);
         this.id = (Long) in.readValue(Long.class.getClassLoader());
         this.type = in.readString();
         this.attributes = in.readParcelable(Attributes.class.getClassLoader());

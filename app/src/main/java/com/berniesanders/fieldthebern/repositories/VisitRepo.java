@@ -76,7 +76,7 @@ public class VisitRepo {
 
         visit = new Visit();
         visit.start();
-        visit.included().add(apiAddress);
+        visit.included().add(0, apiAddress);
         List<CanvassData> included = apiAddress.included();
 
         for(CanvassData canvassData : included) {

@@ -288,6 +288,7 @@ public class Person extends CanvassData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
         dest.writeValue(this.id);
         dest.writeString(this.type);
         dest.writeParcelable(this.attributes, flags);
@@ -297,6 +298,7 @@ public class Person extends CanvassData implements Parcelable {
     }
 
     protected Person(Parcel in) {
+        super(in);
         this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.type = in.readString();
         this.attributes = in.readParcelable(Attributes.class.getClassLoader());

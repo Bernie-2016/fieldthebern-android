@@ -76,7 +76,7 @@ How screen navigation and dependency injection works in our app with flow and mo
  
 * flow and mortar read the `ExampleScreen` and inflate the view based on the resId in the `@Layout` annotation `R.layout.screen_example`
  
-* The `screen_example` XML specifies `TemplateView` as the view class to inflate. (this can extend any valid layout like `LinearLayout`)
+* The `screen_example` XML specifies `ExampleView` as the view class to inflate. (this can extend any valid layout like `LinearLayout`)
  
 * When the view is inflated, it calls a mortar "service" that we set up named `DaggerService`
  

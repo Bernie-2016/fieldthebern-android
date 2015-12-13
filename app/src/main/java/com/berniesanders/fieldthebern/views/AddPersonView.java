@@ -247,11 +247,13 @@ public class AddPersonView extends RelativeLayout {
         if (personAttributes.canvassResponse() != null) {
             setCanvassResponse(personAttributes.canvassResponse());
         }
-
-        if (personAttributes.preferredContact().equals(Contact.EMAIL)) {
-            emailCheckBox.setChecked(true);
-        } else if (personAttributes.preferredContact().equals(Contact.PHONE)) {
-            phoneCheckBox.setChecked(true);
+        
+        if(personAttributes.preferredContact() != null) {
+            if (personAttributes.preferredContact().equals(Contact.EMAIL)) {
+                emailCheckBox.setChecked(true);
+            } else if (personAttributes.preferredContact().equals(Contact.PHONE)) {
+                phoneCheckBox.setChecked(true);
+            }
         }
     }
 }

@@ -251,7 +251,15 @@ public class NewVisitScreen extends FlowPathBase {
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()
                         .bestCanvassResponse(CanvassResponse.ASKED_TO_LEAVE);
+            } else {
+                ((ApiAddress) visitRepo.get().included().get(0))
+                        .attributes()
+                        .bestCanvassResponse(null);
             }
+
+            ((ApiAddress) visitRepo.get().included().get(0))
+                    .attributes()
+                    .lastCanvassResponse(null);
 
             visitSubscription = visitRepo.submit()
                     .subscribeOn(Schedulers.io())

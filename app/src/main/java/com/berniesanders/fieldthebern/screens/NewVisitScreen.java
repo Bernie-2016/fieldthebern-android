@@ -7,6 +7,7 @@ import android.widget.CompoundButton;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
@@ -14,8 +15,10 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
+import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 
@@ -29,6 +32,7 @@ import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
+import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -102,6 +106,7 @@ public class NewVisitScreen extends FlowPathBase {
         void inject(NewVisitView t);
         ApiAddress apiAddress();
         VisitRepo visitRepo();
+        ErrorResponseParser errorResponseParser();
     }
 
     @FtbScreenScope
@@ -109,6 +114,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         private final ApiAddress apiAddress;
         private final VisitRepo visitRepo;
+        private final ErrorResponseParser errorResponseParser;
         Subscription visitSubscription;
 
         @BindString(android.R.string.cancel) String cancel;
@@ -124,9 +130,10 @@ public class NewVisitScreen extends FlowPathBase {
         SwitchCompat askedToLeaveSwitch;
 
         @Inject
-        Presenter(ApiAddress apiAddress, VisitRepo visitRepo) {
+        Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser) {
             this.apiAddress = apiAddress;
             this.visitRepo = visitRepo;
+            this.errorResponseParser = errorResponseParser;
 
             if (!visitRepo.inProgress()) {
                 visitRepo.start(apiAddress);
@@ -263,6 +270,11 @@ public class NewVisitScreen extends FlowPathBase {
                 Timber.e(e, "error submitting visit");
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
+                }
+
+                if (e instanceof HttpException) {
+                    ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
+                    ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
             }
 

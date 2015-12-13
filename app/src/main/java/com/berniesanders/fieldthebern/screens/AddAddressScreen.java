@@ -14,14 +14,18 @@ import com.berniesanders.fieldthebern.controllers.DialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
+import com.bugsnag.android.Bugsnag;
 
 import java.io.IOException;
 
@@ -92,6 +96,7 @@ public class AddAddressScreen extends FlowPathBase {
         void inject(AddAddressView t);
         ApiAddress address();
         AddressRepo addressRepo();
+        ErrorResponseParser errorResponseParser();
     }
 
     @FtbScreenScope
@@ -99,6 +104,7 @@ public class AddAddressScreen extends FlowPathBase {
 
         private ApiAddress address;
         private final AddressRepo addressRepo;
+        private final ErrorResponseParser errorResponseParser;
         @BindString(android.R.string.cancel) String cancel;
 
         @BindString(R.string.add_address) String screenTitle;
@@ -107,9 +113,10 @@ public class AddAddressScreen extends FlowPathBase {
 
 
         @Inject
-        Presenter(ApiAddress address, AddressRepo addressRepo) {
+        Presenter(ApiAddress address, AddressRepo addressRepo, ErrorResponseParser errorResponseParser) {
             this.address = address;
             this.addressRepo = addressRepo;
+            this.errorResponseParser = errorResponseParser;
         }
 
         @Override
@@ -211,10 +218,14 @@ public class AddAddressScreen extends FlowPathBase {
             @Override
             public void onError(Throwable e) {
 
+                if (AuthFailRedirect.redirectOnFailure(e, getView())) {
+                    return;
+                }
+
                 if (e instanceof HttpException) {
 
                     HttpException httpe = (HttpException) e;
-
+                    ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     if (httpe.code() == 404) {
                         //address was not found in db, proceed with visit
                         Flow.get(getView()).set(new NewVisitScreen(address));
@@ -222,23 +233,17 @@ public class AddAddressScreen extends FlowPathBase {
                     } else if (httpe.code() == 400) {
                         //address was found in db, but not specific enough
                         //ask user for more info
-                        //TODO use the error service to parse raw json
                         //TODO probably better to show a dialog here than a bern
-                            String errorBodyString = null;
-                        try {
-                            errorBodyString = httpe.response().errorBody().string();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        ToastService.get(getView()).bern(""+errorBodyString);
+                        ToastService.get(getView()).bern(errorResponse.getAllDetails());
                     } else {
-                        ToastService.get(getView()).bern((e.getMessage()));
+                        ToastService.get(getView()).bern(errorResponse.getAllDetails());
                         Timber.e(e, "singleAddressObserver onError");
                     }
                 } else {
                     //wtf
-                    ToastService.get(getView()).bern((e.getMessage()));
-                    Timber.e(e, "singleAddressObserver onError");
+                    ToastService.get(getView()).bern("unknown error");//TODO externalize string
+                    Timber.e(e, "singleAddressObserver unknown onError");
+                    Bugsnag.notify(e);
                 }
             }
 

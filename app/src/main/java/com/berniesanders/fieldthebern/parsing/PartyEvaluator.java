@@ -59,9 +59,9 @@ public class PartyEvaluator {
      * TODO better way to do this?!
     */
 
-    public static String getText(@Party.Affiliation String apiPary, String[] partyArray) {
+    public static String getText(@Party.Affiliation String apiParty, String[] partyArray) {
 
-        switch (apiPary) {
+        switch (apiParty) {
             case Party.UNKNOWN:
                 return partyArray[0];
             case Party.DEMOCRAT:
@@ -77,6 +77,40 @@ public class PartyEvaluator {
             default:
                 Timber.e("PartyEvaluator.getText() called with unmapped party?");
                 return partyArray[0];
+        }
+    }
+
+
+    /**
+     * This is a hack to get around an inconsistency in a bug in the API
+     *
+     * The API returns party in the format "democrat_affiliation"
+     * However, the API accepts party in the format "Democrat"
+     *
+     * See: https://github.com/Bernie-2016/fieldthebern-android/issues/219
+     *
+     * Marked as deprecated to make clear this should only be used in very limited situations
+     * @deprecated
+     */
+    @Party.Affiliation
+    public static String mapApiParty(@Party.Affiliation String output) {
+
+        switch (output) {
+            case Party.UNKNOWN_AFFILIATION:
+                return Party.UNKNOWN;
+            case Party.DEMOCRAT_AFFILIATION:
+                return Party.DEMOCRAT;
+            case Party.REPUBLICAN_AFFILIATION:
+                return Party.REPUBLICAN;
+            case Party.INDEPENDENT_AFFILIATION:
+                return Party.INDEPENDENT;
+            case Party.UNDECLARED_AFFILIATION:
+                return Party.UNDECLARED;
+            case Party.UNAFFILIATED_AFFILIATION:
+                return Party.UNAFFILIATED;
+            default:
+                Timber.e("PartyEvaluator.mapApiParty() called with unmapped party? returning original string as a fallback");
+                return output;
         }
     }
 }

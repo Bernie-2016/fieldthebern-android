@@ -8,6 +8,7 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
@@ -161,6 +162,7 @@ public class LoginScreen extends FlowPathBase {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(observer);
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
             }
 
         }
@@ -169,6 +171,7 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.d("loginEmail done.");
+                ProgressDialogService.get(getView()).dismiss();
                 Flow.get(getView().getContext()).set(new HomeScreen());
             }
 
@@ -179,6 +182,7 @@ public class LoginScreen extends FlowPathBase {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
+                ProgressDialogService.get(getView()).dismiss();
             }
 
             @Override

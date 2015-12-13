@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity
         DialogController.Activity,
         FacebookController.Activity,
         PermissionController.Activity,
+        ProgressDialogController.Activity,
         Flow.Dispatcher {
 
     private MortarScope activityScope;
@@ -220,6 +221,7 @@ public class MainActivity extends AppCompatActivity
         actionBarController.takeView(this);
         facebookController.takeView(this);
         permissionController.takeView(this);
+        progressDialogController.takeView(this);
     }
 
     @Override
@@ -303,6 +305,7 @@ public class MainActivity extends AppCompatActivity
         dialogController.dropView(this);
         facebookController.dropView(this);
         permissionController.dropView(this);
+        progressDialogController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
         if (isFinishing() && activityScope != null) {

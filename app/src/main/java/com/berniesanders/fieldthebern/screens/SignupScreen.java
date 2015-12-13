@@ -8,6 +8,7 @@ import android.os.Bundle;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
@@ -190,6 +191,7 @@ public class SignupScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         void onSubmit() {
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
             userAttributes = getView().getInput(userAttributes);
             requestLocation();
         }
@@ -284,12 +286,14 @@ public class SignupScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.d("createUserRequest done.");
+                ProgressDialogService.get(getView()).dismiss();
                 Flow.get(getView().getContext()).set(new HomeScreen());
             }
 
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "createUserRequest error");
+                ProgressDialogService.get(getView()).dismiss();
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());

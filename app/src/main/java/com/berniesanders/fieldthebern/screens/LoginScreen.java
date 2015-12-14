@@ -173,11 +173,11 @@ public class LoginScreen extends FlowPathBase {
         }
 
         private boolean formIsValid() {
-            if (FormValidator.isNullOrBlank(passwordEditText)) {
-                ToastService.get(getView()).bern(passwordBlank);
-                return false;
-            } else if (FormValidator.isNullOrBlank(emailEditText)) {
+            if (FormValidator.isNullOrBlank(emailEditText)) {
                 ToastService.get(getView()).bern(emailBlank);
+                return false;
+            } else if (FormValidator.isNullOrBlank(passwordEditText)) {
+                ToastService.get(getView()).bern(passwordBlank);
                 return false;
             }
             return true;

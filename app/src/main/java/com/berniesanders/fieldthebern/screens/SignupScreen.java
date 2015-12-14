@@ -203,11 +203,11 @@ public class SignupScreen extends FlowPathBase {
 
         private boolean formIsValid() {
             //last name is optional
-            if (FormValidator.isNullOrBlank(getView().getEmail())) {
-                ToastService.get(getView()).bern(emailBlank);
-                return false;
-            } else if (FormValidator.isNullOrBlank(getView().getFirstName())) {
+            if (FormValidator.isNullOrBlank(getView().getFirstName())) {
                 ToastService.get(getView()).bern(firstNameBlank);
+                return false;
+            } else if (FormValidator.isNullOrBlank(getView().getEmail())) {
+                ToastService.get(getView()).bern(emailBlank);
                 return false;
             } else if (FormValidator.isNullOrBlank(getView().getPassword())) {
                 ToastService.get(getView()).bern(passwordBlank);

@@ -61,6 +61,13 @@
     <string name="permission_contacts_rationale">Canvassing requires location permissions</string>
     <string name="save_profile">Save Profile</string>
 
+    <string name="err_password_blank">Please enter a password</string>
+    <string name="err_email_blank">Please enter an email</string>
+    <string name="err_your_first_name_blank">Please enter your first name</string>
+    <string name="err_their_first_name_blank">Please enter their first name</string>
+    <string name="err_address_blank">Please enter an address</string>
+    <string name="err_no_visit">Please add a person or indicate if no one was home or you were asked to leave</string>
+
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">
           <item>(select party)</item>

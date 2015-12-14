@@ -17,9 +17,11 @@ import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
+import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
+import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 
@@ -120,6 +122,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
+        @BindString(R.string.err_no_visit) String errorVisitInvalid;
 
         boolean noOneHome = false;
         boolean askedToLeave = false;
@@ -261,11 +264,26 @@ public class NewVisitScreen extends FlowPathBase {
             ((ApiAddress) visitRepo.get().included().get(0))
                     .attributes()
                     .lastCanvassResponse(null);
+            if (!formIsValid()) { return; }
 
             visitSubscription = visitRepo.submit()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(visitResultObserver);
+        }
+
+        private boolean formIsValid() {
+
+            Visit visit = visitRepo.get();
+            ApiAddress apiAddress = (ApiAddress) visitRepo.get().included().get(0);
+
+            boolean hasPeople = visitRepo.get().included().size() > 1;
+
+            if (!hasPeople && !noOneHome && !askedToLeave) {
+                ToastService.get(getView()).bern(errorVisitInvalid);
+                return false;
+            }
+            return true;
         }
 
         Observer<VisitResult> visitResultObserver = new Observer<VisitResult>() {

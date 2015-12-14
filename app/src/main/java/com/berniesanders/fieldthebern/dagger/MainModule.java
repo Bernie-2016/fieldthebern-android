@@ -92,12 +92,6 @@ public class MainModule {
 
     @Provides
     @Singleton
-    public ToastController provideToastController() {
-        return new ToastController(context);
-    }
-
-    @Provides
-    @Singleton
     public RxSharedPreferences provideRxPrefs() {
         return rxPrefs;
     }

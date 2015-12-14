@@ -31,6 +31,8 @@ import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
 import com.bugsnag.android.Bugsnag;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
 
 import javax.inject.Inject;
@@ -114,6 +116,7 @@ public class AddAddressScreen extends FlowPathBase {
         @BindString(R.string.add_address) String screenTitle;
         @BindString(R.string.are_you_sure_address_correct) String confirmTitle;
         @BindString(R.string.are_you_sure_address_body) String confirmBody;
+        @BindString(R.string.err_address_blank) String addressBlank;
 
 
         @Inject
@@ -167,6 +170,8 @@ public class AddAddressScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         public void startNewVisit() {
             address = getView().getAddress();
+            if(!formIsValid()) { return; }
+
             String apartment = (address.attributes().street2() == null) ? "" : address.attributes().street2();
 
             String formattedAddress = String.format(
@@ -201,6 +206,14 @@ public class AddAddressScreen extends FlowPathBase {
                                 .message(formattedAddress)
                                 .withActions(confirmAction, cancelAction)
                     );
+        }
+
+        private boolean formIsValid() {
+            if (StringUtils.isBlank(address.attributes().street1())) {
+                ToastService.get(getView()).bern(addressBlank);
+                return false;
+            }
+            return true;
         }
 
         private void loadAddressFromApi() {

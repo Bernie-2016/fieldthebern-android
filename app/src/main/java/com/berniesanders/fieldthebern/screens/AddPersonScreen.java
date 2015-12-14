@@ -8,14 +8,18 @@ import android.widget.TextView;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.AddPersonView;
+
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 
@@ -106,6 +110,7 @@ public class AddPersonScreen extends FlowPathBase {
         @BindString(R.string.add_person) String addPerson;
         @BindString(R.string.edit_person) String editPerson;
         @BindString(R.string.editing_person) String editing;
+        @BindString(R.string.err_their_first_name_blank) String blankFirstName;
 
         @Inject
         Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
@@ -167,15 +172,32 @@ public class AddPersonScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         public void addPerson() {
 
+            Person person = null;
+
             if (personToEdit==null) {
-                Person person = new Person();
+                person = new Person();
                 getView().updatePerson(person);
                 visitRepo.addPerson(person);
             } else {
+                person = personToEdit;
                 getView().updatePerson(personToEdit);
             }
 
+            if(!formIsValid(person)) { return; }
+
             Flow.get(getView()).goBack();
+        }
+
+        private boolean formIsValid(Person person) {
+
+            if (StringUtils.isBlank(person.attributes().firstName())) {
+                ToastService.get(getView()).bern(blankFirstName);
+                return false;
+            } else if (StringUtils.isBlank(person.attributes().firstName())) {
+                ToastService.get(getView()).bern(blankFirstName);
+                return false;
+            }
+            return true;
         }
 
     }

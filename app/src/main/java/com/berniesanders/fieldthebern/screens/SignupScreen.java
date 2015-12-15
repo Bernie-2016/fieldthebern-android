@@ -4,10 +4,13 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
@@ -146,6 +149,10 @@ public class SignupScreen extends FlowPathBase {
 
             //call in case the photo loads while rotating
             showPhotoIfExists();
+            
+            PermissionService
+                    .get(getView())
+                    .requestPermission();
         }
 
         private void showPhotoIfExists() {
@@ -195,10 +202,24 @@ public class SignupScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         void onSubmit() {
-            ProgressDialogService.get(getView()).show(R.string.please_wait);
-            if(!formIsValid()) { return; }
-            userAttributes = getView().getInput(userAttributes);
-            requestLocation();
+            if (PermissionService.get(getView()).isGranted()) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+                if(!formIsValid()) { return; }
+                userAttributes = getView().getInput(userAttributes);
+                requestLocation();
+
+            } else {
+                // Display a SnackBar with an explanation and a button to trigger the request.
+                Snackbar.make(getView(), R.string.permission_contacts_rationale,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(android.R.string.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                PermissionService.get(getView()).requestPermission();
+                            }
+                        })
+                        .show();
+            }
         }
 
         private boolean formIsValid() {

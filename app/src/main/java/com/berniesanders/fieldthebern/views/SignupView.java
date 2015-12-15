@@ -107,11 +107,32 @@ public class SignupView extends RelativeLayout {
 
     public UserAttributes getInput(UserAttributes userAttributes) {
 
-        return userAttributes
+        userAttributes
                     .email(email.getText().toString())
                     .password(password.getText().toString())
-                    .firstName(firstName.getText().toString())
-                    .lastName(lastName.getText().toString());
+                    .firstName(firstName.getText().toString());
+
+        //last name is optional
+        if(lastName.getText() != null) {
+            userAttributes.lastName(lastName.getText().toString());
+        }
+
+        return userAttributes;
     }
 
+    public AppCompatEditText getFirstName() {
+        return firstName;
+    }
+
+    public AppCompatEditText getLastName() {
+        return lastName;
+    }
+
+    public AppCompatEditText getEmail() {
+        return email;
+    }
+
+    public AppCompatEditText getPassword() {
+        return password;
+    }
 }

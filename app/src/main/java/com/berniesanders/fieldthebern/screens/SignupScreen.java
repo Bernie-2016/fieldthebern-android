@@ -22,6 +22,7 @@ import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
+import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.SignupView;
@@ -108,6 +109,9 @@ public class SignupScreen extends FlowPathBase {
     static public class Presenter extends ViewPresenter<SignupView> {
 
         @BindString(R.string.signup_title) String screenTitleString;
+        @BindString(R.string.err_email_blank) String emailBlank;
+        @BindString(R.string.err_password_blank) String passwordBlank;
+        @BindString(R.string.err_your_first_name_blank) String firstNameBlank;
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
@@ -192,8 +196,24 @@ public class SignupScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         void onSubmit() {
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            if(!formIsValid()) { return; }
             userAttributes = getView().getInput(userAttributes);
             requestLocation();
+        }
+
+        private boolean formIsValid() {
+            //last name is optional
+            if (FormValidator.isNullOrBlank(getView().getFirstName())) {
+                ToastService.get(getView()).bern(firstNameBlank);
+                return false;
+            } else if (FormValidator.isNullOrBlank(getView().getEmail())) {
+                ToastService.get(getView()).bern(emailBlank);
+                return false;
+            } else if (FormValidator.isNullOrBlank(getView().getPassword())) {
+                ToastService.get(getView()).bern(passwordBlank);
+                return false;
+            }
+            return true;
         }
 
         private boolean addressAndLocationSet() {

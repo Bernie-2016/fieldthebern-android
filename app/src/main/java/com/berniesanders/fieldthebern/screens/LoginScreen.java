@@ -18,6 +18,7 @@ import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
+import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.berniesanders.fieldthebern.views.LoginView;
@@ -101,6 +102,8 @@ public class LoginScreen extends FlowPathBase {
     static public class Presenter extends ViewPresenter<LoginView> {
 
         @BindString(R.string.login_title) String screenTitleString;
+        @BindString(R.string.err_email_blank) String emailBlank;
+        @BindString(R.string.err_password_blank) String passwordBlank;
 
         private final User user;
         private final TokenRepo tokenRepo;
@@ -150,6 +153,8 @@ public class LoginScreen extends FlowPathBase {
         @OnClick(R.id.login_email)
         void loginEmail() {
 
+            if(!formIsValid()) { return; }
+
             if (!user.getData().attributes().isFacebookUser()) {
 
                 TokenSpec spec = new TokenSpec()
@@ -165,6 +170,17 @@ public class LoginScreen extends FlowPathBase {
                 ProgressDialogService.get(getView()).show(R.string.please_wait);
             }
 
+        }
+
+        private boolean formIsValid() {
+            if (FormValidator.isNullOrBlank(emailEditText)) {
+                ToastService.get(getView()).bern(emailBlank);
+                return false;
+            } else if (FormValidator.isNullOrBlank(passwordEditText)) {
+                ToastService.get(getView()).bern(passwordBlank);
+                return false;
+            }
+            return true;
         }
 
         Observer<Token> observer = new Observer<Token>() {

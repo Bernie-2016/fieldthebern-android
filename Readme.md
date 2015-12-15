@@ -1,16 +1,20 @@
-#FeelTheBern Android
+[![Circle CI](https://circleci.com/gh/Bernie-2016/fieldthebern-android/tree/develop.svg?style=svg&circle-token=ca0895f7453c8d07ce49d9b59c05c527ef146bda)](https://circleci.com/gh/Bernie-2016/fieldthebern-android/tree/develop)
 
-![feel the bern](play_store_bg_1024x500.png)  
-This app under development and is currently mostly a mirror of the FTB website. 
-The goal is to provide a tool for grassroots organizers to have quick and easy 
-access to Bernie's stance on the issues.
- 
-It uses the JSON feed to render views (rather than a WebView)
+#Field the Bern (Android)
 
+This app under development. The goal is to provide a tool for grassroots organizers to canvass with.  
+
+Issue info is provided by [FeelTheBern.org](http://FeelTheBern.org)
+
+[Video of the iOS version under development](http://cl.ly/113H0T2u350V)  
+[Video of the Android version under development](https://vid.me/UA6J)  
 
 ##Code architecture
 
-FTB Android **loosely** uses [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter) and the [Repository](http://code.tutsplus.com/tutorials/the-repository-design-pattern--net-35804) design patterns.  
+This app **loosely** make use of these design patterns:  
+ [Model-View-Presenter](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter)  
+ [Repository](http://code.tutsplus.com/tutorials/the-repository-design-pattern--net-35804)  
+  
 
 We also use the following open-source libraries.  
 
@@ -22,22 +26,91 @@ We also use the following open-source libraries.
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [RxJava](https://github.com/ReactiveX/RxJava)
 
+
 Before contributing, please be sure your are familiar with the design patterns and libraries. 
 Feel free to reach out on Slack if you have questions!
 
 
-##Building the app
+##Building
 
-To build you will need a **YouTube API key**.  
-Follow the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
+Because all these API keys are based on your debug key, you will need to ask for a 
+valid `debug.keystore` from the current app developers.  
+
+All these keys **must** be generated with the same `debug.keystore`
+
+You will need a **YouTube API key** and **Google Maps Android API Key**. 
+Easiest way to get the Google API keys would be to ask a current **fieldthebern-android** developer.
+ 
+You can also set up your own API keys (for YouTube and Google Maps) by following the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
+Both APIs use the same key, just add both to your application in the Google API Console.  
+
+In order to have the app work with **Facebook** you will need to ask us for the Facebook App ID.  
+You cannot setup your own facebook app because it needs to use the same app as the **fieldthebern-api**
 
 Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="youtubeApiKey">YOUR-API-KEY</string>
+    <string name="googleApiKey">YOUR-API-KEY</string>
+    <string name="facebook_app_id">1234567890</string>
 </resources>
 ```
+
+##Mortar and Flow
+
+A quick primer on how we're using mortar and flow.
+
+These three files show the usage of mortar and flow as blank templates with just the boilerplate stuff in them and some javadocs to explain what is going on.
+
+[ExampleView.java](app/src/main/java/com/berniesanders/fieldthebern/views/ExampleView.java)
+
+[ExampleScreen.java](app/src/main/java/com/berniesanders/fieldthebern/screens/ExampleScreen.java)
+
+[screen_example.xml](app/src/main/res/layout/screen_example.xml)
+
+How screen navigation and dependency injection works in our app with flow and mortar:
+
+* To change "screens" call flow: `Flow.get(context).set(new ExampleScreen());`  
+
+* Flow will manage the backstack by saving the object passed to `set()`
+ 
+* flow and mortar read the `ExampleScreen` and inflate the view based on the resId in the `@Layout` annotation `R.layout.screen_example`
+ 
+* The `screen_example` XML specifies `ExampleView` as the view class to inflate. (this can extend any valid layout like `LinearLayout`)
+ 
+* When the view is inflated, it calls a mortar "service" that we set up named `DaggerService`
+ 
+* `DaggerService` creates the Dagger component based on what's in the `ExampleScreen.java` code 
+ 
+* Using the dagger component, `DaggerService` injects the `ExampleScreen.Presenter` on our custom view `ExampleView`
+ 
+* The presenter is static and will stay alive on rotation.
+ 
+* However you can only use the presenter to manipulate the view between `onLoad()` and `dropView()`
+ 
+* Some common features of Activities and Fragments are not available in presenters or custom views such a dialog boxes, and control of the action bar.
+ 
+* To get around that we use 'controllers' that are basically the same kind of presenters described above.
+ 
+* The controllers are made available via a service-lookup pattern through mortar.  Any valid view context can request the service to, for example, hide the actionbar
+
+
+Example code using the `ActionBarController` to show the Toolbar from a presenter's `onLoad()` method
+```java
+@Override
+protected void onLoad(Bundle savedInstanceState) {
+    ActionBarService.getActionbarController(getView()).showToolbar();
+}
+```
+
+More example code showing how our 'controllers' work can be found in these two example files:
+
+
+[ExampleController.java](app/src/main/java/com/berniesanders/fieldthebern/controllers/ExampleController.java)
+
+[ExampleService.java](app/src/main/java/com/berniesanders/fieldthebern/controllers/ExampleService.java)
+
+
 
 ##Do's and Dont's
 
@@ -50,22 +123,29 @@ Once you have your key, create a `keys.xml` file under the `app/src/main/res/val
 Please follow the [git-flow](http://nvie.com/posts/a-successful-git-branching-model/) branching and branch naming convention
 
 
-##JSON
+##Canvass API
 
-The JSON is parsed using `GSON`.
+This is the primary API for all canvassing and auth requests.
 
-Custom deserializers `CollectionDeserializers` and `PageContentDeserializer` are passed to `Retrofit` to do the work.
+Canvass API docs can be found on the [fieldthebern-api wiki](https://github.com/Bernie-2016/fieldthebern-api/wiki)
+
+##Issue data from FeelTheBern.org
+
+Content to fill out the "issues" section is provided by [feelthebern.org](http://feelthebern.org/) 
+The JSON for the issues can be found at:
+[http://feelthebern.org/ftb-json/](http://feelthebern.org/ftb-json/)
+
 
 ####Structure
 
-There are two JSON endpoints the app uses.  
+There are two important model types returned by FTB: `Collection` and `Page`  
+
+Custom deserializers `CollectionDeserializers` and `PageContentDeserializer` are passed to `Gson` which is passed to `Retrofit` to do the work.
 
 #####Collections
 
-`http://feelthebern.org/ftb-json/index2.php`  
-[http://feelthebern.org/ftb-json/index2.php] (http://feelthebern.org/ftb-json/index2.php)
 
-The first endpoint returns a custom model type called a `Collection`  
+The endpoint returns a custom model type called a `Collection`  
 
 Collections contain an array `items` which can contain other `Collections` or `Pages`
 
@@ -79,25 +159,14 @@ collection
              +-page
      +-page
      +-collection
-         +-items  
+         +-items [array] 
+             +-page
              +-page
              +-page 
+               +-content [array]
 ```
 
 #####Page Content
-
-`http://feelthebern.org/ftb-json/page.php?id={data}`  
-  
-The number from the `Page` object's `data` field replaces `{data}`  
-
-[http://feelthebern.org/ftb-json/page.php?id=1175](http://feelthebern.org/ftb-json/page.php?id=1175)
-
-The _"page"_ endpoint returns the `Page` object's `content` array  
-
-```
-page {obj} (not returned from this endpoint)
-  +-content [array] (these are the children returned)
-```
 
 'content' array items *roughly* equate to HTML nodes such as  
 * `h1`  
@@ -108,5 +177,3 @@ page {obj} (not returned from this endpoint)
 * `nav`  
 * `video`  
   
-The JSON for the full site (not currently used by the app) 
-can be found at: [http://feelthebern.org/ftb-json/](http://feelthebern.org/ftb-json/)

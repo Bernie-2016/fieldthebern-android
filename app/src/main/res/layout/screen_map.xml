@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.fieldthebern.views.MapScreenView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent" >
+
+    <fragment
+    android:id="@+id/map_frag"
+    class="com.google.android.gms.maps.MapFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag="map_frag_tag"
+    />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_pin"
+        android:layout_gravity="center"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/address_btn"
+        android:src="@drawable/ic_new_address"
+        app:fabSize="normal"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="16dp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:background="@color/bernie_translucent_dark_blue"
+        android:layout_margin="16dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        >
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center_vertical"
+            >
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:indeterminate="true"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                />
+            <ImageView
+                android:id="@+id/pin_drop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_pin_drop_white_48dp"
+                android:layout_gravity="center"
+                />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/nearest_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/nearest_address"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:text="@string/example_address"
+                android:textSize="24sp"
+                />
+            <TextView
+                android:id="@+id/leaning"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.berniesanders.fieldthebern.views.MapScreenView>

@@ -1,4 +1,90 @@
 <resources>
-    <string name="app_name">Feel The Bern</string>
+    <string name="app_name">Field The Bern</string>
+    <string name="search_hint">Search Feel The Bern</string>
+    <string name="add_address">Add address</string>
+    <string name="add_person">Add person</string>
+    <string name="edit_person">Edit person</string>
+    <string name="editing_person">Editing: %s</string>
+    <string name="edit">Edit</string>
+    <string name="score">Score!</string>
+    <string name="points">POINTS</string>
+    <string name="back_to_map">Back to map</string>
+    <string name="for_knocking"><b>+%d</b> for knocking</string>
+    <string name="for_updating"><b>+%d</b> for updating <b>%s\'s</b> info</string>
+    <string name="new_visit">New visit</string>
+    <string name="submit_visit_details">Submit visit details</string>
+    <string name="start_visit_btn">Start visit</string>
     <string name="bullet_point">\u2022</string>
+    <string name="drawer_open">Open Navigation Drawer</string>
+    <string name="drawer_close">Close Navigation Drawer</string>
+    <string name="screen_home_issues">Issues</string>
+    <string name="screen_home_canvass">Canvass</string>
+    <string name="main_issues_screen_title">Issues</string>
+    <string name="signup_facebook">Sign up with Facebook</string>
+    <string name="signup_email">Sign up with email</string>
+    <string name="have_an_account">Have an account? Login.</string>
+    <string name="login_facebook">Login with Facebook</string>
+    <string name="login_email">Login with email</string>
+    <string name="no_account">No account? Sign up.</string>
+    <string name="please_wait">Please wait</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="preferred_contact">Prefer</string>
+    <string name="password">Password</string>
+    <string name="login_title">Login</string>
+    <string name="signup_title">Sign up</string>
+    <string name="done">Done</string>
+
+    <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
+    <string name="bernie_sanders">Bernie Sanders</string>
+    <string name="correct_address_reminder">Correct the Address below before you knock on the door.</string>
+    <string name="adding_new_person">Adding a new person</string>
+    <string name="who_spoken_to">Who did you talk to?</string>
+    <string name="bernie_email">bernie@sanders.com</string>
+    <string name="example_address">123 Main St.</string>
+    <string name="address">Address</string>
+    <string name="apartment_number">Apt / Suite / Etc.</string>
+    <string name="nearest_address">Nearest Address</string>
+    <string name="remind_add_apt">Remember: enter an apartment number if there is one</string>
+    <string name="party">Party</string>
+    <string name="no_one_home">No one was home</string>
+    <string name="asked_to_leave">I was asked to leave</string>
+    <string name="ready_to_knock">Ready to knock?</string>
+    <string name="supports">Supports</string>
+    <string name="how_interested_in_bernie">How interested in bernie?</string>
+    <string name="done_talking">Done talking?</string>
+    <string name="are_you_sure_address_correct">Confirm Address</string>
+    <string name="are_you_sure_address_body">Are you sure the address is correct?\n\n%1$s\n%2$s</string>
+    <string name="err_address_not_loaded">Address not loaded yet</string>
+    <string name="permission_contacts_rationale">Field The Bern requires location permissions</string>
+    <string name="save_profile">Save Profile</string>
+
+    <string name="err_password_blank">Please enter a password</string>
+    <string name="err_email_blank">Please enter an email</string>
+    <string name="err_your_first_name_blank">Please enter your first name</string>
+    <string name="err_their_first_name_blank">Please enter their first name</string>
+    <string name="err_address_blank">Please enter an address</string>
+    <string name="err_no_visit">Please add a person or indicate if no one was home or you were asked to leave</string>
+
+    <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
+    <string-array name="party">
+          <item>(select party)</item>
+          <item>Democrat</item>
+          <item>Republican</item>
+          <item>Independent</item>
+          <item>Undeclared</item>
+          <item>Other</item>
+    </string-array>
+
+    <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
+    <string-array name="interest">
+        <item>(select support level)</item>
+        <item>Strongly for Bernie</item>
+        <item>Leaning for Bernie</item>
+        <item>Undecided</item>
+        <item>Leaning against Bernie</item>
+        <item>Strongly against Bernie</item>
+    </string-array>
 </resources>

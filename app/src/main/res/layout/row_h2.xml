@@ -9,5 +9,6 @@
           fontPath="fonts/Dosis-Bold.otf"
           android:textSize="24sp"
           style="@style/PageMargins"
+          android:textIsSelectable="true"
     />
 

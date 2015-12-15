@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.feelthebern.android.views.VideoContainerView
+<com.berniesanders.fieldthebern.views.VideoContainerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,18 +21,18 @@
         android:layout_gravity="center"
         />
 
-    <!--<TextView android:id="@+id/text"-->
-              <!--android:layout_width="match_parent"-->
-              <!--android:layout_height="match_parent"-->
+    <!--<TextView canvass:id="@+id/text"-->
+              <!--canvass:layout_width="match_parent"-->
+              <!--canvass:layout_height="match_parent"-->
               <!--tools:ignore="MissingPrefix"-->
               <!--fontPath="fonts/Dosis-ExtraBold.otf"-->
-              <!--android:textSize="18sp"-->
+              <!--canvass:textSize="18sp"-->
               <!--style="@style/PageMargins"-->
-              <!--android:visibility="gone"-->
-              <!--android:autoLink="web"-->
+              <!--canvass:visibility="gone"-->
+              <!--canvass:autoLink="web"-->
         <!--/>-->
 
-</org.feelthebern.android.views.VideoContainerView>
+</com.berniesanders.fieldthebern.views.VideoContainerView>
 
 
 

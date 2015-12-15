@@ -18,10 +18,13 @@ import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
+import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
+import com.berniesanders.fieldthebern.models.CanvassData;
+import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
-import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
+import com.berniesanders.fieldthebern.parsing.PartyEvaluator;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
@@ -253,6 +256,18 @@ public class AddAddressScreen extends FlowPathBase {
                 Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s", response.addresses().get(0) );
                 address = response.addresses().get(0);
                 address.included(response.included());
+
+                //TODO this is hack because API party values are not the same when outputted as they are input
+                for(CanvassData canvassData : address.included()) {
+                    if (canvassData.type().equals(Person.TYPE)) {
+                        Person person = (Person) canvassData;
+                        if (person.attributes().party() !=null) {
+                            person.attributes().party(
+                                    PartyEvaluator.mapApiParty(
+                                            person.attributes().party()));
+                        }
+                    }
+                }
                 Flow.get(getView()).set(new NewVisitScreen(address));
             }
         };

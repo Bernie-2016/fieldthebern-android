@@ -7,6 +7,7 @@ import android.widget.CompoundButton;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
@@ -240,7 +241,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         public void score() {
-
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
             if(noOneHome) {
                 //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
@@ -271,11 +272,13 @@ public class NewVisitScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.v("visitResultObserver.onCompleted");
+                ProgressDialogService.get(getView()).dismiss();
             }
 
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "error submitting visit");
+                ProgressDialogService.get(getView()).dismiss();
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
                 }

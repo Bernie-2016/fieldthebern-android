@@ -26,7 +26,7 @@
     <string name="login_facebook">Login with Facebook</string>
     <string name="login_email">Login with email</string>
     <string name="no_account">No account? Sign up.</string>
-
+    <string name="please_wait">Please wait</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="email">Email</string>

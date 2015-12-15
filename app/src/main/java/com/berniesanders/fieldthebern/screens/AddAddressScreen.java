@@ -11,6 +11,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.DialogController.DialogAction;
 import com.berniesanders.fieldthebern.controllers.DialogController.DialogConfig;
 import com.berniesanders.fieldthebern.controllers.DialogService;
+import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
@@ -209,17 +210,21 @@ public class AddAddressScreen extends FlowPathBase {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(singleAddressObserver);
+
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
         }
 
         Observer<SingleAddressResponse> singleAddressObserver = new Observer<SingleAddressResponse>() {
             @Override
             public void onCompleted() {
                 Timber.v("singleAddressObserver onCompleted");
+                ProgressDialogService.get(getView()).dismiss();
             }
 
 
             @Override
             public void onError(Throwable e) {
+                ProgressDialogService.get(getView()).dismiss();
 
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;

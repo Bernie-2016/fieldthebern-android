@@ -6,6 +6,7 @@ package com.berniesanders.fieldthebern.repositories.interceptors;
  * License: GNU AGPLv3 - https://gnu.org/licenses/agpl.html 
  */
 
+import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Request;
@@ -24,12 +25,12 @@ public class AddTokenInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
 
-        String token = tokenRepo.get().accessToken();
-
         Request.Builder builder = chain.request().newBuilder();
 
+        Token token = tokenRepo.get();
+
         if (token != null) {
-            builder.addHeader("Authorization", "Bearer " + token);
+            builder.addHeader("Authorization", "Bearer " + token.accessToken());
         }
 
         return chain.proceed(builder.build());

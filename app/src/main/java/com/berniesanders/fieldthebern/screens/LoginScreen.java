@@ -1,6 +1,8 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.EditText;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -8,6 +10,7 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
@@ -127,6 +130,10 @@ public class LoginScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+
+            PermissionService
+                    .get(getView())
+                    .requestPermission();
         }
 
 
@@ -153,21 +160,36 @@ public class LoginScreen extends FlowPathBase {
         @OnClick(R.id.login_email)
         void loginEmail() {
 
-            if(!formIsValid()) { return; }
+            if (PermissionService.get(getView()).isGranted()) {
 
-            if (!user.getData().attributes().isFacebookUser()) {
+                if(!formIsValid()) { return; }
 
-                TokenSpec spec = new TokenSpec()
-                        .email(new LoginEmailRequest()
-                                .password(passwordEditText.getText().toString())
-                                .username(emailEditText.getText().toString()));
+                if (!user.getData().attributes().isFacebookUser()) {
 
-                tokenRepo
-                        .loginEmail(spec)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(observer);
-                ProgressDialogService.get(getView()).show(R.string.please_wait);
+                    TokenSpec spec = new TokenSpec()
+                            .email(new LoginEmailRequest()
+                                    .password(passwordEditText.getText().toString())
+                                    .username(emailEditText.getText().toString()));
+
+                    tokenRepo
+                            .loginEmail(spec)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(observer);
+                    ProgressDialogService.get(getView()).show(R.string.please_wait);
+                }
+
+            } else {
+                // Display a SnackBar with an explanation and a button to trigger the request.
+                Snackbar.make(getView(), R.string.permission_contacts_rationale,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(android.R.string.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                PermissionService.get(getView()).requestPermission();
+                            }
+                        })
+                        .show();
             }
 
         }

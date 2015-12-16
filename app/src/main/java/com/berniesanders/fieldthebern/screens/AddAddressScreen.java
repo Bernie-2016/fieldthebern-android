@@ -27,6 +27,7 @@ import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.PartyEvaluator;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
+import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
 import com.bugsnag.android.Bugsnag;
@@ -103,6 +104,7 @@ public class AddAddressScreen extends FlowPathBase {
         ApiAddress address();
         AddressRepo addressRepo();
         ErrorResponseParser errorResponseParser();
+        VisitRepo visitRepo();
     }
 
     @FtbScreenScope
@@ -111,6 +113,7 @@ public class AddAddressScreen extends FlowPathBase {
         private ApiAddress address;
         private final AddressRepo addressRepo;
         private final ErrorResponseParser errorResponseParser;
+        private final VisitRepo visitRepo;
         @BindString(android.R.string.cancel) String cancel;
 
         @BindString(R.string.add_address) String screenTitle;
@@ -120,10 +123,11 @@ public class AddAddressScreen extends FlowPathBase {
 
 
         @Inject
-        Presenter(ApiAddress address, AddressRepo addressRepo, ErrorResponseParser errorResponseParser) {
+        Presenter(ApiAddress address, AddressRepo addressRepo, ErrorResponseParser errorResponseParser, VisitRepo visitRepo) {
             this.address = address;
             this.addressRepo = addressRepo;
             this.errorResponseParser = errorResponseParser;
+            this.visitRepo = visitRepo;
         }
 
         @Override
@@ -143,7 +147,8 @@ public class AddAddressScreen extends FlowPathBase {
                                 @Override
                                 public void call() {
                                     if (getView()!=null) {
-                                        Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
+                                        visitRepo.clear();
+                                        Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
                                     }
                                 }
                             });

@@ -34,6 +34,8 @@ public class TokenRepo {
     private final OkHttpClient client = new OkHttpClient();
     private final RxSharedPreferences rxPrefs;
     private final Config config;
+    final Retrofit retrofit;
+    final TokenSpec.TokenEndpoint endpoint;
 
 
     @Inject
@@ -42,6 +44,19 @@ public class TokenRepo {
         this.rxPrefs = rxPrefs;
         this.config = config;
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        client.interceptors().add(interceptor);
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(this.config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        endpoint = retrofit.create(TokenSpec.TokenEndpoint.class);
     }
 
     /**
@@ -94,19 +109,6 @@ public class TokenRepo {
     private Observable<Token> loginFacebook(final LoginFacebookRequest loginFacebookRequest) {
         Timber.v("logging in facebook....");
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(interceptor);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-
-        TokenSpec.TokenEndpoint endpoint =
-                retrofit.create(TokenSpec.TokenEndpoint.class);
 
         return endpoint.loginFacebook(
                 getAuthString(),
@@ -121,25 +123,26 @@ public class TokenRepo {
     private Observable<Token> loginEmail(final LoginEmailRequest loginEmailRequest) {
         Timber.v("logging in Email....");
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(interceptor);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-
-        TokenSpec.TokenEndpoint endpoint =
-                retrofit.create(TokenSpec.TokenEndpoint.class);
 
         return endpoint.loginEmail(
                 getAuthString(),
                 loginEmailRequest.getGrantType(),
                 loginEmailRequest.username(),
                 loginEmailRequest.password());
+    }
+
+    /**
+     * Might be best to pass the spec through to this method...?
+     */
+    public Observable<Token> refresh() {
+        Timber.v("logging in Email....");
+
+
+        return endpoint.refresh(
+                Token.GRANT_REFRESH,
+                config.getClientId(),
+                config.getClientSecret(),
+                get().refreshToken());
     }
 
 

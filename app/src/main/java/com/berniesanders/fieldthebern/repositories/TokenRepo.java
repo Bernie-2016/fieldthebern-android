@@ -135,14 +135,24 @@ public class TokenRepo {
      * Might be best to pass the spec through to this method...?
      */
     public Observable<Token> refresh() {
-        Timber.v("logging in Email....");
+        Timber.v("token refresh....");
 
+        String refreshToken = get().refreshToken();
 
         return endpoint.refresh(
                 Token.GRANT_REFRESH,
                 config.getClientId(),
                 config.getClientSecret(),
-                get().refreshToken());
+                refreshToken)
+                       .map(new Func1<Token, Token>() {
+            @Override
+            public Token call(Token token) {
+
+                Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+                tokenPref.set(gson.toJson(token));
+                return token;
+            }
+        });
     }
 
 

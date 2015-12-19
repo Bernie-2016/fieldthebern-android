@@ -53,13 +53,11 @@ public class ApiAuthenticator implements Authenticator {
         // Refresh access token using a synchronous api request
         Timber.d("authenticating");
 
-        Token token = tokenRepo.refresh().toBlocking().first(new Func1<Token, Boolean>() {
-            @Override
-            public Boolean call(Token token) {
-                //some type of token success check?
-                return null;
-            }
-        });
+        Token token = tokenRepo.refresh().toBlocking().first();
+
+        if (token==null) {
+            return null;
+        }
 
         return response.request().newBuilder()
                 .header("Authorization", "Bearer " + token.accessToken())

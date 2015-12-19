@@ -25,6 +25,9 @@ import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.berniesanders.fieldthebern.views.LoginView;
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
@@ -111,6 +114,8 @@ public class LoginScreen extends FlowPathBase {
         private final User user;
         private final TokenRepo tokenRepo;
         private final ErrorResponseParser errorResponseParser;
+        private final RxSharedPreferences rxPrefs;
+        private final Gson gson;
 
         @Bind(R.id.password)
         EditText passwordEditText;
@@ -119,10 +124,16 @@ public class LoginScreen extends FlowPathBase {
         EditText emailEditText;
 
         @Inject
-        Presenter(User user, TokenRepo tokenRepo, ErrorResponseParser errorResponseParser) {
+        Presenter(User user,
+                  TokenRepo tokenRepo,
+                  ErrorResponseParser errorResponseParser,
+                  RxSharedPreferences rxPrefs,
+                  Gson gson) {
             this.user = user;
             this.tokenRepo = tokenRepo;
             this.errorResponseParser = errorResponseParser;
+            this.rxPrefs = rxPrefs;
+            this.gson = gson;
         }
 
         @Override
@@ -134,6 +145,26 @@ public class LoginScreen extends FlowPathBase {
             PermissionService
                     .get(getView())
                     .requestPermission();
+
+            attemptLoginViaRefresh();
+        }
+
+        private void attemptLoginViaRefresh() {
+            //if the permission hasn't been granted the user should just login again
+            if (!PermissionService.get(getView()).isGranted()) { return; }
+
+            Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+
+            if (tokenPref.get()==null) { return; }
+
+            Token token = gson.fromJson(tokenPref.get(), Token.class);
+
+            if (token == null) { return; } // if we don't have a token, we cant refresh
+
+            tokenRepo.refresh()
+                     .subscribeOn(Schedulers.io())
+                     .observeOn(AndroidSchedulers.mainThread())
+                     .subscribe(refreshObserver);
         }
 
 
@@ -226,6 +257,26 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onNext(Token token) {
                 Timber.d("loginEmail onNext: %s", token.toString());
+            }
+        };
+
+        Observer<Token> refreshObserver = new Observer<Token>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("refreshObserver done.");
+                ProgressDialogService.get(getView()).dismiss();
+                Flow.get(getView().getContext()).set(new HomeScreen());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "refreshObserver error");
+                ProgressDialogService.get(getView()).dismiss();
+            }
+
+            @Override
+            public void onNext(Token token) {
+                Timber.d("refreshObserver onNext: %s", token.toString());
             }
         };
 

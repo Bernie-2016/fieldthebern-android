@@ -142,7 +142,8 @@ public class AddPersonScreen extends FlowPathBase {
                                 @Override
                                 public void call() {
                                     if (getView()!=null) {
-                                        Flow.get(getView()).setHistory(History.single(new Main()), Flow.Direction.BACKWARD);
+                                        visitRepo.clear();
+                                        Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
                                     }
                                 }
                             });

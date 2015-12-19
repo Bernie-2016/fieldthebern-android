@@ -165,6 +165,8 @@ public class LoginScreen extends FlowPathBase {
                      .subscribeOn(Schedulers.io())
                      .observeOn(AndroidSchedulers.mainThread())
                      .subscribe(refreshObserver);
+
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
         }
 
 

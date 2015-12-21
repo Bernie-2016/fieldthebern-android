@@ -29,7 +29,9 @@ local.properties
 ##############################################
 # Secure
 ##############################################
-*.keystore
+# Don't ignore keystore files. We need to
+# share debug.keystore for FB auth
+# *.keystore
 secure.properties
 # API keys
 keys.xml

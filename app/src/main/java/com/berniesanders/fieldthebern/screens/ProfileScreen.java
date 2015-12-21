@@ -21,7 +21,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import mortar.ViewPresenter;
-import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -131,6 +132,17 @@ public class ProfileScreen extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
+            userRepo.getMe().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<User>() {
+                @Override
+                public void call(User user) {
+                    String firstName = user.getData().attributes().getFirstName();
+                    String lastName = user.getData().attributes().getLastName();
+                    firstNameEditText.setText(firstName);
+                    lastNameEditText.setText(lastName);
+                }
+            }).subscribe();
         }
 
         /**

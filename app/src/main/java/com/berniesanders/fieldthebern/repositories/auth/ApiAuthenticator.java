@@ -15,6 +15,7 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.net.Proxy;
 
+import rx.functions.Func1;
 import timber.log.Timber;
 
 public class ApiAuthenticator implements Authenticator {
@@ -50,11 +51,14 @@ public class ApiAuthenticator implements Authenticator {
 //      System.out.println("Challenges: " + response.challenges());
 
         // Refresh access token using a synchronous api request
-        // TODO this is not the right code to do a refresh
-        // TODO implement refresh
         Timber.d("authenticating");
 
-        Token token = tokenRepo.get();
+        Token token = tokenRepo.refresh().toBlocking().first();
+
+        if (token==null) {
+            return null;
+        }
+
         return response.request().newBuilder()
                 .header("Authorization", "Bearer " + token.accessToken())
                 .build();

@@ -13,12 +13,14 @@ import com.google.gson.annotations.SerializedName;
  *   "token_type":"bearer",
  *   "expires_in":7200,
  *   "created_at":1447745123,
+ *   "refresh_token":"da98ead980980ade098ead098ade098aed08ade08"
  *   "user_id":29
  * }
  */
 public final class Token implements Parcelable {
 
-    public static final String PREF_NAME = Token.class.getName();
+    public static final String PREF_NAME  = Token.class.getName();
+    public static final String GRANT_REFRESH = "refresh_token";
 
     /**
      * zeee token
@@ -27,7 +29,13 @@ public final class Token implements Parcelable {
     private String accessToken;
 
     /**
-     * should be 'bearer'
+     * zeee most freshiest token
+     */
+    @SerializedName("refresh_token")
+    private String refreshToken;
+
+    /**
+     * should be 'bearer' or ?
      */
     @SerializedName("token_type")
     private String type;
@@ -101,6 +109,16 @@ public final class Token implements Parcelable {
         return this;
     }
 
+    public String refreshToken() {
+        return this.refreshToken;
+    }
+
+    public Token refreshToken(final String refreshToken) {
+        this.refreshToken = refreshToken;
+        return this;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -109,6 +127,7 @@ public final class Token implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.accessToken);
+        dest.writeString(this.refreshToken);
         dest.writeString(this.type);
         dest.writeInt(this.userId);
         dest.writeInt(this.expires);
@@ -120,6 +139,7 @@ public final class Token implements Parcelable {
 
     protected Token(Parcel in) {
         this.accessToken = in.readString();
+        this.refreshToken = in.readString();
         this.type = in.readString();
         this.userId = in.readInt();
         this.expires = in.readInt();

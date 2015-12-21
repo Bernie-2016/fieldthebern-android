@@ -73,5 +73,18 @@ public class TokenSpec {
                 @Field("username") String username,
                 @Field("password") String password);
 
+        @FormUrlEncoded
+        @Headers({"Accept:application/json",
+                "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+        })
+        @POST("oauth/token")
+        Observable<Token> refresh(
+                //@Header("Authorization") String authString,
+                @Field("grant_type") String grantType,
+                @Field("client_id") String clientId,
+                @Field("client_secret") String clientSecret,
+                @Field("refresh_token") String refreshToken
+                                 );
+
     }
 }

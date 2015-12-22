@@ -21,22 +21,16 @@ public class PartyIcon {
 
         switch (party) {
             case Party.DEMOCRAT:
-            case Party.DEMOCRAT_AFFILIATION :
                 return R.drawable.ic_democrat;
             case Party.INDEPENDENT:
-            case Party.INDEPENDENT_AFFILIATION :
                 return R.drawable.ic_independent;
             case Party.REPUBLICAN:
-            case Party.REPUBLICAN_AFFILIATION :
                 return R.drawable.ic_republican;
             case Party.UNAFFILIATED:
-            case Party.UNAFFILIATED_AFFILIATION :
                 return R.drawable.ic_other;
             case Party.UNDECLARED:
-            case Party.UNDECLARED_AFFILIATION :
                 return R.drawable.ic_undeclared;
             case Party.UNKNOWN:
-            case Party.UNKNOWN_AFFILIATION :
                 return R.drawable.ic_undeclared;
             default:
                 Timber.e("cant find PartyIcon for "+party);

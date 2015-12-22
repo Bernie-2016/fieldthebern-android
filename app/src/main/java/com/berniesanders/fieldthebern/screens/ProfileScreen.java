@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -20,8 +21,10 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import flow.Flow;
 import mortar.ViewPresenter;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -168,6 +171,7 @@ public class ProfileScreen extends FlowPathBase {
 
         @OnClick(R.id.submit_profile)
         void onSaveProfileClicked() {
+            Timber.v("Attempting to save profile");
             String firstName = firstNameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
             UserSpec spec = new UserSpec();
@@ -178,6 +182,30 @@ public class ProfileScreen extends FlowPathBase {
             spec.update(user);
             userRepo.update(spec)
                     .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnCompleted(
+                            new Action0() {
+                                @Override
+                                public void call() {
+                                    Timber.v("Profile saved");
+                                    Toast.makeText(getView().getContext(),
+                                            "Profile saved",
+                                            Toast.LENGTH_SHORT).show();
+                                    Flow.get(getView().getContext()).set(new HomeScreen());
+                                }
+                            }
+                    )
+                    .doOnError(
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.e("Unable to save profile", throwable);
+                                    Toast.makeText(getView().getContext(),
+                                            "Error saving profile",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                    )
                     .subscribe();
         }
     }

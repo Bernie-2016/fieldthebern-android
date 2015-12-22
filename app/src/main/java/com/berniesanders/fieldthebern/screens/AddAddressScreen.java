@@ -279,18 +279,6 @@ public class AddAddressScreen extends FlowPathBase {
                 Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s", response.addresses().get(0) );
                 address = response.addresses().get(0);
                 address.included(response.included());
-
-                //TODO this is hack because API party values are not the same when outputted as they are input
-                for(CanvassData canvassData : address.included()) {
-                    if (canvassData.type().equals(Person.TYPE)) {
-                        Person person = (Person) canvassData;
-                        if (person.attributes().party() !=null) {
-                            person.attributes().party(
-                                    PartyEvaluator.mapApiParty(
-                                            person.attributes().party()));
-                        }
-                    }
-                }
                 Flow.get(getView()).set(new NewVisitScreen(address));
             }
         };

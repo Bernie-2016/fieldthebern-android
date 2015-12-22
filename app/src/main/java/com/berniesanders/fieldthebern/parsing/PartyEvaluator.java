@@ -16,21 +16,20 @@ public class PartyEvaluator {
     /**
      * Returns the API compatible response that maps to the selected string
      *
-     *  <item>(select party)</item>
-     *  <item>Democrat</item>
-     *  <item>Republican</item>
-     *  <item>Independent</item>
-     *  <item>Undeclared</item>
-     *  <item>Unaffiliated</item>
-     *  <item>Unknown</item>
-     *  <item>Other</item>
+     *    <item>(select party)</item>
+     *    <item>Democrat</item>
+     *    <item>Republican</item>
+     *    <item>Independent</item>
+     *    <item>Undeclared</item>
+     *    <item>Unknown</item>
+     *    <item>Other</item>
      * TODO better way to do this?!
     */
     @Party.Affiliation
     public static String getParty(String selectedParty, String[] partyArray) {
         if (selectedParty.equals(partyArray[0])) {
             Timber.e("PartyEvaluator.getParty() called but selection is not valid");
-            return Party.UNAFFILIATED;
+            return Party.UNKNOWN;
         } else if (selectedParty.equals(partyArray[1])) {
             return Party.DEMOCRAT;
         } else if (selectedParty.equals(partyArray[2])) {

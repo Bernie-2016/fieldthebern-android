@@ -29,6 +29,11 @@ android {
     lintOptions {
         disable 'InvalidPackage','WrongConstant','ResourceType'
     }
+    signingConfigs {
+        debug {
+            storeFile file("../debug.keystore")
+        }
+    }
 }
 
 dependencies {

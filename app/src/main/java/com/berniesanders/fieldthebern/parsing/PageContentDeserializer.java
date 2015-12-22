@@ -16,8 +16,11 @@ import com.berniesanders.fieldthebern.models.Nav;
 import com.berniesanders.fieldthebern.models.P;
 import com.berniesanders.fieldthebern.models.Quote;
 import com.berniesanders.fieldthebern.models.Video;
+import com.google.gson.JsonSyntaxException;
 
 import java.lang.reflect.Type;
+
+import timber.log.Timber;
 
 /**
  * Custom Gson deserializer for page 'content' to deserialize items into 'h1' 'p' etc
@@ -52,7 +55,13 @@ public class PageContentDeserializer implements JsonDeserializer<Content> {
                 typedContent = context.deserialize(json, Img.class);
                 break;
             case "nav":
-                typedContent = context.deserialize(json, Nav.class);
+                try {
+                    typedContent = context.deserialize(json, Nav.class);
+                } catch (JsonSyntaxException jsonEx) {
+                    Timber.e(jsonEx, "Error deserializing a JSON object");
+                    //use an empty nav item, there is an error in the ftb json
+                    typedContent = new Nav();
+                }
                 break;
             case "video":
                 typedContent = context.deserialize(json, Video.class);

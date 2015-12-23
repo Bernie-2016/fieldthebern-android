@@ -450,7 +450,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                 public void run() {
                     connectCameraObservable(googleMap);
                 }
-            }, 2000);
+            }, 1500);
             return false;
         }
     };

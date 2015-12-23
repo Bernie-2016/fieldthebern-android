@@ -11,15 +11,10 @@
     tools:background="@color/bernie_dark_blue"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,7 +22,6 @@
             android:orientation="vertical"
             android:padding="8dp"
             >
-
             <TextView
                 android:id="@+id/instructions_label"
                 android:layout_width="wrap_content"
@@ -43,8 +37,6 @@
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
                 />
-
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -81,7 +73,6 @@
                     android:textSize="18sp"
                     />
             </android.support.design.widget.TextInputLayout>
-
 
             <TextView
                     android:id="@+id/prefer_label"

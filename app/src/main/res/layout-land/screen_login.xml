@@ -19,7 +19,7 @@
             android:layout_above="@id/have_an_account"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:padding="16dp"
             >
             <FrameLayout
                 android:layout_width="120dp"

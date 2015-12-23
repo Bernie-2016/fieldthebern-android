@@ -352,6 +352,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                             public void onCameraChange(CameraPosition camPosition) {
                                 address = null;
                                 addressTextView.setText("");
+                                leaningTextView.setText("");
                                 progressBar.setVisibility(View.VISIBLE);
                                 pinDrop.setVisibility(View.GONE);
                                 subscriber.onNext(camPosition);

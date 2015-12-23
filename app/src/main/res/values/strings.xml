@@ -67,6 +67,8 @@
     <string name="err_their_first_name_blank">Please enter their first name</string>
     <string name="err_address_blank">Please enter an address</string>
     <string name="err_no_visit">Please add a person or indicate if no one was home or you were asked to leave</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="error_saving_profile">Error saving profile</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

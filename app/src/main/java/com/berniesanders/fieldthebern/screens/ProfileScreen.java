@@ -2,11 +2,11 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
@@ -188,9 +188,7 @@ public class ProfileScreen extends FlowPathBase {
                                 @Override
                                 public void call() {
                                     Timber.v("Profile saved");
-                                    Toast.makeText(getView().getContext(),
-                                            "Profile saved",
-                                            Toast.LENGTH_SHORT).show();
+                                    ToastService.get(getView()).bern(getView().getContext().getString(R.string.profile_saved));
                                     Flow.get(getView().getContext()).set(new HomeScreen());
                                 }
                             }
@@ -200,9 +198,7 @@ public class ProfileScreen extends FlowPathBase {
                                 @Override
                                 public void call(Throwable throwable) {
                                     Timber.e("Unable to save profile", throwable);
-                                    Toast.makeText(getView().getContext(),
-                                            "Error saving profile",
-                                            Toast.LENGTH_SHORT).show();
+                                    ToastService.get(getView()).bern(getView().getContext().getString(R.string.error_saving_profile));
                                 }
                             }
                     )

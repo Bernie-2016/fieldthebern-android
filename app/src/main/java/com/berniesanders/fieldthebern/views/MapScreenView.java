@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.location.Address;
 import android.location.Location;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -70,9 +71,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     Subscription cameraSubscription;
     Subscription locationSubscription;
     Subscription geocodeSubscription;
-
+    Handler handler;
     Observer<Location> locationObserver;
-
     ApiAddress address;
 
     @Bind(R.id.address)
@@ -164,6 +164,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         ButterKnife.bind(this, this);
+        handler = new Handler();
     }
 
     @Override
@@ -231,7 +232,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             if (address == null) {
                 connectCameraObservable(map);
             } else {
-                postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         connectCameraObservable(map);
@@ -432,6 +433,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             //stop watching the camera change while the map moves to the maker
             googleMap.setOnCameraChangeListener(null);
             unsubscribe();
+            handler.removeCallbacksAndMessages(null);
 
             //set the address manually
             ApiAddress apiAddress = markerAddressMap.get(marker.getId());
@@ -442,7 +444,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                     getResources().getStringArray(R.array.interest)));
 
             //re-enable the camera watch
-            postDelayed(new Runnable() {
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     connectCameraObservable(googleMap);

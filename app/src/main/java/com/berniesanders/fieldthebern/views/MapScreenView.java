@@ -218,6 +218,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         if (geocodeSubscription != null) {
             geocodeSubscription.unsubscribe();
         }
+
+        handler.removeCallbacksAndMessages(null);
+        googleMap.setOnCameraChangeListener(null);
     }
 
     private void initCameraPosition(final GoogleMap map) {
@@ -300,7 +303,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             LatLng latLng = cameraPosition.target;
 
             if (onCameraChangeListener!=null) {
-                onCameraChangeListener.onCameraChange(cameraPosition);
+                onCameraChangeListener.onCameraChange(cameraPosition, true);
             }
 
             geocodeSubscription = LocationService.get(MapScreenView.this)
@@ -437,9 +440,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         public boolean onMarkerClick(Marker marker) {
 
             //stop watching the camera change while the map moves to the maker
-            googleMap.setOnCameraChangeListener(null);
             unsubscribe();
-            handler.removeCallbacksAndMessages(null);
 
             //set the address manually
             ApiAddress apiAddress = markerAddressMap.get(marker.getId());
@@ -453,6 +454,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    //notify the listener that the camera moved
+                    onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false);
                     connectCameraObservable(googleMap);
                 }
             }, 1500);
@@ -472,7 +475,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public interface OnCameraChange {
-        void onCameraChange(CameraPosition cameraPosition);
+        void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses);
     }
 
     public interface OnAddressChange {

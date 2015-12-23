@@ -135,8 +135,10 @@ public class MapScreen extends FlowPathBase {
 
         MapScreenView.OnCameraChange onCameraChange = new MapScreenView.OnCameraChange() {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
+            public void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses) {
                 Presenter.this.cameraPosition = cameraPosition;
+
+                if (!shouldRefreshAddresses) { return; }
 
                 Subscription multiAddressSubscription = addressRepo
                         .getMultiple(

@@ -93,6 +93,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     private OnAddressChange onAddressChangeListener;
     private CameraPosition cameraPosition;
     private Map<String, ApiAddress> markerAddressMap = new HashMap<>();
+    private List<ApiAddress> nearbyAddresses;
 
     public MapScreenView(Context context) {
         super(context);
@@ -222,6 +223,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     private void initCameraPosition(final GoogleMap map) {
 
         Timber.v("initCameraPosition");
+        if (nearbyAddresses!=null) {
+            setNearbyAddresses(nearbyAddresses);
+        }
 
         if (cameraPosition != null) {
             //if we're already there, bail early
@@ -399,7 +403,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
-
+        this.nearbyAddresses = nearbyAddresses;
+        if (googleMap==null) { return; }
         googleMap.clear();
         markerAddressMap.clear();
 

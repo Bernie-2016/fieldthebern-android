@@ -23,6 +23,7 @@ import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.MapScreenView;
 import com.google.android.gms.maps.model.CameraPosition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -86,6 +87,7 @@ public class MapScreen extends FlowPathBase {
         private final AddressRepo addressRepo;
         private final ErrorResponseParser errorResponseParser;
 
+        List<ApiAddress> nearbyAddresses = new ArrayList<>();
         private CameraPosition cameraPosition;
         private ApiAddress address;
 
@@ -128,6 +130,7 @@ public class MapScreen extends FlowPathBase {
 
             getView().setOnAddressChangeListener(onAddressChange);
             getView().setOnCameraChangeListener(onCameraChange);
+            getView().setNearbyAddresses(nearbyAddresses);
         }
 
         MapScreenView.OnCameraChange onCameraChange = new MapScreenView.OnCameraChange() {
@@ -178,7 +181,7 @@ public class MapScreen extends FlowPathBase {
             public void onNext(MultiAddressResponse multiAddressResponse) {
                 Timber.v("multiAddressObserver onNext \n%s", multiAddressResponse );
 
-                List<ApiAddress> nearbyAddresses = multiAddressResponse.addresses();
+                nearbyAddresses = multiAddressResponse.addresses();
 
                 getView().setNearbyAddresses(nearbyAddresses);
             }

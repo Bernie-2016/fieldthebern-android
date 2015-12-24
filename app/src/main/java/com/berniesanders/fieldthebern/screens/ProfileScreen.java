@@ -15,6 +15,7 @@ import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.ProfileView;
+import com.bugsnag.android.Bugsnag;
 
 import javax.inject.Inject;
 
@@ -197,7 +198,8 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Throwable>() {
                                 @Override
                                 public void call(Throwable throwable) {
-                                    Timber.e("Unable to save profile", throwable);
+                                    Timber.e(throwable, "Unable to save profile");
+                                    Bugsnag.notify(throwable);
                                     ToastService.get(getView()).bern(getView().getContext().getString(R.string.error_saving_profile));
                                 }
                             }

@@ -139,14 +139,14 @@ public class ProfileScreen extends FlowPathBase {
             userRepo.getMe().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(new Action1<User>() {
-                @Override
-                public void call(User user) {
-                    String firstName = user.getData().attributes().getFirstName();
-                    String lastName = user.getData().attributes().getLastName();
-                    firstNameEditText.setText(firstName);
-                    lastNameEditText.setText(lastName);
-                }
-            }).subscribe();
+                        @Override
+                        public void call(User user) {
+                            String firstName = user.getData().attributes().getFirstName();
+                            String lastName = user.getData().attributes().getLastName();
+                            firstNameEditText.setText(firstName);
+                            lastNameEditText.setText(lastName);
+                        }
+                    }).subscribe();
         }
 
         /**
@@ -189,8 +189,13 @@ public class ProfileScreen extends FlowPathBase {
                                 @Override
                                 public void call() {
                                     Timber.v("Profile saved");
-                                    ToastService.get(getView()).bern(getView().getContext().getString(R.string.profile_saved));
-                                    Flow.get(getView().getContext()).set(new HomeScreen());
+                                    ProfileView view = getView();
+                                    if (view != null) {
+                                        ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
+                                        Flow.get(view.getContext()).set(new HomeScreen());
+                                    } else {
+                                        Timber.w("getView() null, cannot notify user of successful profile save");
+                                    }
                                 }
                             }
                     )
@@ -200,7 +205,12 @@ public class ProfileScreen extends FlowPathBase {
                                 public void call(Throwable throwable) {
                                     Timber.e(throwable, "Unable to save profile");
                                     Bugsnag.notify(throwable);
-                                    ToastService.get(getView()).bern(getView().getContext().getString(R.string.error_saving_profile));
+                                    ProfileView view = getView();
+                                    if (view != null) {
+                                        ToastService.get(view).bern(view.getContext().getString(R.string.error_saving_profile));
+                                    } else {
+                                        Timber.w("getView() null, cannot notify user of failed profile save");
+                                    }
                                 }
                             }
                     )

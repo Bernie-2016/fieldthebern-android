@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.location.Address;
 import android.location.Location;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -70,9 +71,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     Subscription cameraSubscription;
     Subscription locationSubscription;
     Subscription geocodeSubscription;
-
+    Handler handler;
     Observer<Location> locationObserver;
-
     ApiAddress address;
 
     @Bind(R.id.address)
@@ -93,6 +93,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     private OnAddressChange onAddressChangeListener;
     private CameraPosition cameraPosition;
     private Map<String, ApiAddress> markerAddressMap = new HashMap<>();
+    private List<ApiAddress> nearbyAddresses;
 
     public MapScreenView(Context context) {
         super(context);
@@ -165,6 +166,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         ButterKnife.bind(this, this);
+        handler = new Handler();
     }
 
     @Override
@@ -217,11 +219,17 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         if (geocodeSubscription != null) {
             geocodeSubscription.unsubscribe();
         }
+
+        handler.removeCallbacksAndMessages(null);
+        googleMap.setOnCameraChangeListener(null);
     }
 
     private void initCameraPosition(final GoogleMap map) {
 
         Timber.v("initCameraPosition");
+        if (nearbyAddresses!=null) {
+            setNearbyAddresses(nearbyAddresses);
+        }
 
         if (cameraPosition != null) {
             //if we're already there, bail early
@@ -232,7 +240,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             if (address == null) {
                 connectCameraObservable(map);
             } else {
-                postDelayed(new Runnable() {
+                handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         connectCameraObservable(map);
@@ -296,7 +304,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             LatLng latLng = cameraPosition.target;
 
             if (onCameraChangeListener!=null) {
-                onCameraChangeListener.onCameraChange(cameraPosition);
+                onCameraChangeListener.onCameraChange(cameraPosition, true);
             }
 
             geocodeSubscription = LocationService.get(MapScreenView.this)
@@ -352,6 +360,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                             public void onCameraChange(CameraPosition camPosition) {
                                 address = null;
                                 addressTextView.setText("");
+                                leaningTextView.setText("");
                                 progressBar.setVisibility(View.VISIBLE);
                                 pinDrop.setVisibility(View.GONE);
                                 subscriber.onNext(camPosition);
@@ -398,7 +407,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
-
+        this.nearbyAddresses = nearbyAddresses;
+        if (googleMap==null) { return; }
         googleMap.clear();
         markerAddressMap.clear();
 
@@ -431,7 +441,6 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         public boolean onMarkerClick(Marker marker) {
 
             //stop watching the camera change while the map moves to the maker
-            googleMap.setOnCameraChangeListener(null);
             unsubscribe();
 
             //set the address manually
@@ -443,12 +452,14 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                     getResources().getStringArray(R.array.interest)));
 
             //re-enable the camera watch
-            postDelayed(new Runnable() {
+            handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    //notify the listener that the camera moved
+                    onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false);
                     connectCameraObservable(googleMap);
                 }
-            }, 3000);
+            }, 1500);
             return false;
         }
     };
@@ -465,7 +476,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public interface OnCameraChange {
-        void onCameraChange(CameraPosition cameraPosition);
+        void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses);
     }
 
     public interface OnAddressChange {

@@ -56,12 +56,15 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
     @NonNull
     public static ApiAddress from(@NonNull Address address, @Nullable String apartment) {
+
+        String city = address.getSubLocality() == null ? address.getSubAdminArea() : address.getSubLocality();
+
         return new ApiAddress()
                 .type(ApiAddress.TYPE)
                 .attributes(new Attributes()
                         .street1(address.getAddressLine(0))
                         .street2(apartment)
-                        .city(address.getLocality())
+                        .city(city)
                         .state(StateConverter.getStateCode(address.getAdminArea()))
                         .zip(address.getPostalCode())
                         .latitude(address.getLatitude())

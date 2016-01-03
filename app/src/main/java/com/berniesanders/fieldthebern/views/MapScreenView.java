@@ -158,6 +158,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                     Timber.v("OnMapReadyCallback");
                     MapScreenView.this.googleMap = gmap;
                     gmap.setMyLocationEnabled(true);
+                    gmap.getUiSettings().setMapToolbarEnabled(false);
                     initCameraPosition(gmap);
                 }
             });

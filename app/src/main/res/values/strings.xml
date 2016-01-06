@@ -37,6 +37,7 @@
     <string name="signup_title">Sign up</string>
     <string name="done">Done</string>
 
+    <string name="previously_participated">Have they previously participated in a primary or caucus?</string>
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
     <string name="bernie_sanders">Bernie Sanders</string>
     <string name="correct_address_reminder">Correct the Address below before you knock on the door.</string>

@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.views;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -58,6 +59,9 @@ public class AddPersonView extends RelativeLayout {
 
     @Bind(R.id.email_checkbox)
     CheckBox emailCheckBox;
+
+    @Bind(R.id.previously_participated)
+    SwitchCompat prevParticipatedSwitch;
 
     public AddPersonView(Context context) {
         super(context);
@@ -214,6 +218,7 @@ public class AddPersonView extends RelativeLayout {
                 person.attributes().preferredContact(Contact.EMAIL);
             }
         }
+        person.attributes().previouslyParticipated(prevParticipatedSwitch.isChecked());
     }
 
     /**
@@ -255,5 +260,7 @@ public class AddPersonView extends RelativeLayout {
                 phoneCheckBox.setChecked(true);
             }
         }
+
+        prevParticipatedSwitch.setChecked(personAttributes.previouslyParticipated());
     }
 }

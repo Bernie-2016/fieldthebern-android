@@ -2,48 +2,54 @@
 <!--
   ~ Copyright 2015 FeelTheBern.org
   -->
-<com.berniesanders.fieldthebern.views.AddAddressView
+<com.berniesanders.fieldthebern.views.LoginView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@color/bernie_dark_blue"
+    tools:context=".MainActivity"
     >
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="72dp"
+            android:layout_height="match_parent"
+            android:layout_above="@id/have_an_account"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="16dp"
             >
-            <TextView
-                android:id="@+id/instructions_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:drawableLeft="@drawable/ic_pin_drop_white_48dp"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:text="@string/correct_address_reminder"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                />
-
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp">
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/ic_account_circle_white_48dp"
+                    />
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/mask_centered"
+                    android:visibility="invisible"
+                    />
+            </FrameLayout>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/address"
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/address"
+                    android:hint="@string/email"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textColorHint="@color/b_light_blue2"
+                    android:textSize="20sp"
+                    android:inputType="textEmailAddress"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -52,25 +58,17 @@
                 android:layout_height="wrap_content">
 
                 <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/apartment"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/apartment_number"
+                    android:hint="@string/password"
                     android:singleLine="true"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textColorHint="@color/b_light_blue2"
+                    android:textSize="20sp"
+                    android:inputType="textPassword"
                     />
             </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:id="@+id/reminder_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="@string/remind_add_apt"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,33 +77,40 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/large_button_height"
-                    android:layout_alignParentBottom="true"
                     android:background="@color/dark_blue2"
+                    android:layout_centerInParent="true"
                     />
 
                 <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/submit"
+                    android:id="@+id/login_email"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/large_button_height"
-                    android:layout_alignParentBottom="true"
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center"
-                    android:text="@string/start_visit_btn"
-                    android:textColor="@android:color/white"
-                    android:textSize="22sp"
+                    android:text="@string/login_title"
                     android:textAllCaps="false"
-                    />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@id/submit"
-                    android:gravity="left|center_horizontal"
-                    android:text="@string/ready_to_knock"
-                    android:textColor="@color/b_light_blue2"
-                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="normal"
+                    android:layout_centerInParent="true"
                     />
             </RelativeLayout>
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/no_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:text="@string/no_account"
+                android:textAllCaps="false"
+                android:textColor="@color/b_light_blue2"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:layout_centerHorizontal="true"
+                />
         </LinearLayout>
     </ScrollView>
-</com.berniesanders.fieldthebern.views.AddAddressView>
+
+
+
+</com.berniesanders.fieldthebern.views.LoginView>

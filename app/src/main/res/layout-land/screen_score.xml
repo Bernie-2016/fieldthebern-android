@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2015 FeelTheBern.org
+  -->
+<com.berniesanders.fieldthebern.views.ScoreView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/bernie_dark_blue"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <!-- bernie dancing animation-->
+
+                <FrameLayout
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_gravity="center"
+                    >
+                <pl.droidsonroids.gif.GifImageView
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:src="@drawable/bernie_ellen"
+                    />
+                    <ImageView
+                        android:layout_width="240dp"
+                        android:layout_height="240dp"
+                        android:src="@drawable/mask"/>
+                </FrameLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/points_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="96dp"
+                        android:layout_gravity="center_horizontal"
+                        android:clipChildren="false"
+                        >
+
+                    </FrameLayout>
+
+
+                    <TextView
+                        android:id="@+id/points_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
+                        android:text="@string/points"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="left"
+                        >
+                        <TextView
+                            android:id="@+id/for_knocking"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="@android:color/white"
+                            android:text="@string/for_knocking"
+                            android:textSize="16sp"/>
+
+                        <TextView
+                            android:id="@+id/for_updating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="@android:color/white"
+                            android:text="@string/for_updating"
+                            android:textSize="16sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/large_button_height"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="16dp"
+                    android:background="@color/dark_blue2"
+                    />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/back_to_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/large_button_height"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:text="@string/back_to_map"
+                    android:textColor="@android:color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:textSize="22sp"
+                    android:textAllCaps="false"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</com.berniesanders.fieldthebern.views.ScoreView>

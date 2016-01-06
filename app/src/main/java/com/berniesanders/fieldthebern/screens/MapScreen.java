@@ -254,6 +254,9 @@ public class MapScreen extends FlowPathBase {
 
         @OnClick(R.id.address_btn)
         void onAddAddressClick() {
+            address = getView().getCurrentAddress();
+
+
             if (address==null) {
                 ToastService
                         .get(getView())

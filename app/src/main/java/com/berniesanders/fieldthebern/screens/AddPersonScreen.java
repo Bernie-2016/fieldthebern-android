@@ -15,7 +15,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
-import com.berniesanders.fieldthebern.parsing.FormValidator;
+import com.berniesanders.fieldthebern.mortar.HandlesBack;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.AddPersonView;
 
@@ -99,7 +99,8 @@ public class AddPersonScreen extends FlowPathBase {
     static public class Presenter extends ViewPresenter<AddPersonView> {
 
         private final VisitRepo visitRepo;
-        private final Person personToEdit;
+        private Person personToEdit;       //person loaded from the API from a previous visit (aka being edited
+        private Person currentPerson;
 
         @Bind(R.id.submit)
         Button submitButton;
@@ -116,6 +117,12 @@ public class AddPersonScreen extends FlowPathBase {
         Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
             this.visitRepo = visitRepo;
             this.personToEdit = personToEdit;
+
+            if (personToEdit !=null) {
+                currentPerson.copy(personToEdit);
+            } else {
+                currentPerson = new Person();
+            }
         }
 
         @Override
@@ -123,15 +130,15 @@ public class AddPersonScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
-            if(personToEdit!=null) {
-                getView().showPerson(personToEdit);
+            if(currentPerson !=null) {
+                getView().showPerson(currentPerson);
                 submitButton.setText(R.string.done);
-                instructionsLabel.setText(String.format(editing, personToEdit.fullName()));
+                instructionsLabel.setText(String.format(editing, currentPerson.fullName()));
             }
         }
 
         String getScreenTitle() {
-            return (personToEdit==null) ? addPerson : editPerson;
+            return (currentPerson ==null) ? addPerson : editPerson;
         }
 
         void setActionBar() {
@@ -163,28 +170,30 @@ public class AddPersonScreen extends FlowPathBase {
         public void dropView(AddPersonView view) {
             super.dropView(view);
 
-            if(personToEdit!=null) {
-                // update on dropView to keep our personToEdit in sync
+            if(currentPerson !=null) {
+                // update on dropView to keep our currentPerson in sync
                 // with the values displayed in the view
-                view.updatePerson(personToEdit);
+                view.updatePerson(currentPerson);
             }
         }
 
         @OnClick(R.id.submit)
         public void addPerson() {
 
-            Person person = null;
+            //update our "temp" person with value from the form
+            getView().updatePerson(currentPerson);
 
-            if (personToEdit==null) {
-                person = new Person();
-                getView().updatePerson(person);
-                visitRepo.addPerson(person);
+            //make sure they are valid
+            if(!formIsValid(currentPerson)) { return; }
+
+            if (personToEdit !=null) {
+                //if we're editing a person loaded from the API, update its values and update the visit
+                personToEdit.update(currentPerson);
+                visitRepo.addPerson(personToEdit);
             } else {
-                person = personToEdit;
-                getView().updatePerson(personToEdit);
+                //otherwise, just add the temp person
+                visitRepo.addPerson(currentPerson);
             }
-
-            if(!formIsValid(person)) { return; }
 
             Flow.get(getView()).goBack();
         }
@@ -200,6 +209,5 @@ public class AddPersonScreen extends FlowPathBase {
             }
             return true;
         }
-
     }
 }

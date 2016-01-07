@@ -204,8 +204,8 @@ public class SignupScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         void onSubmit() {
             if (PermissionService.get(getView()).isGranted()) {
-                ProgressDialogService.get(getView()).show(R.string.please_wait);
                 if(!formIsValid()) { return; }
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
                 userAttributes = getView().getInput(userAttributes);
                 requestLocation();
 

@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/intro_canvass"
+        android:src="@drawable/intro_users"
         />
 
     <TextView
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:text="@string/canvass"
+        android:text="@string/track"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         android:textColor="@android:color/white"
@@ -28,8 +28,8 @@
         android:id="@+id/textViewDesc"
         android:layout_width="220dp"
         android:gravity="center"
-        android:layout_height="74dp"
-        android:text="@string/intro_canvass_desc"
+        android:layout_height="70dp"
+        android:text="@string/intro_track_desc"
         android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium"
         />

@@ -32,6 +32,9 @@ public class AppIntroPagerAdapter extends PagerAdapter {
             case 2:
                 layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_3, viewGroup, false);
                 break;
+            case 3:
+                layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_4, viewGroup, false);
+                break;
         }
 
         viewGroup.addView(layout);
@@ -45,7 +48,7 @@ public class AppIntroPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override

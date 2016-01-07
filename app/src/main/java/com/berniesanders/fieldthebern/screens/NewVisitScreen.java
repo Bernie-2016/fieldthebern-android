@@ -22,6 +22,7 @@ import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.FormValidator;
+import com.berniesanders.fieldthebern.parsing.VisitModified;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 
@@ -246,7 +247,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         @OnClick(R.id.submit)
         public void score() {
-            ProgressDialogService.get(getView()).show(R.string.please_wait);
+
             if(noOneHome) {
                 //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
@@ -268,6 +269,8 @@ public class NewVisitScreen extends FlowPathBase {
                     .lastCanvassResponse(null);
             if (!formIsValid()) { return; }
 
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
+
             visitSubscription = visitRepo.submit()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -285,6 +288,12 @@ public class NewVisitScreen extends FlowPathBase {
                 ToastService.get(getView()).bern(errorVisitInvalid);
                 return false;
             }
+
+            if (!VisitModified.wasModified(apiAddress, visit)) {
+                ToastService.get(getView()).bern(errorVisitInvalid);
+                return false;
+            }
+
             return true;
         }
 

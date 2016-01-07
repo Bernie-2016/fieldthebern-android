@@ -69,7 +69,7 @@
     <string name="err_invalid_email">Please enter a valid email</string>
     <string name="err_invalid_phone">Please enter a valid phone number</string>
     <string name="err_address_blank">Please enter an address</string>
-    <string name="err_no_visit">Please add a person or indicate if no one was home or you were asked to leave</string>
+    <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
 

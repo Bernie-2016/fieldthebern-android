@@ -117,11 +117,9 @@ public class AddPersonScreen extends FlowPathBase {
         Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
             this.visitRepo = visitRepo;
             this.personToEdit = personToEdit;
-
+            currentPerson = new Person();
             if (personToEdit !=null) {
-                currentPerson.copy(personToEdit);
-            } else {
-                currentPerson = new Person();
+                currentPerson = Person.copy(personToEdit);
             }
         }
 

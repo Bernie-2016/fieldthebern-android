@@ -141,6 +141,8 @@ public class NewVisitScreen extends FlowPathBase {
 
             if (!visitRepo.inProgress()) {
                 visitRepo.start(apiAddress);
+            } else {
+                visitRepo.setAddress(apiAddress);
             }
 
         }

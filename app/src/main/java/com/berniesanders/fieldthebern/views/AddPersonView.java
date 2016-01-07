@@ -255,9 +255,11 @@ public class AddPersonView extends RelativeLayout {
         }
         
         if(personAttributes.preferredContact() != null) {
-            if (personAttributes.preferredContact().equals(Contact.EMAIL)) {
+            if (personAttributes.preferredContact().equals(Contact.EMAIL) &&
+                    personAttributes.email() !=null) {
                 emailCheckBox.setChecked(true);
-            } else if (personAttributes.preferredContact().equals(Contact.PHONE)) {
+            } else if (personAttributes.preferredContact().equals(Contact.PHONE) &&
+                    personAttributes.phone() !=null) {
                 phoneCheckBox.setChecked(true);
             }
         }

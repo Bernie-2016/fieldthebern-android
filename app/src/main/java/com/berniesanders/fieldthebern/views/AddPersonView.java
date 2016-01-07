@@ -132,11 +132,6 @@ public class AddPersonView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    public boolean isValid() {
-        //bit of half baked validation
-        return firstNameEditText.getText() != null;
-    }
-
 
     @CanvassResponse.Response
     private String getCanvassResponse() {
@@ -265,5 +260,13 @@ public class AddPersonView extends RelativeLayout {
         }
 
         prevParticipatedSwitch.setChecked(personAttributes.previouslyParticipated());
+    }
+
+    public CheckBox getPhoneCheckBox() {
+        return phoneCheckBox;
+    }
+
+    public CheckBox getEmailCheckBox() {
+        return emailCheckBox;
     }
 }

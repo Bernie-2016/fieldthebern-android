@@ -8,14 +8,13 @@ import android.widget.TextView;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.controllers.ActionBarController;
-import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
-import com.berniesanders.fieldthebern.mortar.HandlesBack;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.AddPersonView;
 
@@ -33,6 +32,9 @@ import flow.History;
 import mortar.ViewPresenter;
 import rx.functions.Action0;
 import timber.log.Timber;
+
+import static com.berniesanders.fieldthebern.parsing.FormValidator.isEmailValid;
+import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
 
 /**
  * Example for creating new Mortar Screen that helps explain how it all works
@@ -112,6 +114,8 @@ public class AddPersonScreen extends FlowPathBase {
         @BindString(R.string.edit_person) String editPerson;
         @BindString(R.string.editing_person) String editing;
         @BindString(R.string.err_their_first_name_blank) String blankFirstName;
+        @BindString(R.string.err_invalid_email) String invalidEmailError;
+        @BindString(R.string.err_invalid_phone) String invalidPhoneError;
 
         @Inject
         Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
@@ -201,8 +205,21 @@ public class AddPersonScreen extends FlowPathBase {
             if (StringUtils.isBlank(person.attributes().firstName())) {
                 ToastService.get(getView()).bern(blankFirstName);
                 return false;
-            } else if (StringUtils.isBlank(person.attributes().firstName())) {
-                ToastService.get(getView()).bern(blankFirstName);
+            } else if (!StringUtils.isBlank(person.attributes().email()) &&  //blank allowed, but invalid not
+                    !isEmailValid(person.attributes().email())) {
+                ToastService.get(getView()).bern(invalidEmailError);
+                return false;
+            } else if (!StringUtils.isBlank(person.attributes().phone()) &&  //blank allowed, but invalid not
+                    !isPhoneValid(person.attributes().phone())) {
+                ToastService.get(getView()).bern(invalidPhoneError);
+                return false;
+            } else if (getView().getEmailCheckBox().isChecked() &&
+                    StringUtils.isBlank(person.attributes().email())) {
+                ToastService.get(getView()).bern(invalidEmailError);
+                return false;
+            } else if (getView().getPhoneCheckBox().isChecked() &&
+                    StringUtils.isBlank(person.attributes().phone())) {
+                ToastService.get(getView()).bern(invalidPhoneError);
                 return false;
             }
             return true;

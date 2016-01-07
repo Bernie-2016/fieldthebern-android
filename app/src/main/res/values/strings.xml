@@ -70,6 +70,14 @@
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
 
+    <string name="intro_learn_desc">We\'ll teach you to canvass your neighborhood and learn useful talking points.</string>
+    <string name="learn">Learn</string>
+    <string name="intro_welcome">Welcome to Field the Bern.</string>
+    <string name="canvass">Canvass</string>
+    <string name="intro_canvass_desc">Find new doors to knock on and earn points for all your hard work.</string>
+    <string name="track">Track</string>
+    <string name="intro_track_desc">Watch your progress as you compete to get America to #FeelTheBern</string>
+
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">
           <item>(select party)</item>

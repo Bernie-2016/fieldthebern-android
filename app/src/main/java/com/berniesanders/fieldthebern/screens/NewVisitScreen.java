@@ -289,7 +289,7 @@ public class NewVisitScreen extends FlowPathBase {
                 return false;
             }
 
-            if (!VisitModified.wasModified(apiAddress, visit)) {
+            if (!VisitModified.wasModified(visitRepo.getPreviousPeople(), visit)) {
                 ToastService.get(getView()).bern(errorVisitInvalid);
                 return false;
             }

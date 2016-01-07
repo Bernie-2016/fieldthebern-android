@@ -74,7 +74,7 @@ public class Person extends CanvassData implements Parcelable {
         return first + " " + last;
     }
 
-    public Person copy(Person src) {
+    public static Person copy(Person src) {
         Person copy = new Person();
         copy.id(src.id());
         copy.type(src.type());

@@ -26,8 +26,9 @@ public class VisitModified {
         }
 
         addressPeople.removeAll(visitPeople);
+        visitPeople.removeAll(previousPeople);
 
-        return !addressPeople.isEmpty() ||
+        return !addressPeople.isEmpty() || !visitPeople.isEmpty() ||
                 ((ApiAddress)current.included().get(0)).attributes().bestCanvassResponse() != null;
     }
 }

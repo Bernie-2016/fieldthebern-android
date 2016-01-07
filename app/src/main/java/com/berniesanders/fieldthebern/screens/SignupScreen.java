@@ -231,7 +231,7 @@ public class SignupScreen extends FlowPathBase {
             } else if (isNullOrBlank(getView().getEmail())) {
                 ToastService.get(getView()).bern(emailBlank);
                 return false;
-            } else if (isEmailValid(getView().getEmail().getText())) {
+            } else if (!isEmailValid(getView().getEmail().getText())) {
                 ToastService.get(getView()).bern(invalidEmailError);
                 return false;
             } else if (isNullOrBlank(getView().getPassword())) {

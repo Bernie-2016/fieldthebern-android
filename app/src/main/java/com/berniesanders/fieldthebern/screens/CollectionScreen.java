@@ -127,23 +127,6 @@ public class CollectionScreen extends FlowPathBase {
                     .setConfig(new ActionBarController.Config(collection.getTitle(), menu));
         }
 
-        /**
-         * hacky
-         */
-        private boolean hasOnlyVisibleChildren() {
-            int numCols = getView().getContext().getResources().getInteger(R.integer.num_cols);
-            int orientation = getView().getContext().getResources().getConfiguration().orientation;
-
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                return collection.getApiItems().size() <= numCols * 2;          //4 items usually visible in portrait
-            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                return collection.getApiItems().size() <= numCols;              //3 items usually visible in landscape
-            } else {
-                return false;
-            }
-
-        }
-
 
         @Override
         protected void onSave(Bundle outState) {

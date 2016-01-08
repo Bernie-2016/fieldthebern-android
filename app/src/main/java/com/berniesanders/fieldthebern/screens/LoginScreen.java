@@ -242,13 +242,19 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.d("loginEmail done.");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
             }
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "loginEmail error");
+                if (getView() == null) {
+                    Timber.e(e, "loginEmail onError");
+                    return;
+                }
+
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());
@@ -259,6 +265,8 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onNext(Token token) {
                 Timber.d("loginEmail onNext: %s", token.toString());
+                ProgressDialogService.get(getView()).dismiss();
+                Flow.get(getView().getContext()).set(new HomeScreen());
             }
         };
 
@@ -266,19 +274,26 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.d("refreshObserver done.");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
             }
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "refreshObserver error");
+                if (getView() == null) {
+                    Timber.e(e, "refreshObserver onError");
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
             }
 
             @Override
             public void onNext(Token token) {
                 Timber.d("refreshObserver onNext: %s", token.toString());
+                ProgressDialogService.get(getView()).dismiss();
+                Flow.get(getView().getContext()).set(new HomeScreen());
             }
         };
 

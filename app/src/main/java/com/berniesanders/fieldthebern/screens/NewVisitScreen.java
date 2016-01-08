@@ -301,12 +301,19 @@ public class NewVisitScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.v("visitResultObserver.onCompleted");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
             }
 
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "error submitting visit");
+                if (getView() == null) {
+                    return;
+                }
+
                 ProgressDialogService.get(getView()).dismiss();
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;

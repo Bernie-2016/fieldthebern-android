@@ -242,6 +242,12 @@ public class AddAddressScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
+
+                if (getView() == null) {
+                    Timber.e(e, "singleAddressObserver onError");
+                    return;
+                }
+
                 ProgressDialogService.get(getView()).dismiss();
 
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {

@@ -198,8 +198,10 @@ public class MapScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
-                Timber.w("singleAddressObserver onError: %s", e.getMessage());
-
+                if (getView() == null) {
+                    Timber.e(e, "singleAddressObserver onError");
+                    return;
+                }
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
                 }

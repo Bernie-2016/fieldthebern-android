@@ -338,6 +338,9 @@ public class SignupScreen extends FlowPathBase {
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "createUserRequest error");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);

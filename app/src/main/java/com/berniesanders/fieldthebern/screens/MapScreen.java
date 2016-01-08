@@ -143,7 +143,7 @@ public class MapScreen extends FlowPathBase {
 
         MapScreenView.OnCameraChange onCameraChange = new MapScreenView.OnCameraChange() {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses) {
+            public void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses, int radius ) {
                 Presenter.this.cameraPosition = cameraPosition;
 
                 if (!shouldRefreshAddresses) { return; }
@@ -153,7 +153,7 @@ public class MapScreen extends FlowPathBase {
                                 new AddressSpec().multipleAddresses(new RequestMultipleAddresses()
                                         .latitude(cameraPosition.target.latitude)
                                         .longitude(cameraPosition.target.longitude)
-                                        .radius(1000)))
+                                        .radius(radius)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(multiAddressObserver);

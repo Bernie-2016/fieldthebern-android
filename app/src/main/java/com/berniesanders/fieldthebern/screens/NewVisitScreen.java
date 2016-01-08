@@ -88,7 +88,7 @@ public class NewVisitScreen extends FlowPathBase {
 
 
     @dagger.Module
-    class Module {
+    class Module { // expose module to presenter and pass the data
         private final ApiAddress apiAddress;
 
         Module(ApiAddress apiAddress) {
@@ -156,6 +156,7 @@ public class NewVisitScreen extends FlowPathBase {
             initSwitches();
             setSwitchListeners();
             getView().showPeople(visitRepo.get());
+            getView().showPrimary(apiAddress);
         }
 
         /**
@@ -243,6 +244,16 @@ public class NewVisitScreen extends FlowPathBase {
         @OnClick(R.id.add_person)
         public void addPerson() {
             Flow.get(getView()).set(new AddPersonScreen(null));
+        }
+
+        @OnClick(R.id.view_state_primary)
+        public void viewStatePrimaryInfo() {
+            Flow.get(getView()).set(new StatePrimaryScreen(apiAddress));
+        }
+
+        @OnClick(R.id.view_bernie_issues)
+        public void viewBernieIssues() {
+            Flow.get(getView()).set(new Main());
         }
 
         @OnClick(R.id.submit)

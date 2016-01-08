@@ -2,6 +2,8 @@ package com.berniesanders.fieldthebern.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +14,14 @@ import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.media.PartyIcon;
+import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
+import com.berniesanders.fieldthebern.parsing.StatesDataParser;
 import com.berniesanders.fieldthebern.screens.AddPersonScreen;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
 
@@ -43,6 +47,9 @@ public class NewVisitView extends RelativeLayout {
 
     @Bind(R.id.person_container)
     ViewGroup personContainer;
+
+    @Bind(R.id.view_state_primary)
+    AppCompatButton primariesButton;
 
     public NewVisitView(Context context) {
         super(context);
@@ -92,6 +99,31 @@ public class NewVisitView extends RelativeLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
+    }
+
+    public void showPrimary(ApiAddress address) {
+        String state = address.attributes().state();
+
+        Context context = getContext();
+        StatesDataParser stateParser = new StatesDataParser(context);
+        state = stateParser.getStateNameFromCode(state);
+
+        if (state == null){
+            Timber.d("Error parsing states json");
+            return;
+        }
+
+        primariesButton.setText(state);
+
+        state = state.toLowerCase();
+
+        String packageName = context.getPackageName();
+        int resId = getResources().getIdentifier(state, "drawable", packageName);
+        Drawable img = context.getResources().getDrawable(resId);
+        if (img != null){
+            primariesButton.setCompoundDrawablesWithIntrinsicBounds( img, null, null, null );
+        }
+
     }
 
     public void showPeople(final Visit visit) {

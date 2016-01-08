@@ -7,10 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/bernie_dark_blue"
-    >
-
-
+    tools:background="@color/bernie_dark_blue">
 
     <View
         android:layout_width="match_parent"
@@ -25,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
         android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
+        android:layout_margin="12dp"
         android:background="?attr/selectableItemBackground"
         android:gravity="center"
         android:text="@string/submit_visit_details"
@@ -98,7 +95,10 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/large_button_height"
-                android:layout_margin="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp"
                 >
 
                 <android.support.v7.widget.AppCompatButton
@@ -146,7 +146,78 @@
                 android:textSize="18sp"
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:padding="4dp"
+                android:text="@string/primary_policy_info"
+                android:textColor="@color/b_light_blue2"
+                android:textSize="16sp"
+                />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/large_button_height"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/view_state_primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableLeft="@drawable/iowa"
+                    android:drawablePadding="12dp"
+                    android:gravity="left|center_vertical"
+                    android:padding="8dp"
+                    android:text="@string/iowa"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/dark_blue2"
+                    />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/large_button_height"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="4dp">
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/view_bernie_issues"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableLeft="@drawable/ic_issues_24dp"
+                    android:drawablePadding="12dp"
+                    android:gravity="left|center_vertical"
+                    android:padding="8dp"
+                    android:text="@string/bernie_on_issues"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/dark_blue2"
+                    />
+            </FrameLayout>
 
         </LinearLayout>
+
+
     </ScrollView>
 </com.berniesanders.fieldthebern.views.NewVisitView>

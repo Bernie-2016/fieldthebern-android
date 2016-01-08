@@ -455,9 +455,11 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    //notify the listener that the camera moved
-                    onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false);
-                    connectCameraObservable(googleMap);
+                    if(onCameraChangeListener!=null) {
+                        //notify the listener that the camera moved
+                        onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false);
+                        connectCameraObservable(googleMap);
+                    }
                 }
             }, 1500);
             return false;
@@ -473,6 +475,10 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         Canvas canvas = new Canvas(copiedBitmap);
         canvas.drawBitmap(bm, 0, 0, paint);
         return copiedBitmap;
+    }
+
+    public ApiAddress getCurrentAddress() {
+        return address;
     }
 
     public interface OnCameraChange {

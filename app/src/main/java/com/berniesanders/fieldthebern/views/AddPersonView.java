@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.views;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -14,6 +15,7 @@ import com.berniesanders.fieldthebern.models.Contact;
 import com.berniesanders.fieldthebern.models.Party;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
+import com.berniesanders.fieldthebern.mortar.HandlesBack;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
 import com.berniesanders.fieldthebern.parsing.PartyEvaluator;
 import com.berniesanders.fieldthebern.screens.AddPersonScreen;
@@ -58,6 +60,9 @@ public class AddPersonView extends RelativeLayout {
 
     @Bind(R.id.email_checkbox)
     CheckBox emailCheckBox;
+
+    @Bind(R.id.previously_participated)
+    SwitchCompat prevParticipatedSwitch;
 
     public AddPersonView(Context context) {
         super(context);
@@ -125,11 +130,6 @@ public class AddPersonView extends RelativeLayout {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         presenter.dropView(this);
-    }
-
-    public boolean isValid() {
-        //bit of half baked validation
-        return firstNameEditText.getText() != null;
     }
 
 
@@ -214,6 +214,7 @@ public class AddPersonView extends RelativeLayout {
                 person.attributes().preferredContact(Contact.EMAIL);
             }
         }
+        person.attributes().previouslyParticipated(prevParticipatedSwitch.isChecked());
     }
 
     /**
@@ -249,11 +250,23 @@ public class AddPersonView extends RelativeLayout {
         }
         
         if(personAttributes.preferredContact() != null) {
-            if (personAttributes.preferredContact().equals(Contact.EMAIL)) {
+            if (personAttributes.preferredContact().equals(Contact.EMAIL) &&
+                    personAttributes.email() !=null) {
                 emailCheckBox.setChecked(true);
-            } else if (personAttributes.preferredContact().equals(Contact.PHONE)) {
+            } else if (personAttributes.preferredContact().equals(Contact.PHONE) &&
+                    personAttributes.phone() !=null) {
                 phoneCheckBox.setChecked(true);
             }
         }
+
+        prevParticipatedSwitch.setChecked(personAttributes.previouslyParticipated());
+    }
+
+    public CheckBox getPhoneCheckBox() {
+        return phoneCheckBox;
+    }
+
+    public CheckBox getEmailCheckBox() {
+        return emailCheckBox;
     }
 }

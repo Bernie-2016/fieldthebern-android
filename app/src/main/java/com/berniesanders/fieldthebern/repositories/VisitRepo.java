@@ -73,18 +73,9 @@ public class VisitRepo {
     }
 
     public Visit start(final ApiAddress apiAddress) {
-
         visit = new Visit();
         visit.start();
-        visit.included().add(0, apiAddress);
-        List<CanvassData> included = apiAddress.included();
-
-        for(CanvassData canvassData : included) {
-            if (canvassData.type().equals(Person.TYPE)) {
-                addPerson((Person) canvassData);
-            }
-        }
-
+        setAddress(apiAddress);
         return visit;
     }
 
@@ -117,5 +108,32 @@ public class VisitRepo {
 
     public void clear() {
         visit = null;
+    }
+
+    public void setAddress(ApiAddress apiAddress) {
+
+
+        try {
+            //remove the previous address so we don't have duplicates
+            ApiAddress previousAddress = (ApiAddress) visit.included().remove(0);
+            if (previousAddress != null) {
+                if (!apiAddress.equals(previousAddress)) { //if the address changed, reset the visit timer
+                    visit.included().clear();
+                    visit.start();
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {
+            //more logic than an error
+            Timber.d("attempted to read a previous address ");
+        }
+
+        visit.included().add(0, apiAddress);
+        List<CanvassData> included = apiAddress.included();
+
+        for(CanvassData canvassData : included) {
+            if (canvassData.type().equals(Person.TYPE)) {
+                addPerson((Person) canvassData);
+            }
+        }
     }
 }

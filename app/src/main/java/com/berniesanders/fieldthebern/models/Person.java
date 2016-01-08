@@ -74,6 +74,42 @@ public class Person extends CanvassData implements Parcelable {
         return first + " " + last;
     }
 
+    public static Person copy(Person src) {
+        Person copy = new Person();
+        copy.id(src.id());
+        copy.type(src.type());
+
+        Attributes srcAttributes = src.attributes();
+
+        copy.attributes().previouslyParticipated(srcAttributes.previouslyParticipated());
+        copy.attributes().firstName(srcAttributes.firstName());
+        copy.attributes().lastName(srcAttributes.lastName());
+        copy.attributes().email(srcAttributes.email());
+        copy.attributes().phone(srcAttributes.phone());
+        copy.attributes().party(srcAttributes.party());
+        copy.attributes().party(srcAttributes.party());
+        copy.attributes().canvassResponse(srcAttributes.canvassResponse());
+        copy.attributes().preferredContact(srcAttributes.preferredContact());
+
+        return copy;
+    }
+
+    public void update(Person src) {
+        this.id(src.id());
+        this.type(src.type());
+
+        Attributes srcAttributes = src.attributes();
+
+        this.attributes().previouslyParticipated(srcAttributes.previouslyParticipated());
+        this.attributes().firstName(srcAttributes.firstName());
+        this.attributes().lastName(srcAttributes.lastName());
+        this.attributes().email(srcAttributes.email());
+        this.attributes().phone(srcAttributes.phone());
+        this.attributes().party(srcAttributes.party());
+        this.attributes().canvassResponse(srcAttributes.canvassResponse());
+        this.attributes().preferredContact(srcAttributes.preferredContact());
+    }
+
 
     public static class Attributes implements Parcelable {
 
@@ -108,6 +144,7 @@ public class Person extends CanvassData implements Parcelable {
             return this.phone;
         }
 
+        @Contact.Method
         public String preferredContact() {
             return this.preferredContact;
         }
@@ -256,6 +293,7 @@ public class Person extends CanvassData implements Parcelable {
                 return new Attributes[size];
             }
         };
+
     }
 
     @Override

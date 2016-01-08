@@ -4,6 +4,7 @@ package com.berniesanders.fieldthebern.views;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.R;
@@ -29,6 +30,8 @@ public class AppIntroView extends FrameLayout {
     ViewPager viewPager;
     @Bind(R.id.circleIndicator)
     CircleIndicator circleIndicator;
+    @Bind(R.id.doneButton)
+    Button doneButton;
 
     @Inject
     AppIntroScreen.Presenter presenter;
@@ -66,6 +69,24 @@ public class AppIntroView extends FrameLayout {
         ButterKnife.bind(this, this);
         viewPager.setAdapter(new AppIntroPagerAdapter(getContext()));
         circleIndicator.setViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                doneButton.setText(position == 3?R.string.done:R.string.skip);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override

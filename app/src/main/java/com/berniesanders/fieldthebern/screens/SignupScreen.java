@@ -25,7 +25,7 @@ import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
-import com.berniesanders.fieldthebern.parsing.FormValidator;
+import static com.berniesanders.fieldthebern.parsing.FormValidator.*;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.SignupView;
@@ -115,6 +115,7 @@ public class SignupScreen extends FlowPathBase {
         @BindString(R.string.err_email_blank) String emailBlank;
         @BindString(R.string.err_password_blank) String passwordBlank;
         @BindString(R.string.err_your_first_name_blank) String firstNameBlank;
+        @BindString(R.string.err_invalid_email) String invalidEmailError;
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
@@ -203,8 +204,8 @@ public class SignupScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         void onSubmit() {
             if (PermissionService.get(getView()).isGranted()) {
-                ProgressDialogService.get(getView()).show(R.string.please_wait);
                 if(!formIsValid()) { return; }
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
                 userAttributes = getView().getInput(userAttributes);
                 requestLocation();
 
@@ -224,13 +225,16 @@ public class SignupScreen extends FlowPathBase {
 
         private boolean formIsValid() {
             //last name is optional
-            if (FormValidator.isNullOrBlank(getView().getFirstName())) {
+            if (isNullOrBlank(getView().getFirstName())) {
                 ToastService.get(getView()).bern(firstNameBlank);
                 return false;
-            } else if (FormValidator.isNullOrBlank(getView().getEmail())) {
+            } else if (isNullOrBlank(getView().getEmail())) {
                 ToastService.get(getView()).bern(emailBlank);
                 return false;
-            } else if (FormValidator.isNullOrBlank(getView().getPassword())) {
+            } else if (!isEmailValid(getView().getEmail().getText())) {
+                ToastService.get(getView()).bern(invalidEmailError);
+                return false;
+            } else if (isNullOrBlank(getView().getPassword())) {
                 ToastService.get(getView()).bern(passwordBlank);
                 return false;
             }

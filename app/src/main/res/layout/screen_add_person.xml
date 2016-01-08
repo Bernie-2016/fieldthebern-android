@@ -216,6 +216,15 @@
                     android:text="@string/how_interested_in_bernie"
                     />
             </FrameLayout>
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/previously_participated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/previously_participated"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                />
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

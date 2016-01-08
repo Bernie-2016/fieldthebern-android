@@ -6,6 +6,7 @@ import android.widget.EditText;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
@@ -14,14 +15,18 @@ import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.ProfileView;
+import com.bugsnag.android.Bugsnag;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import flow.Flow;
 import mortar.ViewPresenter;
-import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -131,6 +136,17 @@ public class ProfileScreen extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
+            userRepo.getMe().subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnNext(new Action1<User>() {
+                        @Override
+                        public void call(User user) {
+                            String firstName = user.getData().attributes().getFirstName();
+                            String lastName = user.getData().attributes().getLastName();
+                            firstNameEditText.setText(firstName);
+                            lastNameEditText.setText(lastName);
+                        }
+                    }).subscribe();
         }
 
         /**
@@ -156,6 +172,7 @@ public class ProfileScreen extends FlowPathBase {
 
         @OnClick(R.id.submit_profile)
         void onSaveProfileClicked() {
+            Timber.v("Attempting to save profile");
             String firstName = firstNameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
             UserSpec spec = new UserSpec();
@@ -166,6 +183,37 @@ public class ProfileScreen extends FlowPathBase {
             spec.update(user);
             userRepo.update(spec)
                     .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnCompleted(
+                            new Action0() {
+                                @Override
+                                public void call() {
+                                    Timber.v("Profile saved");
+                                    ProfileView view = getView();
+                                    if (view != null) {
+                                        ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
+                                        Flow.get(view.getContext()).set(new HomeScreen());
+                                    } else {
+                                        Timber.w("getView() null, cannot notify user of successful profile save");
+                                    }
+                                }
+                            }
+                    )
+                    .doOnError(
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.e(throwable, "Unable to save profile");
+                                    Bugsnag.notify(throwable);
+                                    ProfileView view = getView();
+                                    if (view != null) {
+                                        ToastService.get(view).bern(view.getContext().getString(R.string.error_saving_profile));
+                                    } else {
+                                        Timber.w("getView() null, cannot notify user of failed profile save");
+                                    }
+                                }
+                            }
+                    )
                     .subscribe();
         }
     }

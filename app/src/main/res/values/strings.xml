@@ -36,7 +36,9 @@
     <string name="login_title">Login</string>
     <string name="signup_title">Sign up</string>
     <string name="done">Done</string>
+    <string name="skip">Skip</string>
 
+    <string name="previously_participated">Have they previously participated in a primary or caucus?</string>
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
     <string name="bernie_sanders">Bernie Sanders</string>
     <string name="correct_address_reminder">Correct the Address below before you knock on the door.</string>
@@ -65,8 +67,20 @@
     <string name="err_email_blank">Please enter an email</string>
     <string name="err_your_first_name_blank">Please enter your first name</string>
     <string name="err_their_first_name_blank">Please enter their first name</string>
+    <string name="err_invalid_email">Please enter a valid email</string>
+    <string name="err_invalid_phone">Please enter a valid phone number</string>
     <string name="err_address_blank">Please enter an address</string>
-    <string name="err_no_visit">Please add a person or indicate if no one was home or you were asked to leave</string>
+    <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
+    <string name="profile_saved">Profile saved</string>
+    <string name="error_saving_profile">Error saving profile</string>
+
+    <string name="intro_learn_desc">We\'ll teach you to canvass your neighborhood and learn useful talking points.</string>
+    <string name="learn">Learn</string>
+    <string name="intro_welcome">Welcome to Field the Bern.</string>
+    <string name="canvass">Canvass</string>
+    <string name="intro_canvass_desc">Find new doors to knock on and earn points for all your hard work.</string>
+    <string name="track">Track</string>
+    <string name="intro_track_desc">Watch your progress as you compete to get America to #FeelTheBern</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">
@@ -75,6 +89,7 @@
           <item>Republican</item>
           <item>Independent</item>
           <item>Undeclared</item>
+          <item>Unknown</item>
           <item>Other</item>
     </string-array>
 

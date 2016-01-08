@@ -162,7 +162,7 @@ public class UserRepo {
         return endpoint.update(user);
     }
 
-    private Observable<User> getMe() {
+    public Observable<User> getMe() {
         Timber.v("getMe()");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())

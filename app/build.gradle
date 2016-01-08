@@ -9,8 +9,8 @@ android {
         applicationId "com.berniesanders.fieldthebern"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 4
-        versionName "1.0.0.alpha.1"
+        versionCode 5
+        versionName "1.0.0.alpha.2"
         multiDexEnabled true
     }
     buildTypes {
@@ -27,7 +27,7 @@ android {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
     lintOptions {
-        disable 'InvalidPackage','WrongConstant'
+        disable 'InvalidPackage','WrongConstant','ResourceType'
     }
 }
 

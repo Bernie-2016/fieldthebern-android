@@ -77,7 +77,8 @@ public class CanvassResponseEvaluator {
             case CanvassResponse.NO_ONE_HOME:
                 return "No one home"; //TODO we need a string for this....
             default:
-                throw new IllegalArgumentException("unknown response");
+                Timber.e("CanvassResponseEvaluator.getText() called but selection is unknown?");
+                return "unknown"; //TODO we need a string for this....
         }
     }
 }

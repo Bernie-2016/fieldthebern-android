@@ -66,6 +66,7 @@
     <string name="err_password_blank">Please enter a password</string>
     <string name="err_email_blank">Please enter an email</string>
     <string name="err_your_first_name_blank">Please enter your first name</string>
+    <string name="err_your_last_name_blank">Please enter your last name</string>
     <string name="err_their_first_name_blank">Please enter their first name</string>
     <string name="err_invalid_email">Please enter a valid email</string>
     <string name="err_invalid_phone">Please enter a valid phone number</string>

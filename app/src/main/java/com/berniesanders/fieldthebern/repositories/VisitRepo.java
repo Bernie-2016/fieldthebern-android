@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +46,7 @@ public class VisitRepo {
     private final Config config;
 
     private Visit visit;
+    private List<Person> previousPeople = new ArrayList<>();
 
 
     @Inject
@@ -75,6 +77,7 @@ public class VisitRepo {
     public Visit start(final ApiAddress apiAddress) {
         visit = new Visit();
         visit.start();
+        setPreviousPeople(apiAddress);
         setAddress(apiAddress);
         return visit;
     }
@@ -82,6 +85,16 @@ public class VisitRepo {
     public void addPerson(Person person) {
         if (!visit.included().contains(person)) {
             visit.included().add(person);
+        }
+    }
+
+    void setPreviousPeople(final ApiAddress apiAddress) {
+        List<CanvassData> included = apiAddress.included();
+        previousPeople.clear();
+        for(CanvassData canvassData : included) {
+            if (canvassData.type().equals(Person.TYPE)) {
+                previousPeople.add(Person.copy((Person) canvassData));
+            }
         }
     }
 
@@ -108,6 +121,11 @@ public class VisitRepo {
 
     public void clear() {
         visit = null;
+        previousPeople.clear();
+    }
+
+    public List<Person> getPreviousPeople() {
+        return previousPeople;
     }
 
     public void setAddress(ApiAddress apiAddress) {
@@ -118,8 +136,9 @@ public class VisitRepo {
             ApiAddress previousAddress = (ApiAddress) visit.included().remove(0);
             if (previousAddress != null) {
                 if (!apiAddress.equals(previousAddress)) { //if the address changed, reset the visit timer
-                    visit.included().clear();
+                    //visit.included().clear();
                     visit.start();
+                    //setPreviousPeople(apiAddress);
                 }
             }
         } catch (IndexOutOfBoundsException e) {

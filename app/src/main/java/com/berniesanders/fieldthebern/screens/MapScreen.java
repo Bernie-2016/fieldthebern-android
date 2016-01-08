@@ -1,6 +1,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -49,6 +50,7 @@ public class MapScreen extends FlowPathBase {
 
     public CameraPosition cameraPosition;
     public ApiAddress address;
+    public List<ApiAddress> nearby;
 
     public MapScreen() {
     }
@@ -84,6 +86,7 @@ public class MapScreen extends FlowPathBase {
 
         public static final String CAMERA_POSITION = "camera_position";
         public static final String ADDRESS = "address";
+        public static final String NEARBY = "nearby";
         private final AddressRepo addressRepo;
         private final ErrorResponseParser errorResponseParser;
 
@@ -108,6 +111,7 @@ public class MapScreen extends FlowPathBase {
                 //restores state after rotation
                 cameraPosition = savedInstanceState.getParcelable(CAMERA_POSITION);
                 address = savedInstanceState.getParcelable(ADDRESS);
+                nearbyAddresses = savedInstanceState.getParcelableArrayList(NEARBY);
             }
 
             if (cameraPosition == null) {
@@ -118,6 +122,10 @@ public class MapScreen extends FlowPathBase {
             if (address == null) {
                 //unfortunate hack for restoring state in flow after navigation
                 address = ((MapScreen) Path.get(getView().getContext())).address;
+            }
+            if (nearbyAddresses.isEmpty()) {
+                //unfortunate hack for restoring state in flow after navigation
+                nearbyAddresses = ((MapScreen) Path.get(getView().getContext())).nearby;
             }
 
             if (address != null) {
@@ -135,7 +143,7 @@ public class MapScreen extends FlowPathBase {
 
         MapScreenView.OnCameraChange onCameraChange = new MapScreenView.OnCameraChange() {
             @Override
-            public void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses) {
+            public void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses, int radius ) {
                 Presenter.this.cameraPosition = cameraPosition;
 
                 if (!shouldRefreshAddresses) { return; }
@@ -145,7 +153,7 @@ public class MapScreen extends FlowPathBase {
                                 new AddressSpec().multipleAddresses(new RequestMultipleAddresses()
                                         .latitude(cameraPosition.target.latitude)
                                         .longitude(cameraPosition.target.longitude)
-                                        .radius(1000)))
+                                        .radius(radius)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(multiAddressObserver);
@@ -193,7 +201,6 @@ public class MapScreen extends FlowPathBase {
         Observer<SingleAddressResponse> singleAddressObserver = new Observer<SingleAddressResponse>() {
             @Override
             public void onCompleted() {
-
             }
 
             @Override
@@ -234,6 +241,10 @@ public class MapScreen extends FlowPathBase {
             if (address!=null) {
                 outState.putParcelable(ADDRESS, address);
             }
+
+            if (!nearbyAddresses.isEmpty()) {
+                outState.putParcelableArrayList(NEARBY, (ArrayList<? extends Parcelable>) nearbyAddresses);
+            }
         }
 
         @Override
@@ -269,6 +280,7 @@ public class MapScreen extends FlowPathBase {
             //unfortunate hack for saving state in flow after navigation
             ((MapScreen) Path.get(getView().getContext())).cameraPosition = cameraPosition;
             ((MapScreen) Path.get(getView().getContext())).address = address;
+            ((MapScreen) Path.get(getView().getContext())).nearby = nearbyAddresses;
             Flow.get(getView()).set(new AddAddressScreen(address));
             dropListeners(getView());
         }

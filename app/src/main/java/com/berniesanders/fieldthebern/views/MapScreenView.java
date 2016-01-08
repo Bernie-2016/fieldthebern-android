@@ -266,6 +266,13 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                 map.moveCamera(CameraUpdateFactory
                         .newCameraPosition(getCameraPosition(location)));
                 connectCameraObservable(map);
+
+                geocodeSubscription = LocationService.get(MapScreenView.this)
+                        .reverseGeocode(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .single()
+                        .subscribe(geocodeObserver);
             }
         };
 

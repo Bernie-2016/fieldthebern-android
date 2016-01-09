@@ -16,6 +16,7 @@ import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.PageContentDeserializer;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -88,6 +89,12 @@ public class MainModule {
     @Singleton
     public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
         return new AddressRepo(gson, tokenRepo, rxPrefs, config);
+    }
+
+    @Provides
+    @Singleton
+    public StatesRepo provideStatesRepo() {
+        return new StatesRepo(gson, context);
     }
 
     @Provides

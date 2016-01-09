@@ -13,7 +13,9 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 import com.berniesanders.fieldthebern.views.StatePrimaryView;
@@ -27,7 +29,11 @@ import dagger.Provides;
 import flow.Flow;
 import flow.History;
 import mortar.ViewPresenter;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -79,6 +85,7 @@ public class StatePrimaryScreen extends FlowPathBase {
         void inject(StatePrimaryView t);
         ApiAddress apiAddress();
         VisitRepo visitRepo();
+        StatesRepo statesRepo();
     }
 
     @FtbScreenScope
@@ -86,14 +93,18 @@ public class StatePrimaryScreen extends FlowPathBase {
 
         private final VisitRepo visitRepo;
         private final ApiAddress apiAddress;
+        private final StatesRepo statesRepo;
+
+        Subscription subscription;
+        private StatePrimaryResponse.StatePrimary[] statePrimaries;
 
         @BindString(android.R.string.cancel) String cancel;
 
         @Inject
-        Presenter(ApiAddress apiAddress, VisitRepo visitRepo) {
+        Presenter(ApiAddress apiAddress, VisitRepo visitRepo, StatesRepo statesRepo) {
             this.visitRepo = visitRepo;
             this.apiAddress = apiAddress;
-
+            this.statesRepo = statesRepo;
         }
 
         @Override
@@ -101,11 +112,36 @@ public class StatePrimaryScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
-            getView().populateStateInfo(apiAddress);
+
+            subscription = statesRepo.getStatePrimaries()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(observer);
+
         }
+
+        Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
+            @Override
+            public void onCompleted() {
+                getView().populateStateInfo(statePrimaries, apiAddress);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e("Error on stateprimaryobserver");
+            }
+
+            @Override
+            public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
+                Presenter.this.statePrimaries = statePrimary;
+            }
+        };
 
         @Override
         public void dropView(StatePrimaryView view) {
+            if (subscription!=null && !subscription.isUnsubscribed()) {
+                subscription.unsubscribe();
+            }
             super.dropView(view);
             ButterKnife.unbind(this);
         }
@@ -128,6 +164,8 @@ public class StatePrimaryScreen extends FlowPathBase {
                     .setMainImage(null)
                     .setConfig(new ActionBarController.Config("Primary Information", menu));
         }
+
+
     }
 
 }

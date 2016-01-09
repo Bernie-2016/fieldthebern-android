@@ -17,12 +17,14 @@ import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
+import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.parsing.VisitModified;
+import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 
@@ -111,6 +113,7 @@ public class NewVisitScreen extends FlowPathBase {
         ApiAddress apiAddress();
         VisitRepo visitRepo();
         ErrorResponseParser errorResponseParser();
+        StatesRepo statesRepo();
     }
 
     @FtbScreenScope
@@ -120,6 +123,11 @@ public class NewVisitScreen extends FlowPathBase {
         private final VisitRepo visitRepo;
         private final ErrorResponseParser errorResponseParser;
         Subscription visitSubscription;
+
+        private final StatesRepo statesRepo;
+
+        Subscription statePrimarySubscription;
+        private StatePrimaryResponse.StatePrimary[] statePrimaries;
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
@@ -135,10 +143,11 @@ public class NewVisitScreen extends FlowPathBase {
         SwitchCompat askedToLeaveSwitch;
 
         @Inject
-        Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser) {
+        Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser, StatesRepo statesRepo) {
             this.apiAddress = apiAddress;
             this.visitRepo = visitRepo;
             this.errorResponseParser = errorResponseParser;
+            this.statesRepo = statesRepo;
 
             if (!visitRepo.inProgress()) {
                 visitRepo.start(apiAddress);
@@ -156,8 +165,29 @@ public class NewVisitScreen extends FlowPathBase {
             initSwitches();
             setSwitchListeners();
             getView().showPeople(visitRepo.get());
-            getView().showPrimary(apiAddress);
+
+            statePrimarySubscription = statesRepo.getStatePrimaries()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(observer);
         }
+
+        Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
+            @Override
+            public void onCompleted() {
+                getView().showPrimary(statePrimaries, apiAddress);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e("Error on stateprimaryobserver");
+            }
+
+            @Override
+            public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
+                Presenter.this.statePrimaries = statePrimary;
+            }
+        };
 
         /**
          * If user rotated the device, be sure the switches match our boolean values
@@ -236,6 +266,9 @@ public class NewVisitScreen extends FlowPathBase {
 
         @Override
         public void dropView(NewVisitView view) {
+            if (statePrimarySubscription!=null && !statePrimarySubscription.isUnsubscribed()) {
+                statePrimarySubscription.unsubscribe();
+            }
             super.dropView(view);
             clearSwitchListeners();
             ButterKnife.unbind(this);

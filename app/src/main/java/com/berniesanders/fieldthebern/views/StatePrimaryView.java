@@ -9,10 +9,12 @@ import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.parsing.StatesDataParser;
 import com.berniesanders.fieldthebern.screens.StatePrimaryScreen;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -78,18 +80,31 @@ public class StatePrimaryView extends RelativeLayout {
 
     }
 
-    public void populateStateInfo(ApiAddress apiAddress) {
-        String stateCode = apiAddress.attributes().state();
+    public void populateStateInfo(StatePrimaryResponse.StatePrimary[] states, ApiAddress apiAddress) {
+
+        // first find the state we desire
+        StatePrimaryResponse.StatePrimary userState = null;
+
+        for (int i = 0; i < states.length; i++) {
+
+            if (states[i].getCode().equalsIgnoreCase(apiAddress.attributes().state())) {
+                userState = states[i];
+                break;
+            }
+        }
+
+        if (userState == null) {
+            Timber.e("Unable to extract state primary");
+            return;
+        }
+
+        String name = userState.getState();
+        String type = userState.getType();
+        String date = "On " + userState.getDate();
+        String deadline = "Voter Registration Deadline: " + userState.getDeadline();
+        String description = userState.getDetails();
 
         Context context = getContext();
-        StatesDataParser parser = new StatesDataParser(context);
-        Map<String, String> dictionary = parser.getStateInfoFromCode(stateCode);
-
-        String name = dictionary.get("state");
-        String type = dictionary.get("type");
-        String date = "On " + dictionary.get("date");
-        String deadline = "Registration Deadline: " + dictionary.get("deadline");
-        String description = dictionary.get("details");
 
         String packageName = context.getPackageName();
         if (name != null) {
@@ -106,6 +121,7 @@ public class StatePrimaryView extends RelativeLayout {
         primaryDeadline.setText(deadline);
         primaryDescription.setText(description);
     }
+
 
     @Override
     protected void onFinishInflate() {

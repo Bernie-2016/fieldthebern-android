@@ -18,6 +18,7 @@ import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.Person;
+import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
@@ -101,30 +102,37 @@ public class NewVisitView extends RelativeLayout {
         presenter.dropView(this);
     }
 
-    public void showPrimary(ApiAddress address) {
-        String state = address.attributes().state();
+    public void showPrimary(StatePrimaryResponse.StatePrimary[] states, ApiAddress apiAddress) {
+        // first find the state we desire
+        StatePrimaryResponse.StatePrimary userState = null;
 
-        Context context = getContext();
-        StatesDataParser stateParser = new StatesDataParser(context);
-        state = stateParser.getStateNameFromCode(state);
+        for (int i = 0; i < states.length; i++) {
 
-        if (state == null){
-            Timber.d("Error parsing states json");
+            if (states[i].getCode().equalsIgnoreCase(apiAddress.attributes().state())) {
+                userState = states[i];
+                break;
+            }
+        }
+
+        if (userState == null) {
+            Timber.e("Unable to extract state primary");
             return;
         }
 
-        primariesButton.setText(state);
-
-        state = state.toLowerCase();
+        Context context = getContext();
+        String name = userState.getState();
 
         String packageName = context.getPackageName();
-        int resId = getResources().getIdentifier(state, "drawable", packageName);
+        int resId = getResources().getIdentifier(name.toLowerCase(), "drawable", packageName);
         Drawable img = context.getResources().getDrawable(resId);
         if (img != null){
             primariesButton.setCompoundDrawablesWithIntrinsicBounds( img, null, null, null );
         }
 
+        primariesButton.setText(name);
+
     }
+
 
     public void showPeople(final Visit visit) {
 

@@ -9,6 +9,7 @@ import com.squareup.picasso.Target;
 
 import java.nio.ByteBuffer;
 
+import rx.Observable;
 import timber.log.Timber;
 
 /*
@@ -41,19 +42,22 @@ public class SaveImageTarget implements Target {
     @Override
     public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
         Timber.v("onBitmapLoaded %s", from.toString());
+
+        String encodedString = base64EncodeBitmap(bitmap);
+
+        callback.onLoad(bitmap, encodedString);
+    }
+
+    public static String base64EncodeBitmap(final Bitmap bitmap) {
         int bytes = bitmap.getByteCount();
         Timber.v("num kb of img %d", bytes/1000);
 
         ByteBuffer buffer = ByteBuffer.allocate(bytes);
         bitmap.copyPixelsToBuffer(buffer);
         byte[] array = buffer.array();
-        String encodedString = Base64.encodeToString(array, Base64.DEFAULT);
-
-        //target.setImageDrawable(new BitmapDrawable(target.getContext().getResources(), bitmap));
-
-        callback.onLoad(bitmap, encodedString);
-
+        return Base64.encodeToString(array, Base64.DEFAULT);
     }
+
 
     /**
      * Callback indicating the image could not be successfully loaded.

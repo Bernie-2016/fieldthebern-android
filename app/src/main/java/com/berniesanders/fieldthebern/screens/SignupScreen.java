@@ -11,13 +11,14 @@ import android.widget.Toast;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.PermissionService;
-import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
-import com.berniesanders.fieldthebern.controllers.ToastService;
-import com.berniesanders.fieldthebern.controllers.LocationService;
-import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.LocationService;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
+import com.berniesanders.fieldthebern.controllers.PhotoService;
+import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
+import com.berniesanders.fieldthebern.controllers.ToastService;
+import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
@@ -26,7 +27,6 @@ import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
-import static com.berniesanders.fieldthebern.parsing.FormValidator.*;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.SignupView;
@@ -48,8 +48,13 @@ import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
+
+import static com.berniesanders.fieldthebern.parsing.FormValidator.isEmailValid;
+import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank;
 
 /**
  * Example for creating new Mortar Screen that helps explain how it all works
@@ -174,6 +179,7 @@ public class SignupScreen extends FlowPathBase {
                     .setImageDrawable(
                             new BitmapDrawable(getView().getContext().getResources(),
                                     userBitmap));
+            getView().showMask();
         }
 
         private void loadPhoto() {
@@ -182,6 +188,70 @@ public class SignupScreen extends FlowPathBase {
                     .into(new SaveImageTarget(onLoad));
         }
 
+        @OnClick(R.id.user_photo)
+        void choosePhoto() {
+
+            if (PermissionService.get(getView()).isPhotoGranted()) {
+                PhotoService
+                        .get(getView())
+                        .pickImage(new Action1<Bitmap>() {
+                            @Override
+                            public void call(Bitmap bitmap) {
+                                if (getView() == null) {
+                                    return;
+                                }
+                                getView().getUserImageView().setImageBitmap(bitmap);
+                                getView().showMask();
+                                userAttributes.base64PhotoData(SaveImageTarget.base64EncodeBitmap(bitmap));
+                            }
+                        });
+            } else {
+                requestPhotoPermission();
+            }
+
+        }
+
+        private void requestPhotoPermission() {
+            PermissionService
+                    .get(getView())
+                    .requestGalleryPermission(
+                            new Action0() {
+                                @Override
+                                public void call() {
+                                    choosePhoto();
+                                }
+                            },
+                            new Action0() {
+                                @Override
+                                public void call() {
+                                    showChoosePhotoSnackbar();
+                                }
+                            });
+        }
+
+        private void showChoosePhotoSnackbar() {
+            // Display a SnackBar with an explanation and a button
+            // to trigger the request.
+            Snackbar.make(getView(),
+                        R.string.permission_photo_rationale,
+                        Snackbar.LENGTH_INDEFINITE)
+                    .setAction(
+                            android.R.string.ok,
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    PermissionService.get(getView())
+                                            .requestGalleryPermission(
+                                                    new Action0() {
+                                                        @Override
+                                                        public void call() {
+                                                            choosePhoto();
+                                                        }
+                                                    }, null);
+                                }
+                            })
+                    .show();
+        }
 
 
         SaveImageTarget.OnLoad onLoad = new SaveImageTarget.OnLoad() {

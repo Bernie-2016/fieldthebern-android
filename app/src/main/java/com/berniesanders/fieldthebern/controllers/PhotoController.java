@@ -7,19 +7,10 @@ package com.berniesanders.fieldthebern.controllers;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.inject.Singleton;
 
@@ -27,12 +18,9 @@ import dagger.Module;
 import dagger.Provides;
 import mortar.Presenter;
 import mortar.bundler.BundleService;
-import rx.functions.Action0;
+import rx.functions.Action1;
 import timber.log.Timber;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static mortar.bundler.BundleService.getBundleService;
 
 /**
@@ -40,8 +28,13 @@ import static mortar.bundler.BundleService.getBundleService;
  */
 public class PhotoController extends Presenter<PhotoController.Activity> {
 
-    public static final int REQ_CODE_PERMISSIONS = 33;
-    private Action0 onComplete;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int PICK_PHOTO = 2;
+    /**
+     * passes the thumbnail of the photo taken/picked or null if cancelled
+     * @param bitmap
+     */
+    private Action1<Bitmap> onComplete;
 
     public interface Activity {
         AppCompatActivity getActivity();
@@ -64,76 +57,107 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
 
 
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int PICK_PHOTO = 2;
-
-    private void dispatchTakePictureIntent() {
+    public void takePhoto(Action1<Bitmap> onComplete) {
+        this.onComplete = onComplete;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getView().getActivity().getPackageManager()) != null) {
             getView().getActivity().startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
+    public void pickImage(Action1<Bitmap> onComplete) {
+        this.onComplete = onComplete;
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        getView().getActivity().startActivityForResult(intent, PICK_PHOTO);
+    }
     /**
      *
      */
     public void onResult(int requestCode, int resultCode, Intent data) {
         //onComplete.call();
         Timber.v("activity result...");
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == android.app.Activity.RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            Bitmap imageBitmap = null;
+
+            if (resultCode == android.app.Activity.RESULT_OK) {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+
+            }
+            if (onComplete != null) {
+                onComplete.call(imageBitmap);
+            }
+        } else if (requestCode == PICK_PHOTO) {
+            Bitmap imageBitmap = null;
+
+            if (resultCode == android.app.Activity.RESULT_OK) {
+                Uri imageUri = data.getData();
+
+                //TODO this code sucks
+                // How is it the api for interacting with the media store
+                // is still manually iterating with a cursor...?!
+                long id = Long.parseLong(
+                        imageUri.getLastPathSegment()
+                                .substring(imageUri.getLastPathSegment().lastIndexOf(":")+1));
+
+                imageBitmap = MediaStore.Images.Thumbnails.getThumbnail(
+                        getView().getActivity().getContentResolver(),
+                        id,
+                        MediaStore.Images.Thumbnails.MINI_KIND,
+                        (BitmapFactory.Options) null);
+
+            }
+            if (onComplete != null) {
+                onComplete.call(imageBitmap);
+            }
         }
     }
 
-    public void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        getView().getActivity().startActivityForResult(intent, PICK_PHOTO);
-    }
 
-    private void setPic() {
-//        // Get the dimensions of the View
-//        int targetW = mImageView.getWidth();
-//        int targetH = mImageView.getHeight();
 //
-//        // Get the dimensions of the bitmap
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        int photoW = bmOptions.outWidth;
-//        int photoH = bmOptions.outHeight;
+//    private void setPic() {
+////        // Get the dimensions of the View
+////        int targetW = mImageView.getWidth();
+////        int targetH = mImageView.getHeight();
+////
+////        // Get the dimensions of the bitmap
+////        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+////        bmOptions.inJustDecodeBounds = true;
+////        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+////        int photoW = bmOptions.outWidth;
+////        int photoH = bmOptions.outHeight;
+////
+////        // Determine how much to scale down the image
+////        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+////
+////        // Decode the image file into a Bitmap sized to fill the View
+////        bmOptions.inJustDecodeBounds = false;
+////        bmOptions.inSampleSize = scaleFactor;
+////        bmOptions.inPurgeable = true;
+////
+////        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+////        mImageView.setImageBitmap(bitmap);
+//    }
 //
-//        // Determine how much to scale down the image
-//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//    String mCurrentPhotoPath;
 //
-//        // Decode the image file into a Bitmap sized to fill the View
-//        bmOptions.inJustDecodeBounds = false;
-//        bmOptions.inSampleSize = scaleFactor;
-//        bmOptions.inPurgeable = true;
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
 //
-//        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        mImageView.setImageBitmap(bitmap);
-    }
-
-    String mCurrentPhotoPath;
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
+//        // Save a file: path for use with ACTION_VIEW intents
+//        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+//        return image;
+//    }
 
     /**
      * required by mortar
@@ -146,11 +170,11 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
     /**
      */
     @Module
-    public static class PermissionModule {
+    public static class PhotoModule {
 
         @Provides
         @Singleton
-        PhotoController providePermissionController() {
+        PhotoController providePhotoontroller() {
             return new PhotoController();
         }
     }

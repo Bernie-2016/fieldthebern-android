@@ -61,6 +61,7 @@
     <string name="are_you_sure_address_body">Are you sure the address is correct?\n\n%1$s\n%2$s</string>
     <string name="err_address_not_loaded">Address not loaded yet</string>
     <string name="permission_contacts_rationale">Field The Bern requires location permissions</string>
+    <string name="permission_photo_rationale">Field The Bern needs permission to read your photos</string>
     <string name="save_profile">Save Profile</string>
 
     <string name="err_password_blank">Please enter a password</string>

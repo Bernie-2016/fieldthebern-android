@@ -3,7 +3,6 @@ package com.berniesanders.fieldthebern.models;
 import java.util.List;
 
 /**
- * Created by Vishal on 1/8/16.
  *
  */
 public class StatePrimaryResponse {

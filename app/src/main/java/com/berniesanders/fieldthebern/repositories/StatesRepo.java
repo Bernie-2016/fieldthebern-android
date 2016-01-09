@@ -21,7 +21,6 @@ import rx.Subscriber;
 
 /**
  *
- * Created by Vishal on 1/8/16.
  */
 @Singleton
 public class StatesRepo  {

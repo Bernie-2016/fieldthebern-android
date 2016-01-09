@@ -38,7 +38,6 @@ import timber.log.Timber;
 
 /**
  * Mortar screen for State primaries
- * Created by Vishal on 1/7/16.
  */
 @Layout(R.layout.screen_state_primary)
 public class StatePrimaryScreen extends FlowPathBase {
@@ -123,6 +122,9 @@ public class StatePrimaryScreen extends FlowPathBase {
         Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
             @Override
             public void onCompleted() {
+                if (getView() == null) {
+                    return;
+                }
                 getView().populateStateInfo(statePrimaries, apiAddress);
             }
 
@@ -139,9 +141,6 @@ public class StatePrimaryScreen extends FlowPathBase {
 
         @Override
         public void dropView(StatePrimaryView view) {
-            if (subscription!=null && !subscription.isUnsubscribed()) {
-                subscription.unsubscribe();
-            }
             super.dropView(view);
             ButterKnife.unbind(this);
         }

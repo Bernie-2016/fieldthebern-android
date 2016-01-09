@@ -175,6 +175,9 @@ public class NewVisitScreen extends FlowPathBase {
         Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
             @Override
             public void onCompleted() {
+                if (getView() == null) {
+                    return;
+                }
                 getView().showPrimary(statePrimaries, apiAddress);
             }
 
@@ -266,9 +269,6 @@ public class NewVisitScreen extends FlowPathBase {
 
         @Override
         public void dropView(NewVisitView view) {
-            if (statePrimarySubscription!=null && !statePrimarySubscription.isUnsubscribed()) {
-                statePrimarySubscription.unsubscribe();
-            }
             super.dropView(view);
             clearSwitchListeners();
             ButterKnife.unbind(this);

@@ -25,7 +25,6 @@ import timber.log.Timber;
 
 /**
  * Custom view for State primaries
- * Created by Vishal on 1/7/16.
  */
 public class StatePrimaryView extends RelativeLayout {
 
@@ -107,7 +106,31 @@ public class StatePrimaryView extends RelativeLayout {
 
         String packageName = context.getPackageName();
         if (name != null) {
-            int resId = getResources().getIdentifier(name.toLowerCase(), "drawable", packageName);
+            String stateName = name.toLowerCase();
+
+            if (stateName.equalsIgnoreCase("new york")) {
+                stateName = "new_york";
+            } else if (stateName.equalsIgnoreCase("new jersey")) {
+                stateName = "new_jersey";
+            } else if (stateName.equalsIgnoreCase("new hampshire")) {
+                stateName = "new_hampshire";
+            } else if (stateName.equalsIgnoreCase("new mexico")) {
+                stateName = "new_mexico";
+            } else if (stateName.equalsIgnoreCase("north carolina")) {
+                stateName = "north_carolina";
+            } else if (stateName.equalsIgnoreCase("north dakota")) {
+                stateName = "north_dakota";
+            } else if (stateName.equalsIgnoreCase("south carolina")) {
+                stateName = "south_carolina";
+            } else if (stateName.equalsIgnoreCase("south dakota")) {
+                stateName = "south_dakota";
+            } else if (stateName.equalsIgnoreCase("west virginia")) {
+                stateName = "west_virginia";
+            } else if (stateName.equalsIgnoreCase("rhode island")) {
+                stateName = "rhode_island";
+            }
+
+            int resId = getResources().getIdentifier(stateName, "drawable", packageName);
             Drawable img = context.getResources().getDrawable(resId);
             if (img != null) {
                 primaryImage.setImageDrawable(img);

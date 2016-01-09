@@ -9,47 +9,9 @@
     android:layout_height="match_parent"
     tools:background="@color/bernie_dark_blue">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/submit_visit_details"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:textStyle="normal"
-        />
-
-    <TextView
-        android:id="@+id/done_talking"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/submit"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/done_talking"
-        android:textColor="@color/b_light_blue2"
-        android:textSize="16sp"
-        />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/done_talking"
         >
 
         <LinearLayout
@@ -215,7 +177,45 @@
                     android:background="@color/dark_blue2"
                     />
             </FrameLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                >
+                <TextView
+                    android:id="@+id/done_talking"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/done_talking"
+                    android:textColor="@color/b_light_blue2"
+                    android:textSize="16sp"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/large_button_height"
+                    android:layout_below="@+id/done_talking"
+                    android:background="@color/dark_blue2"
+                    />
 
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/large_button_height"
+                    android:layout_below="@+id/done_talking"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/submit_visit_details"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="22sp"
+                    android:textStyle="normal"
+                    />
+            </RelativeLayout>
         </LinearLayout>
 
 

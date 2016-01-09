@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.mortar.DaggerService;
-import com.berniesanders.fieldthebern.screens.ProfileScreen;
+import com.berniesanders.fieldthebern.screens.ProfileScreenEdit;
 
 import javax.inject.Inject;
 
@@ -20,7 +20,7 @@ public class ProfileView extends FrameLayout {
      * YourScreen.Presenter
      */
     @Inject
-    ProfileScreen.Presenter presenter;
+    ProfileScreenEdit.Presenter presenter;
 
     public ProfileView(Context context) {
         super(context);
@@ -44,7 +44,7 @@ public class ProfileView extends FrameLayout {
      */
     private void injectSelf(Context context) {
         if (isInEditMode()) { return; }
-        DaggerService.<ProfileScreen.Component>
+        DaggerService.<ProfileScreenEdit.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
     }

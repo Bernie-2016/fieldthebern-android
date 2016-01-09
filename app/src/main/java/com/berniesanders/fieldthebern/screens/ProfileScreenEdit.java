@@ -34,7 +34,7 @@ import timber.log.Timber;
  * Profile Screen for updating user profiles
  */
 @Layout(R.layout.screen_profile_edit)
-public class ProfileScreen extends FlowPathBase {
+public class ProfileScreenEdit extends FlowPathBase {
 
     /**
      * Constructor called by Flow throughout the app
@@ -45,7 +45,7 @@ public class ProfileScreen extends FlowPathBase {
      * Note:
      * Generally common types like "String" are not injected because injection works based on type
      */
-    public ProfileScreen() {
+    public ProfileScreenEdit() {
     }
 
     /**
@@ -59,7 +59,7 @@ public class ProfileScreen extends FlowPathBase {
      */
     @Override
     public Object createComponent() {
-        return DaggerProfileScreen_Component
+        return DaggerProfileScreenEdit_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
                 .profileModule(new ProfileModule()) //pass data to the presenter here
@@ -68,7 +68,7 @@ public class ProfileScreen extends FlowPathBase {
 
     @Override
     public String getScopeName() {
-        return ProfileScreen.class.getName();
+        return ProfileScreenEdit.class.getName();
     }
 
 

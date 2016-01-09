@@ -14,7 +14,6 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.views.NavigationView;
-import com.berniesanders.fieldthebern.views.ProfileView;
 
 import javax.inject.Inject;
 
@@ -171,7 +170,7 @@ public class NavigationScreen extends FlowPathBase {
 
         @OnClick(R.id.drawer_profile)
         void onProfileClicked() {
-            Flow.get(getView().getContext()).set(new ProfileScreen());
+            Flow.get(getView().getContext()).set(new ProfileScreenEdit());
             drawerLayout.closeDrawers();
         }
     }

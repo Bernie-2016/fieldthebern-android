@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -139,6 +140,14 @@ public class SignupScreen extends FlowPathBase {
         private boolean stateCodeRequestCompleted = false;
         private boolean locationRequestCompleted = false;
 
+        @Bind(R.id.avatar_buttons)
+        View avatarButtons;
+
+        @Bind(R.id.avatar_container)
+        View avatarContainer;
+
+        boolean avatarButtonSliderOpen = false;
+
         @Inject
         Presenter(UserRepo repo, UserAttributes userAttributes, ErrorResponseParser errorResponseParser) {
             this.repo = repo;
@@ -180,6 +189,13 @@ public class SignupScreen extends FlowPathBase {
                             new BitmapDrawable(getView().getContext().getResources(),
                                     userBitmap));
             getView().showMask();
+            getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    toggleAvatarWidget(false);
+                }
+            });
+
         }
 
         private void loadPhoto() {
@@ -188,30 +204,121 @@ public class SignupScreen extends FlowPathBase {
                     .into(new SaveImageTarget(onLoad));
         }
 
-        @OnClick(R.id.user_photo)
-        void choosePhoto() {
 
+        @OnClick(R.id.user_photo)
+        void showAvatarButtons() {
+
+            if (avatarButtonSliderOpen) {
+                toggleAvatarWidget(false); //close the widget
+            } else {
+                toggleAvatarWidget(true); //open the widget
+            }
+        }
+
+        void toggleAvatarWidget(boolean open) {
+            float center = avatarContainer.getResources().getDisplayMetrics().widthPixels / 2;
+
+            if (open) {
+                avatarContainer.animate().x(20).setDuration(200).start();
+                avatarButtons.setAlpha(0);
+                avatarButtons.setVisibility(View.VISIBLE);
+                avatarButtons.setX(0);
+                avatarButtons.animate().x(avatarContainer.getWidth()).alpha(1)
+                        .setStartDelay(150).setDuration(200).start();
+                avatarButtonSliderOpen = true;
+            } else {
+                //close the widget
+                avatarContainer
+                        .animate()
+                        .x(center - avatarContainer.getWidth()/2)
+                        .setDuration(200)
+                        .start();
+                avatarButtons.animate().alpha(0).setDuration(75).start();
+                avatarButtonSliderOpen = false;
+            }
+
+        }
+
+        @OnClick(R.id.takePhoto)
+        void takePicture() {
+            if (PermissionService.get(getView()).isPhotoGranted()) {
+                PhotoService
+                        .get(getView())
+                        .takePhoto(new Action1<Bitmap>() {
+                            @Override
+                            public void call(Bitmap bitmap) {
+                                if (bitmap==null) { return; }
+                                userBitmap = bitmap;
+                                showPhotoIfExists();
+                                userAttributes.base64PhotoData(SaveImageTarget.base64EncodeBitmap(bitmap));
+                            }
+                        });
+            } else {
+                requestTakePhotoPermission();
+            }
+        }
+
+        @OnClick(R.id.pickGallery)
+        void choosePhoto() {
             if (PermissionService.get(getView()).isPhotoGranted()) {
                 PhotoService
                         .get(getView())
                         .pickImage(new Action1<Bitmap>() {
                             @Override
                             public void call(Bitmap bitmap) {
-                                if (getView() == null) {
-                                    return;
-                                }
-                                getView().getUserImageView().setImageBitmap(bitmap);
-                                getView().showMask();
+                                if (bitmap==null) { return; }
+                                userBitmap = bitmap;
+                                showPhotoIfExists();
                                 userAttributes.base64PhotoData(SaveImageTarget.base64EncodeBitmap(bitmap));
                             }
                         });
             } else {
-                requestPhotoPermission();
+                requestGalleryPermission();
             }
-
         }
 
-        private void requestPhotoPermission() {
+        private void requestTakePhotoPermission() {
+            PermissionService
+                    .get(getView())
+                    .requestGalleryPermission(
+                            new Action0() {
+                                @Override
+                                public void call() {
+                                    takePicture();
+                                }
+                            },
+                            new Action0() {
+                                @Override
+                                public void call() {
+                                    showTakePhotoSnackbar();
+                                }
+                            });
+        }
+
+        private void showTakePhotoSnackbar() {
+            // Display a SnackBar with an explanation and a button
+            // to trigger the request.
+            Snackbar.make(getView(),
+                        R.string.permission_photo_rationale,
+                        Snackbar.LENGTH_INDEFINITE)
+                    .setAction(
+                            android.R.string.ok,
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    PermissionService.get(getView())
+                                            .requestGalleryPermission(
+                                                    new Action0() {
+                                                        @Override
+                                                        public void call() {
+                                                            takePicture();
+                                                        }
+                                                    }, null);
+                                }
+                            })
+                    .show();
+        }
+        private void requestGalleryPermission() {
             PermissionService
                     .get(getView())
                     .requestGalleryPermission(
@@ -224,12 +331,12 @@ public class SignupScreen extends FlowPathBase {
                             new Action0() {
                                 @Override
                                 public void call() {
-                                    showChoosePhotoSnackbar();
+                                    showGalleryPhotoSnackbar();
                                 }
                             });
         }
 
-        private void showChoosePhotoSnackbar() {
+        private void showGalleryPhotoSnackbar() {
             // Display a SnackBar with an explanation and a button
             // to trigger the request.
             Snackbar.make(getView(),

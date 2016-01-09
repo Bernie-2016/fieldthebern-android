@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public class MinTimeBetweenVisit {
 
-    public static final String API_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; //"yyyy-MM-dd'T'HH:mm:ssZ" ?
+    public static final String API_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; 
 
     static SimpleDateFormat sdf  = new SimpleDateFormat(API_FORMAT, Locale.US);
 

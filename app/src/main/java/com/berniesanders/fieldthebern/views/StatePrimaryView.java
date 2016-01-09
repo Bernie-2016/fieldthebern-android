@@ -11,7 +11,6 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
-import com.berniesanders.fieldthebern.parsing.StatesDataParser;
 import com.berniesanders.fieldthebern.screens.StatePrimaryScreen;
 
 import java.util.List;

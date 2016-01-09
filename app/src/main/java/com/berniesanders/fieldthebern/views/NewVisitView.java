@@ -22,7 +22,6 @@ import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
-import com.berniesanders.fieldthebern.parsing.StatesDataParser;
 import com.berniesanders.fieldthebern.screens.AddPersonScreen;
 import com.berniesanders.fieldthebern.screens.NewVisitScreen;
 

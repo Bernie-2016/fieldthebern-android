@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.mortar.DaggerService;
-import com.berniesanders.fieldthebern.screens.ProfileScreen;
+import com.berniesanders.fieldthebern.screens.ProfileEditScreen;
 
 import javax.inject.Inject;
 
@@ -13,26 +13,26 @@ import javax.inject.Inject;
  * Example mortar view.
  * Change what it extends as needed. Any View/Layout type is fine to extend
  */
-public class ProfileView extends FrameLayout {
+public class ProfileEditView extends FrameLayout {
 
     /**
      * Make sure you are pointing at the correct presenter type
      * YourScreen.Presenter
      */
     @Inject
-    ProfileScreen.Presenter presenter;
+    ProfileEditScreen.Presenter presenter;
 
-    public ProfileView(Context context) {
+    public ProfileEditView(Context context) {
         super(context);
         injectSelf(context);
     }
 
-    public ProfileView(Context context, AttributeSet attrs) {
+    public ProfileEditView(Context context, AttributeSet attrs) {
         super(context, attrs);
         injectSelf(context);
     }
 
-    public ProfileView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ProfileEditView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         injectSelf(context);
     }
@@ -44,7 +44,7 @@ public class ProfileView extends FrameLayout {
      */
     private void injectSelf(Context context) {
         if (isInEditMode()) { return; }
-        DaggerService.<ProfileScreen.Component>
+        DaggerService.<ProfileEditScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
     }

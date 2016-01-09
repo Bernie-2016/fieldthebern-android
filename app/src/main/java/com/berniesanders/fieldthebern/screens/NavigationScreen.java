@@ -170,7 +170,7 @@ public class NavigationScreen extends FlowPathBase {
 
         @OnClick(R.id.drawer_profile)
         void onProfileClicked() {
-            Flow.get(getView().getContext()).set(new ProfileScreenEdit());
+            Flow.get(getView().getContext()).set(new ProfileEditScreen());
             drawerLayout.closeDrawers();
         }
     }

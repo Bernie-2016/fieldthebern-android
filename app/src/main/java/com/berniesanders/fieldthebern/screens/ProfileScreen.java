@@ -33,7 +33,7 @@ import timber.log.Timber;
 /**
  * Profile Screen for updating user profiles
  */
-@Layout(R.layout.screen_profile)
+@Layout(R.layout.screen_profile_edit)
 public class ProfileScreen extends FlowPathBase {
 
     /**

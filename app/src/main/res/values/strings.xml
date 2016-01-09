@@ -79,6 +79,12 @@
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
+    <string name="profile">PROFILE</string>
+    <string name="doors">DOORS</string>
+    <string name="weekly_leaderboard">WEEKLY LEADERBOARD</string>
+    <string name="friends">Friends</string>
+    <string name="state">State</string>
+    <string name="everyone">Everyone</string>
 
     <string name="intro_learn_desc">We\'ll teach you to canvass your neighborhood and learn useful talking points.</string>
     <string name="learn">Learn</string>

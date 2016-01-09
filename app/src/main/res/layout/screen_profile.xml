@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/bernie_dark_blue"
-    >
+    tools:background="@color/bernie_dark_blue">
 
     <LinearLayout
         android:id="@+id/drawer_profile"
@@ -16,60 +15,152 @@
         android:paddingBottom="16dp"
         android:paddingTop="16dp">
 
-        <ImageView
-            android:id="@+id/drawer_header_avatar"
+        <TextView
+            android:id="@+id/full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:src="@drawable/ic_face_white_48dp" />
+            android:layout_gravity="center_horizontal"
+            android:text="@string/profile"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/white" />
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="24dp">
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/first_name"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/drawer_header_avatar"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/first_name"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/b_light_blue2"
-                android:textSize="20sp" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_gravity="0"
+                android:padding="16dp"
+                android:src="@drawable/ic_face_white_48dp" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/last_name"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/last_name"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/b_light_blue2"
-                android:textSize="20sp" />
-        </android.support.design.widget.TextInputLayout>
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/submit_profile"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/point_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:paddingTop="16dp"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/point_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:padding="16dp"
+                    android:text="@string/points"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/door_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingTop="16dp"
+                    android:text="0"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/door_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="16dp"
+                    android:text="@string/doors"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/weekly_leaderboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:text="@string/weekly_leaderboard"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/white" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/large_button_height"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="16dp"
-            android:background="?attr/selectableItemBackground"
-            android:drawablePadding="14dp"
-            android:gravity="center"
-            android:text="@string/save_profile"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="normal"
-            />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/submit_friends"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="14dp"
+                android:gravity="center"
+                android:text="@string/friends"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/submit_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="14dp"
+                android:gravity="center"
+                android:text="@string/state"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/submit_everyone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="14dp"
+                android:gravity="center"
+                android:text="@string/everyone"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="normal" />
+        </LinearLayout>
     </LinearLayout>
 </com.berniesanders.fieldthebern.views.ProfileView>

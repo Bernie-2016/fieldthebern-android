@@ -85,6 +85,13 @@
     <string name="intro_canvass_desc">Find new doors to knock on and earn points for all your hard work.</string>
     <string name="track">Track</string>
     <string name="intro_track_desc">Watch your progress as you compete to get America to #FeelTheBern</string>
+    <string name="bernie_on_issues">Bernie on the Issues</string>
+    <string name="primary_policy_info">Primary and Policy Info</string>
+    <string name="sample_date">on Saturday, March 26, 2016</string>
+    <string name="sample_reg_deadline">Registration Deadline:</string>
+    <string name="sample_description">Description</string>
+    <string name="caucuses">Caucuses</string>
+    <string name="iowa">Iowa</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

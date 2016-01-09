@@ -2,6 +2,8 @@ package com.berniesanders.fieldthebern.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,11 @@ import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.media.PartyIcon;
+import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.Person;
+import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
@@ -43,6 +47,9 @@ public class NewVisitView extends RelativeLayout {
 
     @Bind(R.id.person_container)
     ViewGroup personContainer;
+
+    @Bind(R.id.view_state_primary)
+    AppCompatButton primariesButton;
 
     public NewVisitView(Context context) {
         super(context);
@@ -93,6 +100,65 @@ public class NewVisitView extends RelativeLayout {
         super.onDetachedFromWindow();
         presenter.dropView(this);
     }
+
+    public void showPrimary(StatePrimaryResponse.StatePrimary[] states, ApiAddress apiAddress) {
+        // first find the state we desire
+        StatePrimaryResponse.StatePrimary userState = null;
+
+        for (int i = 0; i < states.length; i++) {
+
+            if (states[i].getCode().equalsIgnoreCase(apiAddress.attributes().state())) {
+                userState = states[i];
+                break;
+            }
+        }
+
+        if (userState == null) {
+            Timber.e("Unable to extract state primary");
+            return;
+        }
+
+        Context context = getContext();
+        String name = userState.getState();
+
+        if (name != null) {
+            String stateName = name.toLowerCase();
+
+            if (stateName.equalsIgnoreCase("new york")) {
+                stateName = "new_york";
+            } else if (stateName.equalsIgnoreCase("new jersey")) {
+                stateName = "new_jersey";
+            } else if (stateName.equalsIgnoreCase("new hampshire")) {
+                stateName = "new_hampshire";
+            } else if (stateName.equalsIgnoreCase("new mexico")) {
+                stateName = "new_mexico";
+            } else if (stateName.equalsIgnoreCase("north carolina")) {
+                stateName = "north_carolina";
+            } else if (stateName.equalsIgnoreCase("north dakota")) {
+                stateName = "north_dakota";
+            } else if (stateName.equalsIgnoreCase("south carolina")) {
+                stateName = "south_carolina";
+            } else if (stateName.equalsIgnoreCase("south dakota")) {
+                stateName = "south_dakota";
+            } else if (stateName.equalsIgnoreCase("west virginia")) {
+                stateName = "west_virginia";
+            } else if (stateName.equalsIgnoreCase("rhode island")) {
+                stateName = "rhode_island";
+            }
+
+
+            String packageName = context.getPackageName();
+            int resId = getResources().getIdentifier(stateName, "drawable", packageName);
+            Drawable img = context.getResources().getDrawable(resId);
+            if (img != null) {
+                primariesButton.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            }
+        }
+
+        primariesButton.setText(name);
+
+    }
+
 
     public void showPeople(final Visit visit) {
 

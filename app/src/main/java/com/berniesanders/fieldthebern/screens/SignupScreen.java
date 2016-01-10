@@ -44,6 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Provides;
 import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
 import retrofit.HttpException;
 import rx.Observer;
@@ -535,7 +536,7 @@ public class SignupScreen extends FlowPathBase {
             public void onNext(User user) {
                 Timber.d("user: %s", user.toString());
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
+                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
             }
         };
 

@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Provides;
 import flow.Flow;
-import flow.History;
 import mortar.ViewPresenter;
 import rx.functions.Action0;
 import timber.log.Timber;
@@ -151,8 +150,7 @@ public class AddPersonScreen extends FlowPathBase {
                                 @Override
                                 public void call() {
                                     if (getView()!=null) {
-                                        visitRepo.clear();
-                                        Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
+                                        Flow.get(getView()).goBack();
                                     }
                                 }
                             });

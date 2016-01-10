@@ -17,13 +17,8 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
-import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.views.NavigationView;
-import com.berniesanders.fieldthebern.views.ProfileView;
-import com.f2prateek.rx.preferences.Preference;
-import com.f2prateek.rx.preferences.RxSharedPreferences;
-import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -83,7 +78,6 @@ public class NavigationScreen extends FlowPathBase {
     static public class Presenter extends ViewPresenter<NavigationView> {
 
 
-        private final RxSharedPreferences rxPrefs;
         private final UserRepo userRepo;
         // in case needed later to show expandable issue list
         DrawerLayout drawerLayout;
@@ -99,15 +93,13 @@ public class NavigationScreen extends FlowPathBase {
 
         @Bind(R.id.drawer_header_email)
         TextView email;
-        private User user;
 
         /**
          * When the view is inflated, this presented is automatically injected to the View
          * Constructor parameters are injected here automatically
          */
         @Inject
-        Presenter(RxSharedPreferences rxPrefs, UserRepo userRepo, Gson gson) {
-            this.rxPrefs = rxPrefs;
+        Presenter(UserRepo userRepo) {
             this.userRepo = userRepo;
         }
 

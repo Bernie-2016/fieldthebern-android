@@ -20,7 +20,6 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -55,15 +54,15 @@ public class UserRepo {
         this.rxPrefs = rxPrefs;
         this.config = config;
 
-        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Timber.v(message);
-            }
-        };
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(loggingInterceptor);
+//        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
+//            @Override
+//            public void log(String message) {
+//                Timber.v(message);
+//            }
+//        };
+//        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//        client.interceptors().add(loggingInterceptor);
 
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
         client.interceptors().add(new AddTokenInterceptor(tokenRepo));

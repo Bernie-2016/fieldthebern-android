@@ -57,24 +57,36 @@ public class SaveImageTarget implements Target {
         callback.onLoad(bitmap, encodedString);
     }
 
+    /**
+     * TODO this doesnt seem to work correctly with the API.
+     * It does seem to correctly convert a bitmap to a base64 string, but for some reason
+     * the API does not understand the data
+     */
+
     public static String base64EncodeBitmap(final Bitmap bitmap) {
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 1, out);
-
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        byte[] outArray = out.toByteArray();
-        options.inSampleSize = 4;
-        Bitmap decoded = BitmapFactory.decodeByteArray(outArray, 0, outArray.length, options);
-
-        int bytes = decoded.getByteCount();
+        int bytes = bitmap.getByteCount();
         Timber.v("num kb of img %d", bytes/1000);
         ByteBuffer buffer = ByteBuffer.allocate(bytes);
-        decoded.copyPixelsToBuffer(buffer);
+        bitmap.copyPixelsToBuffer(buffer);
         byte[] array = buffer.array();
+
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 1, out);
+//
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        byte[] outArray = out.toByteArray();
+//        options.inSampleSize = 4;
+//        Bitmap decoded = BitmapFactory.decodeByteArray(outArray, 0, outArray.length, options);
+//
+//        int bytes = decoded.getByteCount();
+//        Timber.v("num kb of img %d", bytes/1000);
+//        ByteBuffer buffer = ByteBuffer.allocate(bytes);
+//        decoded.copyPixelsToBuffer(buffer);
+//        byte[] array = buffer.array();
 //        ByteArrayOutputStream out = new ByteArrayOutputStream();
 //        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, out);
-//out.toByteArray()
+//        out.toByteArray()
         return Base64.encodeToString(array, Base64.NO_WRAP);
     }
 

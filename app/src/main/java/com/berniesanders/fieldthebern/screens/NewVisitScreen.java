@@ -7,11 +7,11 @@ import android.widget.CompoundButton;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.ActionBarController;
-import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
@@ -47,7 +47,6 @@ import timber.log.Timber;
 
 /**
  * Example for creating new Mortar Screen that helps explain how it all works
- * <p/>
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_new_visit)
@@ -109,13 +108,9 @@ public class NewVisitScreen extends FlowPathBase {
     @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
     public interface Component {
         void inject(NewVisitView t);
-
         ApiAddress apiAddress();
-
         VisitRepo visitRepo();
-
         ErrorResponseParser errorResponseParser();
-
         StatesRepo statesRepo();
     }
 
@@ -132,12 +127,9 @@ public class NewVisitScreen extends FlowPathBase {
         Subscription statePrimarySubscription;
         private StatePrimaryResponse.StatePrimary[] statePrimaries;
 
-        @BindString(android.R.string.cancel)
-        String cancel;
-        @BindString(R.string.new_visit)
-        String newVisit;
-        @BindString(R.string.err_no_visit)
-        String errorVisitInvalid;
+        @BindString(android.R.string.cancel) String cancel;
+        @BindString(R.string.new_visit) String newVisit;
+        @BindString(R.string.err_no_visit) String errorVisitInvalid;
 
         boolean noOneHome = false;
         boolean askedToLeave = false;

@@ -87,7 +87,6 @@ public class LearnView extends FrameLayout {
     }
     @OnClick(R.id.doneButton)
     public void done() {
-        Flow.get(this).setHistory(History.single(new HomeScreen()), Flow.Direction.REPLACE);
-
+        Flow.get(this).goBack();
     }
 }

@@ -43,7 +43,7 @@
                 android:layout_weight="0"
                 android:background="?attr/selectableItemBackground"
                 android:drawablePadding="14dp"
-                android:text="@Edit your profilostring/settings"
+                android:text="@string/settings"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"

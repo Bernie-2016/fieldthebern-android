@@ -1,6 +1,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -103,6 +104,7 @@ public class ProfileScreen extends FlowPathBase {
          */
         private final UserRepo userRepo;
 
+        @Nullable
         @Bind(R.id.full_name)
         TextView fullNameTextView;
 
@@ -124,17 +126,24 @@ public class ProfileScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-            ButterKnife.bind(this, getView());
-            userRepo.getMe().subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<User>() {
-                        @Override
-                        public void call(User user) {
-                            String firstName = user.getData().attributes().getFirstName();
-                            String lastName = user.getData().attributes().getLastName();
-                            fullNameTextView.setText(firstName + " " + lastName);
-                        }
-                    }).subscribe();
+            ProfileView view = this.getView();
+            if(view != null) {
+                ButterKnife.bind(this, view);
+                userRepo.getMe().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(new Action1<User>() {
+                            @Override
+                            public void call(User user) {
+                                String firstName = user.getData().attributes().getFirstName();
+                                String lastName = user.getData().attributes().getLastName();
+                                if(fullNameTextView != null) {
+                                    fullNameTextView.setText(firstName + " " + lastName);
+                                }
+                            }
+                        }).subscribe();
+            } else {
+                Timber.w("ProfileScreen.onLoad view is unavailable");
+            }
         }
 
         /**

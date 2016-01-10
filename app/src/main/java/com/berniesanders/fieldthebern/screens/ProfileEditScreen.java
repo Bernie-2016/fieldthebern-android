@@ -15,7 +15,6 @@ import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.ProfileEditView;
-import com.berniesanders.fieldthebern.views.ProfileView;
 import com.crashlytics.android.Crashlytics;
 
 import javax.inject.Inject;

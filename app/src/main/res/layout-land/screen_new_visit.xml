@@ -13,14 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="72dp"
-            android:orientation="vertical"
-            android:padding="8dp"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,181 +33,205 @@
                 android:textSize="16sp"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:padding="4dp"
-                android:text="@string/who_spoken_to"
-                android:textColor="@color/b_light_blue2"
-                android:textSize="16sp"
-                />
-
             <LinearLayout
-                android:id="@+id/person_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/large_button_height"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="4dp"
-                >
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/add_person"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/ic_person_add_white_24dp"
-                    android:drawablePadding="12dp"
-                    android:gravity="left|center_vertical"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="72dp"
+                    android:orientation="vertical"
                     android:padding="8dp"
-                    android:text="@string/add_person"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    />
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:padding="4dp"
+                        android:text="@string/who_spoken_to"
+                        android:textColor="@color/b_light_blue2"
+                        android:textSize="16sp"
+                        />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
-            </FrameLayout>
+                    <LinearLayout
+                        android:id="@+id/person_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        />
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/large_button_height"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp"
+                        >
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/add_person"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:drawableLeft="@drawable/ic_person_add_white_24dp"
+                            android:drawablePadding="12dp"
+                            android:gravity="left|center_vertical"
+                            android:padding="8dp"
+                            android:text="@string/add_person"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="@color/dark_blue2"
+                            />
+                    </FrameLayout>
 
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/no_one_home"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:singleLine="true"
-                android:text="@string/no_one_home"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                />
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/no_one_home"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:singleLine="true"
+                        android:text="@string/no_one_home"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        />
 
-            <android.support.v7.widget.SwitchCompat
-                android:id="@+id/asked_to_leave"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:singleLine="true"
-                android:text="@string/asked_to_leave"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:padding="4dp"
-                android:text="@string/primary_policy_info"
-                android:textColor="@color/b_light_blue2"
-                android:textSize="16sp"
-                />
-
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/large_button_height"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="4dp">
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/view_state_primary"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/iowa"
-                    android:drawablePadding="12dp"
-                    android:gravity="left|center_vertical"
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/asked_to_leave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:singleLine="true"
+                        android:text="@string/asked_to_leave"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:minHeight="72dp"
+                    android:orientation="vertical"
                     android:padding="8dp"
-                    android:text="@string/iowa"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    />
+                    >
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
-            </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:padding="4dp"
+                        android:text="@string/primary_policy_info"
+                        android:textColor="@color/b_light_blue2"
+                        android:textSize="16sp"
+                        />
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/large_button_height"
-                android:layout_marginBottom="4dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="4dp">
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/large_button_height"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp">
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/view_bernie_issues"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/ic_issues_24dp"
-                    android:drawablePadding="12dp"
-                    android:gravity="left|center_vertical"
-                    android:padding="8dp"
-                    android:text="@string/bernie_on_issues"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    />
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/view_state_primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:drawableLeft="@drawable/iowa"
+                            android:drawablePadding="12dp"
+                            android:gravity="left|center_vertical"
+                            android:padding="8dp"
+                            android:text="@string/iowa"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
-            </FrameLayout>
-            <TextView
-                android:id="@+id/done_talking"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/done_talking"
-                android:textColor="@color/b_light_blue2"
-                android:textSize="16sp"
-                android:layout_margin="8dp"
-                />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/dark_blue2"
-                    />
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="@color/dark_blue2"
+                            />
+                    </FrameLayout>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/submit"
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/large_button_height"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="4dp">
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/view_bernie_issues"
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:drawableLeft="@drawable/ic_issues_24dp"
+                            android:drawablePadding="12dp"
+                            android:gravity="left|center_vertical"
+                            android:padding="8dp"
+                            android:text="@string/bernie_on_issues"
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp"
+                            android:background="@color/dark_blue2"
+                            />
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+                <TextView
+                    android:id="@+id/done_talking"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_alignParentBottom="true"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:text="@string/submit_visit_details"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="22sp"
-                    android:textStyle="normal"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done_talking"
+                    android:textColor="@color/b_light_blue2"
+                    android:textSize="16sp"
+                    android:layout_margin="8dp"
                     />
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"
+                    >
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/large_button_height"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/dark_blue2"
+                        />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/submit"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/large_button_height"
+                        android:layout_alignParentBottom="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:text="@string/submit_visit_details"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="22sp"
+                        android:textStyle="normal"
+                        />
+                </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 </com.berniesanders.fieldthebern.views.NewVisitView>

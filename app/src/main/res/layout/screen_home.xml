@@ -3,70 +3,84 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bernie_dark_blue"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/bernie_dark_blue"
     >
 
-    <View
-        android:id="@+id/canvass_btn_color"
+    <LinearLayout
+        android:id="@+id/button_container"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        />
+        android:padding="16dp"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_button_height"
+            style="@style/HomeButtonMargins"
+            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_blue2"
+                />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/screen_home_canvass"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_pin_drop_white_24dp"
+                android:text="@string/screen_home_canvass"
+                style="@style/HomeButton"
+                />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_button_height"
+            style="@style/HomeButtonMargins"
+            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_blue2"
+                />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/screen_home_issues"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableLeft="@drawable/ic_issues"
+                android:text="@string/screen_home_issues"
+                style="@style/HomeButton"
+                />
+        </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_button_height"
+            style="@style/HomeButtonMargins"
+            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/dark_blue2"
+                />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/screen_home_learn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/large_button_height"
+                android:drawableLeft="@drawable/ic_live_help_white_24dp"
+                android:text="@string/learn_btn"
+                style="@style/HomeButton"
+                />
+        </FrameLayout>
 
-    <View
-        android:id="@+id/issues_btn_color"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="0dp"
-        android:background="@color/dark_blue2"
-        android:layout_above="@id/canvass_btn_color"
-        />
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/screen_home_canvass"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:background="?attr/selectableItemBackground"
-        android:drawableLeft="@drawable/ic_pin_drop_white_24dp"
-        android:gravity="left|center_vertical"
-        android:text="@string/screen_home_canvass"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true"
-        android:paddingLeft="16dp"
-        android:drawablePadding="16dp"
-        />
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/screen_home_issues"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:background="?attr/selectableItemBackground"
-        android:drawableLeft="@drawable/ic_issues"
-        android:gravity="left|center_vertical"
-        android:layout_above="@id/canvass_btn_color"
-        android:text="@string/screen_home_issues"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="0dp"
-        android:paddingLeft="16dp"
-        android:drawablePadding="16dp"
-        />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/screen_home_issues"
+        android:layout_above="@id/button_container"
         android:gravity="center"
         >
         <ImageView

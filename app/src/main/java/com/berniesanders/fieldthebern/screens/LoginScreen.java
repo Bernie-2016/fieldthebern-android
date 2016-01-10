@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Provides;
 import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
 import retrofit.HttpException;
 import rx.Observer;
@@ -266,7 +267,7 @@ public class LoginScreen extends FlowPathBase {
             public void onNext(Token token) {
                 Timber.d("loginEmail onNext: %s", token.toString());
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
+                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
             }
         };
 
@@ -293,13 +294,13 @@ public class LoginScreen extends FlowPathBase {
             public void onNext(Token token) {
                 Timber.d("refreshObserver onNext: %s", token.toString());
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
+                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
             }
         };
 
         @OnClick(R.id.no_account)
         void haveAccount() {
-            Flow.get(getView().getContext()).set(new ChooseSignupScreen());
+            Flow.get(getView()).goBack();
         }
     }
 }

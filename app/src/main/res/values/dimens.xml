@@ -7,10 +7,4 @@
     <integer name="num_cols">2</integer>
     <dimen name="large_button_height">64dp</dimen>
     <dimen name="spinner_margin">16dp</dimen>
-    <dimen name="learn_title_margin_top">10dp</dimen>
-    <dimen name="learn_text_margin_top">2dp</dimen>
-    <dimen name="learn_text_margin_left">16dp</dimen>
-    <dimen name="learn_text_margin_right">16dp</dimen>
-    <dimen name="learn_text_margin_bottom">0dp</dimen>
-    <dimen name="learn_title_margin_bottom">6dp</dimen>
 </resources>

@@ -106,7 +106,7 @@ public class NavigationScreen extends FlowPathBase {
             drawerListView.setAdapter(new NavigationAdapter(
                     //TODO externalize
                     new String[]{"Canvassing", "Issues", "Learn"},
-                    new int[] {R.drawable.ic_pin_drop_white_24dp, R.drawable.ic_issues, android.R.drawable.ic_menu_help
+                    new int[] {R.drawable.ic_pin_drop_white_24dp, R.drawable.ic_issues, R.drawable.ic_live_help_white_24dp
                     }));
 
             drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

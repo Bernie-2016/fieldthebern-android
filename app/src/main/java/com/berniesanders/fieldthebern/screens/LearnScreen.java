@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
@@ -13,6 +14,8 @@ import com.berniesanders.fieldthebern.views.LearnView;
 
 import javax.inject.Inject;
 
+import butterknife.BindString;
+import butterknife.ButterKnife;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -56,6 +59,8 @@ public class LearnScreen extends FlowPathBase {
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<LearnView> {
 
+        @BindString(R.string.learn_screen_title) String screenTitleString;
+
         @Inject
         Presenter() {
         }
@@ -63,15 +68,16 @@ public class LearnScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
+            ButterKnife.bind(this, getView());
             setActionBar();
         }
 
         void setActionBar() {
             ActionBarService
                     .get(getView())
-                    .hideToolbar()
                     .closeAppbar()
-                    .lockDrawer();
+                    .setMainImage(null)
+                    .setConfig(new ActionBarController.Config(screenTitleString, null));
         }
 
         @Override
@@ -81,6 +87,7 @@ public class LearnScreen extends FlowPathBase {
         @Override
         public void dropView(LearnView view) {
             super.dropView(view);
+            ButterKnife.unbind(this);
         }
 
     }

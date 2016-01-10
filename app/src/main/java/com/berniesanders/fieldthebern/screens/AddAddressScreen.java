@@ -293,6 +293,7 @@ public class AddAddressScreen extends FlowPathBase {
                             response.addresses().get(0).attributes().visitedAt())) {
                         address = response.addresses().get(0);
                         address.included(response.included());
+                        visitRepo.clear();
                         Flow.get(getView()).set(new NewVisitScreen(address));
                     } else {
                         ToastService.get(getView()).bern(minTimeNotElapsed, Toast.LENGTH_LONG);

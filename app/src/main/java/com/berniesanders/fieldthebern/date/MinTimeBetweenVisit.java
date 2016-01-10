@@ -4,12 +4,14 @@ import android.app.AlarmManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class MinTimeBetweenVisit {
 
-    public static final String API_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; 
+    public static final String API_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
     static SimpleDateFormat sdf  = new SimpleDateFormat(API_FORMAT, Locale.US);
 
@@ -24,9 +26,10 @@ public class MinTimeBetweenVisit {
      * @see #MIN_TIME
      */
     public static boolean elapsed(String dateTime) throws ParseException {
-
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = sdf.parse(dateTime);
 
-        return System.currentTimeMillis() > date.getTime() + MIN_TIME;
+        return Calendar.getInstance(TimeZone.getTimeZone("UTC")).getTimeInMillis()
+                > date.getTime() + MIN_TIME;
     }
 }

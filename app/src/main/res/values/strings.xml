@@ -162,6 +162,8 @@
     <string name="learn_text_7_5">Never answer a question unless you know the answer. If you are unsure about how to respond to a question, say so! Then, later, you can research the answer and make sure to follow up with the person who asked it.</string>
     <string name="learn_text_7_6">Never start an argument with anyone you meet. Some people will simply refuse to engage in meaningful discussion. Instead of getting caught up or frustrated, simply thank them for their time and disengage.</string>
     <string name="learn_text_7_7">Never place any flyers or other materials in someone’s mailbox. Not only is this a federal offense, it’s a rude invasion of privacy. People will be much more inclined to support Bernie Sanders if you hold conversation with them.</string>
+    <string name="edit_your_profile">Edit your profile</string>
+    <string name="log_out">Log out</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

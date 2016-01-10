@@ -1,9 +1,14 @@
 package com.berniesanders.fieldthebern.repositories;
 
+import android.support.annotation.Nullable;
+
+import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.config.Config;
+import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
+import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
@@ -15,6 +20,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -39,6 +46,7 @@ public class UserRepo {
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
 
+    User currentUser;
 
     @Inject
     public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
@@ -47,19 +55,64 @@ public class UserRepo {
         this.rxPrefs = rxPrefs;
         this.config = config;
 
-//        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-//            @Override
-//            public void log(String message) {
-//                Timber.v(message);
-//            }
-//        };
-//        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
-//        loggingInterceptor.setLevel(Level.BODY);
-//        client.interceptors().add(loggingInterceptor);
+        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Timber.v(message);
+            }
+        };
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        client.interceptors().add(loggingInterceptor);
 
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
         client.interceptors().add(new AddTokenInterceptor(tokenRepo));
         client.setAuthenticator(new ApiAuthenticator(tokenRepo));
+        FTBApplication.getEventBus().register(this);
+    }
+
+    public void logout() {
+        Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+        userPref.delete();
+        tokenPref.delete();
+        currentUser = null;
+        FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGOUT, null));
+    }
+
+    @Subscribe
+    public void onLoginEvent(LoginEvent event) {
+        switch (event.getEventType()) {
+            case LoginEvent.LOGIN:
+                currentUser = event.getUser();
+                Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+                if (currentUser!=null) {
+                    userPref.set(gson.toJson(currentUser));
+                }
+                break;
+            case LoginEvent.LOGOUT:
+                break;
+            default:
+                //uh
+                Timber.e("onLoginEvent unknown type");
+        }
+    }
+
+    /**
+     * Current user could be null, this should generally only be called after receiving a
+     * LoginEvent.LOGIN
+     */
+    @Nullable
+    public User getCurrentUser() {
+        if (currentUser == null) {
+            Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+            String userString = userPref.get();
+
+            if (userString != null) {
+                currentUser = gson.fromJson(userPref.get(), User.class);
+            }
+        }
+        return currentUser;
     }
 
     /**
@@ -97,7 +150,7 @@ public class UserRepo {
 
                 Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
                 userPref.set(gson.toJson(user));
-
+                currentUser = user;
                 return user;
             }
         });
@@ -117,6 +170,9 @@ public class UserRepo {
                                 .lastName(lastName);
                         CreateUserRequest request = spec.getCreateUserRequest()
                                 .withAttributes(user.getData().attributes());
+                        Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+                        userPref.set(gson.toJson(user));
+                        currentUser = user;
                         return update(request);
                     }
                 });

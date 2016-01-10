@@ -20,6 +20,7 @@ import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
@@ -536,6 +537,7 @@ public class SignupScreen extends FlowPathBase {
             public void onNext(User user) {
                 Timber.d("user: %s", user.toString());
                 ProgressDialogService.get(getView()).dismiss();
+                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
             }
         };

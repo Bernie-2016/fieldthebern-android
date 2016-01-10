@@ -1,12 +1,21 @@
 package com.berniesanders.fieldthebern.media;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 import rx.Observable;
@@ -49,13 +58,24 @@ public class SaveImageTarget implements Target {
     }
 
     public static String base64EncodeBitmap(final Bitmap bitmap) {
-        int bytes = bitmap.getByteCount();
-        Timber.v("num kb of img %d", bytes/1000);
 
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 1, out);
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        byte[] outArray = out.toByteArray();
+        options.inSampleSize = 4;
+        Bitmap decoded = BitmapFactory.decodeByteArray(outArray, 0, outArray.length, options);
+
+        int bytes = decoded.getByteCount();
+        Timber.v("num kb of img %d", bytes/1000);
         ByteBuffer buffer = ByteBuffer.allocate(bytes);
-        bitmap.copyPixelsToBuffer(buffer);
+        decoded.copyPixelsToBuffer(buffer);
         byte[] array = buffer.array();
-        return Base64.encodeToString(array, Base64.DEFAULT);
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, out);
+//out.toByteArray()
+        return Base64.encodeToString(array, Base64.NO_WRAP);
     }
 
 

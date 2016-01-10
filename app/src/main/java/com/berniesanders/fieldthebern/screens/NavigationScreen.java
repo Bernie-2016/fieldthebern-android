@@ -4,16 +4,28 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.NavigationAdapter;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.events.LoginEvent;
+import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.views.NavigationView;
+import com.berniesanders.fieldthebern.views.ProfileView;
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
+import com.google.gson.Gson;
+import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -21,6 +33,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -64,27 +77,38 @@ public class NavigationScreen extends FlowPathBase {
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
         void inject(NavigationView t);
-        CollectionRepo repo();
     }
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<NavigationView> {
 
 
+        private final RxSharedPreferences rxPrefs;
+        private final UserRepo userRepo;
         // in case needed later to show expandable issue list
-        private final CollectionRepo repo;
         DrawerLayout drawerLayout;
 
         @Bind(R.id.drawer_listview)
         ListView drawerListView;
+
+        @Bind(R.id.drawer_header_avatar)
+        ImageView avatar;
+
+        @Bind(R.id.drawer_header_name)
+        TextView name;
+
+        @Bind(R.id.drawer_header_email)
+        TextView email;
+        private User user;
 
         /**
          * When the view is inflated, this presented is automatically injected to the View
          * Constructor parameters are injected here automatically
          */
         @Inject
-        Presenter(CollectionRepo repo) {
-            this.repo = repo;
+        Presenter(RxSharedPreferences rxPrefs, UserRepo userRepo, Gson gson) {
+            this.rxPrefs = rxPrefs;
+            this.userRepo = userRepo;
         }
 
         /**
@@ -98,14 +122,53 @@ public class NavigationScreen extends FlowPathBase {
             drawerLayout = (DrawerLayout) getView().getParent();
             ButterKnife.bind(this, getView());
             createNavigationDrawer();
+            FTBApplication.getEventBus().register(this);
+
+            if (userRepo.getCurrentUser()!=null) {
+                showUserInfo(userRepo.getCurrentUser());
+            }
+        }
+
+        @Subscribe
+        public void onLoginEvent(LoginEvent event) {
+            switch (event.getEventType()) {
+                case LoginEvent.LOGIN:
+                    showUserInfo(event.getUser());
+                    break;
+                case LoginEvent.LOGOUT:
+                    clearUserInfo();
+                    break;
+                default:
+                    //uh
+                    Timber.e("onLoginEvent unknown type");
+            }
+        }
+
+        private void showUserInfo(User user) {
+            Picasso.with(getView().getContext())
+                    .load(user.getData().attributes().getPhotoThumbUrl())
+                    .into(avatar);
+            name.setText(user.getData().attributes().getFirstName()
+                    + user.getData().attributes().getLastName());
+            email.setText("");
+        }
+
+        private void clearUserInfo() {
+            avatar.setImageResource(R.drawable.ic_face_white_48dp);
+            name.setText("");
+            email.setText("");
         }
 
         private void createNavigationDrawer() {
 
             drawerListView.setAdapter(new NavigationAdapter(
                     //TODO externalize
-                    new String[]{"Canvassing", "Issues", "Learn"},
-                    new int[] {R.drawable.ic_pin_drop_white_24dp, R.drawable.ic_issues, R.drawable.ic_live_help_white_24dp
+                    new String[]{"Canvassing", "Issues", "Learn", "Logout"},
+                    new int[] {
+                            R.drawable.ic_pin_drop_white_24dp,
+                            R.drawable.ic_issues,
+                            R.drawable.ic_live_help_white_24dp,
+                            R.drawable.ic_exit_to_app_white_24dp
                     }));
 
             drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -143,6 +206,15 @@ public class NavigationScreen extends FlowPathBase {
                                 });
                             }
                             break;
+                        case 3:
+                            userRepo.logout();
+                            view.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    flow.setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
+                                }
+                            });
+                            break;
                     }
                     drawerLayout.closeDrawers();
                 }
@@ -166,6 +238,7 @@ public class NavigationScreen extends FlowPathBase {
             drawerLayout=null;
             drawerListView.setOnItemClickListener(null);
             drawerListView=null;
+            FTBApplication.getEventBus().unregister(this);
         }
 
         @OnClick(R.id.drawer_profile)

@@ -315,9 +315,7 @@ public class NewVisitScreen extends FlowPathBase {
             ((ApiAddress) visitRepo.get().included().get(0))
                     .attributes()
                     .lastCanvassResponse(null);
-            if (!formIsValid()) {
-                return;
-            }
+            if (!formIsValid()) { return; }
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
 

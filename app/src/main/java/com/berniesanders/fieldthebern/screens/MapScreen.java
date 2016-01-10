@@ -97,6 +97,8 @@ public class MapScreen extends FlowPathBase {
         private final AddressRepo addressRepo;
         private final VisitRepo visitRepo;
         private final ErrorResponseParser errorResponseParser;
+        Subscription singleAddressSubscription;
+        Subscription multiAddressSubscription;
 
         List<ApiAddress> nearbyAddresses = new ArrayList<>();
         private CameraPosition cameraPosition;
@@ -154,6 +156,7 @@ public class MapScreen extends FlowPathBase {
 
             getView().setOnAddressChangeListener(onAddressChange);
             getView().setOnCameraChangeListener(onCameraChange);
+            getView().setOnMarkerClick(onMarkerClick);
             getView().setNearbyAddresses(nearbyAddresses);
         }
 
@@ -207,7 +210,11 @@ public class MapScreen extends FlowPathBase {
 
                 if (!shouldRefreshAddresses) { return; }
 
-                Subscription multiAddressSubscription = addressRepo
+                if (multiAddressSubscription != null && !multiAddressSubscription.isUnsubscribed()) {
+                    multiAddressSubscription.unsubscribe();
+                }
+
+                multiAddressSubscription = addressRepo
                         .getMultiple(
                                 new AddressSpec().multipleAddresses(new RequestMultipleAddresses()
                                         .latitude(cameraPosition.target.latitude)
@@ -223,12 +230,28 @@ public class MapScreen extends FlowPathBase {
             @Override
             public void onAddressChange(ApiAddress address) {
                 Presenter.this.address = address;
+                
+                if (singleAddressSubscription != null && !singleAddressSubscription.isUnsubscribed()) {
+                    singleAddressSubscription.unsubscribe();
+                }
 
-                Subscription singleAddressSubscription = addressRepo
+                singleAddressSubscription = addressRepo
                         .getSingle(new AddressSpec().singleAddress(new RequestSingleAddress(address)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(singleAddressObserver);
+            }
+        };
+
+        MapScreenView.OnMarkerClick onMarkerClick = new MapScreenView.OnMarkerClick() {
+            @Override
+            public void onMarkerClick() {
+                if (singleAddressSubscription != null && !singleAddressSubscription.isUnsubscribed()) {
+                    singleAddressSubscription.unsubscribe();
+                }
+                if (multiAddressSubscription != null && !multiAddressSubscription.isUnsubscribed()) {
+                    multiAddressSubscription.unsubscribe();
+                }
             }
         };
 
@@ -322,6 +345,7 @@ public class MapScreen extends FlowPathBase {
         private void dropListeners(MapScreenView mapScreenView) {
             mapScreenView.setOnAddressChangeListener(null);
             mapScreenView.setOnCameraChangeListener(null);
+            mapScreenView.setOnMarkerClick(null);
         }
 
         @OnClick(R.id.address_btn)

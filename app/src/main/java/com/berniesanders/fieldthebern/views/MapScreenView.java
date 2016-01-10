@@ -91,6 +91,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     MapScreen.Presenter presenter;
     private OnCameraChange onCameraChangeListener;
     private OnAddressChange onAddressChangeListener;
+    private OnMarkerClick onMarkerClick;
     private CameraPosition cameraPosition;
     private Map<String, ApiAddress> markerAddressMap = new HashMap<>();
     private List<ApiAddress> nearbyAddresses;
@@ -418,6 +419,10 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         this.onAddressChangeListener = onAddressChangeListener;
     }
 
+    public void setOnMarkerClick(OnMarkerClick onMarkerClick) {
+        this.onMarkerClick = onMarkerClick;
+    }
+
     public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
         this.nearbyAddresses = nearbyAddresses;
         if (googleMap==null) { return; }
@@ -471,6 +476,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
             //stop watching the camera change while the map moves to the maker
             unsubscribe();
+            if (onMarkerClick!=null) {
+                onMarkerClick.onMarkerClick();
+            }
 
             //set the address manually
             ApiAddress apiAddress = markerAddressMap.get(marker.getId());
@@ -516,5 +524,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
     public interface OnAddressChange {
         void onAddressChange(ApiAddress apiAddress);
+    }
+
+    public interface OnMarkerClick {
+        void onMarkerClick();
     }
 }

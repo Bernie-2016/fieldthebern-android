@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.support.v7.widget.AppCompatButton;
 import android.widget.CompoundButton;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -142,6 +143,9 @@ public class NewVisitScreen extends FlowPathBase {
         @Bind(R.id.asked_to_leave)
         SwitchCompat askedToLeaveSwitch;
 
+        @Bind(R.id.add_person)
+        AppCompatButton addPersonButton;
+
         @Inject
         Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser, StatesRepo statesRepo) {
             this.apiAddress = apiAddress;
@@ -221,8 +225,17 @@ public class NewVisitScreen extends FlowPathBase {
                 if (isChecked) {
                     clearSwitchListeners();
                     askedToLeaveSwitch.setChecked(false);
+                    askedToLeaveSwitch.setEnabled(false);
+                    addPersonButton.setEnabled(false);
                     askedToLeave = false;
                     setSwitchListeners();
+                }else{
+                    if(!askedToLeaveSwitch.isEnabled()){
+                        askedToLeaveSwitch.setEnabled(true);
+                    }
+                    if(!addPersonButton.isEnabled()){
+                        addPersonButton.setEnabled(true);
+                    }
                 }
             }
         };
@@ -238,8 +251,11 @@ public class NewVisitScreen extends FlowPathBase {
                 if (isChecked) {
                     clearSwitchListeners();
                     noOneHomeSwitch.setChecked(false);
+                    noOneHomeSwitch.setEnabled(false);
                     noOneHome = false;
                     setSwitchListeners();
+                }else if(!noOneHomeSwitch.isEnabled()){
+                    noOneHomeSwitch.setEnabled(true);
                 }
             }
         };

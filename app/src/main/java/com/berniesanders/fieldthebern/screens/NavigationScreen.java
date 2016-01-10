@@ -141,6 +141,7 @@ public class NavigationScreen extends FlowPathBase {
                     .load(user.getData().attributes().getPhotoThumbUrl())
                     .into(avatar);
             name.setText(user.getData().attributes().getFirstName()
+                    + " "
                     + user.getData().attributes().getLastName());
             email.setText("");
         }

@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="Jane Doe" />
+        android:text="" />
 
     <TextView
         android:layout_width="48dp"

@@ -64,7 +64,7 @@
             android:layout_margin="16dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Private Settings"
+            android:text="@string/private_settings"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white" />
 

@@ -127,7 +127,7 @@ public class ProfileScreen extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ProfileView view = this.getView();
-            if(view != null) {
+            if (view != null) {
                 ButterKnife.bind(this, view);
                 userRepo.getMe().subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -136,7 +136,7 @@ public class ProfileScreen extends FlowPathBase {
                             public void call(User user) {
                                 String firstName = user.getData().attributes().getFirstName();
                                 String lastName = user.getData().attributes().getLastName();
-                                if(fullNameTextView != null) {
+                                if (fullNameTextView != null) {
                                     fullNameTextView.setText(firstName + " " + lastName);
                                 }
                             }
@@ -165,6 +165,11 @@ public class ProfileScreen extends FlowPathBase {
         public void dropView(ProfileView view) {
             super.dropView(view);
             ButterKnife.unbind(this);
+        }
+
+        @OnClick(R.id.submit_edit_profile)
+        void onEditProfileClicked() {
+            Flow.get(getView().getContext()).set(new ProfileEditScreen());
         }
     }
 }

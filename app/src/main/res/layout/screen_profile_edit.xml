@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2015 FeelTheBern.org
   -->
-<com.berniesanders.fieldthebern.views.ProfileView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.berniesanders.fieldthebern.views.ProfileEditView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/bernie_dark_blue"
-    >
+    tools:background="@color/bernie_dark_blue">
 
     <LinearLayout
         android:id="@+id/drawer_profile"
@@ -56,6 +55,7 @@
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="20sp" />
         </android.support.design.widget.TextInputLayout>
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/submit_profile"
             android:layout_width="match_parent"
@@ -69,7 +69,6 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="normal"
-            />
+            android:textStyle="normal" />
     </LinearLayout>
-</com.berniesanders.fieldthebern.views.ProfileView>
+</com.berniesanders.fieldthebern.views.ProfileEditView>

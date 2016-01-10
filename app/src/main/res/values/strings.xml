@@ -67,7 +67,7 @@
     <string name="save_profile">Save Profile</string>
     <string name="take_photo">Take\nphoto</string>
     <string name="choose_picture">Choose\npicture</string>
-
+    <string name="min_time_not_elapsed">That address has been visited too recently.\nPlease try again later.</string>
     <string name="err_password_blank">Please enter a password</string>
     <string name="err_email_blank">Please enter an email</string>
     <string name="err_your_first_name_blank">Please enter your first name</string>

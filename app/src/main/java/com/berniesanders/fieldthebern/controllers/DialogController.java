@@ -190,7 +190,7 @@ public class DialogController extends Presenter<DialogController.Activity> {
             }
             //builder.setCancelable(false);
             Dialog dialog = builder.create();
-            dialog.setCanceledOnTouchOutside(true);
+            dialog.setCanceledOnTouchOutside(false);
             return dialog;
         }
 

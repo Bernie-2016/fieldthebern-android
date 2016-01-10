@@ -37,6 +37,8 @@
     <string name="signup_title">Sign up</string>
     <string name="done">Done</string>
     <string name="skip">Skip</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="previously_participated">Have they previously participated in a primary or caucus?</string>
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
@@ -92,6 +94,8 @@
     <string name="sample_description">Description</string>
     <string name="caucuses">Caucuses</string>
     <string name="iowa">Iowa</string>
+    <string name="visit_in_progress_title">Visit already in progress</string>
+    <string name="visit_in_progress_message">You have a visit in progress at:\n\n%s\n\nWould you like to continue that visit?</string>
     <string name="learn_btn">Learn</string>
     <string name="learn_screen_title">Learn: Canvassing</string>
     <string name="learn_title_1">What is canvassing?</string>

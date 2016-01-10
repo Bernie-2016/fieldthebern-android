@@ -34,7 +34,7 @@
                 android:textColor="@android:color/white" />
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/submit_edit_profile"
+                android:id="@+id/submit_profile_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -43,7 +43,7 @@
                 android:layout_weight="0"
                 android:background="?attr/selectableItemBackground"
                 android:drawablePadding="14dp"
-                android:text="Edit"
+                android:text="Settings"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"

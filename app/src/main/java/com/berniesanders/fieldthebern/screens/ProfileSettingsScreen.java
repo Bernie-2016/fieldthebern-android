@@ -1,34 +1,29 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
-import com.berniesanders.fieldthebern.views.ProfileView;
+import com.berniesanders.fieldthebern.views.ProfileSettingsView;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import flow.Flow;
 import mortar.ViewPresenter;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
  * Profile Screen for updating user profiles
  */
-@Layout(R.layout.screen_profile)
-public class ProfileScreen extends FlowPathBase {
+@Layout(R.layout.screen_profile_settings)
+public class ProfileSettingsScreen extends FlowPathBase {
 
     /**
      * Constructor called by Flow throughout the app
@@ -39,7 +34,7 @@ public class ProfileScreen extends FlowPathBase {
      * Note:
      * Generally common types like "String" are not injected because injection works based on type
      */
-    public ProfileScreen() {
+    public ProfileSettingsScreen() {
     }
 
     /**
@@ -53,26 +48,26 @@ public class ProfileScreen extends FlowPathBase {
      */
     @Override
     public Object createComponent() {
-        return DaggerProfileScreen_Component
+        return DaggerProfileSettingsScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
-                .profileModule(new ProfileModule()) //pass data to the presenter here
+                .profileSettingsModule(new ProfileSettingsModule()) //pass data to the presenter here
                 .build();
     }
 
     @Override
     public String getScopeName() {
-        return ProfileScreen.class.getName();
+        return ProfileSettingsScreen.class.getName();
     }
 
 
     @dagger.Module
-    class ProfileModule {
+    class ProfileSettingsModule {
 
         /**
          * pass variables to the component that will then be injected to the presenter
          */
-        public ProfileModule() {
+        public ProfileSettingsModule() {
         }
     }
 
@@ -84,12 +79,12 @@ public class ProfileScreen extends FlowPathBase {
      * Only use "modules = ExampleModule.class" if you need a module
      */
     @FtbScreenScope
-    @dagger.Component(modules = ProfileModule.class, dependencies = MainComponent.class)
+    @dagger.Component(modules = ProfileSettingsModule.class, dependencies = MainComponent.class)
     public interface Component {
         /**
-         * injection target = the view (ProfileView) to have the presented injected on it
+         * injection target = the view (ProfileSettingsView) to have the presented injected on it
          */
-        void inject(ProfileView t);
+        void inject(ProfileSettingsView t);
 
         // Expose UserRepo through injection
         @SuppressWarnings("unused")
@@ -97,24 +92,13 @@ public class ProfileScreen extends FlowPathBase {
     }
 
     @FtbScreenScope
-    static public class Presenter extends ViewPresenter<ProfileView> {
-
+    static public class Presenter extends ViewPresenter<ProfileSettingsView> {
         /**
-         * Since the presenter is static it should survive rotation
-         */
-        private final UserRepo userRepo;
-
-        @Nullable
-        @Bind(R.id.full_name)
-        TextView fullNameTextView;
-
-        /**
-         * When the view is inflated, this presented is automatically injected to the ProfileView
+         * When the view is inflated, this presented is automatically injected to the ProfileEditView
          * Constructor parameters here are injected automatically
          */
         @Inject
-        Presenter(UserRepo userRepo) {
-            this.userRepo = userRepo;
+        Presenter() {
         }
 
         /**
@@ -126,24 +110,7 @@ public class ProfileScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
-            ProfileView view = this.getView();
-            if (view != null) {
-                ButterKnife.bind(this, view);
-                userRepo.getMe().subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnNext(new Action1<User>() {
-                            @Override
-                            public void call(User user) {
-                                String firstName = user.getData().attributes().getFirstName();
-                                String lastName = user.getData().attributes().getLastName();
-                                if (fullNameTextView != null) {
-                                    fullNameTextView.setText(firstName + " " + lastName);
-                                }
-                            }
-                        }).subscribe();
-            } else {
-                Timber.w("ProfileScreen.onLoad view is unavailable");
-            }
+            ButterKnife.bind(this, getView());
         }
 
         /**
@@ -159,17 +126,22 @@ public class ProfileScreen extends FlowPathBase {
          * You can save state with hack, (restore it the same way by reading the field).
          * objects saved with be "parceled" by gson. Example:
          * <p/>
-         * ((ProfileView)Path.get(view.getContext())).somePublicField = "Something you want to save"
+         * ((ProfileEditView)Path.get(view.getContext())).somePublicField = "Something you want to save"
          */
         @Override
-        public void dropView(ProfileView view) {
+        public void dropView(ProfileSettingsView view) {
             super.dropView(view);
             ButterKnife.unbind(this);
         }
 
-        @OnClick(R.id.submit_profile_settings)
+        @OnClick(R.id.submit_edit_profile)
         void onEditProfileClicked() {
-            Flow.get(getView().getContext()).set(new ProfileSettingsScreen());
+            Flow.get(getView().getContext()).set(new ProfileEditScreen());
+        }
+
+        @OnClick(R.id.submit_logout)
+        void onLogoutClicked() {
+            // TODO logout
         }
     }
 }

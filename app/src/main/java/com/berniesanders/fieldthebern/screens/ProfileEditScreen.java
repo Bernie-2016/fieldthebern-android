@@ -116,6 +116,9 @@ public class ProfileEditScreen extends FlowPathBase {
         @Bind(R.id.last_name)
         EditText lastNameEditText;
 
+        @Bind(R.id.email)
+        EditText emailEditText;
+
 
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileEditView
@@ -143,8 +146,10 @@ public class ProfileEditScreen extends FlowPathBase {
                         public void call(User user) {
                             String firstName = user.getData().attributes().getFirstName();
                             String lastName = user.getData().attributes().getLastName();
+                            String email = user.getData().attributes().getEmail();
                             firstNameEditText.setText(firstName);
                             lastNameEditText.setText(lastName);
+                            emailEditText.setText(email);
                         }
                     }).subscribe();
         }
@@ -175,10 +180,12 @@ public class ProfileEditScreen extends FlowPathBase {
             Timber.v("Attempting to save profile");
             String firstName = firstNameEditText.getText().toString();
             String lastName = lastNameEditText.getText().toString();
+            String email = emailEditText.getText().toString();
             UserSpec spec = new UserSpec();
             User user = new User();
             user.getData().attributes().firstName(firstName);
             user.getData().attributes().lastName(lastName);
+            user.getData().attributes().email(email);
             spec.create(new CreateUserRequest());
             spec.update(user);
             userRepo.update(spec)

@@ -29,10 +29,35 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/about_text_2"
+            android:autoLink="email"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/email_support"
+            android:autoLink="email"
+            android:textColorLink="#99DDFF"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/paidFor"
+            android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_height="wrap_content"
             android:text="@string/paid_for"
-            android:layout_margin="10dp"
+            android:layout_margin="20dp"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textAllCaps="true"

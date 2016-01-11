@@ -1,7 +1,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -106,7 +106,6 @@ public class ProfileScreen extends FlowPathBase {
          */
         private final UserRepo userRepo;
 
-        @Nullable
         @Bind(R.id.full_name)
         TextView fullNameTextView;
 
@@ -171,7 +170,7 @@ public class ProfileScreen extends FlowPathBase {
 
         @OnClick(R.id.submit_profile_settings)
         void onEditProfileClicked() {
-            Flow.get(getView().getContext()).set(new ProfileSettingsScreen());
+            Flow.get(getView()).set(new ProfileSettingsScreen());
         }
     }
 }

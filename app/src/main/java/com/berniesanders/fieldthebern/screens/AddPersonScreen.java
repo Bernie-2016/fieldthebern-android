@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -102,6 +103,7 @@ public class AddPersonScreen extends FlowPathBase {
         private final VisitRepo visitRepo;
         private Person personToEdit;       //person loaded from the API from a previous visit (aka being edited
         private Person currentPerson;
+        private boolean isNewPerson;
 
         @Bind(R.id.submit)
         Button submitButton;
@@ -121,7 +123,7 @@ public class AddPersonScreen extends FlowPathBase {
             this.visitRepo = visitRepo;
             this.personToEdit = personToEdit;
             currentPerson = new Person();
-            if (personToEdit !=null) {
+            if (personToEdit != null) {
                 currentPerson = Person.copy(personToEdit);
             }
         }
@@ -131,15 +133,17 @@ public class AddPersonScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
-            if(currentPerson !=null) {
+            isNewPerson = currentPerson.fullName().equals(" ");
+            if(!isNewPerson) {
                 getView().showPerson(currentPerson);
                 submitButton.setText(R.string.done);
                 instructionsLabel.setText(String.format(editing, currentPerson.fullName()));
+
             }
         }
 
         String getScreenTitle() {
-            return (currentPerson ==null) ? addPerson : editPerson;
+            return (isNewPerson) ? addPerson : editPerson;
         }
 
         void setActionBar() {
@@ -149,7 +153,7 @@ public class AddPersonScreen extends FlowPathBase {
                             .action(new Action0() {
                                 @Override
                                 public void call() {
-                                    if (getView()!=null) {
+                                    if (getView()!= null) {
                                         Flow.get(getView()).goBack();
                                     }
                                 }
@@ -186,7 +190,7 @@ public class AddPersonScreen extends FlowPathBase {
             //make sure they are valid
             if(!formIsValid(currentPerson)) { return; }
 
-            if (personToEdit !=null) {
+            if (!isNewPerson) {
                 //if we're editing a person loaded from the API, update its values and update the visit
                 personToEdit.update(currentPerson);
                 visitRepo.addPerson(personToEdit);

@@ -15,6 +15,7 @@ import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
@@ -67,6 +68,6 @@ public interface MainComponent {
     VisitRepo visitRepo();
     ErrorResponseParser errorParser();
     PhotoController photoController();
-
+    RankingsRepo rankingsRepo();
     StatesRepo statesRepo();
 }

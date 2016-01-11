@@ -30,29 +30,32 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.berniesanders.fieldthebern.config.Actions;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.DialogService;
-import com.berniesanders.fieldthebern.controllers.PhotoController;
-import com.berniesanders.fieldthebern.controllers.PhotoService;
-import com.berniesanders.fieldthebern.controllers.ToastController;
-import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.FacebookService;
 import com.berniesanders.fieldthebern.controllers.LocationController;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionController;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
+import com.berniesanders.fieldthebern.controllers.PhotoController;
+import com.berniesanders.fieldthebern.controllers.PhotoService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogController;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
+import com.berniesanders.fieldthebern.controllers.ToastController;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbActivityScope;
 import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.Collection;
 import com.berniesanders.fieldthebern.models.Page;
-import com.berniesanders.fieldthebern.controllers.ActionBarController;
-import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.mortar.GsonParceler;
 import com.berniesanders.fieldthebern.mortar.MortarScreenSwitcherFrame;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
+import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
 import com.berniesanders.fieldthebern.screens.CollectionScreen;
 import com.berniesanders.fieldthebern.screens.InitialScreen;
 import com.berniesanders.fieldthebern.screens.PageScreen;
@@ -75,6 +78,9 @@ import flow.FlowDelegate;
 import flow.History;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
@@ -155,6 +161,9 @@ public class MainActivity extends AppCompatActivity
     @Inject
     PhotoController photoController;
 
+    @Inject
+    RankingsRepo rankingsRepo;
+
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
 
@@ -231,7 +240,19 @@ public class MainActivity extends AppCompatActivity
         progressDialogController.takeView(this);
         toastController.takeView(this);
         photoController.takeView(this);
+
+        rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Rankings>() {
+                    @Override
+                    public void call(Rankings rankings) {
+                        Timber.v(rankings.toString());
+                    }
+                });
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

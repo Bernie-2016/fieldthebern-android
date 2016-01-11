@@ -86,7 +86,7 @@
                 android:id="@+id/screen_home_about"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/large_button_height"
-                android:drawableLeft="@android:drawable/ic_menu_info_details"
+                android:drawableLeft="@drawable/ic_info_outline_white_24dp"
                 android:text="@string/about"
                 style="@style/HomeButton"
                 />

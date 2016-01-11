@@ -1,24 +1,14 @@
 package com.berniesanders.fieldthebern.media;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-import rx.Observable;
 import timber.log.Timber;
 
 /*
@@ -61,6 +51,7 @@ public class SaveImageTarget implements Target {
      * TODO this doesnt seem to work correctly with the API.
      * It does seem to correctly convert a bitmap to a base64 string, but for some reason
      * the API does not understand the data
+     * TODO this should maybe be move to it's own class
      */
 
     public static String base64EncodeBitmap(final Bitmap bitmap) {

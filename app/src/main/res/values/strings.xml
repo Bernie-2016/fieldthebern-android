@@ -79,6 +79,12 @@
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
+    <string name="profile">PROFILE</string>
+    <string name="doors">DOORS</string>
+    <string name="weekly_leaderboard">WEEKLY LEADERBOARD</string>
+    <string name="friends">Friends</string>
+    <string name="state">State</string>
+    <string name="everyone">Everyone</string>
 
     <string name="intro_learn_desc">We\'ll teach you to canvass your neighborhood and learn useful talking points.</string>
     <string name="learn">Learn</string>
@@ -156,6 +162,10 @@
     <string name="learn_text_7_5">Never answer a question unless you know the answer. If you are unsure about how to respond to a question, say so! Then, later, you can research the answer and make sure to follow up with the person who asked it.</string>
     <string name="learn_text_7_6">Never start an argument with anyone you meet. Some people will simply refuse to engage in meaningful discussion. Instead of getting caught up or frustrated, simply thank them for their time and disengage.</string>
     <string name="learn_text_7_7">Never place any flyers or other materials in someone’s mailbox. Not only is this a federal offense, it’s a rude invasion of privacy. People will be much more inclined to support Bernie Sanders if you hold conversation with them.</string>
+    <string name="edit_your_profile">Edit your profile</string>
+    <string name="log_out">Log out</string>
+    <string name="settings">Settings</string>
+    <string name="private_settings">Private Settings</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

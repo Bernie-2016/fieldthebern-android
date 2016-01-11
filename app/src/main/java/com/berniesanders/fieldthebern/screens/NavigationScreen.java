@@ -14,7 +14,6 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.views.NavigationView;
-import com.berniesanders.fieldthebern.views.ProfileView;
 
 import javax.inject.Inject;
 

@@ -19,7 +19,6 @@ import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
 import com.berniesanders.fieldthebern.parsing.PartyEvaluator;
 import com.berniesanders.fieldthebern.screens.AddPersonScreen;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

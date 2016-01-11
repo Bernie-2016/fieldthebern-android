@@ -166,6 +166,9 @@
     <string name="log_out">Log out</string>
     <string name="settings">Settings</string>
     <string name="private_settings">Private Settings</string>
+    <string name="about_text">Field the Bern is a mobile application for grassroots local canvassing on behalf of the Bernie Sanders presidential campaign.</string>
+    <string name="paid_for">Paid For By Bernie 2016</string>
+    <string name="about">About</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

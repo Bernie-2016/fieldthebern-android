@@ -147,5 +147,15 @@ public class HomeScreen extends FlowPathBase {
             });
         }
 
+        @OnClick(R.id.screen_home_about)
+        void onAboutClicked() {
+            getView().post(new Runnable() {
+                @Override
+                public void run() {
+                    Flow.get(getView().getContext()).set(new AboutScreen());
+                }
+            });
+        }
+
     }
 }

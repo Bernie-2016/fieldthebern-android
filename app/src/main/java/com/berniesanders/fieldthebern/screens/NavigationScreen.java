@@ -156,12 +156,13 @@ public class NavigationScreen extends FlowPathBase {
 
             drawerListView.setAdapter(new NavigationAdapter(
                     //TODO externalize
-                    new String[]{"Canvassing", "Issues", "Learn", "Logout"},
+                    new String[]{"Canvassing", "Issues", "Learn", "Logout", "About"},
                     new int[] {
                             R.drawable.ic_pin_drop_white_24dp,
                             R.drawable.ic_issues,
                             R.drawable.ic_live_help_white_24dp,
-                            R.drawable.ic_exit_to_app_white_24dp
+                            R.drawable.ic_exit_to_app_white_24dp,
+                            R.drawable.ic_info_outline_white_24dp
                     }));
 
             drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -207,6 +208,16 @@ public class NavigationScreen extends FlowPathBase {
                                     flow.setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
                                 }
                             });
+                            break;
+                        case 4:
+                            if (!(flow.getHistory().top() instanceof AboutScreen)) {
+                                view.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        flow.set(new AboutScreen());
+                                    }
+                                });
+                            }
                             break;
                     }
                     drawerLayout.closeDrawers();

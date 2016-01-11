@@ -15,17 +15,20 @@ import com.berniesanders.fieldthebern.models.Contact;
 import com.berniesanders.fieldthebern.models.Party;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
-import com.berniesanders.fieldthebern.mortar.HandlesBack;
 import com.berniesanders.fieldthebern.parsing.CanvassResponseEvaluator;
 import com.berniesanders.fieldthebern.parsing.PartyEvaluator;
 import com.berniesanders.fieldthebern.screens.AddPersonScreen;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 /**
@@ -97,13 +100,18 @@ public class AddPersonView extends RelativeLayout {
         Timber.v("onFinishInflate");
         ButterKnife.bind(this, this);
 
+        //Unknown is only valid as the default initial Party state
+        String[] partyValues = getContext().getResources().getStringArray(R.array.party);
+        List<String> partyValuesToDisplay = new LinkedList<String>(Arrays.asList(partyValues));
+        partyValuesToDisplay.remove(PartyEvaluator.getText(Party.UNKNOWN, partyValues));
+
         //noinspection unchecked
         ArrayAdapter<String> adapter = new ArrayAdapter(
                 getContext(),
                 R.layout.party_spinner_item,
                 R.id.text,
-                getContext().getResources().getStringArray(R.array.party)
-                );
+                partyValuesToDisplay.toArray()
+        );
         adapter.setDropDownViewResource(R.layout.party_spinner_drop_item);
         partySpinner.setAdapter(adapter);
         //ColorStateList csl = new ColorStateList(new int[][]{new int[0]}, new int[]{0xffffcc00});

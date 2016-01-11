@@ -20,15 +20,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
-<<<<<<< HEAD
 import com.squareup.otto.Subscribe;
-=======
-<<<<<<< Updated upstream
-=======
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-import com.squareup.otto.Subscribe;
->>>>>>> Stashed changes
->>>>>>> add user logging temp
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

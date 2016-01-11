@@ -122,8 +122,9 @@ public class AddPersonScreen extends FlowPathBase {
         Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
             this.visitRepo = visitRepo;
             this.personToEdit = personToEdit;
+            isNewPerson = personToEdit == null;
             currentPerson = new Person();
-            if (personToEdit != null) {
+            if (!isNewPerson) {
                 currentPerson = Person.copy(personToEdit);
             }
         }
@@ -133,7 +134,6 @@ public class AddPersonScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
-            isNewPerson = currentPerson.fullName().equals(" ");
             if(!isNewPerson) {
                 getView().showPerson(currentPerson);
                 submitButton.setText(R.string.done);

@@ -93,12 +93,15 @@ public class ProfileSettingsScreen extends FlowPathBase {
 
     @FtbScreenScope
     static public class Presenter extends ViewPresenter<ProfileSettingsView> {
+        private final UserRepo userRepo;
+
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileEditView
          * Constructor parameters here are injected automatically
          */
         @Inject
-        Presenter() {
+        Presenter(UserRepo userRepo) {
+            this.userRepo = userRepo;
         }
 
         /**
@@ -136,12 +139,13 @@ public class ProfileSettingsScreen extends FlowPathBase {
 
         @OnClick(R.id.submit_edit_profile)
         void onEditProfileClicked() {
-            Flow.get(getView().getContext()).set(new ProfileEditScreen());
+            Flow.get(getView()).set(new ProfileEditScreen());
         }
 
         @OnClick(R.id.submit_logout)
         void onLogoutClicked() {
-            // TODO logout
+            userRepo.logout();
+            Flow.get(getView()).set(new ChooseSignupScreen());
         }
     }
 }

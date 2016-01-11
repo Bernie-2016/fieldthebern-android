@@ -1,10 +1,8 @@
 package com.berniesanders.fieldthebern.parsing;
 
 import com.berniesanders.fieldthebern.models.ErrorResponse;
-import com.bugsnag.android.Bugsnag;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
-
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -32,11 +30,14 @@ public class ErrorResponseParser {
         String body = null;
         try {
             body = throwable.response().errorBody().string();
-        } catch (IOException e) {
+            return gson.fromJson(body, ErrorResponse.class);
+        } catch (Exception e) {
             Timber.e(throwable, "exception reading api errorBody json string");
-            Bugsnag.notify(throwable);
+            Crashlytics.logException(throwable);
         }
 
-        return gson.fromJson(body, ErrorResponse.class);
+        //if an error occurred, you know, reading the error, return an empty ErrorResponse
+        //this way at least we don't cascade the failure into a crash
+        return new ErrorResponse();
     }
 }

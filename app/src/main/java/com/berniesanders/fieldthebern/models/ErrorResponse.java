@@ -37,13 +37,19 @@ public class ErrorResponse {
 
 
     public String getAllDetails() {
-        StringBuilder sb = new StringBuilder();
-        for (Error error : errors) {
-            sb.append(error.detail);
-            sb.append("\n");
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (Error error : errors) {
+                sb.append(error.detail);
+                sb.append("\n");
+            }
+            //remove the extra blank line
+            sb.delete(sb.lastIndexOf("\n"), sb.length());
+            return sb.toString();
+        } catch (Exception e) {
+
         }
-        //remove the extra blank line
-        sb.delete(sb.lastIndexOf("\n"), sb.length());
-        return sb.toString();
+
+        return "Unknown Error";
     }
 }

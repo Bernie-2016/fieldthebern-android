@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.screens.LoginScreen;
-import com.bugsnag.android.Bugsnag;
+import com.crashlytics.android.Crashlytics;
 
 import flow.Flow;
 import flow.History;
@@ -36,7 +36,7 @@ public class AuthFailRedirect {
             }
             Flow.get(view).setHistory(History.single(new LoginScreen(new User())), Flow.Direction.BACKWARD);
             Timber.e(throwable, "");
-            Bugsnag.notify(throwable);
+            Crashlytics.logException(throwable);
             return true;
         }
 

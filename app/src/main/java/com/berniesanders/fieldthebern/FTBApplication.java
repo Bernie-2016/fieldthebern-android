@@ -24,11 +24,12 @@ import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.dagger.DaggerMainComponent;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.dagger.MainModule;
-import com.bugsnag.android.Bugsnag;
+import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Bus;
 
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 
+import io.fabric.sdk.android.Fabric;
 import mortar.MortarScope;
 import timber.log.Timber;
 
@@ -59,11 +60,11 @@ public class FTBApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        Bugsnag.init(this);
         component = DaggerMainComponent.builder()
                 .mainModule(new MainModule(getApplicationContext()))
                 .actionBarModule(new ActionBarController.ActionBarModule())

@@ -32,7 +32,7 @@ import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
-import com.bugsnag.android.Bugsnag;
+import com.crashlytics.android.Crashlytics;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -278,7 +278,7 @@ public class AddAddressScreen extends FlowPathBase {
                     //wtf
                     ToastService.get(getView()).bern("unknown error");//TODO externalize string
                     Timber.e(e, "singleAddressObserver unknown onError");
-                    Bugsnag.notify(e);
+                    Crashlytics.logException(e);
                 }
             }
 

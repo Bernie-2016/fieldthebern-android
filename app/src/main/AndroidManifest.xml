@@ -46,9 +46,9 @@
                      android:exported="false"
             />
 
-    <meta-data
-        android:name="com.bugsnag.android.API_KEY"
-        android:value="@string/bugsnagApiKey"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="c0cc1bb8d02e0f920c139be9b05b7ae6e0f9acfb" />
     </application>
 
 </manifest>

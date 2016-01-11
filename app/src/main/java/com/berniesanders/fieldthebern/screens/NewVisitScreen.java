@@ -22,7 +22,6 @@ import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
-import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.parsing.VisitModified;
 import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -48,7 +47,6 @@ import timber.log.Timber;
 
 /**
  * Example for creating new Mortar Screen that helps explain how it all works
- *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_new_visit)
@@ -163,7 +161,6 @@ public class NewVisitScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
             initSwitches();
-            setSwitchListeners();
             getView().showPeople(visitRepo.get());
 
             statePrimarySubscription = statesRepo.getStatePrimaries()
@@ -196,8 +193,15 @@ public class NewVisitScreen extends FlowPathBase {
          * If user rotated the device, be sure the switches match our boolean values
          */
         private void initSwitches() {
-            noOneHomeSwitch.setChecked(noOneHome);
+            if (VisitModified.personAdded(visitRepo.getPreviousPeople(), visitRepo.get())) {
+                noOneHome = false;
+                noOneHomeSwitch.setChecked(noOneHome);
+                noOneHomeSwitch.setEnabled(false);
+            } else {
+                noOneHomeSwitch.setChecked(noOneHome);
+            }
             askedToLeaveSwitch.setChecked(askedToLeave);
+            setSwitchListeners();
         }
 
         private void setSwitchListeners() {
@@ -212,37 +216,37 @@ public class NewVisitScreen extends FlowPathBase {
 
         CompoundButton.OnCheckedChangeListener noOneHomeListener =
                 new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                noOneHome = isChecked;
+                        noOneHome = isChecked;
 
-                //if no one was home, can't have been asked to leave
-                if (isChecked) {
-                    clearSwitchListeners();
-                    askedToLeaveSwitch.setChecked(false);
-                    askedToLeave = false;
-                    setSwitchListeners();
-                }
-            }
-        };
+                        //if no one was home, can't have been asked to leave
+                        if (isChecked) {
+                            clearSwitchListeners();
+                            askedToLeaveSwitch.setChecked(false);
+                            askedToLeave = false;
+                            setSwitchListeners();
+                        }
+                    }
+                };
 
         CompoundButton.OnCheckedChangeListener askedToLeaveListener =
                 new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                askedToLeave = isChecked;
+                        askedToLeave = isChecked;
 
-                //if asked to leave, someone must have been home
-                if (isChecked) {
-                    clearSwitchListeners();
-                    noOneHomeSwitch.setChecked(false);
-                    noOneHome = false;
-                    setSwitchListeners();
-                }
-            }
-        };
+                        //if asked to leave, someone must have been home
+                        if (isChecked) {
+                            clearSwitchListeners();
+                            noOneHomeSwitch.setChecked(false);
+                            noOneHome = false;
+                            setSwitchListeners();
+                        }
+                    }
+                };
 
         void setActionBar() {
             ActionBarController.MenuAction menu =
@@ -292,12 +296,12 @@ public class NewVisitScreen extends FlowPathBase {
         @OnClick(R.id.submit)
         public void score() {
 
-            if(noOneHome) {
+            if (noOneHome) {
                 //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()
                         .bestCanvassResponse(CanvassResponse.NO_ONE_HOME);
-            } else if(askedToLeave) {
+            } else if (askedToLeave) {
                 //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()

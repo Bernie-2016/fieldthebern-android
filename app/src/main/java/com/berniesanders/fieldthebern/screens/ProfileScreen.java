@@ -18,6 +18,8 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import flow.Flow;
 import mortar.ViewPresenter;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;

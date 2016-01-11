@@ -2,7 +2,7 @@
 
 #Field the Bern (Android)
 
-This app under development. 
+This app is under development. 
 
 FieldTheBern helps you go door to door and canvass for Bernie. Knock on doors, tell people about Bernie, find out their level of interest. Next to phonebanking, canvassing is probably the second most crucial and effective way to get votes.The app allows volunteers to enter data about the visit. For example: if no one was home, or the resident strongly supports Bernie, and if they have been contacted before, or want to be contacted again.  A map shows pins for houses that have already been visited so that other volunteers don't overlap each other.  The app includes all the issues information from http://FeelTheBern.org/ (cached for offline) as well as primary and caucus dates and info for all 50 states. Canvassers can also track progress and score points and compete with other volunteers.
 

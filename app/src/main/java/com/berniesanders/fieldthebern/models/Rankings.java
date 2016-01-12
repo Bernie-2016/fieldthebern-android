@@ -44,7 +44,7 @@ public class Rankings {
     java.util.List<UserData> included = new ArrayList<>();
     java.util.List<Data> data = new ArrayList<>();
 
-    static class Data {
+    public static class Data {
         long id;
         String type = "rankings";
         Attributes attributes;
@@ -78,7 +78,7 @@ public class Rankings {
 
     }
 
-    static class Attributes {
+    public static class Attributes {
         String rank;
         int score;
 

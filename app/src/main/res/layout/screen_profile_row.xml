@@ -9,13 +9,16 @@
     android:paddingRight="24dp">
 
     <TextView
+        android:id="@+id/position"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="0"
         android:gravity="center_vertical"
-        android:text="1024" />
+        android:text="1024"
+        android:textColor="@android:color/white" />
 
     <ImageView
+        android:id="@+id/profile_image"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_weight="0"
@@ -23,16 +26,20 @@
         android:src="@drawable/ic_face_white_48dp" />
 
     <TextView
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:text="" />
+        android:text=""
+        android:textColor="@android:color/white" />
 
     <TextView
+        android:id="@+id/score"
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_weight="0"
         android:gravity="center_vertical|right"
-        android:text="0" />
+        android:text="0"
+        android:textColor="@android:color/white" />
 </LinearLayout>

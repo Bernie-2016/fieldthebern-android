@@ -64,6 +64,9 @@ public class AddPersonView extends RelativeLayout {
     @Bind(R.id.previously_participated)
     SwitchCompat prevParticipatedSwitch;
 
+    @Bind(R.id.asked_to_leave)
+    SwitchCompat askedToLeave;
+
     public AddPersonView(Context context) {
         super(context);
         injectSelf(context);
@@ -215,6 +218,11 @@ public class AddPersonView extends RelativeLayout {
             }
         }
         person.attributes().previouslyParticipated(prevParticipatedSwitch.isChecked());
+
+        if (askedToLeave.isChecked()) {
+            person.attributes().canvassResponse(CanvassResponse.ASKED_TO_LEAVE);
+        }
+
     }
 
     /**

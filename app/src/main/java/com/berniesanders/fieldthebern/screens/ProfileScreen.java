@@ -116,7 +116,7 @@ public class ProfileScreen extends FlowPathBase {
         TextView fullNameTextView;
 
         @Bind(R.id.ranking_listview)
-        ListView rankinsListView;
+        ListView rankingsListView;
 
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileView
@@ -157,7 +157,7 @@ public class ProfileScreen extends FlowPathBase {
                         .doOnNext(new Action1<Rankings>() {
                             @Override
                             public void call(Rankings rankings) {
-                                rankinsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
                             }
                         })
                         .doOnError(new Action1<Throwable>() {

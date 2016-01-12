@@ -156,6 +156,13 @@ public class ProfileScreen extends FlowPathBase {
                                 if (fullNameTextView != null) {
                                     fullNameTextView.setText(firstName + " " + lastName);
                                 }
+
+                                // TODO replace with actual data
+                                String pointCount = "10";
+                                String doorCount = "20";
+
+                                pointCountTextView.setText(pointCount);
+                                doorCountTextView.setText(doorCount);
                             }
                         }).subscribe();
                 rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE)).subscribeOn(Schedulers.io())
@@ -179,15 +186,6 @@ public class ProfileScreen extends FlowPathBase {
                         .doOnNext(new Action1<User>() {
                             @Override
                             public void call(User user) {
-                                String pointCount = "10";
-                                String doorCount = "20";
-
-                                // TODO populate total points
-                                pointCountTextView.setText(pointCount);
-
-                                // TODO populate score
-                                doorCountTextView.setText(doorCount);
-
                             }
                         }).subscribe();
 

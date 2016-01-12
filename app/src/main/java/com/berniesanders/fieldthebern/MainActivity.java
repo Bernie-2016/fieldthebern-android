@@ -51,11 +51,9 @@ import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.Collection;
 import com.berniesanders.fieldthebern.models.Page;
-import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.mortar.GsonParceler;
 import com.berniesanders.fieldthebern.mortar.MortarScreenSwitcherFrame;
 import com.berniesanders.fieldthebern.repositories.RankingsRepo;
-import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
 import com.berniesanders.fieldthebern.screens.CollectionScreen;
 import com.berniesanders.fieldthebern.screens.InitialScreen;
 import com.berniesanders.fieldthebern.screens.PageScreen;
@@ -78,9 +76,6 @@ import flow.FlowDelegate;
 import flow.History;
 import mortar.MortarScope;
 import mortar.bundler.BundleServiceRunner;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
@@ -241,15 +236,6 @@ public class MainActivity extends AppCompatActivity
         toastController.takeView(this);
         photoController.takeView(this);
 
-        rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Rankings>() {
-                    @Override
-                    public void call(Rankings rankings) {
-                        Timber.v(rankings.toString());
-                    }
-                });
     }
 
 

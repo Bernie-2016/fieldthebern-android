@@ -21,7 +21,11 @@ public class VisitModified {
 
         for(CanvassData canvassData : current.included()) {
             if (canvassData.type().equals(Person.TYPE)) {
-                visitPeople.add((Person) canvassData);
+                Person person = (Person) canvassData;
+                visitPeople.add(person);
+                if (person.spokenTo()) {
+                    return true;
+                }
             }
         }
 

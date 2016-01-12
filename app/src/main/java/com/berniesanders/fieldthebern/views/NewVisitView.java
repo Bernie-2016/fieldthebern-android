@@ -8,6 +8,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -199,7 +201,19 @@ public class NewVisitView extends RelativeLayout {
 
         personRow.findViewById(R.id.edit).setOnClickListener(onClickListener);
         personRow.findViewById(R.id.edit).setTag(person);
+
+        ((CheckBox) personRow.findViewById(R.id.canvassed_checkbox)).setChecked(person.spokenTo());
+        ((CheckBox) personRow.findViewById(R.id.canvassed_checkbox)).setOnCheckedChangeListener(onCheckChange);
+        personRow.findViewById(R.id.canvassed_checkbox).setTag(person);
     }
+
+    CompoundButton.OnCheckedChangeListener onCheckChange = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Person person = (Person) buttonView.getTag();
+            person.spokenTo(isChecked);
+        }
+    };
 
     OnClickListener onClickListener = new OnClickListener() {
         @Override

@@ -192,9 +192,11 @@ public class AddPersonScreen extends FlowPathBase {
             if (!isNewPerson) {
                 //if we're editing a person loaded from the API, update its values and update the visit
                 personToEdit.update(currentPerson);
+                personToEdit.spokenTo(true);
                 visitRepo.addPerson(personToEdit);
             } else {
                 //otherwise, just add the temp person
+                currentPerson.spokenTo(true);
                 visitRepo.addPerson(currentPerson);
             }
 

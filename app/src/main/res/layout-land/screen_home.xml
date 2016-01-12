@@ -81,25 +81,6 @@
                     />
             </FrameLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/large_button_height"
-                style="@style/HomeButtonMargins"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/dark_blue2"
-                    />
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/screen_home_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:drawableLeft="@drawable/ic_info_outline_white_24dp"
-                    android:text="@string/about"
-                    style="@style/HomeButton"
-                    />
-            </FrameLayout>
         </LinearLayout>
 
 

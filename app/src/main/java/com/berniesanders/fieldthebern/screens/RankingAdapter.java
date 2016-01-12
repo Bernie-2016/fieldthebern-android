@@ -29,7 +29,7 @@ public class RankingAdapter extends ArrayAdapter<String> {
     private List<Rankings.Data> datas;
 
     public RankingAdapter(Context context, List<UserData> userDatas, List<Rankings.Data> datas) {
-        super(context, R.layout.screen_profile_row, new String[datas.size()]);
+        super(context, R.layout.screen_profile_row, new String[userDatas.size()]);
         this.context = context;
         this.userDatas = userDatas;
         this.datas = datas;

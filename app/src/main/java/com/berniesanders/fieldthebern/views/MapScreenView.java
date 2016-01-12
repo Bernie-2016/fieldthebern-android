@@ -222,7 +222,10 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         handler.removeCallbacksAndMessages(null);
-        googleMap.setOnCameraChangeListener(null);
+
+        if (googleMap!=null) {//thanks fragments
+            googleMap.setOnCameraChangeListener(null);
+        }
     }
 
     private void initCameraPosition(final GoogleMap map) {

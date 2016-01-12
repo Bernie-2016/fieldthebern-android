@@ -104,6 +104,22 @@ public class VisitRepo {
     public Observable<VisitResult> submit() {
         Timber.v("submit()");
 
+        //remove anyone who wasn't spoken to
+        List<CanvassData> included = visit.included();
+
+        List<Person> peopleToRemove = new ArrayList<>();
+
+        for(CanvassData canvassData : included) {
+            if (canvassData.type().equals(Person.TYPE)) {
+                Person person = (Person) canvassData;
+                if (!person.spokenTo()) {
+                    peopleToRemove.add(person);
+                }
+            }
+        }
+
+        visit.included().removeAll(peopleToRemove);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))

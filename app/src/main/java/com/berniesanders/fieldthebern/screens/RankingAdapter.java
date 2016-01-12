@@ -1,27 +1,22 @@
 package com.berniesanders.fieldthebern.screens;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.models.UserData;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import flow.Flow;
-import flow.path.PathContext;
-
-import static com.berniesanders.fieldthebern.R.layout.screen_profile_row;
-
 /**
- * Created by fkautz on 1/11/16.
  */
 public class RankingAdapter extends ArrayAdapter<String> {
     private final Context context;
@@ -54,6 +49,12 @@ public class RankingAdapter extends ArrayAdapter<String> {
         TextView scoreView = (TextView) newView.findViewById(R.id.score);
         String score = String.valueOf(attributes1.score());
         scoreView.setText(score);
+
+        //pic
+        ImageView avatar = (ImageView) newView.findViewById(R.id.profile_image);
+        Picasso.with(newView.getContext())
+                .load(attributes.getPhotoThumbUrl())
+                .into(avatar);
 
         return newView;
     }

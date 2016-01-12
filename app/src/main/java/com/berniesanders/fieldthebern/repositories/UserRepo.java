@@ -20,8 +20,8 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.otto.Subscribe;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -30,6 +30,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -119,45 +120,89 @@ public class UserRepo {
      */
     public Observable<User> create(final UserSpec spec) {
 
-        return create(spec.getCreateUserRequest()).map(new Func1<User, User>() {
-            @Override
-            public User call(User user) {
+        //TODO not sure I have chained these in the best way...
 
-                Timber.v("Func1 call()");
+        // This is the order that things are supposed to happen:
+        //
+        // 1. post/create a new user
+        // 2. save a ref to the returned user
+        // 3. login via tokenRepo, (which unfortunately transforms the response to Token, hence the reason for this craziness)
+        // 4. read the returned user from the ref we saved in #2
+        // 5. add the base64 photo data from the user in step #1 to the user we read from step #2
+        // 6. upload that user with the photo data via update() (aka PATCH users/me)
+        // 7. save the user returned from #6
+        // 8. return the user to the original subscriber
 
-                UserAttributes userAttributes = spec
-                        .getCreateUserRequest()
-                        .getData()
-                        .getAttributes();
+        return create(spec.getCreateUserRequest())
+                .map(new Func1<User, User>() { //save the user, this give the late .flatMap access to it
+                    @Override
+                    public User call(User user) {
+                        Timber.v("user created, saving in memory...");
+                        currentUser = user;
+                        Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+                        userPref.set(gson.toJson(user));
+                        return user;
+                    }
+                })
+                .flatMap(new Func1<User, Observable<Token>>() { //log them in
+                    @Override
+                    public Observable<Token> call(User user) {
+                        Timber.v("user created, calling tokenRepo to sign in...");
 
-                if (!userAttributes.isFacebookUser()) {
-                    LoginEmailRequest loginEmailRequest = new LoginEmailRequest()
-                            .username(userAttributes.getEmail())
-                            .password(userAttributes.getPassword());
-                    tokenRepo
-                            .loginEmail(new TokenSpec().email(loginEmailRequest))
-                            .subscribeOn(Schedulers.io())
-                            .subscribe();
-                } else {
-                    LoginFacebookRequest loginFacebookRequest = new LoginFacebookRequest()
-                            .username(userAttributes.getEmail())
-                            .password(userAttributes.getPassword());
-                    tokenRepo
-                            .loginFacebook(new TokenSpec().facebook(loginFacebookRequest))
-                            .subscribeOn(Schedulers.io())
-                            .subscribe();
-                }
+                        //get the username and pass right out of the create user request
+                        //the don't exist in the user object returned from the API call in .map above
+                        final UserAttributes userAttributes = spec
+                                .getCreateUserRequest()
+                                .getData()
+                                .getAttributes();
 
-                Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
-                userPref.set(gson.toJson(user));
-                currentUser = user;
-                return user;
-            }
-        });
+                        if (!userAttributes.isFacebookUser()) {
+                            LoginEmailRequest loginEmailRequest = new LoginEmailRequest()
+                                    .username(userAttributes.getEmail())
+                                    .password(userAttributes.getPassword());
+                            return tokenRepo
+                                    .loginEmail(new TokenSpec().email(loginEmailRequest));
+                        } else {
+                            LoginFacebookRequest loginFacebookRequest = new LoginFacebookRequest()
+                                    .username(userAttributes.getEmail())
+                                    .password(userAttributes.getPassword());
+                            return tokenRepo
+                                    .loginFacebook(new TokenSpec().facebook(loginFacebookRequest));
+                        }
+                    }
+                })
+                .flatMap(new Func1<Token, Observable<User>>() { //upload photo
+
+                    @Override
+                    public Observable<User> call(Token user) {
+                        Timber.v("user signed in, calling update to upload the photo");
+
+                        final UserAttributes userAttributes = spec
+                                .getCreateUserRequest()
+                                .getData()
+                                .getAttributes();
+                        currentUser.getData().attributes(userAttributes);
+                        currentUser.getData().attributes().password(null); //it's all fun and games until someone loses a password
+                        currentUser.getData().attributes().photoLargeUrl(null);
+                        currentUser.getData().attributes().photoThumbUrl(null);
+                        spec.update(currentUser);
+                        return update(spec);
+                    }
+                })
+                .map(new Func1<User, User>() {  //re-save the user to be sure they are an awesome user
+                    @Override
+                    public User call(User user) {
+                        Timber.v("photo uploaded, saving user and returning to the subscriber");
+                        currentUser = user;
+                        Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+                        userPref.set(gson.toJson(user));
+                        return currentUser;
+                    }
+                });
     }
 
     public Observable<User> update(final UserSpec spec) {
-        Timber.v("Calling update");
+        Timber.v("update()");
         Observable<User> me = getMe()
                 .flatMap(new Func1<User, Observable<User>>() {
                     @Override
@@ -167,17 +212,18 @@ public class UserRepo {
                         String lastName = spec.user().getData().attributes().getLastName();
                         user.getData().attributes()
                                 .firstName(firstName)
-                                .lastName(lastName);
+                                .lastName(lastName)
+                                .base64PhotoData(spec.user().getData().attributes().getBase64PhotoData());
                         CreateUserRequest request = spec.getCreateUserRequest()
                                 .withAttributes(user.getData().attributes());
                         Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
                         userPref.set(gson.toJson(user));
                         currentUser = user;
+                        currentUser.getData().attributes().password(null);  //be safe, children
                         return update(request);
                     }
                 });
 
-        Timber.v("Calling update finished");
         return me;
     }
 

@@ -1,12 +1,20 @@
 package com.berniesanders.fieldthebern.media;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.Base64;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import timber.log.Timber;
@@ -24,10 +32,12 @@ public class SaveImageTarget implements Target {
     }
 
     private final OnLoad callback;
+    private final Context context;
 
-    public SaveImageTarget(OnLoad callback) {
+    public SaveImageTarget(OnLoad callback, Context context) {
 
         this.callback = callback;
+        this.context = context;
     }
 
     /**
@@ -42,7 +52,7 @@ public class SaveImageTarget implements Target {
     public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
         Timber.v("onBitmapLoaded %s", from.toString());
 
-        String encodedString = base64EncodeBitmap(bitmap);
+        String encodedString = base64EncodeBitmap(bitmap, context);
 
         callback.onLoad(bitmap, encodedString);
     }
@@ -54,31 +64,31 @@ public class SaveImageTarget implements Target {
      * TODO this should maybe be move to it's own class
      */
 
-    public static String base64EncodeBitmap(final Bitmap bitmap) {
+    public static String base64EncodeBitmap(final Bitmap bitmap, Context context) {
 
-        int bytes = bitmap.getByteCount();
-        Timber.v("num kb of img %d", bytes/1000);
-        ByteBuffer buffer = ByteBuffer.allocate(bytes);
-        bitmap.copyPixelsToBuffer(buffer);
-        byte[] array = buffer.array();
 
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 1, out);
-//
-//        final BitmapFactory.Options options = new BitmapFactory.Options();
-//        byte[] outArray = out.toByteArray();
-//        options.inSampleSize = 4;
-//        Bitmap decoded = BitmapFactory.decodeByteArray(outArray, 0, outArray.length, options);
-//
-//        int bytes = decoded.getByteCount();
-//        Timber.v("num kb of img %d", bytes/1000);
-//        ByteBuffer buffer = ByteBuffer.allocate(bytes);
-//        decoded.copyPixelsToBuffer(buffer);
-//        byte[] array = buffer.array();
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 5, out);
-//        out.toByteArray()
-        return Base64.encodeToString(array, Base64.NO_WRAP);
+        File originalFile = SavePhoto.saveBitmap(bitmap, context);
+        InputStream inputStream = null;//You can get an inputStream using any IO API
+        try {
+            inputStream = new FileInputStream(originalFile.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        byte[] bytes;
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                output.write(buffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        bytes = output.toByteArray();
+        String encodedString = Base64.encodeToString(bytes, Base64.NO_WRAP);
+        Timber.v("encodedString " + encodedString);
+        return encodedString;
     }
 
 

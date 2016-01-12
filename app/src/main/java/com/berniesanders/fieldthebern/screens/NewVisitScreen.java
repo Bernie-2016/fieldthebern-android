@@ -226,6 +226,7 @@ public class NewVisitScreen extends FlowPathBase {
                             clearSwitchListeners();
                             askedToLeaveSwitch.setChecked(false);
                             askedToLeave = false;
+                            getView().clearPersonCheckboxes();
                             setSwitchListeners();
                         }
                     }

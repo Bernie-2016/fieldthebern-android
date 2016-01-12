@@ -226,4 +226,13 @@ public class NewVisitView extends RelativeLayout {
         Flow.get(this).set(new AddPersonScreen(person));
     }
 
+    public void clearPersonCheckboxes() {
+        for(int i = 0; i < personContainer.getChildCount(); i++) {
+            View child = personContainer.getChildAt(i);
+            ((CheckBox) child.findViewById(R.id.canvassed_checkbox)).setChecked(false);
+            //the listeners should update the model, but let's be explicit
+            Person person = (Person) child.findViewById(R.id.canvassed_checkbox).getTag();
+            person.spokenTo(false);
+        }
+    }
 }

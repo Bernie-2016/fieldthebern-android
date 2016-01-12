@@ -203,7 +203,7 @@ public class SignupScreen extends FlowPathBase {
         private void loadPhoto() {
             Picasso.with(getView().getContext())
                     .load(userAttributes.getPhotoLargeUrl())
-                    .into(new SaveImageTarget(onLoad));
+                    .into(new SaveImageTarget(onLoad, getView().getContext()));
         }
 
 
@@ -252,7 +252,9 @@ public class SignupScreen extends FlowPathBase {
                                 if (bitmap==null) { return; }
                                 userBitmap = bitmap;
                                 showPhotoIfExists();
-                                userAttributes.base64PhotoData(SaveImageTarget.base64EncodeBitmap(bitmap));
+                                userAttributes.base64PhotoData(
+                                        SaveImageTarget.base64EncodeBitmap(
+                                                bitmap, getView().getContext()));
                             }
                         });
             } else {
@@ -271,7 +273,9 @@ public class SignupScreen extends FlowPathBase {
                                 if (bitmap==null) { return; }
                                 userBitmap = bitmap;
                                 showPhotoIfExists();
-                                userAttributes.base64PhotoData(SaveImageTarget.base64EncodeBitmap(bitmap));
+                                userAttributes.base64PhotoData(
+                                        SaveImageTarget.base64EncodeBitmap(
+                                                bitmap, getView().getContext()));
                             }
                         });
             } else {
@@ -535,7 +539,7 @@ public class SignupScreen extends FlowPathBase {
 
             @Override
             public void onNext(User user) {
-                Timber.d("user: %s", user.toString());
+                Timber.d("user created! user: %s", user.toString());
                 ProgressDialogService.get(getView()).dismiss();
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);

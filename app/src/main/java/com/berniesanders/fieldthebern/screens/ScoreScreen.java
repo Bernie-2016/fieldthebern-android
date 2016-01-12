@@ -131,7 +131,7 @@ public class ScoreScreen extends FlowPathBase {
                         firstName = person.attributes().firstName();
                     } catch (IndexOutOfBoundsException e) {
                         //this can happen if someone asked us to leave without giving their name
-                        Timber.e(e, "no person update found");
+                        Timber.w(e, "no person update found");
                     }
 
                     Score score = visitResult.included().get(0);

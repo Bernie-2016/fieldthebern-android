@@ -121,6 +121,12 @@ public class ProfileScreen extends FlowPathBase {
         @Bind(R.id.ranking_listview)
         ListView rankingsListView;
 
+        @Bind(R.id.ranking_listview2)
+        ListView rankingsListView2;
+
+        @Bind(R.id.ranking_listview3)
+        ListView rankingsListView3;
+
         @Bind(R.id.point_count)
         TextView pointCountTextView;
 
@@ -171,8 +177,11 @@ public class ProfileScreen extends FlowPathBase {
             tabHost.addTab(spec3);
 
             if (view != null) {
+
                 ButterKnife.bind(this, view);
-                userRepo.getMe().subscribeOn(Schedulers.io())
+
+                userRepo.getMe()
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(new Action1<User>() {
                             @Override
@@ -188,8 +197,11 @@ public class ProfileScreen extends FlowPathBase {
 
                                 loadAvatar(user);
                             }
-                        }).subscribe();
-                rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE)).subscribeOn(Schedulers.io())
+                        })
+                        .subscribe();
+
+                rankingsRepo.get(new RankingSpec(RankingSpec.FRIENDS))
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(new Action1<Rankings>() {
                             @Override
@@ -205,7 +217,42 @@ public class ProfileScreen extends FlowPathBase {
                         })
                         .subscribe();
 
-                userRepo.getMe().subscribeOn(Schedulers.io())
+                rankingsRepo.get(new RankingSpec(RankingSpec.STATE))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(new Action1<Rankings>() {
+                            @Override
+                            public void call(Rankings rankings) {
+                                rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                            }
+                        })
+                        .doOnError(new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Timber.wtf(throwable, "rankings failed");
+                            }
+                        })
+                        .subscribe();
+
+                rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(new Action1<Rankings>() {
+                            @Override
+                            public void call(Rankings rankings) {
+                                rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                            }
+                        })
+                        .doOnError(new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Timber.wtf(throwable, "rankings failed");
+                            }
+                        })
+                        .subscribe();
+
+                userRepo.getMe()
+                        .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnNext(new Action1<User>() {
                             @Override

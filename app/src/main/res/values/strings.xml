@@ -166,6 +166,11 @@
     <string name="log_out">Log out</string>
     <string name="settings">Settings</string>
     <string name="private_settings">Private Settings</string>
+    <string name="about_text">Version: %s</string>
+    <string name="paid_for">Paid For By Bernie 2016</string>
+    <string name="about">About</string>
+    <string name="about_text_2">For help, send an email to:</string>
+    <string name="email_support">support@fieldthebern.com</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

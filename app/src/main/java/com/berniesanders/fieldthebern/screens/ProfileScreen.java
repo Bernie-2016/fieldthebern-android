@@ -1,6 +1,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -8,9 +9,12 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
+import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
 import com.berniesanders.fieldthebern.views.ProfileView;
 
 import javax.inject.Inject;
@@ -95,6 +99,7 @@ public class ProfileScreen extends FlowPathBase {
         // Expose UserRepo through injection
         @SuppressWarnings("unused")
         UserRepo userRepo();
+        RankingsRepo rankingsRepo();
     }
 
     @FtbScreenScope
@@ -105,16 +110,22 @@ public class ProfileScreen extends FlowPathBase {
          */
         private final UserRepo userRepo;
 
+        private final RankingsRepo rankingsRepo;
+
         @Bind(R.id.full_name)
         TextView fullNameTextView;
+
+        @Bind(R.id.ranking_listview)
+        ListView rankinsListView;
 
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileView
          * Constructor parameters here are injected automatically
          */
         @Inject
-        Presenter(UserRepo userRepo) {
+        Presenter(UserRepo userRepo, RankingsRepo rankingRepo) {
             this.userRepo = userRepo;
+            this.rankingsRepo = rankingRepo;
         }
 
         /**
@@ -141,6 +152,21 @@ public class ProfileScreen extends FlowPathBase {
                                 }
                             }
                         }).subscribe();
+                rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE)).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(new Action1<Rankings>() {
+                            @Override
+                            public void call(Rankings rankings) {
+                                rankinsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                            }
+                        })
+                        .doOnError(new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Timber.wtf(throwable, "rankings failed");
+                            }
+                        })
+                        .subscribe();
             } else {
                 Timber.w("ProfileScreen.onLoad view is unavailable");
             }

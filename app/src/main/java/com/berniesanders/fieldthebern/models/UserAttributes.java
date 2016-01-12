@@ -36,6 +36,12 @@ public class UserAttributes implements Parcelable {
     @SerializedName("facebook_id")
     String facebookId;
 
+    @SerializedName("visits_count")
+    String visitsCount;
+
+    @SerializedName("total_points")
+    String totalPoints;
+
     public boolean isFacebookUser() {
         return (facebookId!=null);
     }
@@ -152,7 +158,23 @@ public class UserAttributes implements Parcelable {
         return this;
     }
 
+    public String totalPoints() {
+        return this.totalPoints;
+    }
 
+    public String visitsCount() {
+        return this.visitsCount;
+    }
+
+    public UserAttributes totalPoints(final String totalPoints) {
+        this.totalPoints = totalPoints;
+        return this;
+    }
+
+    public UserAttributes visitsCount(final String visitsCount) {
+        this.visitsCount = visitsCount;
+        return this;
+    }
 
     @Override
     public String toString() {
@@ -166,11 +188,14 @@ public class UserAttributes implements Parcelable {
                 ", lng=" + lng +
                 ", photoThumbUrl='" + photoThumbUrl + '\'' +
                 ", photoLargeUrl='" + photoLargeUrl + '\'' +
-                ", (base64PhotoData!=null)='" + (base64PhotoData!=null) + '\'' +
+                ", has base64PhotoData? ='" + (base64PhotoData != null)  + '\'' +
                 ", facebookAccessToken='" + facebookAccessToken + '\'' +
                 ", facebookId='" + facebookId + '\'' +
+                ", visitsCount='" + visitsCount + '\'' +
+                ", totalPoints='" + totalPoints + '\'' +
                 '}';
     }
+
 
     @Override
     public int describeContents() {
@@ -191,6 +216,8 @@ public class UserAttributes implements Parcelable {
         dest.writeString(this.base64PhotoData);
         dest.writeString(this.facebookAccessToken);
         dest.writeString(this.facebookId);
+        dest.writeString(this.visitsCount);
+        dest.writeString(this.totalPoints);
     }
 
     public UserAttributes() {
@@ -209,9 +236,11 @@ public class UserAttributes implements Parcelable {
         this.base64PhotoData = in.readString();
         this.facebookAccessToken = in.readString();
         this.facebookId = in.readString();
+        this.visitsCount = in.readString();
+        this.totalPoints = in.readString();
     }
 
-    public static final Parcelable.Creator<UserAttributes> CREATOR = new Parcelable.Creator<UserAttributes>() {
+    public static final Creator<UserAttributes> CREATOR = new Creator<UserAttributes>() {
         public UserAttributes createFromParcel(Parcel source) {
             return new UserAttributes(source);
         }

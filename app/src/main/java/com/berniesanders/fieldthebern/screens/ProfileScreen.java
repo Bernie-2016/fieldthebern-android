@@ -1,7 +1,9 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -16,6 +18,7 @@ import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
 import com.berniesanders.fieldthebern.views.ProfileView;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -124,6 +127,9 @@ public class ProfileScreen extends FlowPathBase {
         @Bind(R.id.door_count)
         TextView doorCountTextView;
 
+        @Bind(R.id.avatar)
+        ImageView avatar;
+
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileView
          * Constructor parameters here are injected automatically
@@ -144,6 +150,26 @@ public class ProfileScreen extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ProfileView view = this.getView();
+
+            TabHost tabHost=(TabHost) getView().findViewById(R.id.tabHost);
+            tabHost.setup();
+
+            TabHost.TabSpec spec1=tabHost.newTabSpec("Tab 1");
+            spec1.setContent(R.id.ranking_listview);
+            spec1.setIndicator("friends");
+
+            TabHost.TabSpec spec2=tabHost.newTabSpec("Tab 2");
+            spec2.setIndicator("state");
+            spec2.setContent(R.id.ranking_listview2);
+
+            TabHost.TabSpec spec3=tabHost.newTabSpec("Tab 3");
+            spec3.setIndicator("everyone");
+            spec3.setContent(R.id.ranking_listview3);
+
+            tabHost.addTab(spec1);
+            tabHost.addTab(spec2);
+            tabHost.addTab(spec3);
+
             if (view != null) {
                 ButterKnife.bind(this, view);
                 userRepo.getMe().subscribeOn(Schedulers.io())
@@ -157,12 +183,10 @@ public class ProfileScreen extends FlowPathBase {
                                     fullNameTextView.setText(firstName + " " + lastName);
                                 }
 
-                                // TODO replace with actual data
-                                String pointCount = "10";
-                                String doorCount = "20";
+                                pointCountTextView.setText(user.getData().attributes().totalPoints());
+                                doorCountTextView.setText(user.getData().attributes().visitsCount());
 
-                                pointCountTextView.setText(pointCount);
-                                doorCountTextView.setText(doorCount);
+                                loadAvatar(user);
                             }
                         }).subscribe();
                 rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE)).subscribeOn(Schedulers.io())
@@ -192,6 +216,12 @@ public class ProfileScreen extends FlowPathBase {
             } else {
                 Timber.w("ProfileScreen.onLoad view is unavailable");
             }
+        }
+
+        private void loadAvatar(User user) {
+            Picasso.with(getView().getContext())
+                    .load(user.getData().attributes().getPhotoThumbUrl())
+                    .into(avatar);
         }
 
         /**

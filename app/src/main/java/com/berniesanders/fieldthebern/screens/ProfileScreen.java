@@ -118,6 +118,12 @@ public class ProfileScreen extends FlowPathBase {
         @Bind(R.id.ranking_listview)
         ListView rankingsListView;
 
+        @Bind(R.id.point_count)
+        TextView pointCountTextView;
+
+        @Bind(R.id.door_count)
+        TextView doorCountTextView;
+
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileView
          * Constructor parameters here are injected automatically
@@ -150,6 +156,13 @@ public class ProfileScreen extends FlowPathBase {
                                 if (fullNameTextView != null) {
                                     fullNameTextView.setText(firstName + " " + lastName);
                                 }
+
+                                // TODO replace with actual data
+                                String pointCount = "10";
+                                String doorCount = "20";
+
+                                pointCountTextView.setText(pointCount);
+                                doorCountTextView.setText(doorCount);
                             }
                         }).subscribe();
                 rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE)).subscribeOn(Schedulers.io())
@@ -167,6 +180,15 @@ public class ProfileScreen extends FlowPathBase {
                             }
                         })
                         .subscribe();
+
+                userRepo.getMe().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnNext(new Action1<User>() {
+                            @Override
+                            public void call(User user) {
+                            }
+                        }).subscribe();
+
             } else {
                 Timber.w("ProfileScreen.onLoad view is unavailable");
             }

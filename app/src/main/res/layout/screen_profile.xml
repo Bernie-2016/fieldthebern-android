@@ -4,10 +4,12 @@
 <com.berniesanders.fieldthebern.views.ProfileView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:background="@color/bernie_dark_blue"
+    android:clipChildren="false"
     >
 
 
@@ -95,7 +97,7 @@
             android:id="@+id/full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/profile"
+            tools:text="@string/profile"
             android:textColor="@android:color/white"
             android:textSize="36sp"
             tools:ignore="MissingPrefix"
@@ -133,6 +135,11 @@
         <!--android:id="@+id/submit_friends"-->
         <!--android:id="@+id/submit_state"-->
         <!--android:id="@+id/submit_everyone"-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        >
         <TabHost
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -177,6 +184,19 @@
                 </FrameLayout>
             </LinearLayout>
         </TabHost>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:elevation="4dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="32dp"
+            android:src="@drawable/ic_add_white_24dp"
+            app:fabSize="normal"
+            app:borderWidth="0dp"
+        />
 
+    </RelativeLayout>
 
 </com.berniesanders.fieldthebern.views.ProfileView>

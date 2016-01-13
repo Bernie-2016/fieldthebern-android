@@ -294,7 +294,7 @@ public class ProfileScreen extends FlowPathBase {
 
         @OnClick(R.id.submit_profile_settings)
         void onEditProfileClicked() {
-            Flow.get(getView()).set(new ProfileSettingsScreen());
+            Flow.get(getView()).set(new ProfileEditScreen());
         }
     }
 }

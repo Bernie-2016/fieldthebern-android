@@ -107,6 +107,7 @@ public class ProfileScreen extends FlowPathBase {
         // Expose UserRepo through injection
         @SuppressWarnings("unused")
         UserRepo userRepo();
+
         RankingsRepo rankingsRepo();
     }
 
@@ -179,18 +180,18 @@ public class ProfileScreen extends FlowPathBase {
 
             ProfileView view = this.getView();
 
-            TabHost tabHost=(TabHost) getView().findViewById(R.id.tabHost);
+            TabHost tabHost = (TabHost) getView().findViewById(R.id.tabHost);
             tabHost.setup();
 
-            TabHost.TabSpec spec1=tabHost.newTabSpec("Tab 1");
+            TabHost.TabSpec spec1 = tabHost.newTabSpec("Tab 1");
             spec1.setContent(R.id.ranking_listview);
             spec1.setIndicator("friends");
 
-            TabHost.TabSpec spec2=tabHost.newTabSpec("Tab 2");
+            TabHost.TabSpec spec2 = tabHost.newTabSpec("Tab 2");
             spec2.setIndicator("state");
             spec2.setContent(R.id.ranking_listview2);
 
-            TabHost.TabSpec spec3=tabHost.newTabSpec("Tab 3");
+            TabHost.TabSpec spec3 = tabHost.newTabSpec("Tab 3");
             spec3.setIndicator("everyone");
             spec3.setContent(R.id.ranking_listview3);
 
@@ -234,7 +235,9 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Rankings>() {
                                 @Override
                                 public void call(Rankings rankings) {
-                                    rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    if (rankings != null) {
+                                        rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    }
                                 }
                             },
                             new Action1<Throwable>() {
@@ -252,7 +255,9 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Rankings>() {
                                 @Override
                                 public void call(Rankings rankings) {
-                                    rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    if (rankings != null) {
+                                        rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    }
                                 }
                             },
                             new Action1<Throwable>() {
@@ -270,7 +275,9 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Rankings>() {
                                 @Override
                                 public void call(Rankings rankings) {
-                                    rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    if (rankings != null) {
+                                        rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    }
                                 }
                             },
                             new Action1<Throwable>() {
@@ -313,6 +320,7 @@ public class ProfileScreen extends FlowPathBase {
         void onEditProfileClicked() {
             Flow.get(getView()).set(new ProfileEditScreen());
         }
+
         @OnClick(R.id.fab)
         void invite() {
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(

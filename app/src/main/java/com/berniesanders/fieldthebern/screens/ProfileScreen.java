@@ -1,5 +1,7 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -9,6 +11,8 @@ import android.widget.TextView;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.Rankings;
@@ -23,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
@@ -115,6 +120,15 @@ public class ProfileScreen extends FlowPathBase {
 
         private final RankingsRepo rankingsRepo;
 
+        @BindString(R.string.profile)
+        String screenTitle;
+        @BindString(R.string.invite_subject)
+        String inviteSubject;
+        @BindString(R.string.invite_body)
+        String inviteBody;
+        @BindString(R.string.invite_friends)
+        String inviteFriends;
+
         @Bind(R.id.full_name)
         TextView fullNameTextView;
 
@@ -155,6 +169,14 @@ public class ProfileScreen extends FlowPathBase {
         @Override
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
+            ButterKnife.bind(this, getView());
+            ActionBarService
+                    .get(getView())
+                    .showToolbar()
+                    .closeAppbar()
+                    .setMainImage(null)
+                    .setConfig(new ActionBarController.Config(screenTitle, null));
+
             ProfileView view = this.getView();
 
             TabHost tabHost=(TabHost) getView().findViewById(R.id.tabHost);
@@ -176,93 +198,88 @@ public class ProfileScreen extends FlowPathBase {
             tabHost.addTab(spec2);
             tabHost.addTab(spec3);
 
-            if (view != null) {
 
-                ButterKnife.bind(this, view);
+            ButterKnife.bind(this, view);
 
-                userRepo.getMe()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                new Action1<User>() {
-                                    @Override
-                                    public void call(User user) {
-                                        String firstName = user.getData().attributes().getFirstName();
-                                        String lastName = user.getData().attributes().getLastName();
-                                        if (fullNameTextView != null) {
-                                            fullNameTextView.setText(firstName + " " + lastName);
-                                        }
-
-                                        pointCountTextView.setText(user.getData().attributes().totalPoints());
-                                        doorCountTextView.setText(user.getData().attributes().visitsCount());
-
-                                        loadAvatar(user);
+            userRepo.getMe()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<User>() {
+                                @Override
+                                public void call(User user) {
+                                    String firstName = user.getData().attributes().getFirstName();
+                                    String lastName = user.getData().attributes().getLastName();
+                                    if (fullNameTextView != null) {
+                                        fullNameTextView.setText(firstName + " " + lastName);
                                     }
-                                },
-                                new Action1<Throwable>() {
-                                    @Override
-                                    public void call(Throwable throwable) {
-                                        Timber.wtf(throwable, "rankings failed");
-                                    }
-                                });
 
-                rankingsRepo.get(new RankingSpec(RankingSpec.FRIENDS))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                new Action1<Rankings>() {
-                                    @Override
-                                    public void call(Rankings rankings) {
-                                        rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
-                                    }
-                                },
-                                new Action1<Throwable>() {
-                                    @Override
-                                    public void call(Throwable throwable) {
-                                        Timber.wtf(throwable, "rankings failed");
-                                    }
+                                    pointCountTextView.setText(user.getData().attributes().totalPoints());
+                                    doorCountTextView.setText(user.getData().attributes().visitsCount());
+
+                                    loadAvatar(user);
                                 }
-                        );
-
-                rankingsRepo.get(new RankingSpec(RankingSpec.STATE))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                new Action1<Rankings>() {
-                                    @Override
-                                    public void call(Rankings rankings) {
-                                        rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
-                                    }
-                                },
-                                new Action1<Throwable>() {
-                                    @Override
-                                    public void call(Throwable throwable) {
-                                        Timber.wtf(throwable, "rankings failed");
-                                    }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
                                 }
-                        );
+                            });
 
-                rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                new Action1<Rankings>() {
-                                    @Override
-                                    public void call(Rankings rankings) {
-                                        rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
-                                    }
-                                },
-                                new Action1<Throwable>() {
-                                    @Override
-                                    public void call(Throwable throwable) {
-                                        Timber.wtf(throwable, "rankings failed");
-                                    }
+            rankingsRepo.get(new RankingSpec(RankingSpec.FRIENDS))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<Rankings>() {
+                                @Override
+                                public void call(Rankings rankings) {
+                                    rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
                                 }
-                        );
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            }
+                    );
 
-            } else {
-                Timber.w("ProfileScreen.onLoad view is unavailable");
-            }
+            rankingsRepo.get(new RankingSpec(RankingSpec.STATE))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<Rankings>() {
+                                @Override
+                                public void call(Rankings rankings) {
+                                    rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            }
+                    );
+
+            rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<Rankings>() {
+                                @Override
+                                public void call(Rankings rankings) {
+                                    rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            }
+                    );
         }
 
         private void loadAvatar(User user) {
@@ -295,6 +312,15 @@ public class ProfileScreen extends FlowPathBase {
         @OnClick(R.id.submit_profile_settings)
         void onEditProfileClicked() {
             Flow.get(getView()).set(new ProfileEditScreen());
+        }
+        @OnClick(R.id.fab)
+        void invite() {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", "", null));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, inviteSubject);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, inviteBody);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{}); // String[] addresses
+            getView().getContext().startActivity(Intent.createChooser(emailIntent, inviteFriends));
         }
     }
 }

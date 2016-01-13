@@ -29,21 +29,20 @@ public class SignupView extends RelativeLayout {
     @Bind(R.id.first_name)
     AppCompatEditText firstName;
 
-
     @Bind(R.id.last_name)
     AppCompatEditText lastName;
-
 
     @Bind(R.id.email)
     AppCompatEditText email;
 
-
     @Bind(R.id.password)
     AppCompatEditText password;
 
-
     @Bind(R.id.user_photo)
     ImageView userImageView;
+
+    @Bind(R.id.mask)
+    ImageView mask;
 
 
     public SignupView(Context context) {
@@ -134,5 +133,9 @@ public class SignupView extends RelativeLayout {
 
     public AppCompatEditText getPassword() {
         return password;
+    }
+
+    public void showMask() {
+        mask.setVisibility(VISIBLE);
     }
 }

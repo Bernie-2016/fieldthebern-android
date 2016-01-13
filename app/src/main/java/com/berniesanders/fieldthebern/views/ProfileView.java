@@ -3,6 +3,7 @@ package com.berniesanders.fieldthebern.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.ProfileScreen;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
  * Example mortar view.
  * Change what it extends as needed. Any View/Layout type is fine to extend
  */
-public class ProfileView extends FrameLayout {
+public class ProfileView extends LinearLayout {
 
     /**
      * Make sure you are pointing at the correct presenter type

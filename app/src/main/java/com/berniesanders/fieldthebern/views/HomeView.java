@@ -63,12 +63,14 @@ public class HomeView extends RelativeLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        if (isInEditMode()) { return; }
         presenter.takeView(this);
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        if (isInEditMode()) { return; }
         presenter.dropView(this);
     }
 

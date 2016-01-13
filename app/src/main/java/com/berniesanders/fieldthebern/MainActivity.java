@@ -30,27 +30,30 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.berniesanders.fieldthebern.config.Actions;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.DialogService;
-import com.berniesanders.fieldthebern.controllers.ToastController;
-import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.FacebookService;
 import com.berniesanders.fieldthebern.controllers.LocationController;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionController;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
+import com.berniesanders.fieldthebern.controllers.PhotoController;
+import com.berniesanders.fieldthebern.controllers.PhotoService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogController;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
+import com.berniesanders.fieldthebern.controllers.ToastController;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbActivityScope;
 import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.Collection;
 import com.berniesanders.fieldthebern.models.Page;
-import com.berniesanders.fieldthebern.controllers.ActionBarController;
-import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.mortar.GsonParceler;
 import com.berniesanders.fieldthebern.mortar.MortarScreenSwitcherFrame;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.screens.CollectionScreen;
 import com.berniesanders.fieldthebern.screens.InitialScreen;
 import com.berniesanders.fieldthebern.screens.PageScreen;
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity
         PermissionController.Activity,
         ProgressDialogController.Activity,
         ToastController.Activity,
+        PhotoController.Activity,
         Flow.Dispatcher {
 
     private MortarScope activityScope;
@@ -148,6 +152,12 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     PermissionController permissionController;
+
+    @Inject
+    PhotoController photoController;
+
+    @Inject
+    RankingsRepo rankingsRepo;
 
     @Override
     public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
@@ -224,12 +234,17 @@ public class MainActivity extends AppCompatActivity
         permissionController.takeView(this);
         progressDialogController.takeView(this);
         toastController.takeView(this);
+        photoController.takeView(this);
+
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         facebookController.onActivityResult(requestCode, resultCode, data);
+        photoController.onResult(requestCode, resultCode, data);
     }
     /**
      * Callback received when a permissions request has been completed.
@@ -264,6 +279,7 @@ public class MainActivity extends AppCompatActivity
                     .withService(LocationService.NAME, locationController)
                     .withService(ProgressDialogService.NAME, progressDialogController)
                     .withService(PermissionService.NAME, permissionController)
+                    .withService(PhotoService.NAME, photoController)
                     .build(getScopeName());
         }
     }
@@ -309,6 +325,7 @@ public class MainActivity extends AppCompatActivity
         permissionController.dropView(this);
         progressDialogController.dropView(this);
         toastController.dropView(this);
+        photoController.dropView(this);
 
         // activityScope may be null in case isWrongInstance() returned true in onCreate()
         if (isFinishing() && activityScope != null) {

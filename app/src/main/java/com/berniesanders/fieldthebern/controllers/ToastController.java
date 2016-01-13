@@ -35,6 +35,10 @@ public class ToastController extends Presenter<ToastController.Activity> {
     }
 
     public void bern(String text) {
+        bern(text, Toast.LENGTH_LONG);
+    }
+
+    public void bern(String text, int toastDuration) {
         //Toast.makeText(getView().getActivity(), text, Toast.LENGTH_LONG).show();
 
         View layout = LayoutInflater
@@ -42,7 +46,7 @@ public class ToastController extends Presenter<ToastController.Activity> {
                 .inflate(R.layout.toast,
                         (ViewGroup) getView().getActivity().findViewById(R.id.toast_layout_root),
                         false
-                        );
+                );
 
         ImageView image = (ImageView) layout.findViewById(R.id.image);
         image.setImageResource(R.drawable.ic_info_outline_white_24dp);
@@ -51,7 +55,7 @@ public class ToastController extends Presenter<ToastController.Activity> {
 
         Toast toast = new Toast(getView().getActivity());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(toastDuration);
         toast.setView(layout);
         toast.show();
     }

@@ -16,6 +16,8 @@ import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.PageContentDeserializer;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
+import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -42,6 +44,7 @@ public class MainModule {
         this.context = context.getApplicationContext();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.disableHtmlEscaping();
         gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
         gsonBuilder.registerTypeAdapter(CanvassData.class, new CanvassDataSerializer());
@@ -92,6 +95,12 @@ public class MainModule {
 
     @Provides
     @Singleton
+    public StatesRepo provideStatesRepo() {
+        return new StatesRepo(gson, context);
+    }
+
+    @Provides
+    @Singleton
     public RxSharedPreferences provideRxPrefs() {
         return rxPrefs;
     }
@@ -107,6 +116,12 @@ public class MainModule {
     @Singleton
     public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
         return new VisitRepo(gson, tokenRepo, rxPrefs, config);
+    }
+
+    @Provides
+    @Singleton
+    public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
+        return new RankingsRepo(gson, tokenRepo, rxPrefs, config);
     }
 
     @Provides

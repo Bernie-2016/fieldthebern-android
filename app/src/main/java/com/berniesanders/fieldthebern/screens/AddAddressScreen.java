@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.location.Address;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -15,6 +16,7 @@ import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.date.MinTimeBetweenVisit;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
@@ -30,7 +32,7 @@ import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.berniesanders.fieldthebern.views.AddAddressView;
-import com.bugsnag.android.Bugsnag;
+import com.crashlytics.android.Crashlytics;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -120,6 +122,7 @@ public class AddAddressScreen extends FlowPathBase {
         @BindString(R.string.are_you_sure_address_correct) String confirmTitle;
         @BindString(R.string.are_you_sure_address_body) String confirmBody;
         @BindString(R.string.err_address_blank) String addressBlank;
+        @BindString(R.string.min_time_not_elapsed) String minTimeNotElapsed;
 
 
         @Inject
@@ -242,6 +245,12 @@ public class AddAddressScreen extends FlowPathBase {
 
             @Override
             public void onError(Throwable e) {
+
+                if (getView() == null) {
+                    Timber.e(e, "singleAddressObserver onError");
+                    return;
+                }
+
                 ProgressDialogService.get(getView()).dismiss();
 
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
@@ -269,17 +278,31 @@ public class AddAddressScreen extends FlowPathBase {
                     //wtf
                     ToastService.get(getView()).bern("unknown error");//TODO externalize string
                     Timber.e(e, "singleAddressObserver unknown onError");
-                    Bugsnag.notify(e);
+                    Crashlytics.logException(e);
                 }
             }
 
 
             @Override
             public void onNext(SingleAddressResponse response) {
-                Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s", response.addresses().get(0) );
-                address = response.addresses().get(0);
-                address.included(response.included());
-                Flow.get(getView()).set(new NewVisitScreen(address));
+                Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s",
+                        response.addresses().get(0) );
+
+                try {
+                    if (MinTimeBetweenVisit.elapsed(
+                            response.addresses().get(0).attributes().visitedAt())) {
+                        address = response.addresses().get(0);
+                        address.included(response.included());
+                        visitRepo.clear();
+                        Flow.get(getView()).set(new NewVisitScreen(address));
+                    } else {
+                        ToastService.get(getView()).bern(minTimeNotElapsed, Toast.LENGTH_LONG);
+                    }
+                } catch (Exception e) {
+                    Timber.e(e, "SingleAddressResponse onNext error ");
+
+                }
+
             }
         };
     }

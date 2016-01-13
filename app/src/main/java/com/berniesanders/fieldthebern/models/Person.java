@@ -37,6 +37,18 @@ public class Person extends CanvassData implements Parcelable {
     Integer id; //null if we're creating a new person in the db
     Attributes attributes = new Attributes();
 
+    transient boolean spokenTo = false;
+
+    public boolean spokenTo() {
+        return this.spokenTo;
+    }
+
+    public Person spokenTo(final boolean spokenTo) {
+        this.spokenTo = spokenTo;
+        return this;
+    }
+
+
     public Integer id() {
         return this.id;
     }
@@ -78,6 +90,7 @@ public class Person extends CanvassData implements Parcelable {
         Person copy = new Person();
         copy.id(src.id());
         copy.type(src.type());
+        copy.spokenTo(src.spokenTo());
 
         Attributes srcAttributes = src.attributes();
 
@@ -97,6 +110,7 @@ public class Person extends CanvassData implements Parcelable {
     public void update(Person src) {
         this.id(src.id());
         this.type(src.type());
+        this.spokenTo(src.spokenTo());
 
         Attributes srcAttributes = src.attributes();
 

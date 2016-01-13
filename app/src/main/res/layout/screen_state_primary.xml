@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.berniesanders.fieldthebern.views.StatePrimaryView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_vertical_margin"
+    tools:background="@color/bernie_dark_blue">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/state_primary_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/iowa"/>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_state_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/state_primary_image"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/state_primary_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="@string/iowa"/>
+
+        <TextView
+            android:id="@+id/state_primary_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/b_light_blue2"
+            android:textSize="14sp"
+            android:paddingLeft="12dp"
+            android:text="@string/caucuses"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/state_primary_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/white"
+        android:layout_toRightOf="@id/state_primary_image"
+        android:layout_marginLeft="30dp"
+        android:textSize="14sp"
+        android:layout_below="@id/linear_layout_state_primary"
+        android:text="@string/sample_date"/>
+
+    <TextView
+        android:id="@+id/state_primary_deadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/state_primary_date"
+        android:layout_marginTop="24dp"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:text="@string/sample_reg_deadline"/>
+
+    <TextView
+        android:id="@+id/state_primary_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/state_primary_deadline"
+        android:layout_marginTop="14dp"
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        android:text="@string/sample_description"/>
+
+</com.berniesanders.fieldthebern.views.StatePrimaryView>

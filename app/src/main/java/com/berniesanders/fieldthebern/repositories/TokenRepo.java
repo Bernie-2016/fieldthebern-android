@@ -79,7 +79,7 @@ public class TokenRepo {
         return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
             @Override
             public Token call(Token token) {
-
+                Timber.v("loginEmail() saving token");
                 Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
                 tokenPref.set(gson.toJson(token));
                 return token;
@@ -95,7 +95,7 @@ public class TokenRepo {
         return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
             @Override
             public Token call(Token token) {
-
+                Timber.v("loginFacebook() saving token");
                 Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
                 tokenPref.set(gson.toJson(token));
                 return token;
@@ -137,7 +137,14 @@ public class TokenRepo {
     public Observable<Token> refresh() {
         Timber.v("token refresh....");
 
-        String refreshToken = get().refreshToken();
+        String refreshToken = null;
+        try {
+            refreshToken = get().refreshToken();
+        } catch (NullPointerException npe) {
+            Timber.w(npe, "attempted to refresh the token but it wasn't there");
+            return null;
+        }
+
 
         return endpoint.refresh(
                 Token.GRANT_REFRESH,

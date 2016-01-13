@@ -15,6 +15,7 @@ import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.Token;
@@ -23,6 +24,7 @@ import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
+import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.berniesanders.fieldthebern.views.LoginView;
 import com.f2prateek.rx.preferences.Preference;
@@ -37,10 +39,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.Provides;
 import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
 import retrofit.HttpException;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -112,6 +116,7 @@ public class LoginScreen extends FlowPathBase {
         @BindString(R.string.err_password_blank) String passwordBlank;
 
         private final User user;
+        private final UserRepo userRepo;
         private final TokenRepo tokenRepo;
         private final ErrorResponseParser errorResponseParser;
         private final RxSharedPreferences rxPrefs;
@@ -125,11 +130,13 @@ public class LoginScreen extends FlowPathBase {
 
         @Inject
         Presenter(User user,
+                  UserRepo userRepo,
                   TokenRepo tokenRepo,
                   ErrorResponseParser errorResponseParser,
                   RxSharedPreferences rxPrefs,
                   Gson gson) {
             this.user = user;
+            this.userRepo = userRepo;
             this.tokenRepo = tokenRepo;
             this.errorResponseParser = errorResponseParser;
             this.rxPrefs = rxPrefs;
@@ -242,13 +249,19 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.d("loginEmail done.");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
             }
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "loginEmail error");
+                if (getView() == null) {
+                    Timber.e(e, "loginEmail onError");
+                    return;
+                }
+
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());
@@ -259,6 +272,18 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onNext(Token token) {
                 Timber.d("loginEmail onNext: %s", token.toString());
+
+                userRepo.getMe()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<User>() {
+                    @Override
+                    public void call(User user) {
+                        ProgressDialogService.get(getView()).dismiss();
+                        FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+                        Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+                    }
+                });
             }
         };
 
@@ -266,25 +291,41 @@ public class LoginScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.d("refreshObserver done.");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
-                Flow.get(getView().getContext()).set(new HomeScreen());
             }
 
             @Override
             public void onError(Throwable e) {
-                Timber.e(e, "refreshObserver error");
+                if (getView() == null) {
+                    Timber.e(e, "refreshObserver onError");
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
             }
 
             @Override
             public void onNext(Token token) {
                 Timber.d("refreshObserver onNext: %s", token.toString());
+                userRepo.getMe()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<User>() {
+                            @Override
+                            public void call(User user) {
+                                ProgressDialogService.get(getView()).dismiss();
+                                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+                                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+                            }
+                        });
             }
         };
 
         @OnClick(R.id.no_account)
         void haveAccount() {
-            Flow.get(getView().getContext()).set(new ChooseSignupScreen());
+            Flow.get(getView()).goBack();
         }
     }
 }

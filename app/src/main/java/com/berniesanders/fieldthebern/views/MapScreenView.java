@@ -91,6 +91,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     MapScreen.Presenter presenter;
     private OnCameraChange onCameraChangeListener;
     private OnAddressChange onAddressChangeListener;
+    private OnMarkerClick onMarkerClick;
     private CameraPosition cameraPosition;
     private Map<String, ApiAddress> markerAddressMap = new HashMap<>();
     private List<ApiAddress> nearbyAddresses;
@@ -221,7 +222,10 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         handler.removeCallbacksAndMessages(null);
-        googleMap.setOnCameraChangeListener(null);
+
+        if (googleMap!=null) {//thanks fragments
+            googleMap.setOnCameraChangeListener(null);
+        }
     }
 
     private void initCameraPosition(final GoogleMap map) {
@@ -266,6 +270,13 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                 map.moveCamera(CameraUpdateFactory
                         .newCameraPosition(getCameraPosition(location)));
                 connectCameraObservable(map);
+
+                geocodeSubscription = LocationService.get(MapScreenView.this)
+                        .reverseGeocode(new LatLng(location.getLatitude(), location.getLongitude()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .single()
+                        .subscribe(geocodeObserver);
             }
         };
 
@@ -300,18 +311,23 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         @Override
-        public void onNext(CameraPosition cameraPosition) {
-            LatLng latLng = cameraPosition.target;
+        public void onNext(final CameraPosition cameraPosition) {
+            post(new Runnable() {
+                @Override
+                public void run() {
+                    LatLng latLng = cameraPosition.target;
 
-            if (onCameraChangeListener!=null) {
-                onCameraChangeListener.onCameraChange(cameraPosition, true);
-            }
+                    if (onCameraChangeListener!=null) {
+                        onCameraChangeListener.onCameraChange(cameraPosition, true, getRadius());
+                    }
 
-            geocodeSubscription = LocationService.get(MapScreenView.this)
-                    .reverseGeocode(latLng)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(geocodeObserver);
+                    geocodeSubscription = LocationService.get(MapScreenView.this)
+                            .reverseGeocode(latLng)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(geocodeObserver);
+                }
+            });
         }
     };
 
@@ -406,6 +422,10 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         this.onAddressChangeListener = onAddressChangeListener;
     }
 
+    public void setOnMarkerClick(OnMarkerClick onMarkerClick) {
+        this.onMarkerClick = onMarkerClick;
+    }
+
     public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
         this.nearbyAddresses = nearbyAddresses;
         if (googleMap==null) { return; }
@@ -434,7 +454,24 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         googleMap.setOnMarkerClickListener(onMarkerClickListener);
+
+
     }
+
+    public int getRadius() {
+
+        double startLat  = googleMap.getProjection().getVisibleRegion().latLngBounds.northeast.latitude;
+        double startLng  = googleMap.getProjection().getVisibleRegion().latLngBounds.northeast.longitude;
+        double endLat  = googleMap.getProjection().getVisibleRegion().latLngBounds.southwest.latitude;
+        double endLng  = googleMap.getProjection().getVisibleRegion().latLngBounds.southwest.longitude;
+
+        float[] results = new float[10];
+        Location.distanceBetween(startLat, startLng, endLat, endLng, results);
+        Timber.v("getRadius: %f", Math.ceil(results[0]));
+        return (int) Math.ceil(results[0]);
+    }
+
+
 
     GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
         @Override
@@ -442,6 +479,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
             //stop watching the camera change while the map moves to the maker
             unsubscribe();
+            if (onMarkerClick!=null) {
+                onMarkerClick.onMarkerClick();
+            }
 
             //set the address manually
             ApiAddress apiAddress = markerAddressMap.get(marker.getId());
@@ -457,7 +497,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
                 public void run() {
                     if(onCameraChangeListener!=null) {
                         //notify the listener that the camera moved
-                        onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false);
+                        onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false, 100);
                         connectCameraObservable(googleMap);
                     }
                 }
@@ -482,10 +522,14 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public interface OnCameraChange {
-        void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses);
+        void onCameraChange(CameraPosition cameraPosition, boolean shouldRefreshAddresses, int radius);
     }
 
     public interface OnAddressChange {
         void onAddressChange(ApiAddress apiAddress);
+    }
+
+    public interface OnMarkerClick {
+        void onMarkerClick();
     }
 }

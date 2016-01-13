@@ -17,12 +17,13 @@ import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
+import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
-import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.parsing.VisitModified;
+import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.NewVisitView;
 
@@ -46,7 +47,6 @@ import timber.log.Timber;
 
 /**
  * Example for creating new Mortar Screen that helps explain how it all works
- *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_new_visit)
@@ -88,7 +88,7 @@ public class NewVisitScreen extends FlowPathBase {
 
 
     @dagger.Module
-    class Module {
+    class Module { // expose module to presenter and pass the data
         private final ApiAddress apiAddress;
 
         Module(ApiAddress apiAddress) {
@@ -111,6 +111,7 @@ public class NewVisitScreen extends FlowPathBase {
         ApiAddress apiAddress();
         VisitRepo visitRepo();
         ErrorResponseParser errorResponseParser();
+        StatesRepo statesRepo();
     }
 
     @FtbScreenScope
@@ -120,6 +121,11 @@ public class NewVisitScreen extends FlowPathBase {
         private final VisitRepo visitRepo;
         private final ErrorResponseParser errorResponseParser;
         Subscription visitSubscription;
+
+        private final StatesRepo statesRepo;
+
+        Subscription statePrimarySubscription;
+        private StatePrimaryResponse.StatePrimary[] statePrimaries;
 
         @BindString(android.R.string.cancel) String cancel;
         @BindString(R.string.new_visit) String newVisit;
@@ -135,10 +141,11 @@ public class NewVisitScreen extends FlowPathBase {
         SwitchCompat askedToLeaveSwitch;
 
         @Inject
-        Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser) {
+        Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser, StatesRepo statesRepo) {
             this.apiAddress = apiAddress;
             this.visitRepo = visitRepo;
             this.errorResponseParser = errorResponseParser;
+            this.statesRepo = statesRepo;
 
             if (!visitRepo.inProgress()) {
                 visitRepo.start(apiAddress);
@@ -154,16 +161,47 @@ public class NewVisitScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
             initSwitches();
-            setSwitchListeners();
             getView().showPeople(visitRepo.get());
+
+            statePrimarySubscription = statesRepo.getStatePrimaries()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(observer);
         }
+
+        Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
+            @Override
+            public void onCompleted() {
+                if (getView() == null) {
+                    return;
+                }
+                getView().showPrimary(statePrimaries, apiAddress);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e("Error on stateprimaryobserver");
+            }
+
+            @Override
+            public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
+                Presenter.this.statePrimaries = statePrimary;
+            }
+        };
 
         /**
          * If user rotated the device, be sure the switches match our boolean values
          */
         private void initSwitches() {
-            noOneHomeSwitch.setChecked(noOneHome);
+            if (VisitModified.personAdded(visitRepo.getPreviousPeople(), visitRepo.get())) {
+                noOneHome = false;
+                noOneHomeSwitch.setChecked(noOneHome);
+                noOneHomeSwitch.setEnabled(false);
+            } else {
+                noOneHomeSwitch.setChecked(noOneHome);
+            }
             askedToLeaveSwitch.setChecked(askedToLeave);
+            setSwitchListeners();
         }
 
         private void setSwitchListeners() {
@@ -178,37 +216,38 @@ public class NewVisitScreen extends FlowPathBase {
 
         CompoundButton.OnCheckedChangeListener noOneHomeListener =
                 new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                noOneHome = isChecked;
+                        noOneHome = isChecked;
 
-                //if no one was home, can't have been asked to leave
-                if (isChecked) {
-                    clearSwitchListeners();
-                    askedToLeaveSwitch.setChecked(false);
-                    askedToLeave = false;
-                    setSwitchListeners();
-                }
-            }
-        };
+                        //if no one was home, can't have been asked to leave
+                        if (isChecked) {
+                            clearSwitchListeners();
+                            askedToLeaveSwitch.setChecked(false);
+                            askedToLeave = false;
+                            getView().clearPersonCheckboxes();
+                            setSwitchListeners();
+                        }
+                    }
+                };
 
         CompoundButton.OnCheckedChangeListener askedToLeaveListener =
                 new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                askedToLeave = isChecked;
+                        askedToLeave = isChecked;
 
-                //if asked to leave, someone must have been home
-                if (isChecked) {
-                    clearSwitchListeners();
-                    noOneHomeSwitch.setChecked(false);
-                    noOneHome = false;
-                    setSwitchListeners();
-                }
-            }
-        };
+                        //if asked to leave, someone must have been home
+                        if (isChecked) {
+                            clearSwitchListeners();
+                            noOneHomeSwitch.setChecked(false);
+                            noOneHome = false;
+                            setSwitchListeners();
+                        }
+                    }
+                };
 
         void setActionBar() {
             ActionBarController.MenuAction menu =
@@ -245,15 +284,25 @@ public class NewVisitScreen extends FlowPathBase {
             Flow.get(getView()).set(new AddPersonScreen(null));
         }
 
+        @OnClick(R.id.view_state_primary)
+        public void viewStatePrimaryInfo() {
+            Flow.get(getView()).set(new StatePrimaryScreen(apiAddress));
+        }
+
+        @OnClick(R.id.view_bernie_issues)
+        public void viewBernieIssues() {
+            Flow.get(getView()).set(new Main());
+        }
+
         @OnClick(R.id.submit)
         public void score() {
 
-            if(noOneHome) {
+            if (noOneHome) {
                 //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()
                         .bestCanvassResponse(CanvassResponse.NO_ONE_HOME);
-            } else if(askedToLeave) {
+            } else if (askedToLeave) {
                 //the first item in the included() array is the address
                 ((ApiAddress) visitRepo.get().included().get(0))
                         .attributes()
@@ -301,12 +350,19 @@ public class NewVisitScreen extends FlowPathBase {
             @Override
             public void onCompleted() {
                 Timber.v("visitResultObserver.onCompleted");
+                if (getView() == null) {
+                    return;
+                }
                 ProgressDialogService.get(getView()).dismiss();
             }
 
             @Override
             public void onError(Throwable e) {
                 Timber.e(e, "error submitting visit");
+                if (getView() == null) {
+                    return;
+                }
+
                 ProgressDialogService.get(getView()).dismiss();
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;

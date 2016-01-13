@@ -1,31 +1,38 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.ToastService;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.models.CreateUserRequest;
+import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
-import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
+import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
 import com.berniesanders.fieldthebern.views.ProfileView;
-import com.bugsnag.android.Bugsnag;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
 import mortar.ViewPresenter;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -100,6 +107,8 @@ public class ProfileScreen extends FlowPathBase {
         // Expose UserRepo through injection
         @SuppressWarnings("unused")
         UserRepo userRepo();
+
+        RankingsRepo rankingsRepo();
     }
 
     @FtbScreenScope
@@ -110,20 +119,46 @@ public class ProfileScreen extends FlowPathBase {
          */
         private final UserRepo userRepo;
 
-        @Bind(R.id.first_name)
-        EditText firstNameEditText;
+        private final RankingsRepo rankingsRepo;
 
-        @Bind(R.id.last_name)
-        EditText lastNameEditText;
+        @BindString(R.string.profile)
+        String screenTitle;
+        @BindString(R.string.invite_subject)
+        String inviteSubject;
+        @BindString(R.string.invite_body)
+        String inviteBody;
+        @BindString(R.string.invite_friends)
+        String inviteFriends;
 
+        @Bind(R.id.full_name)
+        TextView fullNameTextView;
+
+        @Bind(R.id.ranking_listview)
+        ListView rankingsListView;
+
+        @Bind(R.id.ranking_listview2)
+        ListView rankingsListView2;
+
+        @Bind(R.id.ranking_listview3)
+        ListView rankingsListView3;
+
+        @Bind(R.id.point_count)
+        TextView pointCountTextView;
+
+        @Bind(R.id.door_count)
+        TextView doorCountTextView;
+
+        @Bind(R.id.avatar)
+        ImageView avatar;
 
         /**
          * When the view is inflated, this presented is automatically injected to the ProfileView
          * Constructor parameters here are injected automatically
          */
         @Inject
-        Presenter(UserRepo userRepo) {
+        Presenter(UserRepo userRepo, RankingsRepo rankingRepo) {
             this.userRepo = userRepo;
+            this.rankingsRepo = rankingRepo;
         }
 
         /**
@@ -136,17 +171,128 @@ public class ProfileScreen extends FlowPathBase {
         protected void onLoad(Bundle savedInstanceState) {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
-            userRepo.getMe().subscribeOn(Schedulers.io())
+            ActionBarService
+                    .get(getView())
+                    .showToolbar()
+                    .closeAppbar()
+                    .setMainImage(null)
+                    .setConfig(new ActionBarController.Config(screenTitle, null));
+
+            ProfileView view = this.getView();
+
+            TabHost tabHost = (TabHost) getView().findViewById(R.id.tabHost);
+            tabHost.setup();
+
+            TabHost.TabSpec spec1 = tabHost.newTabSpec("Tab 1");
+            spec1.setContent(R.id.ranking_listview);
+            spec1.setIndicator("friends");
+
+            TabHost.TabSpec spec2 = tabHost.newTabSpec("Tab 2");
+            spec2.setIndicator("state");
+            spec2.setContent(R.id.ranking_listview2);
+
+            TabHost.TabSpec spec3 = tabHost.newTabSpec("Tab 3");
+            spec3.setIndicator("everyone");
+            spec3.setContent(R.id.ranking_listview3);
+
+            tabHost.addTab(spec1);
+            tabHost.addTab(spec2);
+            tabHost.addTab(spec3);
+
+
+            ButterKnife.bind(this, view);
+
+            userRepo.getMe()
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<User>() {
-                        @Override
-                        public void call(User user) {
-                            String firstName = user.getData().attributes().getFirstName();
-                            String lastName = user.getData().attributes().getLastName();
-                            firstNameEditText.setText(firstName);
-                            lastNameEditText.setText(lastName);
-                        }
-                    }).subscribe();
+                    .subscribe(
+                            new Action1<User>() {
+                                @Override
+                                public void call(User user) {
+                                    String firstName = user.getData().attributes().getFirstName();
+                                    String lastName = user.getData().attributes().getLastName();
+                                    if (fullNameTextView != null) {
+                                        fullNameTextView.setText(firstName + " " + lastName);
+                                    }
+
+                                    pointCountTextView.setText(user.getData().attributes().totalPoints());
+                                    doorCountTextView.setText(user.getData().attributes().visitsCount());
+
+                                    loadAvatar(user);
+                                }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            });
+
+            rankingsRepo.get(new RankingSpec(RankingSpec.FRIENDS))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<Rankings>() {
+                                @Override
+                                public void call(Rankings rankings) {
+                                    if (rankings != null) {
+                                        rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    }
+                                }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            }
+                    );
+
+            rankingsRepo.get(new RankingSpec(RankingSpec.STATE))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<Rankings>() {
+                                @Override
+                                public void call(Rankings rankings) {
+                                    if (rankings != null) {
+                                        rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    }
+                                }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            }
+                    );
+
+            rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            new Action1<Rankings>() {
+                                @Override
+                                public void call(Rankings rankings) {
+                                    if (rankings != null) {
+                                        rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    }
+                                }
+                            },
+                            new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    Timber.wtf(throwable, "rankings failed");
+                                }
+                            }
+                    );
+        }
+
+        private void loadAvatar(User user) {
+            Picasso.with(getView().getContext())
+                    .load(user.getData().attributes().getPhotoThumbUrl())
+                    .into(avatar);
         }
 
         /**
@@ -170,51 +316,19 @@ public class ProfileScreen extends FlowPathBase {
             ButterKnife.unbind(this);
         }
 
-        @OnClick(R.id.submit_profile)
-        void onSaveProfileClicked() {
-            Timber.v("Attempting to save profile");
-            String firstName = firstNameEditText.getText().toString();
-            String lastName = lastNameEditText.getText().toString();
-            UserSpec spec = new UserSpec();
-            User user = new User();
-            user.getData().attributes().firstName(firstName);
-            user.getData().attributes().lastName(lastName);
-            spec.create(new CreateUserRequest());
-            spec.update(user);
-            userRepo.update(spec)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnCompleted(
-                            new Action0() {
-                                @Override
-                                public void call() {
-                                    Timber.v("Profile saved");
-                                    ProfileView view = getView();
-                                    if (view != null) {
-                                        ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
-                                        Flow.get(view.getContext()).set(new HomeScreen());
-                                    } else {
-                                        Timber.w("getView() null, cannot notify user of successful profile save");
-                                    }
-                                }
-                            }
-                    )
-                    .doOnError(
-                            new Action1<Throwable>() {
-                                @Override
-                                public void call(Throwable throwable) {
-                                    Timber.e(throwable, "Unable to save profile");
-                                    Bugsnag.notify(throwable);
-                                    ProfileView view = getView();
-                                    if (view != null) {
-                                        ToastService.get(view).bern(view.getContext().getString(R.string.error_saving_profile));
-                                    } else {
-                                        Timber.w("getView() null, cannot notify user of failed profile save");
-                                    }
-                                }
-                            }
-                    )
-                    .subscribe();
+        @OnClick(R.id.submit_profile_settings)
+        void onEditProfileClicked() {
+            Flow.get(getView()).set(new ProfileEditScreen());
+        }
+
+        @OnClick(R.id.fab)
+        void invite() {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", "", null));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, inviteSubject);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, inviteBody);
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{}); // String[] addresses
+            getView().getContext().startActivity(Intent.createChooser(emailIntent, inviteFriends));
         }
     }
 }

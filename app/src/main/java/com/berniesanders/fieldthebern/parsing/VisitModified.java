@@ -21,7 +21,11 @@ public class VisitModified {
 
         for(CanvassData canvassData : current.included()) {
             if (canvassData.type().equals(Person.TYPE)) {
-                visitPeople.add((Person) canvassData);
+                Person person = (Person) canvassData;
+                visitPeople.add(person);
+                if (person.spokenTo()) {
+                    return true;
+                }
             }
         }
 
@@ -30,5 +34,18 @@ public class VisitModified {
 
         return !addressPeople.isEmpty() || !visitPeople.isEmpty() ||
                 ((ApiAddress)current.included().get(0)).attributes().bestCanvassResponse() != null;
+    }
+
+    public static boolean personAdded(final List<Person> previousPeople, final Visit current) {
+        List<Person> addressPeople = new ArrayList<>(previousPeople);
+
+        List<Person> visitPeople = new ArrayList<>();
+        for (CanvassData canvassData : current.included()) {
+            if (canvassData.type().equals(Person.TYPE)) {
+                visitPeople.add((Person) canvassData);
+            }
+        }
+
+        return addressPeople.size() < visitPeople.size();
     }
 }

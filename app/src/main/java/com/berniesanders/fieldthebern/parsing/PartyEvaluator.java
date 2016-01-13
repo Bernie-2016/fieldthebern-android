@@ -38,8 +38,6 @@ public class PartyEvaluator {
             return Party.INDEPENDENT;
         } else if (selectedParty.equals(partyArray[4])) {
             return Party.UNDECLARED;
-        } else if (selectedParty.equals(partyArray[5])) {
-            return Party.UNKNOWN;
         } else if (selectedParty.equals(partyArray[6])) {
             return Party.OTHER;
         } else {
@@ -74,10 +72,8 @@ public class PartyEvaluator {
                 return partyArray[3];
             case Party.UNDECLARED:
                 return partyArray[4];
-            case Party.UNKNOWN:
-                return partyArray[5];
             case Party.OTHER:
-                return partyArray[6];
+                return partyArray[5];
             default:
                 Timber.w("PartyEvaluator.getText() called with unmapped party?");
                 return partyArray[0];

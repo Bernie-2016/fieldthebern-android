@@ -37,6 +37,8 @@
     <string name="signup_title">Sign up</string>
     <string name="done">Done</string>
     <string name="skip">Skip</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="previously_participated">Have they previously participated in a primary or caucus?</string>
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
@@ -61,11 +63,15 @@
     <string name="are_you_sure_address_body">Are you sure the address is correct?\n\n%1$s\n%2$s</string>
     <string name="err_address_not_loaded">Address not loaded yet</string>
     <string name="permission_contacts_rationale">Field The Bern requires location permissions</string>
+    <string name="permission_photo_rationale">Field The Bern needs permission to read your photos</string>
     <string name="save_profile">Save Profile</string>
-
+    <string name="take_photo">Take\nphoto</string>
+    <string name="choose_picture">Choose\npicture</string>
+    <string name="min_time_not_elapsed">That address has been visited too recently.\nPlease try again later.</string>
     <string name="err_password_blank">Please enter a password</string>
     <string name="err_email_blank">Please enter an email</string>
     <string name="err_your_first_name_blank">Please enter your first name</string>
+    <string name="err_your_last_name_blank">Please enter your last name</string>
     <string name="err_their_first_name_blank">Please enter their first name</string>
     <string name="err_invalid_email">Please enter a valid email</string>
     <string name="err_invalid_phone">Please enter a valid phone number</string>
@@ -73,7 +79,15 @@
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
-
+    <string name="profile">Profile</string>
+    <string name="doors">DOORS</string>
+    <string name="weekly_leaderboard">WEEKLY LEADERBOARD</string>
+    <string name="friends">Friends</string>
+    <string name="state">State</string>
+    <string name="everyone">Everyone</string>
+    <string name="invite_friends">Invite friends</string>
+    <string name="invite_subject">Join me canvassing for Bernie</string>
+    <string name="invite_body">You are invited to download Field The Bern.  An app to help grassroots volunteers canvass for Bernie Sanders.  https://fieldthebern.com/</string>
     <string name="intro_learn_desc">We\'ll teach you to canvass your neighborhood and learn useful talking points.</string>
     <string name="learn">Learn</string>
     <string name="intro_welcome">Welcome to Field the Bern.</string>
@@ -81,6 +95,84 @@
     <string name="intro_canvass_desc">Find new doors to knock on and earn points for all your hard work.</string>
     <string name="track">Track</string>
     <string name="intro_track_desc">Watch your progress as you compete to get America to #FeelTheBern</string>
+    <string name="bernie_on_issues">Bernie on the Issues</string>
+    <string name="primary_policy_info">Primary and Policy Info</string>
+    <string name="sample_date">on Saturday, March 26, 2016</string>
+    <string name="sample_reg_deadline">Registration Deadline:</string>
+    <string name="sample_description">Description</string>
+    <string name="caucuses">Caucuses</string>
+    <string name="iowa">Iowa</string>
+    <string name="visit_in_progress_title">Visit already in progress</string>
+    <string name="visit_in_progress_message">You have a visit in progress at:\n\n%s\n\nWould you like to continue that visit?</string>
+    <string name="learn_btn">Learn</string>
+    <string name="learn_screen_title">Learn: Canvassing</string>
+    <string name="learn_title_1">What is canvassing?</string>
+    <string name="learn_text_1_1">Canvassing refers to door-to-door campaigning that opens up discussion with your neighbors about issues facing your community. In political terms, it involves encouraging people to talk about upcoming elections and getting them registered to vote.</string>
+    <string name="learn_text_1_2">This is different from many other forms of volunteering because it allows room for meaningful discussion – that is, it provides voters the opportunity to openly voice their concerns and for you to respond in a helpful manner. It’s also a great way to meet others interested in campaigning and to build up a volunteer base!</string>
+    <string name="learn_title_2">Why do we canvass?</string>
+    <string name="learn_text_2_2">Talking face-to-face allows for an earnest exchange of ideas and an opportunity to connect with others on a personal level. People are much more willing to listen when the conversation involves and affects them directly, and are therefore more likely to respond positively to Bernie’s message.</string>
+    <string name="learn_text_2_1">Canvassing is one of the most effective ways to perform outreach for Bernie Sanders. Face-to-face interactions are generally much more productive than conversations over the internet or on the telephone – it’s much harder to turn someone away in real life than it is to hang up on them!</string>
+    <string name="learn_title_3">What are your goals?</string>
+    <string name="learn_text_3_1">Hold meaningful, interactive, and educational conversations with members of your neighborhood or community.</string>
+    <string name="learn_text_3_2">Listen earnestly to others when they express their beliefs about the problems that affect them and their families.</string>
+    <string name="learn_text_3_3">Discuss the most important issues facing our country and Bernie’s proposed solutions.</string>
+    <string name="learn_text_3_4">Spread Bernie’s message in a way that addresses people’s concerns in an inclusive and empathetic way.</string>
+    <string name="learn_text_3_5">Clean and collect data to help drive get-out-the-vote efforts on election day.</string>
+    <string name="learn_text_3_6">Build our organizational network so that we can connect with supporters who want to volunteer for Bernie in the future.</string>
+    <string name="learn_title_4">How do I canvass alone?</string>
+    <string name="learn_text_4_1">Choose your location and time to canvass, preferably in an area with many residences and with a large amount of foot traffic. Make sure you pick places that are safe, and that you canvass in the daytime with lots of remaining sunlight.</string>
+    <string name="learn_text_4_2">Choose your location and time to canvass, preferably in an area with many residences and with a large amount of foot traffic. Make sure you pick places that are safe, and that you canvass in the daytime with lots of remaining sunlight.</string>
+    <string name="learn_text_4_3">Read through everything in this how to canvass section! Consider familiarizing yourself with Bernie\'s policy positions using the FeelTheBern.org tab in this app. Don\'t feel like you need to be a policy expert, and certainly don\'t pretend to be one, either.</string>
+    <string name="learn_text_4_4">Use this app’s map feature to plan out a route. Or plan out a route beforehand. Set a goal for the total number of houses you want to reach.</string>
+    <string name="learn_text_4_5">Once you are finished planning out everything, it’s time to hit the streets!</string>
+    <string name="learn_text_4_6">Use the app\'s FeelTheBern.org tab to help you answer people’s questions about the the issues; and the \"add address\" feature to record each voters’ enthusiasm toward Bernie Sanders.</string>
+    <string name="learn_text_4_7">Ask people who respond enthusiastically if they are willing to help campaign for Bernie Sanders. Record all the information you can about them including their availability, skills, and interests.</string>
+    <string name="learn_text_4_8">Have fun! This is a wonderful opportunity for you to meet others and talk to them about the importance of political activism.</string>
+    <string name="learn_text_4_9">At the end of your event, make sure to think about how you did and how you could improve next time. Then count the total number of people you reached!</string>
+    <string name="learn_title_5">How do I lead a group?</string>
+    <string name="learn_text_5_1">Choose your location and time to canvass, preferably in an area with many residences and with a large amount of foot traffic. Make sure you pick places that are safe, and that you canvass in the daytime with lots of remaining sunlight.</string>
+    <string name="learn_text_5_2">Register your event at BernieSanders.com with as many details as possible including meeting place and the event host contact information.</string>
+    <string name="learn_text_5_3">Invite folks to join your effort! Heavily advertise your canvassing event within your social circles and across social media. This involves actively recruiting people to join your volunteer team.</string>
+    <string name="learn_text_5_4">Delegate and divide up responsibilities as you build your team! One person can recruit others, while another prepares canvassing materials, and someone else creates a canvassing script.</string>
+    <string name="learn_text_5_5">Hold a training session before your canvassing event! Have experienced volunteers explain to the newer recruits how to prepare for a successful canvass and what to expect as they walk and talk.</string>
+    <string name="learn_text_5_6">Use this app’s map feature to plan out a route. Or plan out a route beforehand that people can follow. Set a goal for the total number of houses each group should reach.</string>
+    <string name="learn_text_5_7">Once you are finished planning out everything, it’s time to hit the streets! Work in pairs to cover as much ground on your route as possible.</string>
+    <string name="learn_text_5_8">Use the app\'s FeelTheBern.org tab to help you answer people’s questions about the the issues; and the \"add address\" feature to record each voters’ enthusiasm toward Bernie Sanders.</string>
+    <string name="learn_text_5_9">Ask people who respond enthusiastically if they are willing to help campaign for Bernie Sanders. Record all the information you can about them including their availability, skills, and interests.</string>
+    <string name="learn_text_5_10">Have fun! This is a wonderful opportunity for you to meet others and talk to them about the importance of political activism. It’s also a great way to make new friends with others on your canvassing team.</string>
+    <string name="learn_text_5_11">At the end of your event, make sure to debrief with your team. Take this opportunity to share your experience with others and provide feedback over refreshments. Count the total number of people you reached!</string>
+    <string name="learn_title_6">What do I say?</string>
+    <string name="learn_text_6_1">Here\'s a sample script you can use when starting a conversation. However, remember that canvassing is an opportunity to hold a natural conversation with another person. Try to spend more time listening to the people you reach than speaking over them. People will respond better to your message when you listen carefully.</string>
+    <string name="learn_text_6_2">Canvasser: Hello, there! My name is ______, and this is my teammate, ______. We are grassroots activists who are committed to getting people registered to vote for the upcoming Presidential election. Are you registered to vote?</string>
+    <string name="learn_text_6_3">If yes,</string>
+    <string name="learn_text_6_4">Canvasser: Excellent! Do you know who you want to vote for President? Have you heard of Bernie Sanders? He’s an independent senator from Vermont running for the Democratic nomination. Here\'s a flyer with some information on what he stands for and why.</string>
+    <string name="learn_text_6_5">If no,</string>
+    <string name="learn_text_6_6">Canvasser: Alright! What issues are the most important to you in this upcoming election? What do you think the President should be focusing on? What does your ideal candidate look like?</string>
+    <string name="learn_text_6_7">[The resident explains what issue(s) are important to him or her]</string>
+    <string name="learn_text_6_8">Canvasser: Thanks for sharing! Have you heard of Bernie Sanders? Would you like to learn more about Bernie’s stance on [issue]? This website, FeelTheBern.org, has 51 different pages that explain Bernie’s policy positions on a variety of issues including the one you just mentioned!</string>
+    <string name="learn_text_6_9">etc…</string>
+    <string name="learn_text_6_10">[Listen carefully to how each resident responds to your questions]</string>
+    <string name="learn_text_6_11">Canvasser: Thank you for your time! Please encourage your friends and family to register to vote your state’s primary elections by visiting VoteForBernie.org!</string>
+    <string name="learn_text_6_12">Make sure to ask for information the campaign needs. What\'s their name? What\'s their party affiliation? How strongly do they feel about Bernie.</string>
+    <string name="learn_text_6_13">Don\'t try too hard to convince people, and definitely don\'t get into an argument. You want to leave with a positive impression. If they ask you to leave, politely wish them a good day and mark that down.</string>
+    <string name="learn_text_6_14">Practice this script with a friend! One person can be the canvasser and one person can be a resident. Make sure you don\'t stick too rigidly to the script or dominate the conversation. Instead, let it flow organically. Work in pairs and have each canvasser alternate speaking with the resident.</string>
+    <string name="learn_title_7">Canvassing Tips</string>
+    <string name="learn_text_7_1">The most important thing is to speak to as many people as possible with the time that you have. This involves keeping conversations short and to-the-point!</string>
+    <string name="learn_text_7_2">Always maintain a positive attitude and interact respectfully with others. It’s more important to leave a good impression than to insist that Bernie Sanders is the best candidate or prove that someone is wrong.</string>
+    <string name="learn_text_7_3">Always use open body language, maintain eye contact, and speak confidently. People will listen more eagerly it you make an effort to connect with them on a personal level and care about what they are saying.</string>
+    <string name="learn_text_7_4">Always ask people if they are willing to volunteer for Bernie. Collect as much contact information from these people as possible including their home address, phone number,  email address, zip code, interests, and skills.</string>
+    <string name="learn_text_7_5">Never answer a question unless you know the answer. If you are unsure about how to respond to a question, say so! Then, later, you can research the answer and make sure to follow up with the person who asked it.</string>
+    <string name="learn_text_7_6">Never start an argument with anyone you meet. Some people will simply refuse to engage in meaningful discussion. Instead of getting caught up or frustrated, simply thank them for their time and disengage.</string>
+    <string name="learn_text_7_7">Never place any flyers or other materials in someone’s mailbox. Not only is this a federal offense, it’s a rude invasion of privacy. People will be much more inclined to support Bernie Sanders if you hold conversation with them.</string>
+    <string name="edit_your_profile">Edit your profile</string>
+    <string name="log_out">Log out</string>
+    <string name="settings">[edit]</string>
+    <string name="private_settings">Private Settings</string>
+    <string name="about_text">Version: %s</string>
+    <string name="paid_for">Paid For By Bernie 2016</string>
+    <string name="about">About</string>
+    <string name="about_text_2">For help, send an email to:</string>
+    <string name="email_support">support@fieldthebern.com</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">
@@ -89,7 +181,6 @@
           <item>Republican</item>
           <item>Independent</item>
           <item>Undeclared</item>
-          <item>Unknown</item>
           <item>Other</item>
     </string-array>
 

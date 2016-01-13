@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.berniesanders.fieldthebern" >
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -44,9 +46,9 @@
                      android:exported="false"
             />
 
-    <meta-data
-        android:name="com.bugsnag.android.API_KEY"
-        android:value="@string/bugsnagApiKey"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="c0cc1bb8d02e0f920c139be9b05b7ae6e0f9acfb" />
     </application>
 
 </manifest>

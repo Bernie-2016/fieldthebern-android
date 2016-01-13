@@ -8,12 +8,15 @@ import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.controllers.FacebookController;
 import com.berniesanders.fieldthebern.controllers.LocationController;
 import com.berniesanders.fieldthebern.controllers.PermissionController;
+import com.berniesanders.fieldthebern.controllers.PhotoController;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogController;
 import com.berniesanders.fieldthebern.controllers.ToastController;
 import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.RankingsRepo;
+import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -38,7 +41,8 @@ import dagger.Component;
                 ProgressDialogController.ProgressDialogModule.class,
                 LocationController.LocationModule.class,
                 PermissionController.PermissionModule.class,
-                ToastController.ToastModule.class
+                ToastController.ToastModule.class,
+                PhotoController.PhotoModule.class
         }
 )
 public interface MainComponent {
@@ -63,4 +67,7 @@ public interface MainComponent {
     AddressRepo addressRepo();
     VisitRepo visitRepo();
     ErrorResponseParser errorParser();
+    PhotoController photoController();
+    RankingsRepo rankingsRepo();
+    StatesRepo statesRepo();
 }

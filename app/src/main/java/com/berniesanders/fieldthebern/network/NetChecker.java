@@ -11,7 +11,6 @@ public class NetChecker {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        //return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-        return false;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

@@ -1,8 +1,13 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -31,12 +36,15 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import dagger.Provides;
 import flow.Flow;
 import flow.History;
@@ -126,7 +134,7 @@ public class LoginScreen extends FlowPathBase {
         EditText passwordEditText;
 
         @Bind(R.id.email)
-        EditText emailEditText;
+        AutoCompleteTextView emailEditText;
 
         @Inject
         Presenter(User user,
@@ -154,7 +162,9 @@ public class LoginScreen extends FlowPathBase {
                     .requestPermission();
 
             attemptLoginViaRefresh();
+            getView().loadUserEmailAccounts(emailEditText);
         }
+
 
         private void attemptLoginViaRefresh() {
             //if the permission hasn't been granted the user should just login again
@@ -195,6 +205,16 @@ public class LoginScreen extends FlowPathBase {
         public void dropView(LoginView view) {
             super.dropView(view);
             ButterKnife.unbind(this);
+        }
+
+        @OnTouch(R.id.email)
+        boolean showEmails() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailEditText.showDropDown();
+                emailEditText.setFocusable(true);
+                emailEditText.setShowSoftInputOnFocus(true);
+            }
+            return false;
         }
 
         @OnClick(R.id.login_email)
@@ -264,7 +284,7 @@ public class LoginScreen extends FlowPathBase {
 
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
-                    ToastService.get(getView()).bern(errorResponse.getAllDetails());
+                    ToastService.get(getView()).bern("Invalid Password or Email");
                 }
                 ProgressDialogService.get(getView()).dismiss();
             }

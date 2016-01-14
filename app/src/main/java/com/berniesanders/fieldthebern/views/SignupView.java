@@ -1,8 +1,13 @@
 package com.berniesanders.fieldthebern.views;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
+import android.util.Patterns;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -10,6 +15,10 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.SignupScreen;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -33,7 +42,7 @@ public class SignupView extends RelativeLayout {
     AppCompatEditText lastName;
 
     @Bind(R.id.email)
-    AppCompatEditText email;
+    AutoCompleteTextView email;
 
     @Bind(R.id.password)
     AppCompatEditText password;
@@ -68,6 +77,28 @@ public class SignupView extends RelativeLayout {
         DaggerService.<SignupScreen.Component>
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
+    }
+
+    public void loadUserEmailAccounts(AutoCompleteTextView emailAutocompleteTV) {
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        Account[] accounts = AccountManager.get(getContext()).getAccountsByType("com.google");
+
+        final List<String> possibleEmails = new ArrayList<>();
+
+        for (Account account : accounts) {
+            if (emailPattern.matcher(account.name).matches()) {
+                String possibleEmail = account.name;
+                possibleEmails.add(possibleEmail);
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                possibleEmails);
+
+        emailAutocompleteTV.setAdapter(adapter);
+        emailAutocompleteTV.setThreshold(0);
+
     }
 
 
@@ -127,7 +158,7 @@ public class SignupView extends RelativeLayout {
         return lastName;
     }
 
-    public AppCompatEditText getEmail() {
+    public AutoCompleteTextView getEmail() {
         return email;
     }
 

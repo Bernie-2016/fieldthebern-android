@@ -1,14 +1,27 @@
 package com.berniesanders.fieldthebern.views;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Patterns;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.LoginScreen;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import javax.inject.Inject;
 
+import butterknife.Bind;
+import butterknife.OnTouch;
 import timber.log.Timber;
 
 /**
@@ -45,6 +58,29 @@ public class LoginView extends RelativeLayout {
                 getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
                 .inject(this);
     }
+
+    public void loadUserEmailAccounts(AutoCompleteTextView emailAutocompleteTV) {
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        Account[] accounts = AccountManager.get(getContext()).getAccountsByType("com.google");
+
+        final List<String> possibleEmails = new ArrayList<>();
+
+        for (Account account : accounts) {
+            if (emailPattern.matcher(account.name).matches()) {
+                String possibleEmail = account.name;
+                possibleEmails.add(possibleEmail);
+            }
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                possibleEmails);
+
+        emailAutocompleteTV.setAdapter(adapter);
+        emailAutocompleteTV.setThreshold(0);
+
+    }
+
 
 
     @Override

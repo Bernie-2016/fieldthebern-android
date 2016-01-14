@@ -18,6 +18,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.date.MinTimeBetweenVisit;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.location.StateConverter;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
@@ -274,6 +275,9 @@ public class AddAddressScreen extends FlowPathBase {
                         ToastService.get(getView()).bern(errorResponse.getAllDetails());
                         Timber.e(e, "singleAddressObserver onError");
                     }
+                } else if (e instanceof NetworkUnavailableException) {
+                    ToastService.get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
                 } else {
                     //wtf
                     ToastService.get(getView()).bern("unknown error");//TODO externalize string

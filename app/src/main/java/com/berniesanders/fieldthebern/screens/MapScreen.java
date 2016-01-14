@@ -13,6 +13,7 @@ import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
@@ -267,6 +268,12 @@ public class MapScreen extends FlowPathBase {
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
                 }
+
+                if (e instanceof NetworkUnavailableException) {
+                    ToastService
+                            .get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
+                }
             }
 
             @Override
@@ -294,7 +301,11 @@ public class MapScreen extends FlowPathBase {
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
                 }
-
+                if (e instanceof NetworkUnavailableException) {
+                    ToastService
+                            .get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
+                }
             }
 
             @Override

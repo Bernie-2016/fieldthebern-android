@@ -6,10 +6,13 @@
  */
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
+
 import com.berniesanders.fieldthebern.config.Config;
-import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -26,6 +29,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -39,14 +44,20 @@ public class AddressRepo {
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
+    private final Context context;
 
 
     @Inject
-    public AddressRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public AddressRepo(Gson gson,
+                       TokenRepo tokenRepo,
+                       RxSharedPreferences rxPrefs,
+                       Config config,
+                       Context context) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -65,20 +76,33 @@ public class AddressRepo {
     public Observable<MultiAddressResponse> getMultiple(final AddressSpec spec) {
         Timber.v("getMultiple()");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
+        return Observable.create(new Observable.OnSubscribe<MultiAddressResponse>() {
+            @Override
+            public void call(Subscriber<? super MultiAddressResponse> subscriber) {
+                if (!NetChecker.connected(context)) {
+                    subscriber.onError(new NetworkUnavailableException("No internet available"));
+                }
+            }
+        })
+        .flatMap(new Func1<MultiAddressResponse, Observable<MultiAddressResponse>>() {
+            @Override
+            public Observable<MultiAddressResponse> call(MultiAddressResponse multiAddressResponse) {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(config.getCanvassUrl())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                        .client(client)
+                        .build();
 
-        AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
+                AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
 
-        return endpoint.getMultiple(
-                spec.multipleAddresses().latitude(),
-                spec.multipleAddresses().longitude(),
-                spec.multipleAddresses().radius()
+                return endpoint.getMultiple(
+                        spec.multipleAddresses().latitude(),
+                        spec.multipleAddresses().longitude(),
+                        spec.multipleAddresses().radius()
                 );
+            }
+        });
     }
 
     /**
@@ -87,24 +111,38 @@ public class AddressRepo {
     public Observable<SingleAddressResponse> getSingle(final AddressSpec spec) {
         Timber.v("getSingle()");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
+        return Observable.create(new Observable.OnSubscribe<SingleAddressResponse>() {
+            @Override
+            public void call(Subscriber<? super SingleAddressResponse> subscriber) {
+                if (!NetChecker.connected(context)) {
+                    subscriber.onError(new NetworkUnavailableException("No internet available"));
+                }
+            }
+        })
+        .flatMap(new Func1<SingleAddressResponse, Observable<SingleAddressResponse>>() {
+            @Override
+            public Observable<SingleAddressResponse> call(SingleAddressResponse multiAddressResponse) {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(config.getCanvassUrl())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                        .client(client)
+                        .build();
 
-        AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
+                AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
 
-        return endpoint.getSingle(
-                spec.singleAddress().latitude(),
-                spec.singleAddress().longitude(),
-                spec.singleAddress().street1(),
-                spec.singleAddress().street2(),
-                spec.singleAddress().city(),
-                spec.singleAddress().state(),
-                spec.singleAddress().zip()
-        );
+                return endpoint.getSingle(
+                        spec.singleAddress().latitude(),
+                        spec.singleAddress().longitude(),
+                        spec.singleAddress().street1(),
+                        spec.singleAddress().street2(),
+                        spec.singleAddress().city(),
+                        spec.singleAddress().state(),
+                        spec.singleAddress().zip()
+                );
+            }
+        });
+
     }
 
 }

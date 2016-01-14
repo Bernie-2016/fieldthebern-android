@@ -1,10 +1,13 @@
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
 import android.util.Base64;
 import com.berniesanders.fieldthebern.config.Config;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 import com.berniesanders.fieldthebern.models.Token;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.f2prateek.rx.preferences.Preference;
@@ -16,6 +19,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
 
@@ -34,15 +38,17 @@ public class TokenRepo {
     private final OkHttpClient client = new OkHttpClient();
     private final RxSharedPreferences rxPrefs;
     private final Config config;
+    private final Context context;
     final Retrofit retrofit;
     final TokenSpec.TokenEndpoint endpoint;
 
 
     @Inject
-    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config) {
+    public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config, Context context) {
         this.gson = gson;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -75,32 +81,58 @@ public class TokenRepo {
      */
     public Observable<Token> loginEmail(final TokenSpec spec) {
         Timber.v("loginEmail()");
-
-        return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
+        return Observable.create(new Observable.OnSubscribe<Token>() {
             @Override
-            public Token call(Token token) {
-                Timber.v("loginEmail() saving token");
-                Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-                tokenPref.set(gson.toJson(token));
-                return token;
+            public void call(Subscriber<? super Token> subscriber) {
+                if (!NetChecker.connected(context)) {
+                    subscriber.onError(new NetworkUnavailableException("No internet available"));
+                }
+            }
+        })
+        .flatMap(new Func1<Token, Observable<Token>>() {
+            @Override
+            public Observable<Token> call(Token token) {
+                return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
+                    @Override
+                    public Token call(Token token) {
+                        Timber.v("loginEmail() saving token");
+                        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+                        tokenPref.set(gson.toJson(token));
+                        return token;
+                    }
+                });
             }
         });
+
     }
 
     /**
      */
     public Observable<Token> loginFacebook(final TokenSpec spec) {
         Timber.v("loginFacebook()");
-
-        return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
+        return Observable.create(new Observable.OnSubscribe<Token>() {
             @Override
-            public Token call(Token token) {
-                Timber.v("loginFacebook() saving token");
-                Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-                tokenPref.set(gson.toJson(token));
-                return token;
+            public void call(Subscriber<? super Token> subscriber) {
+                if (!NetChecker.connected(context)) {
+                    subscriber.onError(new NetworkUnavailableException("No internet available"));
+                }
+            }
+        })
+        .flatMap(new Func1<Token, Observable<Token>>() {
+            @Override
+            public Observable<Token> call(Token token) {
+                return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
+                    @Override
+                    public Token call(Token token) {
+                        Timber.v("loginFacebook() saving token");
+                        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+                        tokenPref.set(gson.toJson(token));
+                        return token;
+                    }
+                });
             }
         });
+
     }
 
     /**

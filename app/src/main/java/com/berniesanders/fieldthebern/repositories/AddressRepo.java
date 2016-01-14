@@ -6,10 +6,13 @@
  */
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
+
 import com.berniesanders.fieldthebern.config.Config;
-import com.berniesanders.fieldthebern.models.ApiAddress;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -39,14 +42,20 @@ public class AddressRepo {
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
+    private final Context context;
 
 
     @Inject
-    public AddressRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public AddressRepo(Gson gson,
+                       TokenRepo tokenRepo,
+                       RxSharedPreferences rxPrefs,
+                       Config config,
+                       Context context) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -65,6 +74,10 @@ public class AddressRepo {
     public Observable<MultiAddressResponse> getMultiple(final AddressSpec spec) {
         Timber.v("getMultiple()");
 
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -78,7 +91,7 @@ public class AddressRepo {
                 spec.multipleAddresses().latitude(),
                 spec.multipleAddresses().longitude(),
                 spec.multipleAddresses().radius()
-                );
+        );
     }
 
     /**
@@ -86,6 +99,10 @@ public class AddressRepo {
      */
     public Observable<SingleAddressResponse> getSingle(final AddressSpec spec) {
         Timber.v("getSingle()");
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
@@ -105,6 +122,7 @@ public class AddressRepo {
                 spec.singleAddress().state(),
                 spec.singleAddress().zip()
         );
+
     }
 
 }

@@ -78,19 +78,19 @@ public class MainModule {
     @Provides
     @Singleton
     public TokenRepo provideTokenRepo() {
-        return new TokenRepo(this.gson, rxPrefs, config);
+        return new TokenRepo(this.gson, rxPrefs, config, context);
     }
 
     @Provides
     @Singleton
     public UserRepo provideUserRepo(TokenRepo tokenRepo) {
-        return new UserRepo(gson, tokenRepo, rxPrefs, config);
+        return new UserRepo(gson, tokenRepo, rxPrefs, config, context);
     }
 
     @Provides
     @Singleton
     public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
-        return new AddressRepo(gson, tokenRepo, rxPrefs, config);
+        return new AddressRepo(gson, tokenRepo, rxPrefs, config, context);
     }
 
     @Provides
@@ -115,13 +115,13 @@ public class MainModule {
     @Provides
     @Singleton
     public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
-        return new VisitRepo(gson, tokenRepo, rxPrefs, config);
+        return new VisitRepo(gson, tokenRepo, rxPrefs, config, context);
     }
 
     @Provides
     @Singleton
     public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
-        return new RankingsRepo(gson, tokenRepo, rxPrefs, config);
+        return new RankingsRepo(gson, tokenRepo, rxPrefs, config, context);
     }
 
     @Provides

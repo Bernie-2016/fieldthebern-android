@@ -48,10 +48,8 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="@string/email_support"
-            android:autoLink="email"
-            android:textColorLink="#99DDFF"
+            android:textColor="#99DDFF"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white"
             />
 
         <TextView

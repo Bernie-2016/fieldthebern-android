@@ -1,13 +1,30 @@
 package com.berniesanders.fieldthebern.repositories;
 
 import android.content.Context;
+
 import com.berniesanders.fieldthebern.config.Config;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.Collection;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.fieldthebern.repositories.specs.CollectionSpec;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.squareup.okhttp.*;
+import com.squareup.okhttp.Interceptor;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
@@ -19,10 +36,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.io.*;
 
 /**
  * Data repository for loading the tiles on the "home" page
@@ -114,13 +127,15 @@ public class CollectionRepo {
     }
 
 
-
-
     /**
      * Might be best to pass the spec through to this method...?
      */
     private Observable<Collection> getFromHttp(final String urlStub) {
         Timber.v("getFromHttp()");
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
         OkHttpClient client = new OkHttpClient();
         client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
@@ -140,7 +155,7 @@ public class CollectionRepo {
 
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(this.config.getFeelTheBernUrl())
+                .baseUrl(CollectionRepo.this.config.getFeelTheBernUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(client)
@@ -150,6 +165,7 @@ public class CollectionRepo {
                 retrofit.create(CollectionSpec.CollectionEndpoint.class);
 
         return endpoint.load(urlStub);
+
     }
 
     private final Buffer buffer = new Buffer();

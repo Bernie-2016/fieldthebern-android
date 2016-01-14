@@ -21,6 +21,7 @@ import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
@@ -534,6 +535,10 @@ public class SignupScreen extends FlowPathBase {
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails(), Toast.LENGTH_SHORT);
+                }
+                if (e instanceof NetworkUnavailableException) {
+                    ToastService.get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
                 }
             }
 

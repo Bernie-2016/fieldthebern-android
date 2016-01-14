@@ -1,7 +1,11 @@
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
+
 import com.berniesanders.fieldthebern.config.Config;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.Rankings;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -32,14 +36,16 @@ public class RankingsRepo {
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
+    private final Context context;
 
 
     @Inject
-    public RankingsRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public RankingsRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config, Context context) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
 
         HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
             @Override
@@ -60,7 +66,12 @@ public class RankingsRepo {
      */
     public Observable<Rankings> get(final RankingSpec spec) {
 
-        Timber.v("getMe()");
+        Timber.v("get()");
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -72,6 +83,7 @@ public class RankingsRepo {
                 retrofit.create(RankingSpec.RankEndpoint.class);
 
         return endpoint.get(spec.type());
+
     }
 
 }

@@ -71,31 +71,21 @@ public class RankingsRepo {
 
         Timber.v("get()");
 
-        return Observable.create(new Observable.OnSubscribe<Rankings>() {
-            @Override
-            public void call(Subscriber<? super Rankings> subscriber) {
-                if (!NetChecker.connected(context)) {
-                    subscriber.onError(new NetworkUnavailableException("No internet available"));
-                }
-            }
-        })
-        .flatMap(new Func1<Rankings, Observable<Rankings>>() {
-            @Override
-            public Observable<Rankings> call(Rankings rankings) {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(config.getCanvassUrl())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .client(client)
-                        .build();
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
-                RankingSpec.RankEndpoint endpoint =
-                        retrofit.create(RankingSpec.RankEndpoint.class);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
 
-                return endpoint.get(spec.type());
-            }
-        });
+        RankingSpec.RankEndpoint endpoint =
+                retrofit.create(RankingSpec.RankEndpoint.class);
 
+        return endpoint.get(spec.type());
 
     }
 

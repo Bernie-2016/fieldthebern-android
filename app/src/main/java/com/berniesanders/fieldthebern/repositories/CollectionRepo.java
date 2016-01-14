@@ -133,47 +133,38 @@ public class CollectionRepo {
     private Observable<Collection> getFromHttp(final String urlStub) {
         Timber.v("getFromHttp()");
 
-        return Observable.create(new Observable.OnSubscribe<Collection>() {
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
+        OkHttpClient client = new OkHttpClient();
+        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
+        client.interceptors().add(new Interceptor() {
             @Override
-            public void call(Subscriber<? super Collection> subscriber) {
-                if (!NetChecker.connected(context)) {
-                    subscriber.onError(new NetworkUnavailableException("No internet available"));
-                }
-            }
-        })
-        .flatMap(new Func1<Collection, Observable<Collection>>() {
-            @Override
-            public Observable<Collection> call(Collection collection) {
-                OkHttpClient client = new OkHttpClient();
-                client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
-                client.interceptors().add(new Interceptor() {
-                    @Override
-                    public Response intercept(Interceptor.Chain chain) throws IOException {
-                        Response response = chain.proceed(chain.request());
-                        MediaType contentType = response.body().contentType();
-                        String bodyString = response.body().string();
-                        ResponseBody body = ResponseBody.create(contentType, bodyString);
-                        ResponseBody body2 = ResponseBody.create(contentType, bodyString);
-                        write(response.newBuilder().body(body2).build());
-                        return response.newBuilder().body(body).build();
+            public Response intercept(Interceptor.Chain chain) throws IOException {
+                Response response = chain.proceed(chain.request());
+                MediaType contentType = response.body().contentType();
+                String bodyString = response.body().string();
+                ResponseBody body = ResponseBody.create(contentType, bodyString);
+                ResponseBody body2 = ResponseBody.create(contentType, bodyString);
+                write(response.newBuilder().body(body2).build());
+                return response.newBuilder().body(body).build();
 
-                    }
-                });
-
-
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(CollectionRepo.this.config.getFeelTheBernUrl())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .client(client)
-                        .build();
-
-                CollectionSpec.CollectionEndpoint endpoint =
-                        retrofit.create(CollectionSpec.CollectionEndpoint.class);
-
-                return endpoint.load(urlStub);
             }
         });
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(CollectionRepo.this.config.getFeelTheBernUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        CollectionSpec.CollectionEndpoint endpoint =
+                retrofit.create(CollectionSpec.CollectionEndpoint.class);
+
+        return endpoint.load(urlStub);
 
     }
 

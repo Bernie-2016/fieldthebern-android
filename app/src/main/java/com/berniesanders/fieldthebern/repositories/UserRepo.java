@@ -33,7 +33,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
 
@@ -124,6 +123,12 @@ public class UserRepo {
      */
     public Observable<User> create(final UserSpec spec) {
 
+        Timber.v("create()");
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
         //TODO not sure I have chained these in the best way...
 
         // This is the order that things are supposed to happen:
@@ -206,23 +211,14 @@ public class UserRepo {
     }
 
     public Observable<User> update(final UserSpec spec) {
+
         Timber.v("update()");
 
-        return Observable.create(
-                new Observable.OnSubscribe<User>() {
-                    @Override
-                    public void call(Subscriber<? super User> subscriber) {
-                        if (!NetChecker.connected(context)) {
-                            subscriber.onError(new NetworkUnavailableException("No internet available"));
-                        }
-                    }
-                })
-                .flatMap(new Func1<User, Observable<User>>() {
-                    @Override
-                    public Observable<User> call(User user) {
-                        return getMe();
-                    }
-                })
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
+        return getMe()
                 .flatMap(new Func1<User, Observable<User>>() {
                     @Override
                     public Observable<User> call(User user) {
@@ -242,7 +238,6 @@ public class UserRepo {
                         return update(request);
                     }
                 });
-
     }
 
 
@@ -251,37 +246,31 @@ public class UserRepo {
      */
     private Observable<User> create(final CreateUserRequest userRequest) {
         Timber.v("create()");
-        return Observable.create(
-                new Observable.OnSubscribe<User>() {
-                    @Override
-                    public void call(Subscriber<? super User> subscriber) {
-                        if (!NetChecker.connected(context)) {
-                            subscriber.onError(new NetworkUnavailableException("No internet available"));
-                        }
-                    }
-                })
-                .flatMap(new Func1<User, Observable<User>>() {
-                    @Override
-                    public Observable<User> call(User user) {
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(config.getCanvassUrl())
-                                .addConverterFactory(GsonConverterFactory.create(gson))
-                                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                                .client(client)
-                                .build();
 
-                        UserSpec.UserEndpoint endpoint =
-                                retrofit.create(UserSpec.UserEndpoint.class);
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        UserSpec.UserEndpoint endpoint =
+                retrofit.create(UserSpec.UserEndpoint.class);
 
 
-                        return endpoint.create(userRequest);
-                    }
-                });
-
+        return endpoint.create(userRequest);
     }
 
     private Observable<User> update(final CreateUserRequest user) {
         Timber.v("update(CreateUserRequest)");
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(config.getCanvassUrl())
@@ -298,30 +287,20 @@ public class UserRepo {
 
     public Observable<User> getMe() {
         Timber.v("getMe()");
-        return Observable.create(
-                new Observable.OnSubscribe<User>() {
-                    @Override
-                    public void call(Subscriber<? super User> subscriber) {
-                        if (!NetChecker.connected(context)) {
-                            subscriber.onError(new NetworkUnavailableException("No internet available"));
-                        }
-                    }
-                })
-                .flatMap(new Func1<User, Observable<User>>() {
-                    @Override
-                    public Observable<User> call(User user) {
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(config.getCanvassUrl())
-                                .addConverterFactory(GsonConverterFactory.create(gson))
-                                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                                .client(client)
-                                .build();
 
-                        UserSpec.UserEndpoint endpoint =
-                                retrofit.create(UserSpec.UserEndpoint.class);
-                        return endpoint.getMe();
-                    }
-                });
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
+
+        UserSpec.UserEndpoint endpoint =
+                retrofit.create(UserSpec.UserEndpoint.class);
+        return endpoint.getMe();
     }
 }

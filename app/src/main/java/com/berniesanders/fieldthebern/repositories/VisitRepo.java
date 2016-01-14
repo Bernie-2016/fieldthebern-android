@@ -110,49 +110,40 @@ public class VisitRepo {
      *
      */
     public Observable<VisitResult> submit() {
+        
         Timber.v("submit()");
 
-        return Observable.create(
-                new Observable.OnSubscribe<VisitResult>() {
-                    @Override
-                    public void call(Subscriber<? super VisitResult> subscriber) {
-                        if (!NetChecker.connected(context)) {
-                            subscriber.onError(new NetworkUnavailableException("No internet available"));
-                        }
-                    }
-                })
-                .flatMap(new Func1<VisitResult, Observable<VisitResult>>() {
-                    @Override
-                    public Observable<VisitResult> call(VisitResult visitResult) {
-                        //remove anyone who wasn't spoken to
-                        List<CanvassData> included = visit.included();
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
-                        List<Person> peopleToRemove = new ArrayList<>();
+        //remove anyone who wasn't spoken to
+        List<CanvassData> included = visit.included();
 
-                        for (CanvassData canvassData : included) {
-                            if (canvassData.type().equals(Person.TYPE)) {
-                                Person person = (Person) canvassData;
-                                if (!person.spokenTo()) {
-                                    peopleToRemove.add(person);
-                                }
-                            }
-                        }
+        List<Person> peopleToRemove = new ArrayList<>();
 
-                        visit.included().removeAll(peopleToRemove);
+        for (CanvassData canvassData : included) {
+            if (canvassData.type().equals(Person.TYPE)) {
+                Person person = (Person) canvassData;
+                if (!person.spokenTo()) {
+                    peopleToRemove.add(person);
+                }
+            }
+        }
 
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(config.getCanvassUrl())
-                                .addConverterFactory(GsonConverterFactory.create(gson))
-                                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                                .client(client)
-                                .build();
+        visit.included().removeAll(peopleToRemove);
 
-                        visit.stop(); //stop the timer
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
 
-                        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
-                        return endpoint.submit(visit);
-                    }
-                });
+        visit.stop(); //stop the timer
+
+        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
+        return endpoint.submit(visit);
     }
 
     public void clear() {

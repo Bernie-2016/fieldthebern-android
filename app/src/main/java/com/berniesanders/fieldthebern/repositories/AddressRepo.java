@@ -76,33 +76,24 @@ public class AddressRepo {
     public Observable<MultiAddressResponse> getMultiple(final AddressSpec spec) {
         Timber.v("getMultiple()");
 
-        return Observable.create(new Observable.OnSubscribe<MultiAddressResponse>() {
-            @Override
-            public void call(Subscriber<? super MultiAddressResponse> subscriber) {
-                if (!NetChecker.connected(context)) {
-                    subscriber.onError(new NetworkUnavailableException("No internet available"));
-                }
-            }
-        })
-        .flatMap(new Func1<MultiAddressResponse, Observable<MultiAddressResponse>>() {
-            @Override
-            public Observable<MultiAddressResponse> call(MultiAddressResponse multiAddressResponse) {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(config.getCanvassUrl())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .client(client)
-                        .build();
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
-                AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
 
-                return endpoint.getMultiple(
-                        spec.multipleAddresses().latitude(),
-                        spec.multipleAddresses().longitude(),
-                        spec.multipleAddresses().radius()
-                );
-            }
-        });
+        AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
+
+        return endpoint.getMultiple(
+                spec.multipleAddresses().latitude(),
+                spec.multipleAddresses().longitude(),
+                spec.multipleAddresses().radius()
+        );
     }
 
     /**
@@ -111,37 +102,28 @@ public class AddressRepo {
     public Observable<SingleAddressResponse> getSingle(final AddressSpec spec) {
         Timber.v("getSingle()");
 
-        return Observable.create(new Observable.OnSubscribe<SingleAddressResponse>() {
-            @Override
-            public void call(Subscriber<? super SingleAddressResponse> subscriber) {
-                if (!NetChecker.connected(context)) {
-                    subscriber.onError(new NetworkUnavailableException("No internet available"));
-                }
-            }
-        })
-        .flatMap(new Func1<SingleAddressResponse, Observable<SingleAddressResponse>>() {
-            @Override
-            public Observable<SingleAddressResponse> call(SingleAddressResponse multiAddressResponse) {
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl(config.getCanvassUrl())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
-                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                        .client(client)
-                        .build();
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
-                AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(config.getCanvassUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .client(client)
+                .build();
 
-                return endpoint.getSingle(
-                        spec.singleAddress().latitude(),
-                        spec.singleAddress().longitude(),
-                        spec.singleAddress().street1(),
-                        spec.singleAddress().street2(),
-                        spec.singleAddress().city(),
-                        spec.singleAddress().state(),
-                        spec.singleAddress().zip()
-                );
-            }
-        });
+        AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
+
+        return endpoint.getSingle(
+                spec.singleAddress().latitude(),
+                spec.singleAddress().longitude(),
+                spec.singleAddress().street1(),
+                spec.singleAddress().street2(),
+                spec.singleAddress().city(),
+                spec.singleAddress().state(),
+                spec.singleAddress().zip()
+        );
 
     }
 

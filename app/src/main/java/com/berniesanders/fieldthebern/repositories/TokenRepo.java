@@ -81,58 +81,40 @@ public class TokenRepo {
      */
     public Observable<Token> loginEmail(final TokenSpec spec) {
         Timber.v("loginEmail()");
-        return Observable.create(new Observable.OnSubscribe<Token>() {
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
+        return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
             @Override
-            public void call(Subscriber<? super Token> subscriber) {
-                if (!NetChecker.connected(context)) {
-                    subscriber.onError(new NetworkUnavailableException("No internet available"));
-                }
-            }
-        })
-        .flatMap(new Func1<Token, Observable<Token>>() {
-            @Override
-            public Observable<Token> call(Token token) {
-                return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
-                    @Override
-                    public Token call(Token token) {
-                        Timber.v("loginEmail() saving token");
-                        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-                        tokenPref.set(gson.toJson(token));
-                        return token;
-                    }
-                });
+            public Token call(Token token) {
+                Timber.v("loginEmail() saving token");
+                Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+                tokenPref.set(gson.toJson(token));
+                return token;
             }
         });
-
     }
 
     /**
      */
     public Observable<Token> loginFacebook(final TokenSpec spec) {
         Timber.v("loginFacebook()");
-        return Observable.create(new Observable.OnSubscribe<Token>() {
+
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
+
+        return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
             @Override
-            public void call(Subscriber<? super Token> subscriber) {
-                if (!NetChecker.connected(context)) {
-                    subscriber.onError(new NetworkUnavailableException("No internet available"));
-                }
-            }
-        })
-        .flatMap(new Func1<Token, Observable<Token>>() {
-            @Override
-            public Observable<Token> call(Token token) {
-                return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
-                    @Override
-                    public Token call(Token token) {
-                        Timber.v("loginFacebook() saving token");
-                        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-                        tokenPref.set(gson.toJson(token));
-                        return token;
-                    }
-                });
+            public Token call(Token token) {
+                Timber.v("loginFacebook() saving token");
+                Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+                tokenPref.set(gson.toJson(token));
+                return token;
             }
         });
-
     }
 
     /**
@@ -168,6 +150,9 @@ public class TokenRepo {
      */
     public Observable<Token> refresh() {
         Timber.v("token refresh....");
+        if (!NetChecker.connected(context)) {
+            return Observable.error(new NetworkUnavailableException("No internet available"));
+        }
 
         String refreshToken = null;
         try {

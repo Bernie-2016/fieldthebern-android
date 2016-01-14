@@ -62,7 +62,11 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
                 >
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/dark_blue2"
+                    />
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/add_person"
                     android:layout_width="match_parent"
@@ -78,11 +82,7 @@
                     android:textSize="18sp"
                     />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
+
             </FrameLayout>
 
 
@@ -125,7 +125,11 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp">
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/dark_blue2"
+                    />
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/view_state_primary"
                     android:layout_width="match_parent"
@@ -141,11 +145,7 @@
                     android:textSize="18sp"
                     />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
+
             </FrameLayout>
 
             <FrameLayout
@@ -155,7 +155,11 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp">
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/dark_blue2"
+                    />
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/view_bernie_issues"
                     android:layout_width="match_parent"
@@ -171,11 +175,7 @@
                     android:textSize="18sp"
                     />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:background="@color/dark_blue2"
-                    />
+
             </FrameLayout>
             <RelativeLayout
                 android:layout_width="match_parent"

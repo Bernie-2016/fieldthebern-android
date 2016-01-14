@@ -29,8 +29,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**

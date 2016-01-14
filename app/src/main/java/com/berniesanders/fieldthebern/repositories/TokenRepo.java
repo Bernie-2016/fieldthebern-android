@@ -2,6 +2,7 @@ package com.berniesanders.fieldthebern.repositories;
 
 import android.content.Context;
 import android.util.Base64;
+
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
@@ -15,17 +16,18 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+
+import java.io.UnsupportedEncodingException;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.Subscriber;
 import rx.functions.Func1;
 import timber.log.Timber;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Data repository for oauth2

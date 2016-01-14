@@ -5,7 +5,6 @@ import android.content.Context;
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.Rankings;
-import com.berniesanders.fieldthebern.models.SingleAddressResponse;
 import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
@@ -23,8 +22,6 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 

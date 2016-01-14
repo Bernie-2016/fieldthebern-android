@@ -1,16 +1,19 @@
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.events.LoginEvent;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -30,9 +33,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.functions.Action1;
+import rx.Subscriber;
 import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -46,15 +48,17 @@ public class UserRepo {
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
+    private final Context context;
 
     User currentUser;
 
     @Inject
-    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public UserRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config, Context context) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
 
         HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
             @Override
@@ -203,7 +207,22 @@ public class UserRepo {
 
     public Observable<User> update(final UserSpec spec) {
         Timber.v("update()");
-        Observable<User> me = getMe()
+
+        return Observable.create(
+                new Observable.OnSubscribe<User>() {
+                    @Override
+                    public void call(Subscriber<? super User> subscriber) {
+                        if (!NetChecker.connected(context)) {
+                            subscriber.onError(new NetworkUnavailableException("No internet available"));
+                        }
+                    }
+                })
+                .flatMap(new Func1<User, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(User user) {
+                        return getMe();
+                    }
+                })
                 .flatMap(new Func1<User, Observable<User>>() {
                     @Override
                     public Observable<User> call(User user) {
@@ -224,28 +243,41 @@ public class UserRepo {
                     }
                 });
 
-        return me;
     }
 
 
     /**
      * Might be best to pass the spec through to this method...?
      */
-    private Observable<User> create(final CreateUserRequest user) {
+    private Observable<User> create(final CreateUserRequest userRequest) {
         Timber.v("create()");
+        return Observable.create(
+                new Observable.OnSubscribe<User>() {
+                    @Override
+                    public void call(Subscriber<? super User> subscriber) {
+                        if (!NetChecker.connected(context)) {
+                            subscriber.onError(new NetworkUnavailableException("No internet available"));
+                        }
+                    }
+                })
+                .flatMap(new Func1<User, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(User user) {
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(config.getCanvassUrl())
+                                .addConverterFactory(GsonConverterFactory.create(gson))
+                                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                .client(client)
+                                .build();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-
-        UserSpec.UserEndpoint endpoint =
-                retrofit.create(UserSpec.UserEndpoint.class);
+                        UserSpec.UserEndpoint endpoint =
+                                retrofit.create(UserSpec.UserEndpoint.class);
 
 
-        return endpoint.create(user);
+                        return endpoint.create(userRequest);
+                    }
+                });
+
     }
 
     private Observable<User> update(final CreateUserRequest user) {
@@ -266,15 +298,30 @@ public class UserRepo {
 
     public Observable<User> getMe() {
         Timber.v("getMe()");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
+        return Observable.create(
+                new Observable.OnSubscribe<User>() {
+                    @Override
+                    public void call(Subscriber<? super User> subscriber) {
+                        if (!NetChecker.connected(context)) {
+                            subscriber.onError(new NetworkUnavailableException("No internet available"));
+                        }
+                    }
+                })
+                .flatMap(new Func1<User, Observable<User>>() {
+                    @Override
+                    public Observable<User> call(User user) {
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(config.getCanvassUrl())
+                                .addConverterFactory(GsonConverterFactory.create(gson))
+                                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                .client(client)
+                                .build();
 
-        UserSpec.UserEndpoint endpoint =
-                retrofit.create(UserSpec.UserEndpoint.class);
-        return endpoint.getMe();
+                        UserSpec.UserEndpoint endpoint =
+                                retrofit.create(UserSpec.UserEndpoint.class);
+                        return endpoint.getMe();
+                    }
+                });
+
     }
 }

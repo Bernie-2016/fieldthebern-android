@@ -16,6 +16,7 @@ import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.Token;
@@ -304,6 +305,11 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+
+                if (e instanceof NetworkUnavailableException) {
+                    ToastService.get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
+                }
             }
 
             @Override

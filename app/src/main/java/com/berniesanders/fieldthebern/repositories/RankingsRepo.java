@@ -1,7 +1,12 @@
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
+
 import com.berniesanders.fieldthebern.config.Config;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.Rankings;
+import com.berniesanders.fieldthebern.models.SingleAddressResponse;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -18,6 +23,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
 import timber.log.Timber;
 
 
@@ -32,14 +39,16 @@ public class RankingsRepo {
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
+    private final Context context;
 
 
     @Inject
-    public RankingsRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public RankingsRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config, Context context) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
 
         HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
             @Override
@@ -60,18 +69,34 @@ public class RankingsRepo {
      */
     public Observable<Rankings> get(final RankingSpec spec) {
 
-        Timber.v("getMe()");
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
+        Timber.v("get()");
 
-        RankingSpec.RankEndpoint endpoint =
-                retrofit.create(RankingSpec.RankEndpoint.class);
+        return Observable.create(new Observable.OnSubscribe<Rankings>() {
+            @Override
+            public void call(Subscriber<? super Rankings> subscriber) {
+                if (!NetChecker.connected(context)) {
+                    subscriber.onError(new NetworkUnavailableException("No internet available"));
+                }
+            }
+        })
+        .flatMap(new Func1<Rankings, Observable<Rankings>>() {
+            @Override
+            public Observable<Rankings> call(Rankings rankings) {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(config.getCanvassUrl())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                        .client(client)
+                        .build();
 
-        return endpoint.get(spec.type());
+                RankingSpec.RankEndpoint endpoint =
+                        retrofit.create(RankingSpec.RankEndpoint.class);
+
+                return endpoint.get(spec.type());
+            }
+        });
+
+
     }
 
 }

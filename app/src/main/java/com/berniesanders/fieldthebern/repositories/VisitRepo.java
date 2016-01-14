@@ -6,12 +6,16 @@
  */
 package com.berniesanders.fieldthebern.repositories;
 
+import android.content.Context;
+
 import com.berniesanders.fieldthebern.config.Config;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
+import com.berniesanders.fieldthebern.network.NetChecker;
 import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
 import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
@@ -31,6 +35,8 @@ import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -44,17 +50,19 @@ public class VisitRepo {
     private final RxSharedPreferences rxPrefs;
     private final OkHttpClient client = new OkHttpClient();
     private final Config config;
+    private final Context context;
 
     private Visit visit;
     private List<Person> previousPeople = new ArrayList<>();
 
 
     @Inject
-    public VisitRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config) {
+    public VisitRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config, Context context) {
         this.gson = gson;
         this.tokenRepo = tokenRepo;
         this.rxPrefs = rxPrefs;
         this.config = config;
+        this.context = context;
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -104,35 +112,47 @@ public class VisitRepo {
     public Observable<VisitResult> submit() {
         Timber.v("submit()");
 
-        //remove anyone who wasn't spoken to
-        List<CanvassData> included = visit.included();
+        return Observable.create(
+                new Observable.OnSubscribe<VisitResult>() {
+                    @Override
+                    public void call(Subscriber<? super VisitResult> subscriber) {
+                        if (!NetChecker.connected(context)) {
+                            subscriber.onError(new NetworkUnavailableException("No internet available"));
+                        }
+                    }
+                })
+                .flatMap(new Func1<VisitResult, Observable<VisitResult>>() {
+                    @Override
+                    public Observable<VisitResult> call(VisitResult visitResult) {
+                        //remove anyone who wasn't spoken to
+                        List<CanvassData> included = visit.included();
 
-        List<Person> peopleToRemove = new ArrayList<>();
+                        List<Person> peopleToRemove = new ArrayList<>();
 
-        for(CanvassData canvassData : included) {
-            if (canvassData.type().equals(Person.TYPE)) {
-                Person person = (Person) canvassData;
-                if (!person.spokenTo()) {
-                    peopleToRemove.add(person);
-                }
-            }
-        }
+                        for (CanvassData canvassData : included) {
+                            if (canvassData.type().equals(Person.TYPE)) {
+                                Person person = (Person) canvassData;
+                                if (!person.spokenTo()) {
+                                    peopleToRemove.add(person);
+                                }
+                            }
+                        }
 
-        visit.included().removeAll(peopleToRemove);
+                        visit.included().removeAll(peopleToRemove);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl(config.getCanvassUrl())
+                                .addConverterFactory(GsonConverterFactory.create(gson))
+                                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                                .client(client)
+                                .build();
 
-        visit.stop(); //stop the timer
+                        visit.stop(); //stop the timer
 
-
-
-        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
-        return endpoint.submit(visit);
+                        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
+                        return endpoint.submit(visit);
+                    }
+                });
     }
 
     public void clear() {

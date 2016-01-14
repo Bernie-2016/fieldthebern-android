@@ -14,6 +14,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
@@ -371,6 +372,11 @@ public class NewVisitScreen extends FlowPathBase {
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());
+                }
+
+                if (e instanceof NetworkUnavailableException) {
+                    ToastService.get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
                 }
             }
 

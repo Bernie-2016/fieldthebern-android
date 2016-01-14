@@ -17,7 +17,7 @@
  */
 package com.berniesanders.fieldthebern;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.DialogController;
@@ -36,7 +36,7 @@ import timber.log.Timber;
 /**
  *
  */
-public class FTBApplication extends Application {
+public class FTBApplication extends MultiDexApplication {
 
     private MortarScope rootScope;
     static MainComponent component;

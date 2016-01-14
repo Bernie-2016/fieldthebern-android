@@ -1,9 +1,16 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
+import com.berniesanders.fieldthebern.BuildConfig;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
@@ -19,6 +26,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
@@ -64,9 +72,10 @@ public class AboutScreen extends FlowPathBase {
 
         @BindString(R.string.about) String screenTitleString;
         @BindString(R.string.about_text) String versionUnformatted;
+        @BindString(R.string.email_support) String supportEmail;
 
-        @Bind(R.id.textView)
-        TextView versionText;
+        @Bind(R.id.email) TextView emailText;
+        @Bind(R.id.textView) TextView versionText;
 
         @Inject
         Presenter() {
@@ -77,6 +86,10 @@ public class AboutScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+
+            SpannableStringBuilder spanBuilder = new SpannableStringBuilder(supportEmail);
+            spanBuilder.setSpan(new UnderlineSpan(), 0, spanBuilder.length(), 0);
+            emailText.setText(spanBuilder);
 
             String pkName = getView().getContext().getPackageName();
             String version = null;
@@ -94,6 +107,30 @@ public class AboutScreen extends FlowPathBase {
                     .closeAppbar()
                     .setMainImage(null)
                     .setConfig(new ActionBarController.Config(screenTitleString, null));
+        }
+
+        @OnClick(R.id.email)
+        void emailSupport() {
+            String body = "Version: " + BuildConfig.VERSION_NAME + "\n" +
+                    "\n" +
+                    "-- Device --" + "\n" +
+                    "Make: " + Build.MANUFACTURER + "\n" +
+                    "Model: " + Build.MODEL + "\n" +
+                    "Release: " + Build.VERSION.RELEASE + "\n" +
+                    "API: " + Build.VERSION.SDK_INT + "\n" +
+                    "\n" +
+                    "-- Description --" + "\n";
+
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
+                .putExtra(Intent.EXTRA_EMAIL, new String[]{supportEmail})
+                .putExtra(Intent.EXTRA_TEXT, body);
+
+            Context context = getView().getContext();
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(intent);
+            } else {
+                Timber.w("No app available to handle email intent");
+            }
         }
 
         @Override

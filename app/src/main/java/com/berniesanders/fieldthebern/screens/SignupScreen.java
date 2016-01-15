@@ -1,11 +1,14 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -44,6 +47,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import dagger.Provides;
 import flow.Flow;
 import flow.History;
@@ -149,6 +153,9 @@ public class SignupScreen extends FlowPathBase {
         @Bind(R.id.avatar_container)
         View avatarContainer;
 
+        @Bind(R.id.email)
+        AutoCompleteTextView emailAutocompleteTV;
+
         boolean avatarButtonSliderOpen = false;
 
         @Inject
@@ -175,6 +182,17 @@ public class SignupScreen extends FlowPathBase {
             PermissionService
                     .get(getView())
                     .requestPermission();
+
+            getView().loadUserEmailAccounts(emailAutocompleteTV);
+        }
+
+        @OnTouch(R.id.email)
+        boolean showEmails() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailAutocompleteTV.showDropDown();
+                emailAutocompleteTV.setShowSoftInputOnFocus(true);
+            }
+            return false;
         }
 
         private void showPhotoIfExists() {

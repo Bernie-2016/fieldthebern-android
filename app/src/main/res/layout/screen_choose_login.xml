@@ -10,12 +10,25 @@
     tools:background="@color/bernie_dark_blue"
     tools:context=".MainActivity"
     >
-
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/no_account"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/no_account"
+        android:textAllCaps="false"
+        android:textColor="@color/b_light_blue2"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_centerHorizontal="true"
+        />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/no_account"
         android:layout_margin="16dp"
         android:background="@color/dark_blue2"
         />
@@ -24,7 +37,7 @@
         android:id="@+id/login_email"
         android:layout_width="match_parent"
         android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@id/no_account"
         android:layout_margin="16dp"
         android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/ic_email_white_24dp"
@@ -69,24 +82,11 @@
         android:textSize="18sp"
         android:textStyle="normal"
         />
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/no_account"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/login_facebook"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/no_account"
-        android:textAllCaps="false"
-        android:textColor="@color/b_light_blue2"
-        android:textSize="16sp"
-        android:textStyle="normal"
-        android:layout_centerHorizontal="true"
-        />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/no_account"
+        android:layout_above="@id/login_facebook"
         android:gravity="center"
         >
         <ImageView

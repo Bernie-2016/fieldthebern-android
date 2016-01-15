@@ -165,14 +165,7 @@ public class ChooseSignupScreen extends FlowPathBase {
 
         @OnClick(R.id.have_an_account)
         void haveAccount() {
-
-            Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
-            String userString = userPref.get();
-
-            //if we have any store user info we can start with that
-            User user = (userString == null) ? new User() : gson.fromJson(userString, User.class);
-
-            Flow.get(getView().getContext()).set(new LoginScreen(user));
+            Flow.get(getView().getContext()).set(new ChooseLoginScreen());
         }
 
     }

@@ -284,7 +284,7 @@ public class LoginScreen extends FlowPathBase {
 
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
-                    ToastService.get(getView()).bern("Invalid Password or Email");
+                    ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
                 ProgressDialogService.get(getView()).dismiss();
             }

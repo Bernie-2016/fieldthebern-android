@@ -551,7 +551,7 @@ public class SignupScreen extends FlowPathBase {
                 ProgressDialogService.get(getView()).dismiss();
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
-                    ToastService.get(getView()).bern("An account with this email already exists. ", Toast.LENGTH_SHORT);
+                    ToastService.get(getView()).bern(errorResponse.getAllDetails(), Toast.LENGTH_SHORT);
                 }
             }
 

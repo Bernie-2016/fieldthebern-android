@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
@@ -22,10 +23,13 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
+import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
+import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
+import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.FormValidator;
@@ -36,6 +40,8 @@ import com.berniesanders.fieldthebern.views.LoginView;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.regex.Pattern;
 
@@ -130,12 +136,19 @@ public class LoginScreen extends FlowPathBase {
         private final ErrorResponseParser errorResponseParser;
         private final RxSharedPreferences rxPrefs;
         private final Gson gson;
+        private final UserAttributes userAttributes;
 
         @Bind(R.id.password)
         EditText passwordEditText;
 
         @Bind(R.id.email)
         AutoCompleteTextView emailEditText;
+
+        @Bind(R.id.user_photo)
+        ImageView userImageView;
+
+        @Bind(R.id.mask)
+        ImageView mask;
 
         @Inject
         Presenter(User user,
@@ -150,6 +163,8 @@ public class LoginScreen extends FlowPathBase {
             this.errorResponseParser = errorResponseParser;
             this.rxPrefs = rxPrefs;
             this.gson = gson;
+            this.userAttributes = user.getData().attributes();
+
         }
 
         @Override
@@ -164,6 +179,11 @@ public class LoginScreen extends FlowPathBase {
 
             attemptLoginViaRefresh();
             getView().loadUserEmailAccounts(emailEditText);
+
+            if (userAttributes.isFacebookUser()) {
+                getView().showFacebook(userAttributes);
+                loadPhoto();
+            }
         }
 
 
@@ -218,6 +238,22 @@ public class LoginScreen extends FlowPathBase {
             return false;
         }
 
+        private void loadPhoto() {
+            Picasso.with(getView().getContext())
+                    .load(userAttributes.getPhotoLargeUrl())
+                    .into(userImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            mask.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Timber.e("error loading facebook image");
+                        }
+                    });
+        }
+
         @OnClick(R.id.login_email)
         void loginEmail() {
 
@@ -225,7 +261,22 @@ public class LoginScreen extends FlowPathBase {
 
                 if(!formIsValid()) { return; }
 
-                if (!user.getData().attributes().isFacebookUser()) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+
+                if (user.getData().attributes().isFacebookUser()) {
+
+                    TokenSpec spec = new TokenSpec()
+                            .facebook(new LoginFacebookRequest()
+                                    .password(passwordEditText.getText().toString())
+                                    .username(emailEditText.getText().toString()));
+
+                    tokenRepo
+                            .loginFacebook(spec)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(observer);
+
+                } else {
 
                     TokenSpec spec = new TokenSpec()
                             .email(new LoginEmailRequest()
@@ -237,7 +288,7 @@ public class LoginScreen extends FlowPathBase {
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(observer);
-                    ProgressDialogService.get(getView()).show(R.string.please_wait);
+
                 }
 
             } else {
@@ -350,8 +401,8 @@ public class LoginScreen extends FlowPathBase {
         };
 
         @OnClick(R.id.no_account)
-        void haveAccount() {
-            Flow.get(getView()).goBack();
+        void noAccount() {
+            Flow.get(getView()).setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.BACKWARD);
         }
     }
 }

@@ -9,6 +9,7 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
@@ -182,7 +183,7 @@ public class ProfileEditScreen extends FlowPathBase {
             String lastName = lastNameEditText.getText().toString();
 //            String email = emailEditText.getText().toString();
             UserSpec spec = new UserSpec();
-            User user = new User();
+            final User user = new User();
             user.getData().attributes().firstName(firstName);
             user.getData().attributes().lastName(lastName);
 //            user.getData().attributes().email(email);
@@ -199,6 +200,7 @@ public class ProfileEditScreen extends FlowPathBase {
                                     ProfileEditView view = getView();
                                     if (view != null) {
                                         ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
+                                        FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
                                         Flow.get(view.getContext()).set(new HomeScreen());
                                     } else {
                                         Timber.w("getView() null, cannot notify user of successful profile save");

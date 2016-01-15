@@ -3,6 +3,7 @@ package com.berniesanders.fieldthebern.views;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.util.Patterns;
@@ -35,7 +36,7 @@ public class LoginView extends RelativeLayout {
     LoginScreen.Presenter presenter;
 
     @Bind(R.id.email)
-    AppCompatEditText email;
+    AppCompatAutoCompleteTextView email;
 
     public LoginView(Context context) {
         super(context);

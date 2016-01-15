@@ -6,13 +6,21 @@ import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.FacebookService;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
+import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
+import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
+import com.berniesanders.fieldthebern.events.LoginEvent;
+import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.FacebookUser;
+import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.repositories.TokenRepo;
+import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.views.ChooseLoginView;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
@@ -29,8 +37,13 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import flow.Flow;
+import flow.History;
 import mortar.ViewPresenter;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -81,12 +94,16 @@ public class ChooseLoginScreen extends FlowPathBase {
 
         private final Gson gson;
         private final RxSharedPreferences rxPrefs;
+        private final TokenRepo tokenRepo;
+        private final UserRepo userRepo;
         @BindString(R.string.login_title) String screenTitleString;
 
         @Inject
-        Presenter(Gson gson, RxSharedPreferences rxPrefs) {
+        Presenter(Gson gson, RxSharedPreferences rxPrefs, TokenRepo tokenRepo, UserRepo userRepo) {
             this.gson = gson;
             this.rxPrefs = rxPrefs;
+            this.tokenRepo = tokenRepo;
+            this.userRepo = userRepo;
         }
 
         @Override
@@ -94,6 +111,7 @@ public class ChooseLoginScreen extends FlowPathBase {
             Timber.v("onLoad");
             ButterKnife.bind(this, getView());
             setActionBar();
+            attemptLoginViaRefresh();
         }
 
 
@@ -169,6 +187,68 @@ public class ChooseLoginScreen extends FlowPathBase {
         void noAccount() {
             Flow.get(getView().getContext()).goBack();
         }
+
+        private void attemptLoginViaRefresh() {
+            //if the permission hasn't been granted the user should just login again
+            if (!PermissionService.get(getView()).isGranted()) { return; }
+
+            Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+
+            if (tokenPref.get()==null) { return; }
+
+            Token token = gson.fromJson(tokenPref.get(), Token.class);
+
+            if (token == null) { return; } // if we don't have a token, we cant refresh
+
+            tokenRepo.refresh()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(refreshObserver);
+
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
+        }
+
+
+        Observer<Token> refreshObserver = new Observer<Token>() {
+            @Override
+            public void onCompleted() {
+                Timber.d("refreshObserver done.");
+                if (getView() == null) {
+                    return;
+                }
+                ProgressDialogService.get(getView()).dismiss();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                if (getView() == null) {
+                    Timber.e(e, "refreshObserver onError");
+                    return;
+                }
+                ProgressDialogService.get(getView()).dismiss();
+
+                if (e instanceof NetworkUnavailableException) {
+                    ToastService.get(getView())
+                            .bern(getView().getResources().getString(R.string.err_internet_not_available));
+                }
+            }
+
+            @Override
+            public void onNext(Token token) {
+                Timber.d("refreshObserver onNext: %s", token.toString());
+                userRepo.getMe()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<User>() {
+                            @Override
+                            public void call(User user) {
+                                ProgressDialogService.get(getView()).dismiss();
+                                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+                                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+                            }
+                        });
+            }
+        };
 
     }
 

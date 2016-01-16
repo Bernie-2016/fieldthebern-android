@@ -1,5 +1,6 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.EditText;
 
@@ -15,6 +16,7 @@ import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
+import com.berniesanders.fieldthebern.views.PhotoEditView;
 import com.berniesanders.fieldthebern.views.ProfileEditView;
 import com.crashlytics.android.Crashlytics;
 
@@ -111,6 +113,9 @@ public class ProfileEditScreen extends FlowPathBase {
          */
         private final UserRepo userRepo;
 
+        private Bitmap userPhoto;
+        private String base64PhotoData;
+
         @Bind(R.id.first_name)
         EditText firstNameEditText;
 
@@ -119,6 +124,9 @@ public class ProfileEditScreen extends FlowPathBase {
 
 //        @Bind(R.id.email)
 //        EditText emailEditText;
+
+        @Bind(R.id.photo_edit)
+        PhotoEditView photoEditView;
 
 
         /**
@@ -151,8 +159,18 @@ public class ProfileEditScreen extends FlowPathBase {
                             firstNameEditText.setText(firstName);
                             lastNameEditText.setText(lastName);
 //                            emailEditText.setText(email);
+
+                            photoEditView.load(user.getData().attributes(), userPhoto);
                         }
                     }).subscribe();
+
+            photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
+                @Override
+                public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
+                    userPhoto = bitmap;
+                    Presenter.this.base64PhotoData = base64PhotoData;
+                }
+            });
         }
 
         /**
@@ -186,6 +204,7 @@ public class ProfileEditScreen extends FlowPathBase {
             final User user = new User();
             user.getData().attributes().firstName(firstName);
             user.getData().attributes().lastName(lastName);
+            user.getData().attributes().base64PhotoData(base64PhotoData);
 //            user.getData().attributes().email(email);
             spec.create(new CreateUserRequest());
             spec.update(user);

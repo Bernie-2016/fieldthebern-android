@@ -5,24 +5,23 @@ import android.os.Bundle;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-import com.berniesanders.fieldthebern.controllers.ActionBarController;
-import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.FacebookService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
+import com.berniesanders.fieldthebern.controllers.ActionBarController;
+import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.FacebookUser;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
-import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
-import com.berniesanders.fieldthebern.views.ChooseSignupView;
+import com.berniesanders.fieldthebern.views.ChooseLoginView;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.AccessToken;
@@ -52,19 +51,19 @@ import timber.log.Timber;
  *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_choose_signup)
-public class ChooseSignupScreen extends FlowPathBase {
+@Layout(R.layout.screen_choose_login)
+public class ChooseLoginScreen extends FlowPathBase {
 
     /**
      */
-    public ChooseSignupScreen() {
+    public ChooseLoginScreen() {
     }
 
     /**
      */
     @Override
     public Object createComponent() {
-        return DaggerChooseSignupScreen_Component
+        return DaggerChooseLoginScreen_Component
                 .builder()
                 .mainComponent(FTBApplication.getComponent())
                 .build();
@@ -74,7 +73,7 @@ public class ChooseSignupScreen extends FlowPathBase {
      */
     @Override
     public String getScopeName() {
-        return ChooseSignupScreen.class.getName();
+        return ChooseLoginScreen.class.getName();
     }
 
 
@@ -87,19 +86,17 @@ public class ChooseSignupScreen extends FlowPathBase {
     @FtbScreenScope
     @dagger.Component(dependencies = MainComponent.class)
     public interface Component {
-        void inject(ChooseSignupView t);
-        Gson gson();
-        RxSharedPreferences rxPrefs();
+        void inject(ChooseLoginView t);
     }
 
     @FtbScreenScope
-    static public class Presenter extends ViewPresenter<ChooseSignupView> {
+    static public class Presenter extends ViewPresenter<ChooseLoginView> {
 
         private final Gson gson;
         private final RxSharedPreferences rxPrefs;
         private final TokenRepo tokenRepo;
         private final UserRepo userRepo;
-        @BindString(R.string.signup_title) String screenTitleString;
+        @BindString(R.string.login_title) String screenTitleString;
 
         @Inject
         Presenter(Gson gson, RxSharedPreferences rxPrefs, TokenRepo tokenRepo, UserRepo userRepo) {
@@ -122,8 +119,8 @@ public class ChooseSignupScreen extends FlowPathBase {
             ActionBarService
                     .get(getView())
                     .showToolbar()
-                    .lockDrawer()
                     .closeAppbar()
+                    .lockDrawer()
                     .setMainImage(null)
                     .setConfig(new ActionBarController.Config(screenTitleString, null));
         }
@@ -133,20 +130,25 @@ public class ChooseSignupScreen extends FlowPathBase {
         }
 
         @Override
-        public void dropView(ChooseSignupView view) {
+        public void dropView(ChooseLoginView view) {
             super.dropView(view);
             ButterKnife.unbind(this);
         }
 
-        @OnClick(R.id.sign_up_email)
-        void signUpEmail() {
-            Flow.get(getView().getContext())
-                    .set(new SignupScreen(new UserAttributes()));
+        @OnClick(R.id.login_email)
+        void loginEmail() {
+            Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+            String userString = userPref.get();
+
+            //if we have any store user info we can start with that
+            User user = (userString == null) ? new User() : gson.fromJson(userString, User.class);
+
+            Flow.get(getView().getContext()).set(new LoginScreen(user));
         }
 
-        @OnClick(R.id.sign_up_facebook)
-        void signUpFacebook() {
-
+        //TODO: pass a pre-crafted user?
+        @OnClick(R.id.login_facebook)
+        void loginFacebook() {
             FacebookService
                     .get(getView())
                     .loginWithFacebook(new Action0() {
@@ -168,8 +170,10 @@ public class ChooseSignupScreen extends FlowPathBase {
                                                             response.getJSONObject().toString(),
                                                             FacebookUser.class);
 
+                                            User user = new User();
+                                            user.getData().attributes(facebookUser.convertToApiUser());
                                             Flow.get(getView().getContext())
-                                                    .set(new SignupScreen(facebookUser.convertToApiUser()));
+                                                    .set(new LoginScreen(user));
                                         }
                                     }
                             );
@@ -177,15 +181,12 @@ public class ChooseSignupScreen extends FlowPathBase {
                             graphRequest.executeAsync();
                         }
                     });
-
-
         }
 
-        @OnClick(R.id.have_an_account)
-        void haveAccount() {
-            Flow.get(getView().getContext()).set(new ChooseLoginScreen());
+        @OnClick(R.id.no_account)
+        void noAccount() {
+            Flow.get(getView().getContext()).goBack();
         }
-
 
         private void attemptLoginViaRefresh() {
             //if the permission hasn't been granted the user should just login again
@@ -250,4 +251,6 @@ public class ChooseSignupScreen extends FlowPathBase {
         };
 
     }
+
+
 }

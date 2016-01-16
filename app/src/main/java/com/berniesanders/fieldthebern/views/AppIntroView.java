@@ -79,6 +79,9 @@ public class AppIntroView extends FrameLayout {
 
             @Override
             public void onPageSelected(int position) {
+                if (position == 4) {
+                    done();
+                }
                 doneButton.setText(position == 3?R.string.done:R.string.skip);
             }
 

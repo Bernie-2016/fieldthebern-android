@@ -322,7 +322,7 @@ public class ProfileScreen extends FlowPathBase {
             ButterKnife.unbind(this);
         }
 
-        @OnClick(R.id.submit_profile_settings)
+        @OnClick({R.id.submit_profile_settings, R.id.avatar})
         void onEditProfileClicked() {
             Flow.get(getView()).set(new ProfileEditScreen());
         }

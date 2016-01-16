@@ -22,83 +22,9 @@
             android:orientation="vertical"
             android:padding="16dp"
             >
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                >
-                <LinearLayout
-                    android:id="@+id/avatar_buttons"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="left|center_vertical"
-                    android:layout_gravity="center_vertical"
-                    android:visibility="gone"
-                    >
 
-                    <android.support.v7.widget.AppCompatButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/take_photo"
-                        android:id="@+id/takePhoto"
-                        android:drawableLeft="@drawable/ic_camera_alt_white_24dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:textColor="@android:color/white"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_margin="8dp"
-                        android:textAllCaps="false"
-                        android:gravity="left|center_vertical"
-                        android:drawablePadding="8dp"
-                        android:padding="8dp"
-                        />
-                    <android.support.v7.widget.AppCompatButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/choose_picture"
-                        android:id="@+id/pickGallery"
-                        android:drawableLeft="@drawable/ic_photo_library_white_24dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:textColor="@android:color/white"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_margin="8dp"
-                        android:textAllCaps="false"
-                        android:gravity="left|center_vertical"
-                        android:drawablePadding="8dp"
-                        android:padding="8dp"
-                        />
-                </LinearLayout>
-                <FrameLayout
-                    android:id="@+id/avatar_container"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
-                    android:layout_gravity="center">
-                    <ImageView
-                        android:id="@+id/user_photo"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/ic_account_circle_white_48dp"
-                        android:scaleType="centerCrop"
-                        />
-                    <ImageView
-                        android:id="@+id/mask"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:src="@drawable/mask_centered"
-                        android:visibility="gone"
-                        />
-                    <ImageView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:src="@drawable/edit_circle"
-                        android:layout_margin="8dp"
-                        android:layout_gravity="right|top"
-                        />
-                </FrameLayout>
+            <include layout="@layout/photo_edit"/>
 
-            </FrameLayout>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

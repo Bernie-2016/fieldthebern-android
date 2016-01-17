@@ -222,9 +222,9 @@ public class ProfileEditScreen extends FlowPathBase {
             userRepo.update(spec)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action0() {
+                    .subscribe(new Action1<User>() {
                         @Override
-                        public void call() {
+                        public void call(User user) {
                             Timber.v("Profile saved");
                             ProfileEditView view = getView();
                             if (view != null) {

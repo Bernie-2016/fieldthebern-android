@@ -9,9 +9,28 @@ public class FieldOffice {
     private String officeNumber;
     private String notes;
     private String officeLead;
-    private String phone;
     private Double lat;
     private Double lng;
+
+    public String fullAddress() {
+        return address
+                + "\n"
+                + city
+                + ", "
+                + state
+                + " "
+                + zipCode
+                +"\n"
+                + officeNumber;
+    }
+    public String flatAddress() {
+        return address
+                + city
+                + ", "
+                + state
+                + " "
+                + zipCode;
+    }
 
     public String state() {
         return this.state;
@@ -29,9 +48,6 @@ public class FieldOffice {
         return this.zipCode;
     }
 
-    public String officeNumber() {
-        return this.officeNumber;
-    }
 
     public String notes() {
         return this.notes;
@@ -42,7 +58,7 @@ public class FieldOffice {
     }
 
     public String phone() {
-        return this.phone;
+        return this.officeNumber;
     }
 
     public Double lat() {
@@ -73,11 +89,6 @@ public class FieldOffice {
         return this;
     }
 
-    public FieldOffice officeNumber(final String officeNumber) {
-        this.officeNumber = officeNumber;
-        return this;
-    }
-
     public FieldOffice notes(final String notes) {
         this.notes = notes;
         return this;
@@ -88,8 +99,8 @@ public class FieldOffice {
         return this;
     }
 
-    public FieldOffice phone(final String phone) {
-        this.phone = phone;
+    public FieldOffice phone(final String officeNumber) {
+        this.officeNumber = officeNumber;
         return this;
     }
 
@@ -113,7 +124,6 @@ public class FieldOffice {
                 ", officeNumber='" + officeNumber + '\'' +
                 ", notes='" + notes + '\'' +
                 ", officeLead='" + officeLead + '\'' +
-                ", phone='" + phone + '\'' +
                 ", lat=" + lat +
                 ", lng=" + lng +
                 '}';
@@ -137,7 +147,6 @@ public class FieldOffice {
         if (officeLead != null ? !officeLead.equals(that.officeLead) : that.officeLead != null) {
             return false;
         }
-        if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
         if (lat != null ? !lat.equals(that.lat) : that.lat != null) return false;
         return !(lng != null ? !lng.equals(that.lng) : that.lng != null);
 
@@ -152,7 +161,6 @@ public class FieldOffice {
         result = 31 * result + (officeNumber != null ? officeNumber.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
         result = 31 * result + (officeLead != null ? officeLead.hashCode() : 0);
-        result = 31 * result + (phone != null ? phone.hashCode() : 0);
         result = 31 * result + (lat != null ? lat.hashCode() : 0);
         result = 31 * result + (lng != null ? lng.hashCode() : 0);
         return result;

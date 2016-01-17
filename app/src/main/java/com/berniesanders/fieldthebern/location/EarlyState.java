@@ -18,6 +18,9 @@ public class EarlyState {
     public static final String PHONEBANK = "phonebank";
     public static final String FIELD_OFFICE = "field_office";
 
+    public static final String PREF_SHOW_PHONEBANK = "pref_show_phonebank";
+    public static final String PREF_SHOW_FIELD_OFFICE = "pref_show_field_office";
+
     public static final int MAX_DISTANCE_TO_OFFICE = 80467;
 
     private FieldOffice closestOffice;

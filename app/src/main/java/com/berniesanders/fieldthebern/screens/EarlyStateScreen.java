@@ -19,6 +19,7 @@ import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.repositories.FieldOfficeRepo;
 import com.berniesanders.fieldthebern.views.EarlyStateView;
 import com.berniesanders.fieldthebern.views.ExampleView;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import dagger.Provides;
 import flow.Flow;
@@ -87,6 +89,7 @@ public class EarlyStateScreen extends FlowPathBase {
 
 
         private final EarlyState earlyState;
+        private final RxSharedPreferences rxPrefs;
 
         @Bind(R.id.field_office_container)
         View fieldOfficeContainer;
@@ -104,8 +107,9 @@ public class EarlyStateScreen extends FlowPathBase {
         AppCompatButton mapButton;
 
         @Inject
-        Presenter(EarlyState earlyState) {
+        Presenter(EarlyState earlyState, RxSharedPreferences rxPrefs) {
             this.earlyState = earlyState;
+            this.rxPrefs = rxPrefs;
         }
 
         @Override
@@ -168,6 +172,16 @@ public class EarlyStateScreen extends FlowPathBase {
                 getView().getContext().startActivity(mapIntent);
             }
 
+        }
+
+        @OnCheckedChanged(R.id.dont_show_again)
+        void onDontShowAgainChecked(boolean checked) {
+
+            if (earlyState.type().equals(EarlyState.FIELD_OFFICE)) {
+                rxPrefs.getBoolean(EarlyState.PREF_SHOW_FIELD_OFFICE, true).set(!checked);
+            } else {
+                rxPrefs.getBoolean(EarlyState.PREF_SHOW_PHONEBANK, true).set(!checked);
+            }
         }
 
     }

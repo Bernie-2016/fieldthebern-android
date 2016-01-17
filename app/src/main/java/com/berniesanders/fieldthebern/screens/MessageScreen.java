@@ -32,10 +32,13 @@ public class MessageScreen {
                 .state(stateCode)
                 .offices(offices);
 
-        if (earlyState.isNear()) {
+        boolean showFieldOffice = rxPrefs.getBoolean(EarlyState.PREF_SHOW_FIELD_OFFICE, true).get();
+        boolean showPhonebank = rxPrefs.getBoolean(EarlyState.PREF_SHOW_PHONEBANK, true).get();
+
+        if (earlyState.isNear() && showFieldOffice) {
             earlyState.type(EarlyState.FIELD_OFFICE);
             return new EarlyStateScreen(earlyState);
-        } else if (earlyState.phonebank()) {
+        } else if (earlyState.phonebank() && showPhonebank) {
             earlyState.type(EarlyState.PHONEBANK);
             return new EarlyStateScreen(earlyState);
         } else {

@@ -132,6 +132,7 @@ public class ChooseSignupScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
             attemptLoginViaRefresh();
+            PermissionService.get(getView()).requestPermission();
         }
 
 

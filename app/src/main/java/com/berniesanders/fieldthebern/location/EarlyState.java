@@ -20,7 +20,7 @@ public class EarlyState {
 
     public static final int MAX_DISTANCE_TO_OFFICE = 80467;
 
-    private FieldOffice fieldOffice;
+    private FieldOffice closestOffice;
     private Location location;
     private String state; //Two letter state code
     private FieldOfficeList offices;
@@ -34,10 +34,17 @@ public class EarlyState {
     public @interface ScreenType {}
 
 
-    public boolean nearFieldOffice() {
-        fieldOffice = offices.get(11);
-        type(FIELD_OFFICE);
-        return true;
+    public boolean isNear() {
+        if (closestOffice == null) {
+            closestOffice = nearestOffice();
+        }
+
+        if (inState() || closestOffice.distance() < MAX_DISTANCE_TO_OFFICE) {
+            type(FIELD_OFFICE);
+            return true;
+        }
+
+        return false;
     }
 
     private boolean inState() {
@@ -60,6 +67,7 @@ public class EarlyState {
             Location.distanceBetween(office.lat(), office.lng(), location.getLatitude(), location.getLongitude(), results);
 
             float distance = results[0];
+            office.distance(distance);
 
             if (nearest == null || distance < shortestDistance) {
                 nearest = office;
@@ -67,6 +75,7 @@ public class EarlyState {
             }
 
         }
+
         return nearest;
     }
 
@@ -107,7 +116,7 @@ public class EarlyState {
 
 
     public FieldOffice fieldOffice() {
-        return this.fieldOffice;
+        return this.closestOffice;
     }
 
     public Location location() {
@@ -131,7 +140,7 @@ public class EarlyState {
     }
 
     public EarlyState fieldOffice(final FieldOffice fieldOffice) {
-        this.fieldOffice = fieldOffice;
+        this.closestOffice = fieldOffice;
         return this;
     }
 

@@ -3,7 +3,6 @@ package com.berniesanders.fieldthebern.screens;
 import android.location.Location;
 
 import com.berniesanders.fieldthebern.location.EarlyState;
-import com.berniesanders.fieldthebern.models.FieldOffice;
 import com.berniesanders.fieldthebern.models.FieldOfficeList;
 import com.berniesanders.fieldthebern.repositories.FieldOfficeRepo;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
@@ -33,7 +32,7 @@ public class MessageScreen {
                 .state(stateCode)
                 .offices(offices);
 
-        if (earlyState.nearFieldOffice()) {
+        if (earlyState.isNear()) {
             earlyState.type(EarlyState.FIELD_OFFICE);
             return new EarlyStateScreen(earlyState);
         } else if (earlyState.phonebank()) {

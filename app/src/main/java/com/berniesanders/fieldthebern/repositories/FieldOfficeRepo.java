@@ -15,7 +15,6 @@ import java.io.InputStream;
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscriber;
 import timber.log.Timber;
 
 public class FieldOfficeRepo {

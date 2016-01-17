@@ -161,7 +161,7 @@ public class EarlyStateScreen extends FlowPathBase {
                     + ","
                     + earlyState.fieldOffice().lng()
                     + "?q="
-                    + Uri.encode(earlyState.fieldOffice().fullAddress()));
+                    + Uri.encode(earlyState.fieldOffice().flatAddress()));
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             if (mapIntent.resolveActivity(getView().getContext().getPackageManager()) != null) {

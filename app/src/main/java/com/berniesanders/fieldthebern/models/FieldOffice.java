@@ -11,6 +11,7 @@ public class FieldOffice {
     private String officeLead;
     private Double lat;
     private Double lng;
+    float distance;
 
     public String fullAddress() {
         return address
@@ -58,7 +59,7 @@ public class FieldOffice {
     }
 
     public String phone() {
-        return this.officeNumber;
+        return "N/A".equals(officeNumber) ? "" : officeNumber;
     }
 
     public Double lat() {
@@ -114,6 +115,16 @@ public class FieldOffice {
         return this;
     }
 
+    public float distance() {
+        return this.distance;
+    }
+
+    public FieldOffice distance(final float distance) {
+        this.distance = distance;
+        return this;
+    }
+
+
     @Override
     public String toString() {
         return "FieldOffice{" +
@@ -129,40 +140,4 @@ public class FieldOffice {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FieldOffice that = (FieldOffice) o;
-
-        if (state != null ? !state.equals(that.state) : that.state != null) return false;
-        if (address != null ? !address.equals(that.address) : that.address != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (zipCode != null ? !zipCode.equals(that.zipCode) : that.zipCode != null) return false;
-        if (officeNumber != null ? !officeNumber.equals(that.officeNumber) : that.officeNumber != null) {
-            return false;
-        }
-        if (notes != null ? !notes.equals(that.notes) : that.notes != null) return false;
-        if (officeLead != null ? !officeLead.equals(that.officeLead) : that.officeLead != null) {
-            return false;
-        }
-        if (lat != null ? !lat.equals(that.lat) : that.lat != null) return false;
-        return !(lng != null ? !lng.equals(that.lng) : that.lng != null);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = state != null ? state.hashCode() : 0;
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (zipCode != null ? zipCode.hashCode() : 0);
-        result = 31 * result + (officeNumber != null ? officeNumber.hashCode() : 0);
-        result = 31 * result + (notes != null ? notes.hashCode() : 0);
-        result = 31 * result + (officeLead != null ? officeLead.hashCode() : 0);
-        result = 31 * result + (lat != null ? lat.hashCode() : 0);
-        result = 31 * result + (lng != null ? lng.hashCode() : 0);
-        return result;
-    }
 }

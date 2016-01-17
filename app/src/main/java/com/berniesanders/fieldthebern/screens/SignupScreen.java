@@ -1,11 +1,13 @@
 package com.berniesanders.fieldthebern.screens;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -15,14 +17,12 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
-import com.berniesanders.fieldthebern.controllers.PhotoService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
-import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.User;
@@ -31,8 +31,8 @@ import com.berniesanders.fieldthebern.mortar.FlowPathBase;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
+import com.berniesanders.fieldthebern.views.PhotoEditView;
 import com.berniesanders.fieldthebern.views.SignupView;
-import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -44,6 +44,7 @@ import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 import dagger.Provides;
 import flow.Flow;
 import flow.History;
@@ -52,8 +53,6 @@ import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -149,7 +148,11 @@ public class SignupScreen extends FlowPathBase {
         @Bind(R.id.avatar_container)
         View avatarContainer;
 
-        boolean avatarButtonSliderOpen = false;
+        @Bind(R.id.email)
+        AutoCompleteTextView emailAutocompleteTV;
+
+        @Bind(R.id.photo_edit)
+        PhotoEditView photoEditView;
 
         @Inject
         Presenter(UserRepo repo, UserAttributes userAttributes, ErrorResponseParser errorResponseParser) {
@@ -166,218 +169,35 @@ public class SignupScreen extends FlowPathBase {
 
             if (userAttributes.isFacebookUser()) {
                 getView().showFacebook(userAttributes);
-                loadPhoto();
+                photoEditView.load(userAttributes, userBitmap);
+            } else if (userBitmap != null) {
+                // User may have set their own photo and persist through rotation
+                photoEditView.load(userAttributes, userBitmap);
             }
 
-            //call in case the photo loads while rotating
-            showPhotoIfExists();
+            photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
+                @Override
+                public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
+                    userBitmap = bitmap;
+                    userAttributes.base64PhotoData(base64PhotoData);
+                }
+            });
             
             PermissionService
                     .get(getView())
                     .requestPermission();
+
+            getView().loadUserEmailAccounts(emailAutocompleteTV);
         }
 
-        private void showPhotoIfExists() {
-
-            if (userBitmap==null) { return; } //nothing to show
-
-            if (getView() == null) { //nowhere to show
-                Timber.w("showPhotoIfExists called but no photo was attached");
-                return;
+        @OnTouch(R.id.email)
+        boolean showEmails() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailAutocompleteTV.showDropDown();
+                emailAutocompleteTV.setShowSoftInputOnFocus(true);
             }
-
-            getView()
-                    .getUserImageView()
-                    .setImageDrawable(
-                            new BitmapDrawable(getView().getContext().getResources(),
-                                    userBitmap));
-            getView().showMask();
-            getView().post(new Runnable() {
-                @Override
-                public void run() {
-                    toggleAvatarWidget(false);
-                }
-            });
-
+            return false;
         }
-
-        private void loadPhoto() {
-            Picasso.with(getView().getContext())
-                    .load(userAttributes.getPhotoLargeUrl())
-                    .into(new SaveImageTarget(onLoad, getView().getContext()));
-        }
-
-
-        @OnClick(R.id.user_photo)
-        void showAvatarButtons() {
-
-            if (avatarButtonSliderOpen) {
-                toggleAvatarWidget(false); //close the widget
-            } else {
-                toggleAvatarWidget(true); //open the widget
-            }
-        }
-
-        void toggleAvatarWidget(boolean open) {
-            float center = avatarContainer.getResources().getDisplayMetrics().widthPixels / 2;
-
-            if (open) {
-                avatarContainer.animate().x(20).setDuration(200).start();
-                avatarButtons.setAlpha(0);
-                avatarButtons.setVisibility(View.VISIBLE);
-                avatarButtons.setX(0);
-                avatarButtons.animate().x(avatarContainer.getWidth()).alpha(1)
-                        .setStartDelay(150).setDuration(200).start();
-                avatarButtonSliderOpen = true;
-            } else {
-                //close the widget
-                avatarContainer
-                        .animate()
-                        .x(center - avatarContainer.getWidth()/2)
-                        .setDuration(200)
-                        .start();
-                avatarButtons.animate().alpha(0).setDuration(75).start();
-                avatarButtonSliderOpen = false;
-            }
-
-        }
-
-        @OnClick(R.id.takePhoto)
-        void takePicture() {
-            if (PermissionService.get(getView()).isPhotoGranted()) {
-                PhotoService
-                        .get(getView())
-                        .takePhoto(new Action1<Bitmap>() {
-                            @Override
-                            public void call(Bitmap bitmap) {
-                                if (bitmap==null) { return; }
-                                userBitmap = bitmap;
-                                showPhotoIfExists();
-                                userAttributes.base64PhotoData(
-                                        SaveImageTarget.base64EncodeBitmap(
-                                                bitmap, getView().getContext()));
-                            }
-                        });
-            } else {
-                requestTakePhotoPermission();
-            }
-        }
-
-        @OnClick(R.id.pickGallery)
-        void choosePhoto() {
-            if (PermissionService.get(getView()).isPhotoGranted()) {
-                PhotoService
-                        .get(getView())
-                        .pickImage(new Action1<Bitmap>() {
-                            @Override
-                            public void call(Bitmap bitmap) {
-                                if (bitmap==null) { return; }
-                                userBitmap = bitmap;
-                                showPhotoIfExists();
-                                userAttributes.base64PhotoData(
-                                        SaveImageTarget.base64EncodeBitmap(
-                                                bitmap, getView().getContext()));
-                            }
-                        });
-            } else {
-                requestGalleryPermission();
-            }
-        }
-
-        private void requestTakePhotoPermission() {
-            PermissionService
-                    .get(getView())
-                    .requestGalleryPermission(
-                            new Action0() {
-                                @Override
-                                public void call() {
-                                    takePicture();
-                                }
-                            },
-                            new Action0() {
-                                @Override
-                                public void call() {
-                                    showTakePhotoSnackbar();
-                                }
-                            });
-        }
-
-        private void showTakePhotoSnackbar() {
-            // Display a SnackBar with an explanation and a button
-            // to trigger the request.
-            Snackbar.make(getView(),
-                        R.string.permission_photo_rationale,
-                        Snackbar.LENGTH_INDEFINITE)
-                    .setAction(
-                            android.R.string.ok,
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    PermissionService.get(getView())
-                                            .requestGalleryPermission(
-                                                    new Action0() {
-                                                        @Override
-                                                        public void call() {
-                                                            takePicture();
-                                                        }
-                                                    }, null);
-                                }
-                            })
-                    .show();
-        }
-        private void requestGalleryPermission() {
-            PermissionService
-                    .get(getView())
-                    .requestGalleryPermission(
-                            new Action0() {
-                                @Override
-                                public void call() {
-                                    choosePhoto();
-                                }
-                            },
-                            new Action0() {
-                                @Override
-                                public void call() {
-                                    showGalleryPhotoSnackbar();
-                                }
-                            });
-        }
-
-        private void showGalleryPhotoSnackbar() {
-            // Display a SnackBar with an explanation and a button
-            // to trigger the request.
-            Snackbar.make(getView(),
-                        R.string.permission_photo_rationale,
-                        Snackbar.LENGTH_INDEFINITE)
-                    .setAction(
-                            android.R.string.ok,
-                            new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    PermissionService.get(getView())
-                                            .requestGalleryPermission(
-                                                    new Action0() {
-                                                        @Override
-                                                        public void call() {
-                                                            choosePhoto();
-                                                        }
-                                                    }, null);
-                                }
-                            })
-                    .show();
-        }
-
-
-        SaveImageTarget.OnLoad onLoad = new SaveImageTarget.OnLoad() {
-
-            @Override
-            public void onLoad(Bitmap bitmap, String encodedString) {
-                userBitmap = bitmap;
-                Timber.v("onLoad encodedString.length() = %d", encodedString.length());
-                userAttributes.base64PhotoData(encodedString);
-                showPhotoIfExists();
-            }
-        };
 
         void setActionBar() {
             ActionBarService

@@ -26,6 +26,7 @@ import timber.log.Timber;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.GET_ACCOUNTS;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static mortar.bundler.BundleService.getBundleService;
@@ -61,7 +62,8 @@ public class PermissionController extends Presenter<PermissionController.Activit
     public boolean isGranted() {
         if ( Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(getView().getActivity(), ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getView().getActivity(), GET_ACCOUNTS) != PERMISSION_GRANTED) {
 
             return false;
         }
@@ -83,7 +85,7 @@ public class PermissionController extends Presenter<PermissionController.Activit
         //Action0 onComplete
         //this.onComplete = onComplete;
         if (!isGranted()) {
-            String[] permissions = {ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION};
+            String[] permissions = {ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, GET_ACCOUNTS};
             ActivityCompat.requestPermissions(getView().getActivity(), permissions, REQ_CODE_PERMISSIONS);
         }
     }

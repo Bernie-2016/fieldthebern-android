@@ -235,8 +235,9 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Rankings>() {
                                 @Override
                                 public void call(Rankings rankings) {
-                                    if (rankings != null) {
-                                        rankingsListView.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    ProfileView view1 = getView();
+                                    if (rankings != null && view1 != null) {
+                                        rankingsListView.setAdapter(new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
                                     }
                                 }
                             },
@@ -255,8 +256,9 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Rankings>() {
                                 @Override
                                 public void call(Rankings rankings) {
-                                    if (rankings != null) {
-                                        rankingsListView2.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    ProfileView view1 = getView();
+                                    if (rankings != null && view1 != null) {
+                                        rankingsListView2.setAdapter(new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
                                     }
                                 }
                             },
@@ -275,8 +277,9 @@ public class ProfileScreen extends FlowPathBase {
                             new Action1<Rankings>() {
                                 @Override
                                 public void call(Rankings rankings) {
-                                    if (rankings != null) {
-                                        rankingsListView3.setAdapter(new RankingAdapter(getView().getContext(), rankings.included(), rankings.data()));
+                                    ProfileView view1 = getView();
+                                    if (rankings != null && view1 != null) {
+                                        rankingsListView3.setAdapter(new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
                                     }
                                 }
                             },
@@ -290,9 +293,12 @@ public class ProfileScreen extends FlowPathBase {
         }
 
         private void loadAvatar(User user) {
-            Picasso.with(getView().getContext())
-                    .load(user.getData().attributes().getPhotoThumbUrl())
-                    .into(avatar);
+            ProfileView view = getView();
+            if(view != null) {
+                Picasso.with(view.getContext())
+                        .load(user.getData().attributes().getPhotoThumbUrl())
+                        .into(avatar);
+            }
         }
 
         /**
@@ -316,7 +322,7 @@ public class ProfileScreen extends FlowPathBase {
             ButterKnife.unbind(this);
         }
 
-        @OnClick(R.id.submit_profile_settings)
+        @OnClick({R.id.submit_profile_settings, R.id.avatar})
         void onEditProfileClicked() {
             Flow.get(getView()).set(new ProfileEditScreen());
         }

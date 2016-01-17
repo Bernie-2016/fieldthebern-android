@@ -68,3 +68,8 @@ proguard/
 /*/*/production
 build/
 app/build/**
+
+##############################################
+# fabric
+##############################################
+app/fabric.properties

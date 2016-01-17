@@ -5,6 +5,8 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.FrameLayout;
 
 import com.berniesanders.fieldthebern.R;
 
@@ -35,6 +37,9 @@ public class AppIntroPagerAdapter extends PagerAdapter {
             case 3:
                 layout = (ViewGroup) inflater.inflate(R.layout.app_intro_page_4, viewGroup, false);
                 break;
+            case 4:
+                layout = new FrameLayout(context);
+                break;
         }
 
         viewGroup.addView(layout);
@@ -48,7 +53,7 @@ public class AppIntroPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
     @Override

@@ -2,26 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_centerInParent="true"
     android:gravity="center"
-    >
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo_final"
-            />
+    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/intro_welcome"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/white"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            />
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_final" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/intro_welcome"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textStyle="bold" />
 </LinearLayout>

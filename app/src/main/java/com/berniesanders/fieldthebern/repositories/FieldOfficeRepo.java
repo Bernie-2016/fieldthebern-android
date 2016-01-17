@@ -23,7 +23,7 @@ public class FieldOfficeRepo {
     final Gson gson;
     private final OkHttpClient client = new OkHttpClient();
     private final Context context;
-
+    FieldOfficeList fieldOfficeList = new FieldOfficeList();
 
     @Inject
     public FieldOfficeRepo(Gson gson,
@@ -36,37 +36,33 @@ public class FieldOfficeRepo {
     }
 
     public Observable<FieldOfficeList> get() {
-        return getFromFile();
+        return Observable.just(getFromFile());
     }
 
 
-    private Observable<FieldOfficeList> getFromFile() {
+    private FieldOfficeList getFromFile() {
 
-        return Observable.create(new Observable.OnSubscribe<FieldOfficeList>() {
+        Timber.v("getFromFile()");
 
-            @Override
-            public void call(Subscriber<? super FieldOfficeList> subscriber) {
+        if (!fieldOfficeList.isEmpty()) {
+            return fieldOfficeList;
+        }
 
-                Timber.v("getFromFile()");
-                String json = null;
-                try {
-                    InputStream is = context.getResources().openRawResource(R.raw.field_offices_geocoded);
-                    int size = is.available();
-                    byte[] buffer = new byte[size];
-                    int read = is.read(buffer);
-                    is.close();
-                    json = new String(buffer, "UTF-8");
-                } catch (IOException ex) {
-                    Timber.e(ex, "error reading field office file");
-                    ex.printStackTrace();
-                }
+        String json = null;
+        try {
+            InputStream is = context.getResources().openRawResource(R.raw.field_offices_geocoded);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            int read = is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            Timber.e(ex, "error reading field office file");
+            ex.printStackTrace();
+        }
 
-                FieldOfficeList fieldOffices = gson.fromJson(json, FieldOfficeList.class);
-                subscriber.onNext(fieldOffices);
-                subscriber.onCompleted();
-            }
-        });
-
+        fieldOfficeList = gson.fromJson(json, FieldOfficeList.class);
+        return fieldOfficeList;
     }
 
 }

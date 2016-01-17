@@ -39,6 +39,7 @@ import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
+import com.berniesanders.fieldthebern.screens.MessageScreen;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -147,6 +148,11 @@ public class MainModule {
     @Singleton
     public FieldOfficeRepo provideFieldOfficeRepo(TokenRepo tokenRepo) {
         return new FieldOfficeRepo(gson, config, context);
+    }
+    @Provides
+    @Singleton
+    public MessageScreen provideMessageScreen(FieldOfficeRepo fieldOfficeRepo) {
+        return new MessageScreen(fieldOfficeRepo, rxPrefs);
     }
 
     @Provides

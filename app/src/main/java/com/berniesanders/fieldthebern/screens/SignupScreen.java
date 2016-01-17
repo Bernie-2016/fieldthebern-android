@@ -157,6 +157,7 @@ public class SignupScreen extends FlowPathBase {
         private final UserRepo repo;
         private UserAttributes userAttributes;
         private final ErrorResponseParser errorResponseParser;
+        private final MessageScreen messageScreen;
         Bitmap userBitmap;
 
         private String stateCode;
@@ -180,10 +181,14 @@ public class SignupScreen extends FlowPathBase {
         PhotoEditView photoEditView;
 
         @Inject
-        Presenter(UserRepo repo, UserAttributes userAttributes, ErrorResponseParser errorResponseParser) {
+        Presenter(UserRepo repo,
+                  UserAttributes userAttributes,
+                  ErrorResponseParser errorResponseParser,
+                  MessageScreen messageScreen) {
             this.repo = repo;
             this.userAttributes = userAttributes;
             this.errorResponseParser = errorResponseParser;
+            this.messageScreen = messageScreen;
         }
 
         @Override
@@ -424,7 +429,12 @@ public class SignupScreen extends FlowPathBase {
                 Timber.d("user created! user: %s", user.toString());
                 ProgressDialogService.get(getView()).dismiss();
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+
+                //Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+
+                Flow.get(getView()).setHistory(
+                        History.single(messageScreen.getMessageOrHome(location, stateCode)),
+                        Flow.Direction.FORWARD);
             }
         };
 

@@ -40,6 +40,7 @@ import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.screens.InitialScreen;
+import com.berniesanders.fieldthebern.screens.MessageScreen;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 
@@ -89,4 +90,5 @@ public interface MainComponent {
     RankingsRepo rankingsRepo();
     StatesRepo statesRepo();
     FieldOfficeRepo fieldOfficeRepo();
+    MessageScreen messageScreen();
 }

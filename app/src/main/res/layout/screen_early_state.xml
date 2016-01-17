@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.berniesanders.fieldthebern.views.EarlyStateView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:background="@color/bernie_dark_blue"
+android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:id="@+id/field_office_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LearnHeader"
+            tools:ignore="MissingPrefix"
+            fontPath="fonts/Lato-Heavy.ttf"
+            android:text="@string/field_office_header"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/field_office_msg1"
+            style="@style/LearnParagraph"
+            />
+
+        <TextView
+            android:id="@+id/field_office_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="123 Somewhere Street\nBurlington, VT 05401\n(555) 555-5555"
+            style="@style/LearnParagraph"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:drawableLeft="@drawable/ic_phone_white_24dp"
+                android:drawablePadding="14dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/call"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                android:padding="16dp"
+                />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:drawableLeft="@drawable/ic_map_white_24dp"
+                android:drawablePadding="14dp"
+                android:gravity="center_vertical|left"
+                android:padding="16dp"
+                android:text="@string/map"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/field_office_msg2"
+            style="@style/LearnParagraph"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/phonebank_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/LearnHeader"
+            tools:ignore="MissingPrefix"
+            fontPath="fonts/Lato-Heavy.ttf"
+            android:text="@string/phonebank_header"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/phonebank"
+            style="@style/LearnParagraph"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/phonebank_link"
+            android:autoLink="web"
+            style="@style/LearnParagraph"
+            android:textSize="22sp"
+            android:textColorLink="@color/bernie_grey"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/dont_show_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dont_show_again"
+        android:textColor="@android:color/white"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="0dp"
+        />
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_margin="16dp"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/dark_blue2"
+            />
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/continueButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_button_height"
+            android:text="@string/continue_btn"
+            style="@style/HomeButton"
+            />
+    </FrameLayout>
+</com.berniesanders.fieldthebern.views.EarlyStateView>

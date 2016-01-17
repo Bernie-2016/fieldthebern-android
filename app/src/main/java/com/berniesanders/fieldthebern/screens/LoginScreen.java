@@ -24,7 +24,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -45,7 +44,6 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
-import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
@@ -64,8 +62,6 @@ import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -161,6 +157,7 @@ public class LoginScreen extends FlowPathBase {
         private final ErrorResponseParser errorResponseParser;
         private final RxSharedPreferences rxPrefs;
         private final Gson gson;
+        private final MessageScreen messageScreen;
         private final UserAttributes userAttributes;
 
         @Bind(R.id.password)
@@ -181,13 +178,15 @@ public class LoginScreen extends FlowPathBase {
                   TokenRepo tokenRepo,
                   ErrorResponseParser errorResponseParser,
                   RxSharedPreferences rxPrefs,
-                  Gson gson) {
+                  Gson gson,
+                  MessageScreen messageScreen) {
             this.user = user;
             this.userRepo = userRepo;
             this.tokenRepo = tokenRepo;
             this.errorResponseParser = errorResponseParser;
             this.rxPrefs = rxPrefs;
             this.gson = gson;
+            this.messageScreen = messageScreen;
             this.userAttributes = user.getData().attributes();
 
         }
@@ -444,6 +443,7 @@ public class LoginScreen extends FlowPathBase {
                             public void call(User user) {
                                 ProgressDialogService.get(getView()).dismiss();
                                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+
                                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
                             }
                         });

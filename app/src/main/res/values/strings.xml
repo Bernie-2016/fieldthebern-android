@@ -56,7 +56,10 @@
     <string name="skip">Skip</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-
+    <string name="call">Call</string>
+    <string name="map">Map</string>
+    <string name="continue_btn">Continue</string>
+    <string name="dont_show_again">Don\'t show this message again</string>
     <string name="previously_participated">Have they previously participated in a primary or caucus?</string>
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
     <string name="bernie_sanders">Bernie Sanders</string>
@@ -195,6 +198,12 @@
     <string name="email_support">support@fieldthebern.com</string>
     <string name="credits_header">CREDITS</string>
     <string name="credits">PROJECT LEAD\n\nJosh Smith\n\nANDROID LEAD\n\nPatrick Cousins\n\nANDROID DEVELOPERS\n\nPatrick Cousins\nFrederick Kautz\nErnest Grzybowski\nPatrick Dattilio\nThomas John Evans IV\nVishal Disawar\nTom Renn\n\nSPECIAL THANKS\n\nZach Schneider\nEthan Wojcinski\nDaniela Perdomo\nEveryone at FeelTheBern.org\nCodersForSanders\nSandersForPresident\n\nAnd everyone who helped test and canvass</string>
+    <string name="field_office_header">Field Office</string>
+    <string name="field_office_msg1">Hey! It looks like you\'re close to one of our field offices:</string>
+    <string name="field_office_msg2">You should stop in and volunteer to canvass with us directly. It helps us target our canvassing efforts even better, and we always love to meet our volunteers. Thanks for supporting the campaign!</string>
+    <string name="phonebank_header">Phonebank</string>
+    <string name="phonebank">Hey! Want to make an even bigger impact for the campaign? We\'re getting all hands on deck to phonebank into crucial early states and build momentum for the political revolution. Visit this link to make some phone calls for Bernie and get the movement going. Thanks for supporting the campaign!</string>
+    <string name="phonebank_link">berniesanders.com/phonebank</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

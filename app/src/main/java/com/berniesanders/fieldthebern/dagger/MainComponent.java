@@ -32,6 +32,7 @@ import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.FieldOfficeRepo;
 import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
@@ -39,6 +40,7 @@ import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.screens.AppIntroScreen;
 import com.berniesanders.fieldthebern.screens.InitialScreen;
+import com.berniesanders.fieldthebern.screens.MessageScreen;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
 
@@ -87,4 +89,6 @@ public interface MainComponent {
     PhotoController photoController();
     RankingsRepo rankingsRepo();
     StatesRepo statesRepo();
+    FieldOfficeRepo fieldOfficeRepo();
+    MessageScreen messageScreen();
 }

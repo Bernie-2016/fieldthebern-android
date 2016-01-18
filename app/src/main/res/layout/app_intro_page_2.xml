@@ -28,7 +28,7 @@
         android:id="@+id/textViewDesc"
         android:layout_width="220dp"
         android:gravity="center"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
         android:text="@string/intro_learn_desc"
         android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium"

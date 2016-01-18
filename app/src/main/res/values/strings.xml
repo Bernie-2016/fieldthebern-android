@@ -80,6 +80,7 @@
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
+    <string name="error_retrieving_profile">Error retrieving profile</string>
     <string name="profile">Profile</string>
     <string name="doors">DOORS</string>
     <string name="weekly_leaderboard">WEEKLY LEADERBOARD</string>

@@ -150,19 +150,30 @@ public class ProfileEditScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             userRepo.getMe().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<User>() {
-                        @Override
-                        public void call(User user) {
-                            String firstName = user.getData().attributes().getFirstName();
-                            String lastName = user.getData().attributes().getLastName();
-//                            String email = user.getData().attributes().getEmail();
-                            firstNameEditText.setText(firstName);
-                            lastNameEditText.setText(lastName);
-//                            emailEditText.setText(email);
-
-                            photoEditView.load(user.getData().attributes(), userPhoto);
-                        }
-                    }).subscribe();
+                    .subscribe(new Action1<User>() {
+                @Override
+                public void call(User user) {
+                    String firstName = user.getData().attributes().getFirstName();
+                    String lastName = user.getData().attributes().getLastName();
+//                    String email = user.getData().attributes().getEmail();
+                    firstNameEditText.setText(firstName);
+                    lastNameEditText.setText(lastName);
+//                    emailEditText.setText(email);
+                    photoEditView.load(user.getData().attributes(), userPhoto);
+                }
+            }, new Action1<Throwable>() {
+                @Override
+                public void call(Throwable throwable) {
+                    Timber.e(throwable, "Unable to retrieve profile");
+                    Crashlytics.logException(throwable);
+                    ProfileEditView view = getView();
+                    if (view != null) {
+                        ToastService.get(view).bern(view.getContext().getString(R.string.error_retrieving_profile));
+                    } else {
+                        Timber.w("getView() null, can not notify user of failed profile retrieval.");
+                    }
+                }
+            });
 
             photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
                 @Override
@@ -211,38 +222,32 @@ public class ProfileEditScreen extends FlowPathBase {
             userRepo.update(spec)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnCompleted(
-                            new Action0() {
-                                @Override
-                                public void call() {
-                                    Timber.v("Profile saved");
-                                    ProfileEditView view = getView();
-                                    if (view != null) {
-                                        ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
-                                        FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                                        Flow.get(view.getContext()).set(new HomeScreen());
-                                    } else {
-                                        Timber.w("getView() null, cannot notify user of successful profile save");
-                                    }
-                                }
+                    .subscribe(new Action1<User>() {
+                        @Override
+                        public void call(User user) {
+                            Timber.v("Profile saved");
+                            ProfileEditView view = getView();
+                            if (view != null) {
+                                ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
+                                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+                                Flow.get(view.getContext()).set(new HomeScreen());
+                            } else {
+                                Timber.w("getView() null, cannot notify user of successful profile save");
                             }
-                    )
-                    .doOnError(
-                            new Action1<Throwable>() {
-                                @Override
-                                public void call(Throwable throwable) {
-                                    Timber.e(throwable, "Unable to save profile");
-                                    Crashlytics.logException(throwable);
-                                    ProfileEditView view = getView();
-                                    if (view != null) {
-                                        ToastService.get(view).bern(view.getContext().getString(R.string.error_saving_profile));
-                                    } else {
-                                        Timber.w("getView() null, cannot notify user of failed profile save");
-                                    }
-                                }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            Timber.e(throwable, "Unable to save profile");
+                            Crashlytics.logException(throwable);
+                            ProfileEditView view = getView();
+                            if (view != null) {
+                                ToastService.get(view).bern(view.getContext().getString(R.string.error_saving_profile));
+                            } else {
+                                Timber.w("getView() null, cannot notify user of failed profile save");
                             }
-                    )
-                    .subscribe();
+                        }
+                    });
         }
     }
 }

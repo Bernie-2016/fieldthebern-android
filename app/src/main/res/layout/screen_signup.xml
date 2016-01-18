@@ -37,6 +37,8 @@
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="20sp"
                 android:inputType="textPersonName|textCapWords"
+                android:nextFocusDown="@+id/last_name"
+                android:nextFocusRight="@+id/last_name"
                 />
 
         </android.support.design.widget.TextInputLayout>
@@ -56,6 +58,8 @@
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="20sp"
                 android:inputType="textPersonName|textCapWords"
+                android:nextFocusDown="@+id/email"
+                android:nextFocusRight="@+id/email"
                 />
         </android.support.design.widget.TextInputLayout>
 
@@ -74,6 +78,9 @@
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="20sp"
                 android:inputType="textEmailAddress"
+                android:nextFocusDown="@+id/password"
+                android:nextFocusRight="@+id/password"
+                android:imeOptions="actionNext"
                 />
         </android.support.design.widget.TextInputLayout>
 

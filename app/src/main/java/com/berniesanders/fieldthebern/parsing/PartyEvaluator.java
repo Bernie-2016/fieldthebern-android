@@ -38,7 +38,7 @@ public class PartyEvaluator {
             return Party.INDEPENDENT;
         } else if (selectedParty.equals(partyArray[4])) {
             return Party.UNDECLARED;
-        } else if (selectedParty.equals(partyArray[6])) {
+        } else if (selectedParty.equals(partyArray[5])) {
             return Party.OTHER;
         } else {
             Timber.e("PartyEvaluator.getParty() called but selection is default?");

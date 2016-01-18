@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,10 +38,13 @@ public class VideoHolder extends BaseViewHolder<Video> {
     @Bind(R.id.play_arrow_icon)
     ImageView playIcon;
 
+    ViewGroup.LayoutParams layoutParams;
+
     VideoHolder(View itemView) {
         super(itemView);
         videoContainer = (VideoContainerView) itemView;
         ButterKnife.bind(this, itemView);
+        layoutParams = thumbnail.getLayoutParams();
     }
 
     @Override
@@ -71,7 +75,15 @@ public class VideoHolder extends BaseViewHolder<Video> {
                 loader.release();
             }
 
-            thumbnail
+            //see https://code.google.com/p/gdata-issues/issues/detail?id=7533
+            videoContainer.removeViewAt(0);
+
+            YouTubeThumbnailView thumbnailView = new YouTubeThumbnailView(videoContainer.getContext());
+            thumbnailView.setLayoutParams(layoutParams);
+            thumbnailView.setId(R.id.youtubethumbnailview);
+            thumbnailView.setAdjustViewBounds(true);
+            videoContainer.addView(thumbnailView, 0);
+            thumbnailView
                     .initialize(thumbnail
                                     .getContext()
                                     .getString(R.string.googleApiKey),
@@ -93,7 +105,7 @@ public class VideoHolder extends BaseViewHolder<Video> {
                             });
 
 
-            thumbnail.setOnClickListener(new View.OnClickListener() {
+            thumbnailView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = YouTubeIntents.createPlayVideoIntent(v.getContext(), model.getId());
@@ -102,9 +114,9 @@ public class VideoHolder extends BaseViewHolder<Video> {
             });
         } else {
             //try showing the video url as a text-link
-
             playIcon.setVisibility(View.INVISIBLE);
-            thumbnail.setVisibility(View.INVISIBLE);
+            videoContainer.findViewById(R.id.youtubethumbnailview).setVisibility(View.INVISIBLE);
+
             TextView textView = (TextView) LayoutInflater
                     .from(videoContainer.getContext())
                     .inflate(R.layout.item_video_link, videoContainer, false);

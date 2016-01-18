@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright 2015 FeelTheBern.org
  */
 package com.berniesanders.fieldthebern.mortar;
 

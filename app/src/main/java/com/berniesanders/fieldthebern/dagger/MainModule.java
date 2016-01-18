@@ -63,7 +63,6 @@ public class MainModule {
         this.context = context.getApplicationContext();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setPrettyPrinting();
         gsonBuilder.disableHtmlEscaping();
         gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());

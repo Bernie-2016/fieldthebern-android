@@ -15,7 +15,6 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.exceptions.AuthFailRedirect;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.ApiAddress;
-import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.RequestMultipleAddresses;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
@@ -42,7 +41,6 @@ import flow.History;
 import flow.path.Path;
 import mortar.MortarScope;
 import mortar.ViewPresenter;
-import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -327,15 +325,15 @@ public class MapScreen extends FlowPathBase {
         @Override
         protected void onSave(Bundle outState) {
 
-            if (cameraPosition!=null) {
+            if (cameraPosition != null) {
                 outState.putParcelable(CAMERA_POSITION, cameraPosition);
             }
 
-            if (address!=null) {
+            if (address != null) {
                 outState.putParcelable(ADDRESS, address);
             }
 
-            if (!nearbyAddresses.isEmpty()) {
+            if (nearbyAddresses != null && !nearbyAddresses.isEmpty()) {
                 outState.putParcelableArrayList(NEARBY, (ArrayList<? extends Parcelable>) nearbyAddresses);
             }
         }

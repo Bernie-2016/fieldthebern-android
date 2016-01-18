@@ -194,7 +194,7 @@
     <string name="about_text_2">For help, send an email to:</string>
     <string name="email_support">support@fieldthebern.com</string>
     <string name="credits_header">CREDITS</string>
-    <string name="credits">PROJECT LEAD\n\nJosh Smith\n\nANDROID LEAD\n\nPatrick Cousins\n\nANDROID DEVELOPERS\n\nPatrick Cousins\nFrederick Kautz\nErnest G\nPatrick Dattilio\nThomas John Evans IV\nVishal Disawar\nTom Renn\n\nSPECIAL THANKS\n\nZach Schneider\nEthan Wojcinski\nDaniela Perdomo\nEveryone at FeelTheBern.org\nCodersForSanders\nSandersForPresident\n\nAnd everyone who helped test and canvass</string>
+    <string name="credits">PROJECT LEAD\n\nJosh Smith\n\nANDROID LEAD\n\nPatrick Cousins\n\nANDROID DEVELOPERS\n\nPatrick Cousins\nFrederick Kautz\nErnest Grzybowski\nPatrick Dattilio\nThomas John Evans IV\nVishal Disawar\nTom Renn\n\nSPECIAL THANKS\n\nZach Schneider\nEthan Wojcinski\nDaniela Perdomo\nEveryone at FeelTheBern.org\nCodersForSanders\nSandersForPresident\n\nAnd everyone who helped test and canvass</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

@@ -33,6 +33,7 @@ import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.PageContentDeserializer;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
+import com.berniesanders.fieldthebern.repositories.FieldOfficeRepo;
 import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
@@ -61,6 +62,7 @@ public class MainModule {
         this.context = context.getApplicationContext();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setPrettyPrinting();
         gsonBuilder.disableHtmlEscaping();
         gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
         gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
@@ -139,6 +141,12 @@ public class MainModule {
     @Singleton
     public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
         return new RankingsRepo(gson, tokenRepo, rxPrefs, config, context);
+    }
+
+    @Provides
+    @Singleton
+    public FieldOfficeRepo provideFieldOfficeRepo(TokenRepo tokenRepo) {
+        return new FieldOfficeRepo(gson, config, context);
     }
 
     @Provides

@@ -50,6 +50,9 @@
                 android:textColorHint="@color/b_light_blue2"
                 android:textSize="20sp"
                 android:inputType="textEmailAddress"
+                android:nextFocusDown="@+id/password"
+                android:nextFocusRight="@+id/password"
+                android:imeOptions="actionNext"
                 />
         </android.support.design.widget.TextInputLayout>
 

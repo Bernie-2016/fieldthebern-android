@@ -140,7 +140,7 @@ public class MapScreen extends FlowPathBase {
                 //unfortunate hack for restoring state in flow after navigation
                 address = ((MapScreen) Path.get(getView().getContext())).address;
             }
-            if (nearbyAddresses.isEmpty()) {
+            if (nearbyAddresses != null && nearbyAddresses.isEmpty()) {
                 //unfortunate hack for restoring state in flow after navigation
                 nearbyAddresses = ((MapScreen) Path.get(getView().getContext())).nearby;
             }

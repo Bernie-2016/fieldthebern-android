@@ -33,6 +33,9 @@ local.properties
 secure.properties
 # API keys
 keys.xml
+secure.properties
+secure/
+*.jks
 
 ##############################################
 # Eclipse

@@ -90,6 +90,8 @@ public class AboutScreen extends FlowPathBase {
         @BindString(R.string.about) String screenTitleString;
         @BindString(R.string.about_text) String versionUnformatted;
         @BindString(R.string.email_support) String supportEmail;
+        @BindString(R.string.gitHash) String gitHash;
+        @BindString(R.string.buildDate) String buildDate;
 
         @Bind(R.id.email) TextView emailText;
         @Bind(R.id.textView) TextView versionText;
@@ -135,6 +137,8 @@ public class AboutScreen extends FlowPathBase {
                     "Model: " + Build.MODEL + "\n" +
                     "Release: " + Build.VERSION.RELEASE + "\n" +
                     "API: " + Build.VERSION.SDK_INT + "\n" +
+                    "Build date: " + buildDate + "\n" +
+                    "Git hash: " + gitHash + "\n" +
                     "\n" +
                     "-- Description --" + "\n";
 

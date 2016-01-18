@@ -45,6 +45,26 @@
             android:textColor="@android:color/white"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="@string/buildDate"
+            android:layout_margin="10dp"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="@string/gitHash"
+            android:layout_margin="10dp"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
 
         <TextView
             android:id="@+id/textView2"

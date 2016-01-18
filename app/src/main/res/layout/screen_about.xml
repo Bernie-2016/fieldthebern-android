@@ -36,7 +36,7 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="350dp"
+            android:layout_width="wrap_content"
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_height="wrap_content"
@@ -112,5 +112,27 @@
             android:layout_gravity="center_horizontal"
             />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/credits_header"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="64dp"
+            android:textStyle="bold"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+        <TextView
+            android:id="@+id/credits"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/credits"
+            android:textColor="@android:color/white"
+            android:layout_margin="16dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
     </LinearLayout>
 </com.berniesanders.fieldthebern.views.AboutView>

@@ -18,10 +18,12 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -30,8 +32,11 @@ import android.widget.Toast;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.apilevels.PermissionUtil;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.DialogController;
+import com.berniesanders.fieldthebern.controllers.DialogService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
@@ -70,6 +75,7 @@ import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -145,6 +151,8 @@ public class SignupScreen extends FlowPathBase {
         @BindString(R.string.err_your_first_name_blank) String firstNameBlank;
         @BindString(R.string.err_your_last_name_blank) String lastNameBlank;
         @BindString(R.string.err_invalid_email) String invalidEmailError;
+        @BindString(R.string.location_disabled_title) String locationDisableTitle;
+        @BindString(R.string.location_disabled_message) String locationDisabledBody;
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
@@ -200,11 +208,39 @@ public class SignupScreen extends FlowPathBase {
                 }
             });
             
-            PermissionService
-                    .get(getView())
-                    .requestPermission();
+
+            if (PermissionService.get(getView()).isGranted()) {
+
+                if (!LocationService.get(getView()).isLocationEnabled()) {
+                    showEnableLocationDialog();
+                }
+            } else {
+                PermissionService.get(getView()).requestPermission();
+            }
 
             getView().loadUserEmailAccounts(emailAutocompleteTV);
+        }
+
+        private void showEnableLocationDialog() {
+            DialogController.DialogAction confirmAction = new DialogController.DialogAction()
+                    .label(android.R.string.ok)
+                    .action(new Action0() {
+                        @Override
+                        public void call() {
+                            Timber.d("ok button click");
+                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            getView().getContext().startActivity(myIntent);
+                        }
+                    });
+
+            DialogService
+                    .get(getView())
+                    .setDialogConfig(
+                            new DialogController.DialogConfig()
+                                    .title(locationDisableTitle)
+                                    .message(locationDisabledBody)
+                                    .withActions(confirmAction)
+                    );
         }
 
         @OnTouch(R.id.email)
@@ -230,6 +266,10 @@ public class SignupScreen extends FlowPathBase {
         void onSubmit() {
             if (PermissionService.get(getView()).isGranted()) {
                 if(!formIsValid()) { return; }
+                if (!LocationService.get(getView()).isLocationEnabled()) {
+                    showEnableLocationDialog();
+                    return;
+                }
                 ProgressDialogService.get(getView()).show(R.string.please_wait);
                 userAttributes = getView().getInput(userAttributes);
                 requestLocation();

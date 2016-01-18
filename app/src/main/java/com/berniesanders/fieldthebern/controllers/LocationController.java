@@ -29,8 +29,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 
 import com.berniesanders.fieldthebern.exceptions.AddressUnavailableException;
 import com.berniesanders.fieldthebern.exceptions.LocationUnavailableException;
@@ -230,5 +232,33 @@ public class LocationController extends Presenter<LocationController.Activity> {
 
             return address;
         }
+    }
+
+
+    public boolean isLocationEnabled() {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+            try {
+                locationMode = Settings.Secure.getInt(
+                        context.getContentResolver(),
+                        Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                Timber.w(e, "isLocationEnabled SettingNotFoundException");
+            }
+
+            //We want network location
+            //LOCATION_MODE_SENSORS_ONLY doesnt really work, thanks google
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF
+                    && locationMode != Settings.Secure.LOCATION_MODE_SENSORS_ONLY;
+
+        }else{
+            locationProviders = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+
     }
 }

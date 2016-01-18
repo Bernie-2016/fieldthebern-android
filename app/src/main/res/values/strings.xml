@@ -95,6 +95,8 @@
     <string name="err_invalid_phone">Please enter a valid phone number</string>
     <string name="err_address_blank">Please enter an address</string>
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
+    <string name="location_disabled_title">Location disabled</string>
+    <string name="location_disabled_message">Please enable your phone\'s location setting (specifically WiFi and network location)</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
     <string name="error_retrieving_profile">Error retrieving profile</string>

@@ -19,8 +19,10 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.util.Patterns;
 import android.view.View;
@@ -33,6 +35,9 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.DialogController;
+import com.berniesanders.fieldthebern.controllers.DialogService;
+import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
@@ -76,6 +81,7 @@ import mortar.ViewPresenter;
 import retrofit.HttpException;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -146,6 +152,8 @@ public class LoginScreen extends FlowPathBase {
         @BindString(R.string.login_title) String screenTitleString;
         @BindString(R.string.err_email_blank) String emailBlank;
         @BindString(R.string.err_password_blank) String passwordBlank;
+        @BindString(R.string.location_disabled_title) String locationDisableTitle;
+        @BindString(R.string.location_disabled_message) String locationDisabledBody;
 
         private final User user;
         private final UserRepo userRepo;
@@ -194,7 +202,12 @@ public class LoginScreen extends FlowPathBase {
                     .get(getView())
                     .requestPermission();
 
-            attemptLoginViaRefresh();
+            if (LocationService.get(getView()).isLocationEnabled()) {
+                attemptLoginViaRefresh();
+            } else {
+                showEnableLocationDialog();
+            }
+
             getView().loadUserEmailAccounts(emailEditText);
 
             if (userAttributes.isFacebookUser()) {
@@ -202,7 +215,27 @@ public class LoginScreen extends FlowPathBase {
                 loadPhoto();
             }
         }
+        private void showEnableLocationDialog() {
+            DialogController.DialogAction confirmAction = new DialogController.DialogAction()
+                    .label(android.R.string.ok)
+                    .action(new Action0() {
+                        @Override
+                        public void call() {
+                            Timber.d("ok button click");
+                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            getView().getContext().startActivity(myIntent);
+                        }
+                    });
 
+            DialogService
+                    .get(getView())
+                    .setDialogConfig(
+                            new DialogController.DialogConfig()
+                                    .title(locationDisableTitle)
+                                    .message(locationDisabledBody)
+                                    .withActions(confirmAction)
+                    );
+        }
 
         private void attemptLoginViaRefresh() {
             //if the permission hasn't been granted the user should just login again

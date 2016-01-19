@@ -7,7 +7,7 @@ import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.models.FieldOfficeList;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
 import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;

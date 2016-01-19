@@ -27,11 +27,11 @@ import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterce
 import com.berniesanders.fieldthebern.repositories.specs.CollectionSpec;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,13 +42,14 @@ import java.io.Reader;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func1;
@@ -154,21 +155,33 @@ public class CollectionRepo {
             return Observable.error(new NetworkUnavailableException("No internet available"));
         }
 
-        OkHttpClient client = new OkHttpClient();
-        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
-        client.interceptors().add(new Interceptor() {
+        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
             @Override
-            public Response intercept(Interceptor.Chain chain) throws IOException {
-                Response response = chain.proceed(chain.request());
-                MediaType contentType = response.body().contentType();
-                String bodyString = response.body().string();
-                ResponseBody body = ResponseBody.create(contentType, bodyString);
-                ResponseBody body2 = ResponseBody.create(contentType, bodyString);
-                write(response.newBuilder().body(body2).build());
-                return response.newBuilder().body(body).build();
-
+            public void log(String message) {
+                Timber.v(message);
             }
-        });
+        };
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Interceptor.Chain chain) throws IOException {
+                        Response response = chain.proceed(chain.request());
+                        MediaType contentType = response.body().contentType();
+                        String bodyString = response.body().string();
+                        ResponseBody body = ResponseBody.create(contentType, bodyString);
+                        ResponseBody body2 = ResponseBody.create(contentType, bodyString);
+                        write(response.newBuilder().body(body2).build());
+                        return response.newBuilder().body(body).build();
+
+                    }
+                })
+                .addInterceptor(loggingInterceptor)
+                .build();
+
 
 
         Retrofit retrofit = new Retrofit.Builder()

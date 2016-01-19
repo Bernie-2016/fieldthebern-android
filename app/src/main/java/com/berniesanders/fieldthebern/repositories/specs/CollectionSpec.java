@@ -18,8 +18,8 @@ package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.Collection;
 
-import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
 import rx.Observable;
 
 /**

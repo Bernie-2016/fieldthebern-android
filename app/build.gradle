@@ -78,7 +78,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
 
     compile 'com.google.code.gson:gson:2.5'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
     compile 'com.google.guava:guava:18.0'
     compile 'org.apache.commons:commons-lang3:3.4'
 
@@ -95,15 +96,14 @@ dependencies {
     compile 'com.squareup.mortar:mortar:0.19'
     compile 'com.squareup.flow:flow:0.12'
     compile 'com.squareup.flow:flow-path:0.12'
-    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
-    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
-    compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.squareup:otto:1.3.8'
     compile 'com.commit451:PhotoView:1.2.4'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.10'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
-    compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
     compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
     compile 'me.relex:circleindicator:1.1.6@aar'
 
@@ -138,15 +138,22 @@ android.applicationVariants.all{ variant ->
 
         if(variant.buildType.name.equals('release')) {
             println "updating release keys and build info"
+
+            content = content.replaceAll(/##API_URL##/, "https://api.fieldthebern.com/")
             def propsFile = rootProject.file( "secure/api_keys.properties" )
             //this check is to stop ci from failing
             if (propsFile.exists()) {
                 def props = new Properties()
                 props.load(new FileInputStream(propsFile))
                 def googleApiKey = props['key.google']
+                def oauthId = props['key.oathclient']
+                def oauthSecret = props['key.oathsecret']
                 content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
+                content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
+                content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
             }
         } else {
+            content = content.replaceAll(/##API_URL##/, "http://api.groundgameapp-staging.com/")
             println "updating debug keys and build info"
             def propsFile = rootProject.file( "secure/debug_keys.properties" )
             //this check is to stop ci from failing
@@ -154,7 +161,11 @@ android.applicationVariants.all{ variant ->
                 def props = new Properties()
                 props.load(new FileInputStream(propsFile))
                 def googleApiKey = props['key.google']
+                def oauthId = props['key.oathclient']
+                def oauthSecret = props['key.oathsecret']
                 content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
+                content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
+                content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
             }
         }
 

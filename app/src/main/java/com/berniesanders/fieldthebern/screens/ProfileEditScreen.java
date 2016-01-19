@@ -199,6 +199,13 @@ public class ProfileEditScreen extends FlowPathBase {
                     Presenter.this.base64PhotoData = base64PhotoData;
                 }
             });
+
+            getView().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    photoEditView.toggleAvatarWidget(true);
+                }
+            }, 300) ;
         }
 
         /**

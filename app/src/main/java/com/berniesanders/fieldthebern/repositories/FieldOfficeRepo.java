@@ -5,9 +5,7 @@ import android.content.Context;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.models.FieldOfficeList;
-import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
 import com.google.gson.Gson;
-import okhttp3.OkHttpClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +18,6 @@ import timber.log.Timber;
 public class FieldOfficeRepo {
 
     final Gson gson;
-    private final OkHttpClient client = new OkHttpClient();
     private final Context context;
     FieldOfficeList fieldOfficeList = new FieldOfficeList();
 
@@ -31,7 +28,6 @@ public class FieldOfficeRepo {
         this.gson = gson;
         this.context = context;
 
-        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
     }
 
     public Observable<FieldOfficeList> get() {

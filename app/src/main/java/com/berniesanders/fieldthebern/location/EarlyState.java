@@ -42,6 +42,9 @@ public class EarlyState {
 
 
     public boolean isNear() {
+
+        if (location == null) { return false; }
+
         if (closestOffice == null) {
             closestOffice = nearestOffice();
         }
@@ -55,6 +58,9 @@ public class EarlyState {
     }
 
     private boolean inState() {
+
+        if (state == null) { return false; }
+
         for (FieldOffice office : offices) {
             if (state.equals(office.state())) {
                 return true;

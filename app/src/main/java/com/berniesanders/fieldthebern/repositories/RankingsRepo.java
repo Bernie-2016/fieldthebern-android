@@ -29,15 +29,15 @@ import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterce
 import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import okhttp3.OkHttpClient;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
 import timber.log.Timber;
 
@@ -51,7 +51,7 @@ public class RankingsRepo {
     final Gson gson;
     private final TokenRepo tokenRepo;
     private final RxSharedPreferences rxPrefs;
-    private final OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client;
     private final Config config;
     private final Context context;
 
@@ -72,11 +72,13 @@ public class RankingsRepo {
         };
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(loggingInterceptor);
 
-        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
-        client.interceptors().add(new AddTokenInterceptor(tokenRepo));
-        client.setAuthenticator(new ApiAuthenticator(tokenRepo));
+        client = new OkHttpClient.Builder()
+                .addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
+                .addInterceptor(new AddTokenInterceptor(tokenRepo))
+                .addInterceptor(loggingInterceptor)
+                .authenticator(new ApiAuthenticator(tokenRepo))
+                .build();
     }
 
     /**

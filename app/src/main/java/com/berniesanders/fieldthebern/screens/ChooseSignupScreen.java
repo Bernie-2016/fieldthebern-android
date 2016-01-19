@@ -117,6 +117,7 @@ public class ChooseSignupScreen extends FlowPathBase {
         private final TokenRepo tokenRepo;
         private final UserRepo userRepo;
         @BindString(R.string.signup_title) String screenTitleString;
+        private boolean showPleaseWait = false;
 
         @Inject
         Presenter(Gson gson, RxSharedPreferences rxPrefs, TokenRepo tokenRepo, UserRepo userRepo) {
@@ -133,6 +134,9 @@ public class ChooseSignupScreen extends FlowPathBase {
             setActionBar();
             attemptLoginViaRefresh();
             PermissionService.get(getView()).requestPermission();
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
 
 
@@ -195,8 +199,6 @@ public class ChooseSignupScreen extends FlowPathBase {
                             graphRequest.executeAsync();
                         }
                     });
-
-
         }
 
         @OnClick(R.id.have_an_account)
@@ -223,6 +225,7 @@ public class ChooseSignupScreen extends FlowPathBase {
                     .subscribe(refreshObserver);
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
         }
 
 
@@ -234,6 +237,7 @@ public class ChooseSignupScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -242,7 +246,9 @@ public class ChooseSignupScreen extends FlowPathBase {
                     Timber.e(e, "refreshObserver onError");
                     return;
                 }
+
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
 
                 if (e instanceof NetworkUnavailableException) {
                     ToastService.get(getView())
@@ -260,6 +266,7 @@ public class ChooseSignupScreen extends FlowPathBase {
                             @Override
                             public void call(User user) {
                                 ProgressDialogService.get(getView()).dismiss();
+                                showPleaseWait = false;
                                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
                                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
                             }

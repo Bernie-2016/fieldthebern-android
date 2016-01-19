@@ -157,6 +157,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         @Bind(R.id.asked_to_leave)
         SwitchCompat askedToLeaveSwitch;
+        private boolean showPleaseWait = false;
 
         @Inject
         Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser, StatesRepo statesRepo) {
@@ -185,6 +186,10 @@ public class NewVisitScreen extends FlowPathBase {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(observer);
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
 
         Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
@@ -337,6 +342,7 @@ public class NewVisitScreen extends FlowPathBase {
             if (!formIsValid()) { return; }
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
 
             visitSubscription = visitRepo.submit()
                     .subscribeOn(Schedulers.io())
@@ -372,6 +378,7 @@ public class NewVisitScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -382,6 +389,8 @@ public class NewVisitScreen extends FlowPathBase {
                 }
 
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
+
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
                 }

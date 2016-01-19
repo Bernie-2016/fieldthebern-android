@@ -179,6 +179,7 @@ public class LoginScreen extends FlowPathBase {
         ImageView mask;
         private Subscription stateCodeSubscription;
         private Subscription locationSubscription;
+        private boolean showPleaseWait = false;
 
 
         @Inject
@@ -222,6 +223,10 @@ public class LoginScreen extends FlowPathBase {
                 getView().showFacebook(userAttributes);
                 loadPhoto();
             }
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
         private void showEnableLocationDialog() {
             DialogController.DialogAction confirmAction = new DialogController.DialogAction()
@@ -263,6 +268,7 @@ public class LoginScreen extends FlowPathBase {
                      .subscribe(refreshObserver);
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
         }
 
 
@@ -348,6 +354,7 @@ public class LoginScreen extends FlowPathBase {
             if(!formIsValid()) { return; }
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
 
             if (user.getData().attributes().isFacebookUser()) {
 
@@ -397,6 +404,7 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -411,6 +419,7 @@ public class LoginScreen extends FlowPathBase {
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -424,6 +433,7 @@ public class LoginScreen extends FlowPathBase {
                     @Override
                     public void call(User user) {
                         ProgressDialogService.get(getView()).dismiss();
+                        showPleaseWait = false;
                         FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
                         Flow.get(getView()).setHistory(
                                 History.single(messageScreen.getMessageOrHome(location, stateCode)),
@@ -502,6 +512,7 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -511,6 +522,7 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
 
                 if (e instanceof NetworkUnavailableException) {
                     ToastService.get(getView())
@@ -528,6 +540,7 @@ public class LoginScreen extends FlowPathBase {
                             @Override
                             public void call(User user) {
                                 ProgressDialogService.get(getView()).dismiss();
+                                showPleaseWait = false;
                                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
 
                                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);

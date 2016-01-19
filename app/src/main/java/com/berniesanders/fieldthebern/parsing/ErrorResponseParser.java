@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import retrofit.HttpException;
+import retrofit2.HttpException;
 import timber.log.Timber;
 
 public class ErrorResponseParser {

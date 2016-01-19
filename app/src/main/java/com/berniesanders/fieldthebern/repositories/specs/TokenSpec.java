@@ -20,11 +20,11 @@ import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
-import retrofit.http.Header;
-import retrofit.http.Headers;
-import retrofit.http.POST;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import rx.Observable;
 
 /**

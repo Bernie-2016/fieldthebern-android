@@ -26,22 +26,24 @@ import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.network.NetChecker;
+import com.berniesanders.fieldthebern.repositories.auth.ApiAuthenticator;
+import com.berniesanders.fieldthebern.repositories.interceptors.AddTokenInterceptor;
 import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterceptor;
 import com.berniesanders.fieldthebern.repositories.specs.TokenSpec;
 import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 import java.io.UnsupportedEncodingException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
@@ -54,7 +56,7 @@ public class TokenRepo {
 
 
     final Gson gson;
-    private final OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client;
     private final RxSharedPreferences rxPrefs;
     private final Config config;
     private final Context context;
@@ -68,11 +70,21 @@ public class TokenRepo {
         this.rxPrefs = rxPrefs;
         this.config = config;
         this.context = context;
-        client.interceptors().add(new UserAgentInterceptor(config.getUserAgent()));
 
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        client.interceptors().add(interceptor);
+
+        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                Timber.v(message);
+            }
+        };
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        client = new OkHttpClient.Builder()
+                .addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
+                .addInterceptor(loggingInterceptor)
+                .build();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(this.config.getCanvassUrl())

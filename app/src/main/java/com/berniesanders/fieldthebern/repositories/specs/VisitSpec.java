@@ -20,8 +20,8 @@ package com.berniesanders.fieldthebern.repositories.specs;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
 
-import retrofit.http.Body;
-import retrofit.http.POST;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 import rx.Observable;
 
 public class VisitSpec {

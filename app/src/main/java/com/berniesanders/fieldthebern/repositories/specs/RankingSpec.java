@@ -23,8 +23,8 @@ import com.berniesanders.fieldthebern.models.Rankings;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**

@@ -18,7 +18,7 @@
 
 <resources>
     <string name="baseUrl">http://feelthebern.org/</string>
-    <string name="canvassUrl">http://api.groundgameapp-staging.com/</string>
+    <string name="canvassUrl">##API_URL##</string>
     <string name="buildDate">##DATETIME##</string>
     <string name="gitHash">##HASHCODE##</string>
 </resources>

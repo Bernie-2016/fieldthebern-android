@@ -286,6 +286,16 @@ public class LoginScreen extends FlowPathBase {
             ButterKnife.unbind(this);
         }
 
+        @OnTouch(R.id.email_input_layout)
+        boolean showEmailsInputLayout() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailEditText.showDropDown();
+                emailEditText.setFocusable(true);
+                emailEditText.setShowSoftInputOnFocus(true);
+            }
+            return false;
+        }
+
         @OnTouch(R.id.email)
         boolean showEmails() {
             if (Build.VERSION.SDK_INT >= 21) {

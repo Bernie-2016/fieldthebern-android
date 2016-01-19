@@ -248,10 +248,21 @@ public class SignupScreen extends FlowPathBase {
                     );
         }
 
+        @OnTouch(R.id.email_input_layout)
+        boolean showEmailsInputLayout() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailAutocompleteTV.showDropDown();
+                emailAutocompleteTV.setFocusable(true);
+                emailAutocompleteTV.setShowSoftInputOnFocus(true);
+            }
+            return false;
+        }
+
         @OnTouch(R.id.email)
         boolean showEmails() {
             if (Build.VERSION.SDK_INT >= 21) {
                 emailAutocompleteTV.showDropDown();
+                emailAutocompleteTV.setFocusable(true);
                 emailAutocompleteTV.setShowSoftInputOnFocus(true);
             }
             return false;

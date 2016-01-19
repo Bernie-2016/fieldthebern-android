@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 - Bernie 2016, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.berniesanders.fieldthebern.screens;
 
 import android.location.Address;
@@ -124,6 +141,7 @@ public class AddAddressScreen extends FlowPathBase {
         @BindString(R.string.are_you_sure_address_body) String confirmBody;
         @BindString(R.string.err_address_blank) String addressBlank;
         @BindString(R.string.min_time_not_elapsed) String minTimeNotElapsed;
+        private boolean showPleaseWait = false;
 
 
         @Inject
@@ -140,6 +158,10 @@ public class AddAddressScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
             getView().setAddress(address);
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
 
 
@@ -152,6 +174,7 @@ public class AddAddressScreen extends FlowPathBase {
                                 public void call() {
                                     if (getView()!=null) {
                                         visitRepo.clear();
+                                        showPleaseWait = false;
                                         Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
                                     }
                                 }
@@ -234,6 +257,7 @@ public class AddAddressScreen extends FlowPathBase {
                         .subscribe(singleAddressObserver);
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
         }
 
         Observer<SingleAddressResponse> singleAddressObserver = new Observer<SingleAddressResponse>() {
@@ -241,6 +265,7 @@ public class AddAddressScreen extends FlowPathBase {
             public void onCompleted() {
                 Timber.v("singleAddressObserver onCompleted");
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
 
@@ -253,6 +278,7 @@ public class AddAddressScreen extends FlowPathBase {
                 }
 
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
 
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
@@ -292,6 +318,9 @@ public class AddAddressScreen extends FlowPathBase {
                 Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s",
                         response.addresses().get(0) );
 
+                ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
+
                 try {
                     if (MinTimeBetweenVisit.elapsed(
                             response.addresses().get(0).attributes().visitedAt())) {
@@ -304,7 +333,6 @@ public class AddAddressScreen extends FlowPathBase {
                     }
                 } catch (Exception e) {
                     Timber.e(e, "SingleAddressResponse onNext error ");
-
                 }
 
             }

@@ -1,11 +1,30 @@
+/*
+ * Copyright (c) 2016 - Bernie 2016, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.berniesanders.fieldthebern.screens;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -16,6 +35,9 @@ import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.DialogController;
+import com.berniesanders.fieldthebern.controllers.DialogService;
+import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
 import com.berniesanders.fieldthebern.controllers.ToastService;
@@ -23,7 +45,6 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
-import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
@@ -43,8 +64,6 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import java.util.regex.Pattern;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -58,7 +77,9 @@ import flow.History;
 import mortar.ViewPresenter;
 import retrofit.HttpException;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -129,6 +150,8 @@ public class LoginScreen extends FlowPathBase {
         @BindString(R.string.login_title) String screenTitleString;
         @BindString(R.string.err_email_blank) String emailBlank;
         @BindString(R.string.err_password_blank) String passwordBlank;
+        @BindString(R.string.location_disabled_title) String locationDisableTitle;
+        @BindString(R.string.location_disabled_message) String locationDisabledBody;
 
         private final User user;
         private final UserRepo userRepo;
@@ -136,7 +159,12 @@ public class LoginScreen extends FlowPathBase {
         private final ErrorResponseParser errorResponseParser;
         private final RxSharedPreferences rxPrefs;
         private final Gson gson;
+        private final MessageScreen messageScreen;
         private final UserAttributes userAttributes;
+        private boolean stateCodeRequestCompleted;
+        private boolean locationRequestCompleted;
+        private Location location;
+        private String stateCode;
 
         @Bind(R.id.password)
         EditText passwordEditText;
@@ -149,6 +177,10 @@ public class LoginScreen extends FlowPathBase {
 
         @Bind(R.id.mask)
         ImageView mask;
+        private Subscription stateCodeSubscription;
+        private Subscription locationSubscription;
+        private boolean showPleaseWait = false;
+
 
         @Inject
         Presenter(User user,
@@ -156,13 +188,15 @@ public class LoginScreen extends FlowPathBase {
                   TokenRepo tokenRepo,
                   ErrorResponseParser errorResponseParser,
                   RxSharedPreferences rxPrefs,
-                  Gson gson) {
+                  Gson gson,
+                  MessageScreen messageScreen) {
             this.user = user;
             this.userRepo = userRepo;
             this.tokenRepo = tokenRepo;
             this.errorResponseParser = errorResponseParser;
             this.rxPrefs = rxPrefs;
             this.gson = gson;
+            this.messageScreen = messageScreen;
             this.userAttributes = user.getData().attributes();
 
         }
@@ -177,15 +211,44 @@ public class LoginScreen extends FlowPathBase {
                     .get(getView())
                     .requestPermission();
 
-            attemptLoginViaRefresh();
+            if (LocationService.get(getView()).isLocationEnabled()) {
+                attemptLoginViaRefresh();
+            } else {
+                showEnableLocationDialog();
+            }
+
             getView().loadUserEmailAccounts(emailEditText);
 
             if (userAttributes.isFacebookUser()) {
                 getView().showFacebook(userAttributes);
                 loadPhoto();
             }
-        }
 
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
+        }
+        private void showEnableLocationDialog() {
+            DialogController.DialogAction confirmAction = new DialogController.DialogAction()
+                    .label(android.R.string.ok)
+                    .action(new Action0() {
+                        @Override
+                        public void call() {
+                            Timber.d("ok button click");
+                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            getView().getContext().startActivity(myIntent);
+                        }
+                    });
+
+            DialogService
+                    .get(getView())
+                    .setDialogConfig(
+                            new DialogController.DialogConfig()
+                                    .title(locationDisableTitle)
+                                    .message(locationDisabledBody)
+                                    .withActions(confirmAction)
+                    );
+        }
 
         private void attemptLoginViaRefresh() {
             //if the permission hasn't been granted the user should just login again
@@ -205,6 +268,7 @@ public class LoginScreen extends FlowPathBase {
                      .subscribe(refreshObserver);
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
         }
 
 
@@ -226,6 +290,16 @@ public class LoginScreen extends FlowPathBase {
         public void dropView(LoginView view) {
             super.dropView(view);
             ButterKnife.unbind(this);
+        }
+
+        @OnTouch(R.id.email_input_layout)
+        boolean showEmailsInputLayout() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailEditText.showDropDown();
+                emailEditText.setFocusable(true);
+                emailEditText.setShowSoftInputOnFocus(true);
+            }
+            return false;
         }
 
         @OnTouch(R.id.email)
@@ -259,37 +333,7 @@ public class LoginScreen extends FlowPathBase {
 
             if (PermissionService.get(getView()).isGranted()) {
 
-                if(!formIsValid()) { return; }
-
-                ProgressDialogService.get(getView()).show(R.string.please_wait);
-
-                if (user.getData().attributes().isFacebookUser()) {
-
-                    TokenSpec spec = new TokenSpec()
-                            .facebook(new LoginFacebookRequest()
-                                    .password(passwordEditText.getText().toString())
-                                    .username(emailEditText.getText().toString()));
-
-                    tokenRepo
-                            .loginFacebook(spec)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(observer);
-
-                } else {
-
-                    TokenSpec spec = new TokenSpec()
-                            .email(new LoginEmailRequest()
-                                    .password(passwordEditText.getText().toString())
-                                    .username(emailEditText.getText().toString()));
-
-                    tokenRepo
-                            .loginEmail(spec)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(observer);
-
-                }
+                requestLocation();
 
             } else {
                 // Display a SnackBar with an explanation and a button to trigger the request.
@@ -304,6 +348,41 @@ public class LoginScreen extends FlowPathBase {
                         .show();
             }
 
+        }
+
+        private void login() {
+            if(!formIsValid()) { return; }
+
+            ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
+
+            if (user.getData().attributes().isFacebookUser()) {
+
+                TokenSpec spec = new TokenSpec()
+                        .facebook(new LoginFacebookRequest()
+                                .password(passwordEditText.getText().toString())
+                                .username(emailEditText.getText().toString()));
+
+                tokenRepo
+                        .loginFacebook(spec)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+
+            } else {
+
+                TokenSpec spec = new TokenSpec()
+                        .email(new LoginEmailRequest()
+                                .password(passwordEditText.getText().toString())
+                                .username(emailEditText.getText().toString()));
+
+                tokenRepo
+                        .loginEmail(spec)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(observer);
+
+            }
         }
 
         private boolean formIsValid() {
@@ -325,6 +404,7 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -339,6 +419,7 @@ public class LoginScreen extends FlowPathBase {
                     ToastService.get(getView()).bern(errorResponse.getAllDetails());
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -352,12 +433,76 @@ public class LoginScreen extends FlowPathBase {
                     @Override
                     public void call(User user) {
                         ProgressDialogService.get(getView()).dismiss();
+                        showPleaseWait = false;
                         FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                        Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+                        Flow.get(getView()).setHistory(
+                                History.single(messageScreen.getMessageOrHome(location, stateCode)),
+                                Flow.Direction.FORWARD);
                     }
                 });
             }
         };
+
+        private boolean addressAndLocationSet() {
+            return (stateCodeRequestCompleted && locationRequestCompleted);
+        }
+
+
+        private Observer<Location> locationObserver = new Observer<Location>() {
+            @Override
+            public void onCompleted() {
+                locationRequestCompleted = true;
+                if (addressAndLocationSet()) {
+                    login();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                locationRequestCompleted = true;
+                Timber.e(e, "locationObserver onError");
+                if (addressAndLocationSet()) {
+                    login();
+                }
+            }
+
+            @Override
+            public void onNext(Location location) {
+                Timber.v("location on next"+location);
+                Presenter.this.location = location;
+            }
+        };
+
+
+        private Observer<String> stateCodeObserver = new Observer<String>() {
+            @Override
+            public void onCompleted() {
+                stateCodeRequestCompleted = true;
+                if (addressAndLocationSet()) {
+                    login();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                stateCodeRequestCompleted = true;
+                Timber.e(e, "stateCodeObserver onError");
+                if (addressAndLocationSet()) {
+                    login();
+                }
+            }
+
+            @Override
+            public void onNext(String stateCode) {
+                Timber.v("stateCodeObserver on next"+stateCode);
+                Presenter.this.stateCode = stateCode;
+            }
+        };
+
+        private void requestLocation() {
+            stateCodeSubscription = LocationService.get(getView()).getAddress().subscribe(stateCodeObserver);
+            locationSubscription = LocationService.get(getView()).get().subscribe(locationObserver);;
+        }
 
         Observer<Token> refreshObserver = new Observer<Token>() {
             @Override
@@ -367,6 +512,7 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -376,6 +522,7 @@ public class LoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
 
                 if (e instanceof NetworkUnavailableException) {
                     ToastService.get(getView())
@@ -393,7 +540,9 @@ public class LoginScreen extends FlowPathBase {
                             @Override
                             public void call(User user) {
                                 ProgressDialogService.get(getView()).dismiss();
+                                showPleaseWait = false;
                                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+
                                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
                             }
                         });

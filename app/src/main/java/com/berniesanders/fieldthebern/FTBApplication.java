@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright 2015 FeelTheBern.org
+ * Copyright 2015 Bernie 2016
  */
 package com.berniesanders.fieldthebern;
 

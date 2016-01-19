@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 - Bernie 2016, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
@@ -140,6 +157,7 @@ public class NewVisitScreen extends FlowPathBase {
 
         @Bind(R.id.asked_to_leave)
         SwitchCompat askedToLeaveSwitch;
+        private boolean showPleaseWait = false;
 
         @Inject
         Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser, StatesRepo statesRepo) {
@@ -168,6 +186,10 @@ public class NewVisitScreen extends FlowPathBase {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe(observer);
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
 
         Observer<StatePrimaryResponse.StatePrimary[]> observer = new Observer<StatePrimaryResponse.StatePrimary[]>() {
@@ -320,6 +342,7 @@ public class NewVisitScreen extends FlowPathBase {
             if (!formIsValid()) { return; }
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
 
             visitSubscription = visitRepo.submit()
                     .subscribeOn(Schedulers.io())
@@ -355,6 +378,7 @@ public class NewVisitScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -365,6 +389,8 @@ public class NewVisitScreen extends FlowPathBase {
                 }
 
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
+
                 if (AuthFailRedirect.redirectOnFailure(e, getView())) {
                     return;
                 }

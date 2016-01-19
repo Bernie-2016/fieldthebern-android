@@ -1,3 +1,20 @@
+<!--
+  ~ Copyright (c) 2016 - Bernie 2016, Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
 <resources>
     <string name="app_name">Field The Bern</string>
     <string name="search_hint">Search Feel The Bern</string>
@@ -39,7 +56,10 @@
     <string name="skip">Skip</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-
+    <string name="call">Call</string>
+    <string name="map">Map</string>
+    <string name="continue_btn">Continue</string>
+    <string name="dont_show_again">Don\'t show this message again</string>
     <string name="previously_participated">Have they previously participated in a primary or caucus?</string>
     <string name="new_visit_check_off_and_update">Check off who you talked to and update their information</string>
     <string name="bernie_sanders">Bernie Sanders</string>
@@ -78,6 +98,8 @@
     <string name="err_invalid_phone">Please enter a valid phone number</string>
     <string name="err_address_blank">Please enter an address</string>
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
+    <string name="location_disabled_title">Location disabled</string>
+    <string name="location_disabled_message">Please enable your phone\'s location setting (specifically WiFi and network location)</string>
     <string name="profile_saved">Profile saved</string>
     <string name="error_saving_profile">Error saving profile</string>
     <string name="error_retrieving_profile">Error retrieving profile</string>
@@ -123,10 +145,10 @@
     <string name="learn_text_3_6">Build our organizational network so that we can connect with supporters who want to volunteer for Bernie in the future.</string>
     <string name="learn_title_4">How do I canvass alone?</string>
     <string name="learn_text_4_1">Choose your location and time to canvass, preferably in an area with many residences and with a large amount of foot traffic. Make sure you pick places that are safe, and that you canvass in the daytime with lots of remaining sunlight.</string>
-    <string name="learn_text_4_2">Read through everything in this how to canvass section! Consider familiarizing yourself with Bernie\'s policy positions using the FeelTheBern.org tab in this app. Don\'t feel like you need to be a policy expert, and certainly don\'t pretend to be one, either.</string>
+    <string name="learn_text_4_2">Read through everything in this how to canvass section! Consider familiarizing yourself with Bernie\'s policy positions using the issues tab in this app. Don\'t feel like you need to be a policy expert, and certainly don\'t pretend to be one, either.</string>
     <string name="learn_text_4_3">Use this app’s map feature to plan out a route. Or plan out a route beforehand. Set a goal for the total number of houses you want to reach.</string>
     <string name="learn_text_4_4">Once you are finished planning out everything, it’s time to hit the streets!</string>
-    <string name="learn_text_4_5">Use the app\'s FeelTheBern.org tab to help you answer people’s questions about the the issues; and the \"add address\" feature to record each voters’ enthusiasm toward Bernie Sanders.</string>
+    <string name="learn_text_4_5">Use the app\'s issues tab to help you answer people’s questions about the issues; and the \"add address\" feature to record each voters’ enthusiasm toward Bernie Sanders.</string>
     <string name="learn_text_4_6">Ask people who respond enthusiastically if they are willing to help campaign for Bernie Sanders. Record all the information you can about them including their availability, skills, and interests.</string>
     <string name="learn_text_4_7">Have fun! This is a wonderful opportunity for you to meet others and talk to them about the importance of political activism.</string>
     <string name="learn_text_4_8">At the end of your event, make sure to think about how you did and how you could improve next time. Then count the total number of people you reached!</string>
@@ -138,7 +160,7 @@
     <string name="learn_text_5_5">Hold a training session before your canvassing event! Have experienced volunteers explain to the newer recruits how to prepare for a successful canvass and what to expect as they walk and talk.</string>
     <string name="learn_text_5_6">Use this app’s map feature to plan out a route. Or plan out a route beforehand that people can follow. Set a goal for the total number of houses each group should reach.</string>
     <string name="learn_text_5_7">Once you are finished planning out everything, it’s time to hit the streets! Work in pairs to cover as much ground on your route as possible.</string>
-    <string name="learn_text_5_8">Use the app\'s FeelTheBern.org tab to help you answer people’s questions about the the issues; and the \"add address\" feature to record each voters’ enthusiasm toward Bernie Sanders.</string>
+    <string name="learn_text_5_8">Use the app\'s issues tab to help you answer people’s questions about the issues; and the \"add address\" feature to record each voters’ enthusiasm toward Bernie Sanders.</string>
     <string name="learn_text_5_9">Ask people who respond enthusiastically if they are willing to help campaign for Bernie Sanders. Record all the information you can about them including their availability, skills, and interests.</string>
     <string name="learn_text_5_10">Have fun! This is a wonderful opportunity for you to meet others and talk to them about the importance of political activism. It’s also a great way to make new friends with others on your canvassing team.</string>
     <string name="learn_text_5_11">At the end of your event, make sure to debrief with your team. Take this opportunity to share your experience with others and provide feedback over refreshments. Count the total number of people you reached!</string>
@@ -174,6 +196,14 @@
     <string name="about">About</string>
     <string name="about_text_2">For help, send an email to:</string>
     <string name="email_support">support@fieldthebern.com</string>
+    <string name="credits_header">CREDITS</string>
+    <string name="credits">PROJECT LEAD\n\nJosh Smith\n\nANDROID LEAD\n\nPatrick Cousins\n\nANDROID DEVELOPERS\n\nPatrick Cousins\nFrederick Kautz\nErnest Grzybowski\nPatrick Dattilio\nThomas John Evans IV\nVishal Disawar\nTom Renn\n\nSPECIAL THANKS\n\nZach Schneider\nEthan Wojcinski\nDaniela Perdomo\nEveryone at FeelTheBern.org\nCodersForSanders\nSandersForPresident\n\nAnd everyone who helped test and canvass</string>
+    <string name="field_office_header">Field Office</string>
+    <string name="field_office_msg1">Hey! It looks like you\'re close to one of our field offices:</string>
+    <string name="field_office_msg2">You should stop in and volunteer to canvass with us directly. It helps us target our canvassing efforts even better, and we always love to meet our volunteers. Thanks for supporting the campaign!</string>
+    <string name="phonebank_header">Phonebank</string>
+    <string name="phonebank">Hey! Want to make an even bigger impact for the campaign? We\'re getting all hands on deck to phonebank into crucial early states and build momentum for the political revolution. Visit this link to make some phone calls for Bernie and get the movement going. Thanks for supporting the campaign!</string>
+    <string name="phonebank_link">berniesanders.com/phonebank</string>
 
     <!-- IMPORTANT DO NOT CHANGE THE ORDER OF THESE ITEMS -->
     <string-array name="party">

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 - Bernie 2016, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.berniesanders.fieldthebern.screens;
 
 import android.content.Context;
@@ -73,6 +90,8 @@ public class AboutScreen extends FlowPathBase {
         @BindString(R.string.about) String screenTitleString;
         @BindString(R.string.about_text) String versionUnformatted;
         @BindString(R.string.email_support) String supportEmail;
+        @BindString(R.string.gitHash) String gitHash;
+        @BindString(R.string.buildDate) String buildDate;
 
         @Bind(R.id.email) TextView emailText;
         @Bind(R.id.textView) TextView versionText;
@@ -118,6 +137,8 @@ public class AboutScreen extends FlowPathBase {
                     "Model: " + Build.MODEL + "\n" +
                     "Release: " + Build.VERSION.RELEASE + "\n" +
                     "API: " + Build.VERSION.SDK_INT + "\n" +
+                    "Build date: " + buildDate + "\n" +
+                    "Git hash: " + gitHash + "\n" +
                     "\n" +
                     "-- Description --" + "\n";
 

@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2016 - Bernie 2016, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
@@ -97,6 +114,7 @@ public class ChooseLoginScreen extends FlowPathBase {
         private final TokenRepo tokenRepo;
         private final UserRepo userRepo;
         @BindString(R.string.login_title) String screenTitleString;
+        private boolean showPleaseWait = false;
 
         @Inject
         Presenter(Gson gson, RxSharedPreferences rxPrefs, TokenRepo tokenRepo, UserRepo userRepo) {
@@ -112,6 +130,10 @@ public class ChooseLoginScreen extends FlowPathBase {
             ButterKnife.bind(this, getView());
             setActionBar();
             attemptLoginViaRefresh();
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
 
 
@@ -143,6 +165,8 @@ public class ChooseLoginScreen extends FlowPathBase {
             //if we have any store user info we can start with that
             User user = (userString == null) ? new User() : gson.fromJson(userString, User.class);
 
+            ProgressDialogService.get(getView()).dismiss();
+            showPleaseWait = false;
             Flow.get(getView().getContext()).set(new LoginScreen(user));
         }
 
@@ -172,6 +196,8 @@ public class ChooseLoginScreen extends FlowPathBase {
 
                                             User user = new User();
                                             user.getData().attributes(facebookUser.convertToApiUser());
+                                            ProgressDialogService.get(getView()).dismiss();
+                                            showPleaseWait = false;
                                             Flow.get(getView().getContext())
                                                     .set(new LoginScreen(user));
                                         }
@@ -206,6 +232,7 @@ public class ChooseLoginScreen extends FlowPathBase {
                     .subscribe(refreshObserver);
 
             ProgressDialogService.get(getView()).show(R.string.please_wait);
+            showPleaseWait = true;
         }
 
 
@@ -217,6 +244,7 @@ public class ChooseLoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
             }
 
             @Override
@@ -226,6 +254,7 @@ public class ChooseLoginScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
 
                 if (e instanceof NetworkUnavailableException) {
                     ToastService.get(getView())
@@ -243,6 +272,7 @@ public class ChooseLoginScreen extends FlowPathBase {
                             @Override
                             public void call(User user) {
                                 ProgressDialogService.get(getView()).dismiss();
+                                showPleaseWait = false;
                                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
                                 Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
                             }

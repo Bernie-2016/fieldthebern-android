@@ -1,10 +1,29 @@
+/*
+ * Copyright (c) 2016 - Bernie 2016, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package com.berniesanders.fieldthebern.screens;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -13,8 +32,11 @@ import android.widget.Toast;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.apilevels.PermissionUtil;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
+import com.berniesanders.fieldthebern.controllers.DialogController;
+import com.berniesanders.fieldthebern.controllers.DialogService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.controllers.ProgressDialogService;
@@ -53,6 +75,7 @@ import retrofit.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -128,10 +151,13 @@ public class SignupScreen extends FlowPathBase {
         @BindString(R.string.err_your_first_name_blank) String firstNameBlank;
         @BindString(R.string.err_your_last_name_blank) String lastNameBlank;
         @BindString(R.string.err_invalid_email) String invalidEmailError;
+        @BindString(R.string.location_disabled_title) String locationDisableTitle;
+        @BindString(R.string.location_disabled_message) String locationDisabledBody;
 
         private final UserRepo repo;
         private UserAttributes userAttributes;
         private final ErrorResponseParser errorResponseParser;
+        private final MessageScreen messageScreen;
         Bitmap userBitmap;
 
         private String stateCode;
@@ -153,12 +179,17 @@ public class SignupScreen extends FlowPathBase {
 
         @Bind(R.id.photo_edit)
         PhotoEditView photoEditView;
+        private boolean showPleaseWait = false;
 
         @Inject
-        Presenter(UserRepo repo, UserAttributes userAttributes, ErrorResponseParser errorResponseParser) {
+        Presenter(UserRepo repo,
+                  UserAttributes userAttributes,
+                  ErrorResponseParser errorResponseParser,
+                  MessageScreen messageScreen) {
             this.repo = repo;
             this.userAttributes = userAttributes;
             this.errorResponseParser = errorResponseParser;
+            this.messageScreen = messageScreen;
         }
 
         @Override
@@ -173,6 +204,13 @@ public class SignupScreen extends FlowPathBase {
             } else if (userBitmap != null) {
                 // User may have set their own photo and persist through rotation
                 photoEditView.load(userAttributes, userBitmap);
+            } else {
+                getView().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        photoEditView.toggleAvatarWidget(true);
+                    }
+                }, 300) ;
             }
 
             photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
@@ -183,17 +221,60 @@ public class SignupScreen extends FlowPathBase {
                 }
             });
             
-            PermissionService
-                    .get(getView())
-                    .requestPermission();
+
+            if (PermissionService.get(getView()).isGranted()) {
+
+                if (!LocationService.get(getView()).isLocationEnabled()) {
+                    showEnableLocationDialog();
+                }
+            } else {
+                PermissionService.get(getView()).requestPermission();
+            }
 
             getView().loadUserEmailAccounts(emailAutocompleteTV);
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
+        }
+
+        private void showEnableLocationDialog() {
+            DialogController.DialogAction confirmAction = new DialogController.DialogAction()
+                    .label(android.R.string.ok)
+                    .action(new Action0() {
+                        @Override
+                        public void call() {
+                            Timber.d("ok button click");
+                            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            getView().getContext().startActivity(myIntent);
+                        }
+                    });
+
+            DialogService
+                    .get(getView())
+                    .setDialogConfig(
+                            new DialogController.DialogConfig()
+                                    .title(locationDisableTitle)
+                                    .message(locationDisabledBody)
+                                    .withActions(confirmAction)
+                    );
+        }
+
+        @OnTouch(R.id.email_input_layout)
+        boolean showEmailsInputLayout() {
+            if (Build.VERSION.SDK_INT >= 21) {
+                emailAutocompleteTV.showDropDown();
+                emailAutocompleteTV.setFocusable(true);
+                emailAutocompleteTV.setShowSoftInputOnFocus(true);
+            }
+            return false;
         }
 
         @OnTouch(R.id.email)
         boolean showEmails() {
             if (Build.VERSION.SDK_INT >= 21) {
                 emailAutocompleteTV.showDropDown();
+                emailAutocompleteTV.setFocusable(true);
                 emailAutocompleteTV.setShowSoftInputOnFocus(true);
             }
             return false;
@@ -213,7 +294,12 @@ public class SignupScreen extends FlowPathBase {
         void onSubmit() {
             if (PermissionService.get(getView()).isGranted()) {
                 if(!formIsValid()) { return; }
+                if (!LocationService.get(getView()).isLocationEnabled()) {
+                    showEnableLocationDialog();
+                    return;
+                }
                 ProgressDialogService.get(getView()).show(R.string.please_wait);
+                showPleaseWait = true;
                 userAttributes = getView().getInput(userAttributes);
                 requestLocation();
 
@@ -352,6 +438,7 @@ public class SignupScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails(), Toast.LENGTH_SHORT);
@@ -366,8 +453,14 @@ public class SignupScreen extends FlowPathBase {
             public void onNext(User user) {
                 Timber.d("user created! user: %s", user.toString());
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+
+                //Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+
+                Flow.get(getView()).setHistory(
+                        History.single(messageScreen.getMessageOrHome(location, stateCode)),
+                        Flow.Direction.FORWARD);
             }
         };
 

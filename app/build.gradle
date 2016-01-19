@@ -20,19 +20,39 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+    signingConfigs {
+        ftb {
+                def propsFile = rootProject.file( "secure/secure.properties" )
+                //this check is to stop ci from failing
+                if (propsFile.exists()) {
+                    def props = new Properties()
+                    props.load(new FileInputStream(propsFile))
+
+                    storeFile = file("../secure/" + props['key.store'])
+                    storePassword = props['key.store.password']
+                    keyAlias = props['key.alias']
+                    keyPassword = props['key.alias.password']
+                }
+        }
+    }
+
     defaultConfig {
         applicationId "com.berniesanders.fieldthebern"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 9
-        versionName "1.0.0.beta4"
+        versionCode 11
+        versionName "1.0.0.beta5"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+
+        def ftbSigningConfig = signingConfigs.ftb
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig ftbSigningConfig
         }
     }
     packagingOptions {
@@ -103,4 +123,53 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
+}
+android.applicationVariants.all{ variant ->
+    variant.mergeResources.doLast{
+        def gitHash = getGitHash()
+        def timeStamp = getDate()
+
+        File valuesFile = file("${buildDir}/intermediates/res/merged/${variant.dirName}/values/values.xml")
+        println("Replacing keys in file: " + valuesFile)
+        println("Git Hash: " + gitHash)
+        String content = valuesFile.getText('UTF-8')
+        content = content.replaceAll(/##HASHCODE##/, gitHash)
+        content = content.replaceAll(/##DATETIME##/, timeStamp)
+
+        if(variant.buildType.name.equals('release')) {
+            println "updating release keys and build info"
+            def propsFile = rootProject.file( "secure/api_keys.properties" )
+            //this check is to stop ci from failing
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                def googleApiKey = props['key.google']
+                content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
+            }
+        } else {
+            println "updating debug keys and build info"
+            def propsFile = rootProject.file( "secure/debug_keys.properties" )
+            //this check is to stop ci from failing
+            if (propsFile.exists()) {
+                def props = new Properties()
+                props.load(new FileInputStream(propsFile))
+                def googleApiKey = props['key.google']
+                content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
+            }
+        }
+
+        valuesFile.write(content, 'UTF-8')
+    }
+}
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd_HHmm')
+    return formattedDate
+}
+
+def getGitHash() {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    return "(" + proc.text.trim() + ")"
 }

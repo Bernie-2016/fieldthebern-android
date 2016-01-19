@@ -142,7 +142,7 @@ public class PhotoEditView extends FrameLayout {
         });
     }
 
-    void toggleAvatarWidget(boolean open) {
+    public void toggleAvatarWidget(boolean open) {
         float center = avatarContainer.getResources().getDisplayMetrics().widthPixels / 2;
 
         if (open) {

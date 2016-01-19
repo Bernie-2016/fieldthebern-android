@@ -203,6 +203,13 @@ public class SignupScreen extends FlowPathBase {
             } else if (userBitmap != null) {
                 // User may have set their own photo and persist through rotation
                 photoEditView.load(userAttributes, userBitmap);
+            } else {
+                getView().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        photoEditView.toggleAvatarWidget(true);
+                    }
+                }, 300) ;
             }
 
             photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {

@@ -179,6 +179,7 @@ public class SignupScreen extends FlowPathBase {
 
         @Bind(R.id.photo_edit)
         PhotoEditView photoEditView;
+        private boolean showPleaseWait = false;
 
         @Inject
         Presenter(UserRepo repo,
@@ -224,6 +225,10 @@ public class SignupScreen extends FlowPathBase {
             }
 
             getView().loadUserEmailAccounts(emailAutocompleteTV);
+
+            if (showPleaseWait) {
+                ProgressDialogService.get(getView()).show(R.string.please_wait);
+            }
         }
 
         private void showEnableLocationDialog() {
@@ -276,6 +281,7 @@ public class SignupScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).show(R.string.please_wait);
+                showPleaseWait = true;
                 userAttributes = getView().getInput(userAttributes);
                 requestLocation();
 
@@ -414,6 +420,7 @@ public class SignupScreen extends FlowPathBase {
                     return;
                 }
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
                 if (e instanceof HttpException) {
                     ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
                     ToastService.get(getView()).bern(errorResponse.getAllDetails(), Toast.LENGTH_SHORT);
@@ -428,6 +435,7 @@ public class SignupScreen extends FlowPathBase {
             public void onNext(User user) {
                 Timber.d("user created! user: %s", user.toString());
                 ProgressDialogService.get(getView()).dismiss();
+                showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
 
                 //Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);

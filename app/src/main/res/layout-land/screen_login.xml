@@ -44,6 +44,7 @@
                     android:src="@drawable/ic_account_circle_white_48dp"
                     />
                 <ImageView
+                    android:id="@+id/mask"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/mask_centered"

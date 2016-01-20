@@ -32,9 +32,12 @@ public class Visit {
     /**
      * Mix of ApiAddress and Person objects
      */
-    List<CanvassData> included = new ArrayList<>();
+    List<CanvassData> included;
 
     public List<CanvassData> included() {
+        if (included == null) {
+            included = new ArrayList<>();
+        }
         return this.included;
     }
 

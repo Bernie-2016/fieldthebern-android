@@ -97,6 +97,7 @@
     <string name="err_invalid_email">Please enter a valid email</string>
     <string name="err_invalid_phone">Please enter a valid phone number</string>
     <string name="err_address_blank">Please enter an address</string>
+    <string name="err_cant_load_photo">Unable to load photo</string>
     <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
     <string name="location_disabled_title">Location disabled</string>
     <string name="location_disabled_message">Please enable your phone\'s location setting (specifically WiFi and network location)</string>

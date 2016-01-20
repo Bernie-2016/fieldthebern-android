@@ -190,6 +190,8 @@ public class ChooseSignupScreen extends FlowPathBase {
                                                             response.getJSONObject().toString(),
                                                             FacebookUser.class);
 
+                                            if (getView() == null) { return; }
+
                                             Flow.get(getView().getContext())
                                                     .set(new SignupScreen(facebookUser.convertToApiUser()));
                                         }

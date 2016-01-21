@@ -450,8 +450,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     public void setNearbyAddresses(List<ApiAddress> nearbyAddresses) {
+        if (nearbyAddresses == null) { return; }
         this.nearbyAddresses = nearbyAddresses;
-        if (googleMap==null) { return; }
+        if (googleMap == null) { return; }
         googleMap.clear();
         markerAddressMap.clear();
 
@@ -477,7 +478,6 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         }
 
         googleMap.setOnMarkerClickListener(onMarkerClickListener);
-
 
     }
 

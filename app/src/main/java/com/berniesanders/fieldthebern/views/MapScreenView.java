@@ -112,6 +112,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     private CameraPosition cameraPosition;
     private Map<String, ApiAddress> markerAddressMap = new HashMap<>();
     private List<ApiAddress> nearbyAddresses;
+    private boolean isAttached = false;
 
     public MapScreenView(Context context) {
         super(context);
@@ -192,10 +193,12 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         Timber.v("onAttachToWindow");
         super.onAttachedToWindow();
         presenter.takeView(this);
+        isAttached = true;
     }
 
     @Override
     protected void onDetachedFromWindow() {
+        isAttached = false;
         presenter.dropView(this);
         super.onDetachedFromWindow();
         if (activityWeakReference != null) {
@@ -227,6 +230,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     private void unsubscribe() {
+        handler.removeCallbacksAndMessages(null);
 
         if (cameraSubscription != null) {
             cameraSubscription.unsubscribe();
@@ -237,8 +241,6 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         if (geocodeSubscription != null) {
             geocodeSubscription.unsubscribe();
         }
-
-        handler.removeCallbacksAndMessages(null);
 
         if (googleMap!=null) {//thanks fragments
             googleMap.setOnCameraChangeListener(null);
@@ -329,20 +331,24 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
         @Override
         public void onNext(final CameraPosition cameraPosition) {
+
             post(new Runnable() {
                 @Override
                 public void run() {
-                    LatLng latLng = cameraPosition.target;
 
-                    if (onCameraChangeListener!=null) {
-                        onCameraChangeListener.onCameraChange(cameraPosition, true, getRadius());
+                    if (isAttached) {
+                        LatLng latLng = cameraPosition.target;
+
+                        if (onCameraChangeListener != null) {
+                            onCameraChangeListener.onCameraChange(cameraPosition, true, getRadius());
+                        }
+
+                        geocodeSubscription = LocationService.get(MapScreenView.this)
+                                .reverseGeocode(latLng)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(geocodeObserver);
                     }
-
-                    geocodeSubscription = LocationService.get(MapScreenView.this)
-                            .reverseGeocode(latLng)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(geocodeObserver);
                 }
             });
         }

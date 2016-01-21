@@ -193,6 +193,8 @@ public class ChooseLoginScreen extends FlowPathBase {
                                                     .fromJson(
                                                             response.getJSONObject().toString(),
                                                             FacebookUser.class);
+                                            
+                                            if (getView() == null) { return; }
 
                                             User user = new User();
                                             user.getData().attributes(facebookUser.convertToApiUser());

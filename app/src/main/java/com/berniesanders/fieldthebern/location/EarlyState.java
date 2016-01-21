@@ -94,8 +94,13 @@ public class EarlyState {
 
     /**
      * Returns if the "hey you should phonebank" screen should be shown to the user
+     * Was asked to exclude these specific states from seeing the message
      */
     public boolean phonebank() {
+
+        if(state == null) {
+            return false;
+        }
 
         switch (state) {
             case "AL":

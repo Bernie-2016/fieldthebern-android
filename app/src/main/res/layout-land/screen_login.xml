@@ -28,8 +28,7 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/have_an_account"
+            android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
             android:padding="16dp"
@@ -44,6 +43,7 @@
                     android:src="@drawable/ic_account_circle_white_48dp"
                     />
                 <ImageView
+                    android:id="@+id/mask"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/mask_centered"
@@ -121,7 +121,6 @@
                 android:textColor="@color/b_light_blue2"
                 android:textSize="16sp"
                 android:textStyle="normal"
-                android:layout_centerHorizontal="true"
                 />
         </LinearLayout>
     </ScrollView>

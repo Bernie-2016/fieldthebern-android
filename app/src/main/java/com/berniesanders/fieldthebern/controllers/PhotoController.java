@@ -29,6 +29,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 
+import com.berniesanders.fieldthebern.R;
+import com.crashlytics.android.Crashlytics;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -94,41 +97,54 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
     public void onResult(int requestCode, int resultCode, Intent data) {
         //onComplete.call();
         Timber.v("activity result...");
-        if (requestCode == REQUEST_IMAGE_CAPTURE) {
-            Bitmap imageBitmap = null;
 
-            if (resultCode == android.app.Activity.RESULT_OK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
+        //TODO this is really hacky code so let's fail gracefully for now
+        try {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bitmap imageBitmap = null;
 
+                if (resultCode == android.app.Activity.RESULT_OK) {
+                    Bundle extras = data.getExtras();
+                    imageBitmap = (Bitmap) extras.get("data");
+
+                }
+                if (onComplete != null) {
+                    onComplete.call(imageBitmap);
+                }
+            } else if (requestCode == PICK_PHOTO) {
+                Bitmap imageBitmap = null;
+
+                if (resultCode == android.app.Activity.RESULT_OK) {
+                    Uri imageUri = data.getData();
+
+                    //TODO this code sucks
+                    // How is it the api for interacting with the media store
+                    // is still manually iterating with a cursor...?!
+                    long id = Long.parseLong(
+                            imageUri.getLastPathSegment()
+                                    .substring(imageUri.getLastPathSegment().lastIndexOf(":")+1));
+
+                    imageBitmap = MediaStore.Images.Thumbnails.getThumbnail(
+                            getView().getActivity().getContentResolver(),
+                            id,
+                            MediaStore.Images.Thumbnails.MINI_KIND,
+                            (BitmapFactory.Options) null);
+
+                }
+                if (onComplete != null) {
+                    onComplete.call(imageBitmap);
+                }
             }
-            if (onComplete != null) {
-                onComplete.call(imageBitmap);
-            }
-        } else if (requestCode == PICK_PHOTO) {
-            Bitmap imageBitmap = null;
+        } catch (Exception e) {
+            Timber.e(e, "Error loading image");
+            Crashlytics.logException(e);
 
-            if (resultCode == android.app.Activity.RESULT_OK) {
-                Uri imageUri = data.getData();
-
-                //TODO this code sucks
-                // How is it the api for interacting with the media store
-                // is still manually iterating with a cursor...?!
-                long id = Long.parseLong(
-                        imageUri.getLastPathSegment()
-                                .substring(imageUri.getLastPathSegment().lastIndexOf(":")+1));
-
-                imageBitmap = MediaStore.Images.Thumbnails.getThumbnail(
-                        getView().getActivity().getContentResolver(),
-                        id,
-                        MediaStore.Images.Thumbnails.MINI_KIND,
-                        (BitmapFactory.Options) null);
-
-            }
-            if (onComplete != null) {
-                onComplete.call(imageBitmap);
+            if (getView() != null) {
+                String errmsg = getView().getActivity().getString(R.string.err_cant_load_photo);
+                ToastService.get(getView().getActivity()).bern(errmsg);
             }
         }
+
     }
 
     /**

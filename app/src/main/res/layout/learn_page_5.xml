@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,100 +16,100 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:background="@color/bernie_dark_blue"
-    >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/titleView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_title_5"
-            style="@style/LearnHeader"
-            tools:ignore="MissingPrefix"
-            fontPath="fonts/Lato-Heavy.ttf"
-            />
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_1"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_2"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_3"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_4"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_5"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_6"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_7"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_8"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_9"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_10"
-            style="@style/LearnParagraph"
-            />
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/learn_text_5_11"
-            style="@style/LearnParagraph"
-            />
-    </LinearLayout>
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bernie_dark_blue">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/titleView"
+      style="@style/LearnHeader"
+      fontPath="fonts/Lato-Heavy.ttf"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_title_5"
+      tools:ignore="MissingPrefix" />
+
+    <TextView
+      android:id="@+id/textView"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_1" />
+
+    <TextView
+      android:id="@+id/textView2"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_2" />
+
+    <TextView
+      android:id="@+id/textView3"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_3" />
+
+    <TextView
+      android:id="@+id/textView4"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_4" />
+
+    <TextView
+      android:id="@+id/textView5"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_5" />
+
+    <TextView
+      android:id="@+id/textView6"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_6" />
+
+    <TextView
+      android:id="@+id/textView7"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_7" />
+
+    <TextView
+      android:id="@+id/textView8"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_8" />
+
+    <TextView
+      android:id="@+id/textView9"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_9" />
+
+    <TextView
+      android:id="@+id/textView10"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_10" />
+
+    <TextView
+      android:id="@+id/textView11"
+      style="@style/LearnParagraph"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/learn_text_5_11" />
+  </LinearLayout>
 </ScrollView>

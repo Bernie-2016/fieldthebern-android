@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,150 +14,148 @@
   ~ limitations under the License.
   ~
   -->
-<com.berniesanders.fieldthebern.views.ScoreView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.berniesanders.fieldthebern.views.ScoreView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bernie_dark_blue">
+
+  <ScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@color/bernie_dark_blue"
-    >
-    <ScrollView
+    android:layout_marginTop="16dp">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="16dp">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1">
+
+        </View>
+
+        <!-- bernie dancing animation-->
+
+        <FrameLayout
+          android:layout_width="0dp"
+          android:layout_height="240dp"
+          android:layout_weight="3">
+
+          <pl.droidsonroids.gif.GifImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:src="@drawable/bernie_ellen" />
+
+          <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:src="@drawable/mask" />
+        </FrameLayout>
+
+        <View
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1">
+
+        </View>
+
         <LinearLayout
+          android:layout_width="0dp"
+          android:layout_height="240dp"
+          android:layout_weight="3"
+          android:orientation="vertical">
+
+          <FrameLayout
+            android:id="@+id/points_container"
             android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:layout_gravity="center_horizontal"
+            android:clipChildren="false">
+
+          </FrameLayout>
+
+
+          <TextView
+            android:id="@+id/points_label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/points"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+          <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="left"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+            <TextView
+              android:id="@+id/for_knocking"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:text="@string/for_knocking"
+              android:textColor="@android:color/white"
+              android:textSize="16sp" />
 
-                <View
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-
-                </View>
-
-                <!-- bernie dancing animation-->
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="240dp"
-                    android:layout_weight="3"
-                    >
-                    <pl.droidsonroids.gif.GifImageView
-                        android:layout_width="240dp"
-                        android:layout_height="240dp"
-                        android:src="@drawable/bernie_ellen"
-                        android:layout_gravity="center"
-                        />
-                        <ImageView
-                            android:layout_width="240dp"
-                            android:layout_height="240dp"
-                            android:src="@drawable/mask"
-                            android:layout_gravity="center"
-                            />
-                </FrameLayout>
-                <View
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-
-                </View>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="240dp"
-                    android:layout_weight="3"
-                    android:orientation="vertical"
-                    >
-
-                    <FrameLayout
-                        android:id="@+id/points_container"
-                        android:layout_width="match_parent"
-                        android:layout_height="96dp"
-                        android:layout_gravity="center_horizontal"
-                        android:clipChildren="false"
-                        >
-
-                    </FrameLayout>
-
-
-                    <TextView
-                        android:id="@+id/points_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textColor="@android:color/white"
-                        android:text="@string/points"
-                        android:layout_gravity="center_horizontal"
-                        android:textStyle="bold"
-                        android:textSize="18sp"/>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="left"
-                        >
-                        <TextView
-                            android:id="@+id/for_knocking"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textColor="@android:color/white"
-                            android:text="@string/for_knocking"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:id="@+id/for_updating"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:textColor="@android:color/white"
-                            android:text="@string/for_updating"
-                            android:textSize="16sp"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <View
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
-
-                </View>
-            </LinearLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/dark_blue2"
-                    />
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/back_to_map"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center"
-                    android:text="@string/back_to_map"
-                    android:textColor="@android:color/white"
-                    android:background="?attr/selectableItemBackground"
-                    android:textSize="22sp"
-                    android:textAllCaps="false"
-                    />
-            </RelativeLayout>
+            <TextView
+              android:id="@+id/for_updating"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center"
+              android:text="@string/for_updating"
+              android:textColor="@android:color/white"
+              android:textSize="16sp" />
+          </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+
+        <View
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="1">
+
+        </View>
+      </LinearLayout>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/large_button_height"
+          android:layout_alignParentBottom="true"
+          android:background="@color/dark_blue2" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/back_to_map"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/large_button_height"
+          android:layout_alignParentBottom="true"
+          android:background="?attr/selectableItemBackground"
+          android:gravity="center"
+          android:text="@string/back_to_map"
+          android:textAllCaps="false"
+          android:textColor="@android:color/white"
+          android:textSize="22sp" />
+      </RelativeLayout>
+    </LinearLayout>
+  </ScrollView>
 </com.berniesanders.fieldthebern.views.ScoreView>

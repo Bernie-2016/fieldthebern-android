@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,118 +14,112 @@
   ~ limitations under the License.
   ~
   -->
-<com.berniesanders.fieldthebern.views.LoginView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.berniesanders.fieldthebern.views.LoginView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bernie_dark_blue"
+  tools:context=".MainActivity">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/bernie_dark_blue"
-    tools:context=".MainActivity"
-    >
-    <LinearLayout
+    android:layout_above="@id/have_an_account"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <FrameLayout
+      android:layout_width="120dp"
+      android:layout_height="120dp">
+
+      <ImageView
+        android:id="@+id/user_photo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_account_circle_white_48dp" />
+
+      <ImageView
+        android:id="@+id/mask"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/mask_centered"
+        android:visibility="invisible" />
+    </FrameLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:id="@+id/email_input_layout"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <android.support.v7.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/email"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/have_an_account"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="8dp"
-        >
-        <FrameLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp">
-            <ImageView
-                android:id="@+id/user_photo"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_account_circle_white_48dp"
-                />
-            <ImageView
-                android:id="@+id/mask"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/mask_centered"
-                android:visibility="invisible"
-                />
-        </FrameLayout>
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/email_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/email"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/b_light_blue2"
-                android:textSize="20sp"
-                android:inputType="textEmailAddress"
-                android:nextFocusDown="@+id/password"
-                android:nextFocusRight="@+id/password"
-                android:imeOptions="actionNext"
-                />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/password"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textColorHint="@color/b_light_blue2"
-                android:textSize="20sp"
-                android:inputType="textPassword"
-                />
-        </android.support.design.widget.TextInputLayout>
-    </LinearLayout>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/no_account"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/no_account"
-        android:textAllCaps="false"
-        android:textColor="@color/b_light_blue2"
-        android:textSize="16sp"
-        android:textStyle="normal"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_above="@id/no_account"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/login_email"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_above="@id/no_account"
-        android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/login_title"
-        android:textAllCaps="false"
+        android:layout_margin="8dp"
+        android:hint="@string/email"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:nextFocusDown="@+id/password"
+        android:nextFocusRight="@+id/password"
+        android:singleLine="true"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        />
+        android:textColorHint="@color/b_light_blue2"
+        android:textSize="20sp" />
+    </android.support.design.widget.TextInputLayout>
 
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textColorHint="@color/b_light_blue2"
+        android:textSize="20sp" />
+    </android.support.design.widget.TextInputLayout>
+  </LinearLayout>
+
+  <android.support.v7.widget.AppCompatButton
+    android:id="@+id/no_account"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:text="@string/no_account"
+    android:textAllCaps="false"
+    android:textColor="@color/b_light_blue2"
+    android:textSize="16sp"
+    android:textStyle="normal" />
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/large_button_height"
+    android:layout_above="@id/no_account"
+    android:layout_margin="16dp"
+    android:background="@color/dark_blue2" />
+
+  <android.support.v7.widget.AppCompatButton
+    android:id="@+id/login_email"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/large_button_height"
+    android:layout_above="@id/no_account"
+    android:layout_margin="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:text="@string/login_title"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    android:textStyle="normal" />
 
 
 </com.berniesanders.fieldthebern.views.LoginView>

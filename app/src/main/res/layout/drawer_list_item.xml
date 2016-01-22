@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,29 +16,27 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              tools:background="@color/bernie_dark_blue"
-              android:gravity="center_vertical"
-    >
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:gravity="center_vertical"
+  android:orientation="horizontal"
+  tools:background="@color/bernie_dark_blue">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        tools:src="@drawable/ic_pin_drop_white_24dp"
-        android:layout_margin="16dp"
-        />
+  <ImageView
+    android:id="@+id/icon"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_margin="16dp"
+    tools:src="@drawable/ic_pin_drop_white_24dp" />
 
-    <TextView
-        android:id="@+id/drawer_list_item_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        tools:text="Text"/>
+  <TextView
+    android:id="@+id/drawer_list_item_text"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    android:textStyle="bold"
+    tools:text="Text" />
 </LinearLayout>

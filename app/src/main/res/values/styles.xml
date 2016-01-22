@@ -17,81 +17,84 @@
 
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimaryDark">@color/dark_blue2</item>
-        <item name="colorPrimary">@color/bernie_dark_blue</item>
-        <item name="colorAccent">@color/dark_blue2</item>
-        <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="colorControlNormal">@color/dark_blue2</item>
-        <!-- You can also set colorControlNormal, colorSwitchThumbNormal. -->
-        <item name="android:textColorHint">@color/b_light_blue2</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:tabWidgetStyle">@style/Tabs</item>
+  <!-- Base application theme. -->
+  <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <item name="colorPrimaryDark">@color/dark_blue2</item>
+    <item name="colorPrimary">@color/bernie_dark_blue</item>
+    <item name="colorAccent">@color/dark_blue2</item>
+    <item name="colorControlActivated">@color/white</item>
+    <item name="colorControlHighlight">@color/white</item>
+    <item name="colorControlNormal">@color/dark_blue2</item>
+    <!-- You can also set colorControlNormal, colorSwitchThumbNormal. -->
+    <item name="android:textColorHint">@color/b_light_blue2</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+    <item name="android:tabWidgetStyle">@style/Tabs</item>
 
-    </style>
+  </style>
 
-    <style name="DarkDialog" parent="Theme.AppCompat.Light">
-        <item name="colorPrimaryDark">@color/dark_blue2</item>
-        <item name="colorPrimary">@color/bernie_dark_blue</item>
-        <item name="colorAccent">@color/dark_blue2</item>
-        <item name="colorControlActivated">@color/dark_blue2</item>
-        <item name="colorControlHighlight">@color/dark_blue2</item>
-        <item name="colorControlNormal">@color/dark_blue2</item>
-        <!-- You can also set colorControlNormal, colorSwitchThumbNormal. -->
-        <item name="android:textColorHint">@color/b_light_blue2</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+  <style name="DarkDialog" parent="Theme.AppCompat.Light">
+    <item name="colorPrimaryDark">@color/dark_blue2</item>
+    <item name="colorPrimary">@color/bernie_dark_blue</item>
+    <item name="colorAccent">@color/dark_blue2</item>
+    <item name="colorControlActivated">@color/dark_blue2</item>
+    <item name="colorControlHighlight">@color/dark_blue2</item>
+    <item name="colorControlNormal">@color/dark_blue2</item>
+    <!-- You can also set colorControlNormal, colorSwitchThumbNormal. -->
+    <item name="android:textColorHint">@color/b_light_blue2</item>
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
 
-    </style>
+  </style>
 
 
+  <style name="PageMargins" parent="AppTheme">
+    <item name="android:layout_marginTop">8dp</item>
+    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:layout_marginLeft">16dp</item>
+    <item name="android:layout_marginRight">16dp</item>
+  </style>
 
-    <style name="PageMargins" parent="AppTheme">
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-    </style>
-    <style name="Tabs" parent="Theme.AppCompat">
-        <item name="android:textColor">@color/white</item>
-    </style>
+  <style name="Tabs" parent="Theme.AppCompat">
+    <item name="android:textColor">@color/white</item>
+  </style>
 
-    <style name="LearnHeader" parent="AppTheme">
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:textSize">32sp</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:gravity">left|center_vertical</item>
+  <style name="LearnHeader" parent="AppTheme">
+    <item name="android:layout_marginTop">16dp</item>
+    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:layout_marginLeft">16dp</item>
+    <item name="android:layout_marginRight">16dp</item>
+    <item name="android:textSize">32sp</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:gravity">left|center_vertical</item>
 
-    </style>
-    <style name="LearnParagraph" parent="AppTheme">
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginBottom">8dp</item>
-        <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginRight">16dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@android:color/white</item>
-    </style>
-    <style name="HomeButton" parent="AppTheme">
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:drawablePadding">16dp</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
-        <item name="android:gravity">left|center_vertical</item>
-    </style>
-    <style name="HomeButtonMargins" parent="AppTheme">
-        <item name="android:layout_marginTop">4dp</item>
-        <item name="android:layout_marginLeft">4dp</item>
-        <item name="android:layout_marginRight">4dp</item>
-        <item name="android:layout_marginBottom">4dp</item>
-    </style>
+  </style>
+
+  <style name="LearnParagraph" parent="AppTheme">
+    <item name="android:layout_marginTop">16dp</item>
+    <item name="android:layout_marginBottom">8dp</item>
+    <item name="android:layout_marginLeft">16dp</item>
+    <item name="android:layout_marginRight">16dp</item>
+    <item name="android:textSize">16sp</item>
+    <item name="android:textColor">@android:color/white</item>
+  </style>
+
+  <style name="HomeButton" parent="AppTheme">
+    <item name="android:textAllCaps">false</item>
+    <item name="android:textColor">@android:color/white</item>
+    <item name="android:textSize">18sp</item>
+    <item name="android:padding">16dp</item>
+    <item name="android:drawablePadding">16dp</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:gravity">left|center_vertical</item>
+  </style>
+
+  <style name="HomeButtonMargins" parent="AppTheme">
+    <item name="android:layout_marginTop">4dp</item>
+    <item name="android:layout_marginLeft">4dp</item>
+    <item name="android:layout_marginRight">4dp</item>
+    <item name="android:layout_marginBottom">4dp</item>
+  </style>
 
 
 </resources>

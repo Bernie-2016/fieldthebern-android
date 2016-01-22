@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,102 +14,99 @@
   ~ limitations under the License.
   ~
   -->
-<com.berniesanders.fieldthebern.views.ChooseSignupView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.berniesanders.fieldthebern.views.ChooseSignupView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bernie_dark_blue"
+  tools:context=".MainActivity">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/bernie_dark_blue"
-    tools:context=".MainActivity"
-    >
-    <LinearLayout
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:layout_width="200dp"
+      android:layout_height="200dp"
+      android:src="@drawable/logo_final" />
+
+    <RelativeLayout
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      android:layout_weight="1"
+      android:gravity="center">
+
+      <android.support.v7.widget.AppCompatButton
+        android:id="@+id/have_an_account"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/have_an_account"
+        android:textAllCaps="false"
+        android:textColor="@color/b_light_blue2"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+      <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/logo_final"
-            />
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/have_an_account"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:text="@string/have_an_account"
-                    android:textAllCaps="false"
-                    android:textColor="@color/b_light_blue2"
-                    android:textSize="16sp"
-                    android:textStyle="normal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
-                    />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_above="@id/have_an_account"
-                    android:layout_margin="16dp"
-                    android:background="@color/dark_blue2"
-                    />
+        android:layout_height="@dimen/large_button_height"
+        android:layout_above="@id/have_an_account"
+        android:layout_margin="16dp"
+        android:background="@color/dark_blue2" />
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/sign_up_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_above="@id/have_an_account"
-                    android:layout_margin="16dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/ic_email_white_24dp"
-                    android:drawablePadding="14dp"
-                    android:gravity="center_vertical|left"
-                    android:paddingLeft="16dp"
-                    android:text="@string/signup_email"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    android:textStyle="normal"
-                    />
+      <android.support.v7.widget.AppCompatButton
+        android:id="@+id/sign_up_email"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_above="@id/have_an_account"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_email_white_24dp"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="16dp"
+        android:text="@string/signup_email"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="normal" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_above="@id/sign_up_email"
-                    android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@color/fb_blue"
-                    />
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_above="@id/sign_up_email"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/fb_blue" />
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/sign_up_facebook"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:layout_above="@id/sign_up_email"
-                    android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawableLeft="@drawable/facebook"
-                    android:drawablePadding="14dp"
-                    android:gravity="center_vertical|left"
-                    android:paddingLeft="16dp"
-                    android:text="@string/signup_facebook"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    android:textStyle="normal"
-                    />
-        </RelativeLayout>
+      <android.support.v7.widget.AppCompatButton
+        android:id="@+id/sign_up_facebook"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height"
+        android:layout_above="@id/sign_up_email"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/facebook"
+        android:drawablePadding="14dp"
+        android:gravity="center_vertical|left"
+        android:paddingLeft="16dp"
+        android:text="@string/signup_facebook"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+    </RelativeLayout>
 
 
-    </LinearLayout>
+  </LinearLayout>
 </com.berniesanders.fieldthebern.views.ChooseSignupView>

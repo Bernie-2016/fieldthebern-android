@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,84 +16,77 @@
   -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                tools:context=".MainActivity"
-                android:background="@color/bernie_darker_blue"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="1dp"
-    >
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="56dp"
+  android:layout_marginBottom="1dp"
+  android:layout_marginLeft="8dp"
+  android:layout_marginRight="8dp"
+  android:background="@color/bernie_darker_blue"
+  tools:context=".MainActivity">
 
-    <android.support.v7.widget.AppCompatCheckBox
-        android:id="@+id/canvassed_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_centerVertical="true"
-        android:checked="true"
-        />
+  <android.support.v7.widget.AppCompatCheckBox
+    android:id="@+id/canvassed_checkbox"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="12dp"
+    android:layout_marginRight="12dp"
+    android:checked="true" />
+
+  <TextView
+    android:id="@+id/person"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_marginTop="4dp"
+    android:layout_toRightOf="@id/canvassed_checkbox"
+    android:textColor="@android:color/white"
+    android:textSize="18sp"
+    tools:text="Bernie Fan" />
+
+  <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/person"
+    android:layout_toRightOf="@id/canvassed_checkbox"
+    android:gravity="left|center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:id="@+id/party"
+      android:layout_width="18dp"
+      android:layout_height="18dp"
+      tools:src="@drawable/ic_democrat" />
 
     <TextView
-        android:id="@+id/person"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/canvassed_checkbox"
-        android:textColor="@android:color/white"
-        tools:text="Bernie Fan"
-        android:textSize="18sp"
-        android:layout_marginTop="4dp"
-        />
+      android:id="@+id/interest"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="4dp"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:textStyle="bold"
+      tools:text="Strongly for Bernie" />
+  </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/canvassed_checkbox"
-        android:layout_below="@id/person"
-        android:orientation="horizontal"
-        android:gravity="left|center_vertical"
-        >
+  <View
+    android:layout_width="48dp"
+    android:layout_height="match_parent"
+    android:layout_alignParentRight="true"
+    android:layout_margin="0dp"
+    android:background="@color/dark_blue2" />
 
-        <ImageView
-            android:id="@+id/party"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            tools:src="@drawable/ic_democrat"
-            />
-
-        <TextView
-            android:id="@+id/interest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Strongly for Bernie"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:layout_marginLeft="4dp"
-            />
-    </LinearLayout>
-    <View
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_margin="0dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/edit"
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:background="?attr/selectableItemBackground"
-        android:layout_margin="0dp"
-        android:gravity="center"
-        android:text="@string/edit"
-        android:textColor="@android:color/white"
-        android:textAllCaps="false"
-        />
+  <android.support.v7.widget.AppCompatButton
+    android:id="@+id/edit"
+    android:layout_width="48dp"
+    android:layout_height="match_parent"
+    android:layout_alignParentRight="true"
+    android:layout_margin="0dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:text="@string/edit"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white" />
 </RelativeLayout>

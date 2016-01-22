@@ -17,7 +17,6 @@
 package com.berniesanders.fieldthebern.repositories;
 
 import android.content.Context;
-
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.ApiAddress;
@@ -32,15 +31,12 @@ import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterce
 import com.berniesanders.fieldthebern.repositories.specs.VisitSpec;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
@@ -50,152 +46,147 @@ import timber.log.Timber;
 /**
  * For starting a visit, updating it, then submitting to the API
  */
-@Singleton
-public class VisitRepo {
+@Singleton public class VisitRepo {
 
-    final Gson gson;
-    private final TokenRepo tokenRepo;
-    private final RxSharedPreferences rxPrefs;
-    private OkHttpClient client;
-    private final Config config;
-    private final Context context;
+  final Gson gson;
+  private final TokenRepo tokenRepo;
+  private final RxSharedPreferences rxPrefs;
+  private OkHttpClient client;
+  private final Config config;
+  private final Context context;
 
-    private Visit visit;
-    private List<Person> previousPeople = new ArrayList<>();
+  private Visit visit;
+  private List<Person> previousPeople = new ArrayList<>();
 
+  @Inject
+  public VisitRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config,
+      Context context) {
+    this.gson = gson;
+    this.tokenRepo = tokenRepo;
+    this.rxPrefs = rxPrefs;
+    this.config = config;
+    this.context = context;
 
-    @Inject
-    public VisitRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config, Context context) {
-        this.gson = gson;
-        this.tokenRepo = tokenRepo;
-        this.rxPrefs = rxPrefs;
-        this.config = config;
-        this.context = context;
+    HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
+      @Override public void log(String message) {
+        Timber.v(message);
+      }
+    };
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Timber.v(message);
-            }
-        };
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    client =
+        new OkHttpClient.Builder().addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
+            .addInterceptor(new AddTokenInterceptor(tokenRepo))
+            .addInterceptor(loggingInterceptor)
+            .authenticator(new ApiAuthenticator(tokenRepo))
+            .build();
+  }
 
-        client = new OkHttpClient.Builder()
-                .addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
-                .addInterceptor(new AddTokenInterceptor(tokenRepo))
-                .addInterceptor(loggingInterceptor)
-                .authenticator(new ApiAuthenticator(tokenRepo))
-                .build();
+  public boolean inProgress() {
+    return visit != null;
+  }
+
+  public Visit get() {
+    return visit;
+  }
+
+  public Visit start(final ApiAddress apiAddress) {
+    visit = new Visit();
+    visit.start();
+    setPreviousPeople(apiAddress);
+    setAddress(apiAddress);
+    return visit;
+  }
+
+  public void addPerson(Person person) {
+    if (!visit.included().contains(person)) {
+      visit.included().add(person);
+    }
+  }
+
+  void setPreviousPeople(final ApiAddress apiAddress) {
+    List<CanvassData> included = apiAddress.included();
+    previousPeople.clear();
+    for (CanvassData canvassData : included) {
+      if (canvassData.type().equals(Person.TYPE)) {
+        previousPeople.add(Person.copy((Person) canvassData));
+      }
+    }
+  }
+
+  /**
+   *
+   */
+  public Observable<VisitResult> submit() {
+
+    Timber.v("submit()");
+
+    if (!NetChecker.connected(context)) {
+      return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
+    //remove anyone who wasn't spoken to
+    List<CanvassData> included = visit.included();
 
-    public boolean inProgress() {
-        return visit != null;
-    }
+    List<Person> peopleToRemove = new ArrayList<>();
 
-    public Visit get() {
-        return visit;
-    }
-
-    public Visit start(final ApiAddress apiAddress) {
-        visit = new Visit();
-        visit.start();
-        setPreviousPeople(apiAddress);
-        setAddress(apiAddress);
-        return visit;
-    }
-
-    public void addPerson(Person person) {
-        if (!visit.included().contains(person)) {
-            visit.included().add(person);
+    for (CanvassData canvassData : included) {
+      if (canvassData.type().equals(Person.TYPE)) {
+        Person person = (Person) canvassData;
+        if (!person.spokenTo()) {
+          peopleToRemove.add(person);
         }
+      }
     }
 
-    void setPreviousPeople(final ApiAddress apiAddress) {
-        List<CanvassData> included = apiAddress.included();
-        previousPeople.clear();
-        for(CanvassData canvassData : included) {
-            if (canvassData.type().equals(Person.TYPE)) {
-                previousPeople.add(Person.copy((Person) canvassData));
-            }
+    visit.included().removeAll(peopleToRemove);
+
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getCanvassUrl())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        .client(client)
+        .build();
+
+    visit.stop(); //stop the timer
+
+    VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
+    return endpoint.submit(visit);
+  }
+
+  public void clear() {
+    visit = null;
+    previousPeople.clear();
+  }
+
+  public List<Person> getPreviousPeople() {
+    return previousPeople;
+  }
+
+  public void setAddress(ApiAddress apiAddress) {
+
+    try {
+      //remove the previous address so we don't have duplicates
+      ApiAddress previousAddress = (ApiAddress) visit.included().remove(0);
+      if (previousAddress != null) {
+        if (!apiAddress.equals(previousAddress)) { //if the address changed, reset the visit timer
+          //visit.included().clear();
+          visit.start();
+          //setPreviousPeople(apiAddress);
         }
+      }
+    } catch (IndexOutOfBoundsException e) {
+      //more logic than an error
+      Timber.d("attempted to read a previous address ");
     }
 
-    /**
-     *
-     */
-    public Observable<VisitResult> submit() {
-        
-        Timber.v("submit()");
+    visit.included().add(0, apiAddress);
+    List<CanvassData> included = apiAddress.included();
 
-        if (!NetChecker.connected(context)) {
-            return Observable.error(new NetworkUnavailableException("No internet available"));
-        }
-
-        //remove anyone who wasn't spoken to
-        List<CanvassData> included = visit.included();
-
-        List<Person> peopleToRemove = new ArrayList<>();
-
-        for (CanvassData canvassData : included) {
-            if (canvassData.type().equals(Person.TYPE)) {
-                Person person = (Person) canvassData;
-                if (!person.spokenTo()) {
-                    peopleToRemove.add(person);
-                }
-            }
-        }
-
-        visit.included().removeAll(peopleToRemove);
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-
-        visit.stop(); //stop the timer
-
-        VisitSpec.VisitEndpoint endpoint = retrofit.create(VisitSpec.VisitEndpoint.class);
-        return endpoint.submit(visit);
+    for (CanvassData canvassData : included) {
+      if (canvassData.type().equals(Person.TYPE)) {
+        addPerson((Person) canvassData);
+      }
     }
-
-    public void clear() {
-        visit = null;
-        previousPeople.clear();
-    }
-
-    public List<Person> getPreviousPeople() {
-        return previousPeople;
-    }
-
-    public void setAddress(ApiAddress apiAddress) {
-
-
-        try {
-            //remove the previous address so we don't have duplicates
-            ApiAddress previousAddress = (ApiAddress) visit.included().remove(0);
-            if (previousAddress != null) {
-                if (!apiAddress.equals(previousAddress)) { //if the address changed, reset the visit timer
-                    //visit.included().clear();
-                    visit.start();
-                    //setPreviousPeople(apiAddress);
-                }
-            }
-        } catch (IndexOutOfBoundsException e) {
-            //more logic than an error
-            Timber.d("attempted to read a previous address ");
-        }
-
-        visit.included().add(0, apiAddress);
-        List<CanvassData> included = apiAddress.included();
-
-        for(CanvassData canvassData : included) {
-            if (canvassData.type().equals(Person.TYPE)) {
-                addPerson((Person) canvassData);
-            }
-        }
-    }
+  }
 }

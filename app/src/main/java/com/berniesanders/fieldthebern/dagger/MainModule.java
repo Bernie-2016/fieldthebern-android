@@ -23,7 +23,6 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.config.ConfigImpl;
-import com.berniesanders.fieldthebern.controllers.ToastController;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.CanvassData;
 import com.berniesanders.fieldthebern.models.Content;
@@ -45,119 +44,86 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dagger.Module;
 import dagger.Provides;
-
 import javax.inject.Singleton;
 
 /**
  *
  */
-@Module
-@Singleton
-public class MainModule {
-    private final Context context;
-    private final Gson gson;
-    private final RxSharedPreferences rxPrefs;
-    private final Config config;
+@Module @Singleton public class MainModule {
+  private final Context context;
+  private final Gson gson;
+  private final RxSharedPreferences rxPrefs;
+  private final Config config;
 
-    public MainModule(Context context) {
-        this.context = context.getApplicationContext();
+  public MainModule(Context context) {
+    this.context = context.getApplicationContext();
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.disableHtmlEscaping();
-        gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
-        gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
-        gsonBuilder.registerTypeAdapter(CanvassData.class, new CanvassDataSerializer());
-        gson = gsonBuilder.create();
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    gsonBuilder.disableHtmlEscaping();
+    gsonBuilder.registerTypeAdapter(ApiItem.class, new CollectionDeserializer());
+    gsonBuilder.registerTypeAdapter(Content.class, new PageContentDeserializer());
+    gsonBuilder.registerTypeAdapter(CanvassData.class, new CanvassDataSerializer());
+    gson = gsonBuilder.create();
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        rxPrefs = RxSharedPreferences.create(preferences);
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+    rxPrefs = RxSharedPreferences.create(preferences);
 
-        config = new ConfigImpl(context);
-    }
+    config = new ConfigImpl(context);
+  }
 
-    @Provides
-    @Singleton
-    public Gson provideGson() {
-        return gson;
-    }
+  @Provides @Singleton public Gson provideGson() {
+    return gson;
+  }
 
-    @Provides
-    @Singleton
-    public Context provideContext() {
-        return context;
-    }
+  @Provides @Singleton public Context provideContext() {
+    return context;
+  }
 
+  @Provides @Singleton public CollectionRepo provideCollectionRepo() {
+    return new CollectionRepo(gson, context, config);
+  }
 
-    @Provides
-    @Singleton
-    public CollectionRepo provideCollectionRepo() {
-        return new CollectionRepo(gson, context, config);
-    }
+  @Provides @Singleton public TokenRepo provideTokenRepo() {
+    return new TokenRepo(this.gson, rxPrefs, config, context);
+  }
 
-    @Provides
-    @Singleton
-    public TokenRepo provideTokenRepo() {
-        return new TokenRepo(this.gson, rxPrefs, config, context);
-    }
+  @Provides @Singleton public UserRepo provideUserRepo(TokenRepo tokenRepo) {
+    return new UserRepo(gson, tokenRepo, rxPrefs, config, context);
+  }
 
-    @Provides
-    @Singleton
-    public UserRepo provideUserRepo(TokenRepo tokenRepo) {
-        return new UserRepo(gson, tokenRepo, rxPrefs, config, context);
-    }
+  @Provides @Singleton public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
+    return new AddressRepo(gson, tokenRepo, rxPrefs, config, context);
+  }
 
-    @Provides
-    @Singleton
-    public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
-        return new AddressRepo(gson, tokenRepo, rxPrefs, config, context);
-    }
+  @Provides @Singleton public StatesRepo provideStatesRepo() {
+    return new StatesRepo(gson, context);
+  }
 
-    @Provides
-    @Singleton
-    public StatesRepo provideStatesRepo() {
-        return new StatesRepo(gson, context);
-    }
+  @Provides @Singleton public RxSharedPreferences provideRxPrefs() {
+    return rxPrefs;
+  }
 
-    @Provides
-    @Singleton
-    public RxSharedPreferences provideRxPrefs() {
-        return rxPrefs;
-    }
+  @Provides @Singleton public LocationManager provideLocationManager() {
+    return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+  }
 
+  @Provides @Singleton public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
+    return new VisitRepo(gson, tokenRepo, rxPrefs, config, context);
+  }
 
-    @Provides
-    @Singleton
-    public LocationManager provideLocationManager() {
-        return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-    }
+  @Provides @Singleton public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
+    return new RankingsRepo(gson, tokenRepo, rxPrefs, config, context);
+  }
 
-    @Provides
-    @Singleton
-    public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
-        return new VisitRepo(gson, tokenRepo, rxPrefs, config, context);
-    }
+  @Provides @Singleton public FieldOfficeRepo provideFieldOfficeRepo(TokenRepo tokenRepo) {
+    return new FieldOfficeRepo(gson, config, context);
+  }
 
-    @Provides
-    @Singleton
-    public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
-        return new RankingsRepo(gson, tokenRepo, rxPrefs, config, context);
-    }
+  @Provides @Singleton public MessageScreen provideMessageScreen(FieldOfficeRepo fieldOfficeRepo) {
+    return new MessageScreen(fieldOfficeRepo, rxPrefs);
+  }
 
-    @Provides
-    @Singleton
-    public FieldOfficeRepo provideFieldOfficeRepo(TokenRepo tokenRepo) {
-        return new FieldOfficeRepo(gson, config, context);
-    }
-    @Provides
-    @Singleton
-    public MessageScreen provideMessageScreen(FieldOfficeRepo fieldOfficeRepo) {
-        return new MessageScreen(fieldOfficeRepo, rxPrefs);
-    }
-
-    @Provides
-    @Singleton
-    public ErrorResponseParser provideErrorParser() {
-        return new ErrorResponseParser(gson);
-    }
-
+  @Provides @Singleton public ErrorResponseParser provideErrorParser() {
+    return new ErrorResponseParser(gson);
+  }
 }

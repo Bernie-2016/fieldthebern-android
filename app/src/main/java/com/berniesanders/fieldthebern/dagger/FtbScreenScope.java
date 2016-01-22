@@ -22,6 +22,5 @@ import javax.inject.Scope;
 /**
  *
  */
-@Scope
-public @interface FtbScreenScope {
+@Scope public @interface FtbScreenScope {
 }

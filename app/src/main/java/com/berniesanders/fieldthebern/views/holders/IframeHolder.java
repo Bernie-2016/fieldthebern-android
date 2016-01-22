@@ -19,7 +19,6 @@ package com.berniesanders.fieldthebern.views.holders;
 
 import android.view.View;
 import android.widget.TextView;
-
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.BaseViewHolder;
 import com.berniesanders.fieldthebern.models.Iframe;
@@ -29,16 +28,15 @@ import com.berniesanders.fieldthebern.models.Iframe;
  */
 public class IframeHolder extends BaseViewHolder<Iframe> {
 
-    TextView textView;
+  TextView textView;
 
-    IframeHolder(View itemView) {
-        super(itemView);
-        textView = (TextView)itemView.findViewById(R.id.text);
-    }
+  IframeHolder(View itemView) {
+    super(itemView);
+    textView = (TextView) itemView.findViewById(R.id.text);
+  }
 
-    @Override
-    public void setModel(final Iframe model) {
-        super.setModel(model);
-        textView.setText(model.getText());
-    }
+  @Override public void setModel(final Iframe model) {
+    super.setModel(model);
+    textView.setText(model.getText());
+  }
 }

@@ -19,7 +19,6 @@ package com.berniesanders.fieldthebern.mortar;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.view.LayoutInflater;
-
 import flow.path.Path;
 import flow.path.PathContextFactory;
 import mortar.MortarScope;
@@ -32,7 +31,7 @@ public final class MortarContextFactory implements PathContextFactory {
 
   @Override public Context setUpContext(Path path, Context parentContext) {
     MortarScope screenScope =
-        screenScoper.getScreenScope(parentContext, ((FlowPathBase)path).getScopeName(), path);
+        screenScoper.getScreenScope(parentContext, ((FlowPathBase) path).getScopeName(), path);
     return new TearDownContext(parentContext, screenScope);
   }
 
@@ -46,7 +45,7 @@ public final class MortarContextFactory implements PathContextFactory {
     private LayoutInflater inflater;
 
     static void destroyScope(Context context) {
-        MortarScope.getScope(context).destroy();
+      MortarScope.getScope(context).destroy();
     }
 
     public TearDownContext(Context context, MortarScope scope) {

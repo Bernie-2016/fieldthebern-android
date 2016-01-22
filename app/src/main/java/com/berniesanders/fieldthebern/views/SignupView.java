@@ -27,163 +27,148 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.berniesanders.fieldthebern.screens.SignupScreen;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 /**
  */
 public class SignupView extends RelativeLayout {
 
-    /**
-     */
-    @Inject
-    SignupScreen.Presenter presenter;
+  /**
+   */
+  @Inject SignupScreen.Presenter presenter;
 
-    @Bind(R.id.first_name)
-    AppCompatEditText firstName;
+  @Bind(R.id.first_name) AppCompatEditText firstName;
 
-    @Bind(R.id.last_name)
-    AppCompatEditText lastName;
+  @Bind(R.id.last_name) AppCompatEditText lastName;
 
-    @Bind(R.id.email)
-    AutoCompleteTextView email;
+  @Bind(R.id.email) AutoCompleteTextView email;
 
-    @Bind(R.id.password)
-    AppCompatEditText password;
+  @Bind(R.id.password) AppCompatEditText password;
 
-    @Bind(R.id.user_photo)
-    ImageView userImageView;
+  @Bind(R.id.user_photo) ImageView userImageView;
 
-    @Bind(R.id.mask)
-    ImageView mask;
+  @Bind(R.id.mask) ImageView mask;
 
+  public SignupView(Context context) {
+    super(context);
+    injectSelf(context);
+  }
 
-    public SignupView(Context context) {
-        super(context);
-        injectSelf(context);
+  public SignupView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    injectSelf(context);
+  }
+
+  public SignupView(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    injectSelf(context);
+  }
+
+  /**
+   */
+  private void injectSelf(Context context) {
+    if (isInEditMode()) {
+      return;
+    }
+    DaggerService.<SignupScreen.Component>getDaggerComponent(context,
+        DaggerService.DAGGER_SERVICE).inject(this);
+  }
+
+  public void loadUserEmailAccounts(AutoCompleteTextView emailAutocompleteTV) {
+    Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+    Account[] accounts = AccountManager.get(getContext()).getAccountsByType("com.google");
+
+    final List<String> possibleEmails = new ArrayList<>();
+
+    for (Account account : accounts) {
+      if (emailPattern.matcher(account.name).matches()) {
+        String possibleEmail = account.name;
+        possibleEmails.add(possibleEmail);
+      }
     }
 
-    public SignupView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        injectSelf(context);
+    ArrayAdapter<String> adapter =
+        new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line,
+            possibleEmails);
+
+    emailAutocompleteTV.setAdapter(adapter);
+    emailAutocompleteTV.setThreshold(0);
+  }
+
+  @Override protected void onFinishInflate() {
+    super.onFinishInflate();
+    if (isInEditMode()) {
+      return;
+    }
+    Timber.v("onFinishInflate");
+    ButterKnife.bind(this, this);
+  }
+
+  @Override protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    if (isInEditMode()) {
+      return;
+    }
+    presenter.takeView(this);
+  }
+
+  @Override protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
+    presenter.dropView(this);
+  }
+
+  public void showFacebook(UserAttributes userAttributes) {
+
+    firstName.setText(userAttributes.getFirstName());
+    lastName.setText(userAttributes.getLastName());
+    email.setText(userAttributes.getEmail());
+  }
+
+  public ImageView getUserImageView() {
+    return userImageView;
+  }
+
+  public UserAttributes getInput(UserAttributes userAttributes) {
+
+    userAttributes.email(email.getText().toString())
+        .password(password.getText().toString())
+        .firstName(firstName.getText().toString());
+
+    //last name is optional
+    if (lastName.getText() != null) {
+      userAttributes.lastName(lastName.getText().toString());
     }
 
-    public SignupView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        injectSelf(context);
-    }
+    return userAttributes;
+  }
 
+  public AppCompatEditText getFirstName() {
+    return firstName;
+  }
 
-    /**
-     */
-    private void injectSelf(Context context) {
-        if (isInEditMode()) { return; }
-        DaggerService.<SignupScreen.Component>
-                getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
-                .inject(this);
-    }
+  public AppCompatEditText getLastName() {
+    return lastName;
+  }
 
-    public void loadUserEmailAccounts(AutoCompleteTextView emailAutocompleteTV) {
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-        Account[] accounts = AccountManager.get(getContext()).getAccountsByType("com.google");
+  public AutoCompleteTextView getEmail() {
+    return email;
+  }
 
-        final List<String> possibleEmails = new ArrayList<>();
+  public AppCompatEditText getPassword() {
+    return password;
+  }
 
-        for (Account account : accounts) {
-            if (emailPattern.matcher(account.name).matches()) {
-                String possibleEmail = account.name;
-                possibleEmails.add(possibleEmail);
-            }
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                possibleEmails);
-
-        emailAutocompleteTV.setAdapter(adapter);
-        emailAutocompleteTV.setThreshold(0);
-
-    }
-
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        if (isInEditMode()) { return; }
-        Timber.v("onFinishInflate");
-        ButterKnife.bind(this, this);
-    }
-
-    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        if (isInEditMode()) { return; }
-        presenter.takeView(this);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        presenter.dropView(this);
-    }
-
-    public void showFacebook(UserAttributes userAttributes) {
-
-        firstName.setText(userAttributes.getFirstName());
-        lastName.setText(userAttributes.getLastName());
-        email.setText(userAttributes.getEmail());
-
-    }
-
-    public ImageView getUserImageView() {
-        return userImageView;
-    }
-
-    public UserAttributes getInput(UserAttributes userAttributes) {
-
-        userAttributes
-                    .email(email.getText().toString())
-                    .password(password.getText().toString())
-                    .firstName(firstName.getText().toString());
-
-        //last name is optional
-        if(lastName.getText() != null) {
-            userAttributes.lastName(lastName.getText().toString());
-        }
-
-        return userAttributes;
-    }
-
-    public AppCompatEditText getFirstName() {
-        return firstName;
-    }
-
-    public AppCompatEditText getLastName() {
-        return lastName;
-    }
-
-    public AutoCompleteTextView getEmail() {
-        return email;
-    }
-
-    public AppCompatEditText getPassword() {
-        return password;
-    }
-
-    public void showMask() {
-        mask.setVisibility(VISIBLE);
-    }
+  public void showMask() {
+    mask.setVisibility(VISIBLE);
+  }
 }

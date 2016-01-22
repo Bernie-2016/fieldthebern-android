@@ -21,18 +21,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import com.berniesanders.fieldthebern.R;
-
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;
 import flow.path.PathContainerView;
 
-
 /** A FrameLayout that can show screens for a {@link flow.Flow}. */
-public class FramePathContainerView extends FrameLayout
-    implements HandlesBack, PathContainerView {
+public class FramePathContainerView extends FrameLayout implements HandlesBack, PathContainerView {
   private final PathContainer container;
   private boolean disabled;
 
@@ -42,7 +38,8 @@ public class FramePathContainerView extends FrameLayout
   }
 
   /**
-   * Allows subclasses to use custom {@link flow.path.PathContainer} implementations. Allows the use
+   * Allows subclasses to use custom {@link flow.path.PathContainer} implementations. Allows the
+   * use
    * of more sophisticated transition schemes, and customized context wrappers.
    */
   protected FramePathContainerView(Context context, AttributeSet attrs, PathContainer container) {

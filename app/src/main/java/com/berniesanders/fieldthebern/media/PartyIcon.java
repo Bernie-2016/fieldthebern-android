@@ -18,34 +18,30 @@
 package com.berniesanders.fieldthebern.media;
 
 import android.support.annotation.DrawableRes;
-
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.Party;
-
 import timber.log.Timber;
 
 public class PartyIcon {
 
+  @DrawableRes public static int get(@Party.Affiliation String party) {
 
-    @DrawableRes
-    public static int get(@Party.Affiliation String party) {
-
-        switch (party) {
-            case Party.DEMOCRAT:
-                return R.drawable.ic_democrat;
-            case Party.INDEPENDENT:
-                return R.drawable.ic_independent;
-            case Party.REPUBLICAN:
-                return R.drawable.ic_republican;
-            case Party.UNAFFILIATED:
-                return R.drawable.ic_other;
-            case Party.UNDECLARED:
-                return R.drawable.ic_undeclared;
-            case Party.UNKNOWN:
-                return R.drawable.ic_undeclared;
-            default:
-                Timber.e("cant find PartyIcon for "+party);
-                return R.drawable.ic_other;
-        }
+    switch (party) {
+      case Party.DEMOCRAT:
+        return R.drawable.ic_democrat;
+      case Party.INDEPENDENT:
+        return R.drawable.ic_independent;
+      case Party.REPUBLICAN:
+        return R.drawable.ic_republican;
+      case Party.UNAFFILIATED:
+        return R.drawable.ic_other;
+      case Party.UNDECLARED:
+        return R.drawable.ic_undeclared;
+      case Party.UNKNOWN:
+        return R.drawable.ic_undeclared;
+      default:
+        Timber.e("cant find PartyIcon for " + party);
+        return R.drawable.ic_other;
     }
+  }
 }

@@ -18,7 +18,6 @@ package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.User;
-
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -32,48 +31,43 @@ import rx.Observable;
  */
 public class UserSpec {
 
-    private User user;
-    CreateUserRequest createUserRequest;
+  private User user;
+  CreateUserRequest createUserRequest;
 
-    public UserSpec() {
-    }
+  public UserSpec() {
+  }
 
+  public UserSpec update(User user) {
+    this.user = user;
+    return this;
+  }
 
-    public UserSpec update(User user) {
-        this.user = user;
-        return this;
-    }
+  public UserSpec create(CreateUserRequest createUserRequest) {
+    this.createUserRequest = createUserRequest;
+    return this;
+  }
 
-    public UserSpec create(CreateUserRequest createUserRequest) {
-        this.createUserRequest = createUserRequest;
-        return this;
-    }
+  public User user() {
+    return user;
+  }
 
-    public User user() {
-        return user;
-    }
+  public CreateUserRequest getCreateUserRequest() {
+    return createUserRequest;
+  }
 
-    public CreateUserRequest getCreateUserRequest() {
-        return createUserRequest;
-    }
+  /**
+   * Retrofit 2 endpoint definition
+   */
+  public interface UserEndpoint {
 
-    /**
-     * Retrofit 2 endpoint definition
-     */
-    public interface UserEndpoint {
+    @Headers({ "Content-Type:application/json" }) @POST("users") Observable<User> create(
+        @Body CreateUserRequest createUserRequest);
 
-        @Headers({"Content-Type:application/json"})
-        @POST("users")
-        Observable<User> create(@Body CreateUserRequest createUserRequest);
+    @Headers({ "Content-Type:application/json" }) @PATCH("users/me") Observable<User> update(
+        @Body CreateUserRequest createUserRequest);
 
-        @Headers({"Content-Type:application/json"})
-        @PATCH("users/me")
-        Observable<User> update(@Body CreateUserRequest createUserRequest);
+    @GET("users/{id}") Observable<User> get(@Path("id") int id);
 
-        @GET("users/{id}")
-        Observable<User> get(@Path("id") int id);
-
-        @GET("users/me")
-        Observable<User> getMe();
-    }
+    @GET("users/me") Observable<User> getMe();
+  }
 }

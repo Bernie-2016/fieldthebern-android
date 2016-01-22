@@ -22,38 +22,37 @@ package com.berniesanders.fieldthebern.models;
  */
 public class LoginFacebookRequest {
 
-    private final String grant_type = "password";
+  private final String grant_type = "password";
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 
-    public LoginFacebookRequest() {
-    }
+  public LoginFacebookRequest() {
+  }
 
-    public String getGrantType() {
-        return grant_type;
-    }
+  public String getGrantType() {
+    return grant_type;
+  }
 
-    /**
-     * email
-     */
-    public String username() {
-        return username;
-    }
+  /**
+   * email
+   */
+  public String username() {
+    return username;
+  }
 
-    public String password() {
-        return password;
-    }
+  public String password() {
+    return password;
+  }
 
+  public LoginFacebookRequest password(String token) {
+    this.password = token;
+    return this;
+  }
 
-    public LoginFacebookRequest password(String token) {
-        this.password = token;
-        return this;
-    }
-
-    public LoginFacebookRequest username(String email) {
-        this.username = email;
-        return this;
-    }
+  public LoginFacebookRequest username(String email) {
+    this.username = email;
+    return this;
+  }
 }

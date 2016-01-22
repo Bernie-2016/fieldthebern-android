@@ -23,17 +23,14 @@ import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.berniesanders.fieldthebern.annotations.Layout;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;
 import flow.path.PathContext;
 import flow.path.PathContextFactory;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static flow.Flow.Direction.REPLACE;
 
@@ -67,9 +64,8 @@ public class SimplePathContainer extends PathContainer {
     View newView;
     context = PathContext.create(oldPath, to, contextFactory);
     int layout = getLayout(to);
-    newView = LayoutInflater.from(context)
-        .cloneInContext(context)
-        .inflate(layout, containerView, false);
+    newView =
+        LayoutInflater.from(context).cloneInContext(context).inflate(layout, containerView, false);
 
     View fromView = null;
     if (traversalState.fromPath() != null) {

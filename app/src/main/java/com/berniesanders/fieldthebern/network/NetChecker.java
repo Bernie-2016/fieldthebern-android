@@ -23,11 +23,11 @@ import android.net.NetworkInfo;
 
 public class NetChecker {
 
-    public static boolean connected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
+  public static boolean connected(Context context) {
+    ConnectivityManager cm =
+        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-    }
+    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+  }
 }

@@ -18,53 +18,52 @@ package com.berniesanders.fieldthebern.models;
 
 /**
  * Docs:
- *      https://github.com/Bernie-2016/fieldthebern-api/wiki/API-Addresses
+ * https://github.com/Bernie-2016/fieldthebern-api/wiki/API-Addresses
  *
- *  request format
- *  {
- *      latitude: <latitude>,
- *      longitude: <longitude>,
- *      radius: <distance_from_location_in_meters>
- *  }
+ * request format
+ * {
+ * latitude: <latitude>,
+ * longitude: <longitude>,
+ * radius: <distance_from_location_in_meters>
+ * }
  */
 public class RequestMultipleAddresses {
-    double latitude;
-    double longitude;
-    int radius;
+  double latitude;
+  double longitude;
+  int radius;
 
-    public double latitude() {
-        return latitude;
-    }
+  public double latitude() {
+    return latitude;
+  }
 
-    public RequestMultipleAddresses latitude(double latitude) {
-        this.latitude = latitude;
-        return this;
-    }
+  public RequestMultipleAddresses latitude(double latitude) {
+    this.latitude = latitude;
+    return this;
+  }
 
-    public double longitude() {
-        return longitude;
-    }
+  public double longitude() {
+    return longitude;
+  }
 
-    public RequestMultipleAddresses longitude(double longitude) {
-        this.longitude = longitude;
-        return this;
-    }
+  public RequestMultipleAddresses longitude(double longitude) {
+    this.longitude = longitude;
+    return this;
+  }
 
-    public int radius() {
-        return radius;
-    }
+  public int radius() {
+    return radius;
+  }
 
-    public RequestMultipleAddresses radius(int radius) {
-        this.radius = radius;
-        return this;
-    }
+  public RequestMultipleAddresses radius(int radius) {
+    this.radius = radius;
+    return this;
+  }
 
-    @Override
-    public String toString() {
-        return "RequestMultipleAddresses{" +
-                "latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", radius=" + radius +
-                '}';
-    }
+  @Override public String toString() {
+    return "RequestMultipleAddresses{" +
+        "latitude=" + latitude +
+        ", longitude=" + longitude +
+        ", radius=" + radius +
+        '}';
+  }
 }

@@ -18,7 +18,6 @@
 package com.berniesanders.fieldthebern.models;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,114 +72,103 @@ import java.util.List;
  */
 public class VisitResult {
 
-    Data data = new Data();
-    List<Score> included = new ArrayList<>(); // Data for the associated score object.
+  Data data = new Data();
+  List<Score> included = new ArrayList<>(); // Data for the associated score object.
 
-    public Data data() {
-        return data;
+  public Data data() {
+    return data;
+  }
+
+  public List<Score> included() {
+    return this.included;
+  }
+
+  public static class Data {
+
+    Relationships relationships = new Relationships();
+    Attributes attributes = new Attributes();
+
+    public Relationships relationships() {
+      return this.relationships;
     }
 
-    public List<Score> included() {
-        return this.included;
+    public Attributes attributes() {
+      return this.attributes;
     }
 
-    public static class Data {
+    public static class Attributes {
+      //<duration_in_seconds>,
+      @SerializedName("duration_sec") int durationSeconds;
 
-        Relationships relationships = new Relationships();
-        Attributes attributes = new Attributes();
+      @SerializedName("total_points") int totalPoints;
 
+      //<date_and_time_of_creation>
+      //ISO-8601  2015-12-03T23:19:48.480Z
+      @SerializedName("created_at") String createdAt;
 
-        public Relationships relationships() {
-            return this.relationships;
-        }
+      public int durationSeconds() {
+        return this.durationSeconds;
+      }
 
-        public Attributes attributes() {
-            return this.attributes;
-        }
+      public int totalPoints() {
+        return this.totalPoints;
+      }
 
-
-
-        public static class Attributes {
-            //<duration_in_seconds>,
-            @SerializedName("duration_sec")
-            int durationSeconds;
-
-            @SerializedName("total_points")
-            int totalPoints;
-
-            //<date_and_time_of_creation>
-            //ISO-8601  2015-12-03T23:19:48.480Z
-            @SerializedName("created_at")
-            String createdAt;
-
-            public int durationSeconds() {
-                return this.durationSeconds;
-            }
-
-            public int totalPoints() {
-                return this.totalPoints;
-            }
-
-            public String createdAt() {
-                return this.createdAt;
-            }
-        }
-
-
-        public static class Relationships {
-            // links the visit to the user who created it
-            User user;
-
-            // tracks when and in what way the address was updated by the visit
-            @SerializedName("address_update")
-            ApiAddress addressUpdate;
-
-            // tracks the address that was updated
-            ApiAddress address;
-
-            // tracks when, in what way and which people were updated by the visit
-            @SerializedName("person_updates")
-            PersonUpdates personUpdates;
-
-            // tracks people updated by the visit
-            PeopleUpdates people;
-
-            //tracks the associated score
-            Score score;
-
-            public User user() {
-                return this.user;
-            }
-
-            public ApiAddress addressUpdate() {
-                return this.addressUpdate;
-            }
-
-            public ApiAddress address() {
-                return this.address;
-            }
-
-            public PersonUpdates personUpdates() {
-                return this.personUpdates;
-            }
-
-            public PeopleUpdates people() {
-                return this.people;
-            }
-
-            public Score score() {
-                return this.score;
-            }
-
-            public static class PersonUpdates {
-                List<Person> data;
-            }
-
-            public static class PeopleUpdates {
-                List<Person> data;
-            }
-        }
-
+      public String createdAt() {
+        return this.createdAt;
+      }
     }
 
+    public static class Relationships {
+      // links the visit to the user who created it
+      User user;
+
+      // tracks when and in what way the address was updated by the visit
+      @SerializedName("address_update") ApiAddress addressUpdate;
+
+      // tracks the address that was updated
+      ApiAddress address;
+
+      // tracks when, in what way and which people were updated by the visit
+      @SerializedName("person_updates") PersonUpdates personUpdates;
+
+      // tracks people updated by the visit
+      PeopleUpdates people;
+
+      //tracks the associated score
+      Score score;
+
+      public User user() {
+        return this.user;
+      }
+
+      public ApiAddress addressUpdate() {
+        return this.addressUpdate;
+      }
+
+      public ApiAddress address() {
+        return this.address;
+      }
+
+      public PersonUpdates personUpdates() {
+        return this.personUpdates;
+      }
+
+      public PeopleUpdates people() {
+        return this.people;
+      }
+
+      public Score score() {
+        return this.score;
+      }
+
+      public static class PersonUpdates {
+        List<Person> data;
+      }
+
+      public static class PeopleUpdates {
+        List<Person> data;
+      }
+    }
+  }
 }

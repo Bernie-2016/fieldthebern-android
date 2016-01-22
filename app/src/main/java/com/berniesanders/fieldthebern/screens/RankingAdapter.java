@@ -65,7 +65,7 @@ public class RankingAdapter extends ArrayAdapter<String> {
     return view;
   }
 
-  private class ViewHolder {
+  class ViewHolder {
     @Bind(R.id.position)
     TextView position;
     @Bind(R.id.name)

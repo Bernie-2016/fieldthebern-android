@@ -25,11 +25,13 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 /**
  *
  */
-@Layout(R.layout.row_list) public class List extends Content implements Parcelable {
+@Layout(R.layout.row_list)
+public class List extends Content implements Parcelable {
 
   private java.util.List<String> list;
 
-  @Override public String getText() {
+  @Override
+  public String getText() {
     return list.get(0);//TODO?
   }
 
@@ -37,11 +39,13 @@ import com.berniesanders.fieldthebern.annotations.Layout;
     return list;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeStringList(this.list);
   }

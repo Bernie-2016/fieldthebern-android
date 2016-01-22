@@ -30,23 +30,33 @@ public class UserAttributes implements Parcelable {
 
   private String email;
   private String password;
-  @SerializedName("first_name") private String firstName;
-  @SerializedName("last_name") private String lastName;
-  @SerializedName("state_code") private String stateCode;
+  @SerializedName("first_name")
+  private String firstName;
+  @SerializedName("last_name")
+  private String lastName;
+  @SerializedName("state_code")
+  private String stateCode;
   private double lat;
   private double lng;
 
-  @SerializedName("photo_thumb_url") String photoThumbUrl;
-  @SerializedName("photo_large_url") String photoLargeUrl;
-  @SerializedName("base_64_photo_data") String base64PhotoData;
+  @SerializedName("photo_thumb_url")
+  String photoThumbUrl;
+  @SerializedName("photo_large_url")
+  String photoLargeUrl;
+  @SerializedName("base_64_photo_data")
+  String base64PhotoData;
 
-  @SerializedName("facebook_access_token") String facebookAccessToken;
+  @SerializedName("facebook_access_token")
+  String facebookAccessToken;
 
-  @SerializedName("facebook_id") String facebookId;
+  @SerializedName("facebook_id")
+  String facebookId;
 
-  @SerializedName("visits_count") String visitsCount;
+  @SerializedName("visits_count")
+  String visitsCount;
 
-  @SerializedName("total_points") String totalPoints;
+  @SerializedName("total_points")
+  String totalPoints;
 
   public boolean isFacebookUser() {
     return (facebookId != null);
@@ -183,7 +193,8 @@ public class UserAttributes implements Parcelable {
     return this;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "UserAttributes{" +
         "email='" + email + '\'' +
         ", password='" + password + '\'' +
@@ -202,11 +213,13 @@ public class UserAttributes implements Parcelable {
         '}';
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.email);
     dest.writeString(this.password);
     dest.writeString(this.firstName);

@@ -60,14 +60,18 @@ public class UserSpec {
    */
   public interface UserEndpoint {
 
-    @Headers({ "Content-Type:application/json" }) @POST("users") Observable<User> create(
-        @Body CreateUserRequest createUserRequest);
+    @Headers({ "Content-Type:application/json" })
+    @POST("users")
+    Observable<User> create(@Body CreateUserRequest createUserRequest);
 
-    @Headers({ "Content-Type:application/json" }) @PATCH("users/me") Observable<User> update(
-        @Body CreateUserRequest createUserRequest);
+    @Headers({ "Content-Type:application/json" })
+    @PATCH("users/me")
+    Observable<User> update(@Body CreateUserRequest createUserRequest);
 
-    @GET("users/{id}") Observable<User> get(@Path("id") int id);
+    @GET("users/{id}")
+    Observable<User> get(@Path("id") int id);
 
-    @GET("users/me") Observable<User> getMe();
+    @GET("users/me")
+    Observable<User> getMe();
   }
 }

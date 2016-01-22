@@ -80,7 +80,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
  *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_signup) public class SignupScreen extends FlowPathBase {
+@Layout(R.layout.screen_signup)
+public class SignupScreen extends FlowPathBase {
 
   private final UserAttributes userAttributes;
 
@@ -92,7 +93,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
 
   /**
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerSignupScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(userAttributes))
@@ -101,25 +103,30 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
 
   /**
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return SignupScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
     private final UserAttributes userAttributes;
 
     public Module(UserAttributes userAttributes) {
       this.userAttributes = userAttributes;
     }
 
-    @FtbScreenScope @Provides public UserAttributes provideUserAttributes() {
+    @FtbScreenScope
+    @Provides
+    public UserAttributes provideUserAttributes() {
       return userAttributes;
     }
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
   public interface Component {
     void inject(SignupView t);
 
@@ -128,16 +135,25 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
     ErrorResponseParser errorParser();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<SignupView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<SignupView> {
 
-    @BindString(R.string.signup_title) String screenTitleString;
-    @BindString(R.string.err_email_blank) String emailBlank;
-    @BindString(R.string.err_password_blank) String passwordBlank;
-    @BindString(R.string.err_your_first_name_blank) String firstNameBlank;
-    @BindString(R.string.err_your_last_name_blank) String lastNameBlank;
-    @BindString(R.string.err_invalid_email) String invalidEmailError;
-    @BindString(R.string.location_disabled_title) String locationDisableTitle;
-    @BindString(R.string.location_disabled_message) String locationDisabledBody;
+    @BindString(R.string.signup_title)
+    String screenTitleString;
+    @BindString(R.string.err_email_blank)
+    String emailBlank;
+    @BindString(R.string.err_password_blank)
+    String passwordBlank;
+    @BindString(R.string.err_your_first_name_blank)
+    String firstNameBlank;
+    @BindString(R.string.err_your_last_name_blank)
+    String lastNameBlank;
+    @BindString(R.string.err_invalid_email)
+    String invalidEmailError;
+    @BindString(R.string.location_disabled_title)
+    String locationDisableTitle;
+    @BindString(R.string.location_disabled_message)
+    String locationDisabledBody;
 
     private final UserRepo repo;
     private UserAttributes userAttributes;
@@ -153,24 +169,30 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
     private boolean stateCodeRequestCompleted = false;
     private boolean locationRequestCompleted = false;
 
-    @Bind(R.id.avatar_buttons) View avatarButtons;
+    @Bind(R.id.avatar_buttons)
+    View avatarButtons;
 
-    @Bind(R.id.avatar_container) View avatarContainer;
+    @Bind(R.id.avatar_container)
+    View avatarContainer;
 
-    @Bind(R.id.email) AutoCompleteTextView emailAutocompleteTV;
+    @Bind(R.id.email)
+    AutoCompleteTextView emailAutocompleteTV;
 
-    @Bind(R.id.photo_edit) PhotoEditView photoEditView;
+    @Bind(R.id.photo_edit)
+    PhotoEditView photoEditView;
     private boolean showPleaseWait = false;
 
-    @Inject Presenter(UserRepo repo, UserAttributes userAttributes,
-        ErrorResponseParser errorResponseParser, MessageScreen messageScreen) {
+    @Inject
+    Presenter(UserRepo repo, UserAttributes userAttributes, ErrorResponseParser errorResponseParser,
+        MessageScreen messageScreen) {
       this.repo = repo;
       this.userAttributes = userAttributes;
       this.errorResponseParser = errorResponseParser;
       this.messageScreen = messageScreen;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -183,14 +205,16 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
         photoEditView.load(userAttributes, userBitmap);
       } else {
         getView().postDelayed(new Runnable() {
-          @Override public void run() {
+          @Override
+          public void run() {
             photoEditView.toggleAvatarWidget(true);
           }
         }, 300);
       }
 
       photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
-        @Override public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
+        @Override
+        public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
           userBitmap = bitmap;
           userAttributes.base64PhotoData(base64PhotoData);
         }
@@ -215,7 +239,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
     private void showEnableLocationDialog() {
       DialogController.DialogAction confirmAction =
           new DialogController.DialogAction().label(android.R.string.ok).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               Timber.d("ok button click");
               Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
               getView().getContext().startActivity(myIntent);
@@ -228,7 +253,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
               .withActions(confirmAction));
     }
 
-    @OnTouch(R.id.email_input_layout) boolean showEmailsInputLayout() {
+    @OnTouch(R.id.email_input_layout)
+    boolean showEmailsInputLayout() {
       if (Build.VERSION.SDK_INT >= 21) {
         emailAutocompleteTV.showDropDown();
         emailAutocompleteTV.setFocusable(true);
@@ -237,7 +263,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
       return false;
     }
 
-    @OnTouch(R.id.email) boolean showEmails() {
+    @OnTouch(R.id.email)
+    boolean showEmails() {
       if (Build.VERSION.SDK_INT >= 21) {
         emailAutocompleteTV.showDropDown();
         emailAutocompleteTV.setFocusable(true);
@@ -255,7 +282,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
           .setConfig(new ActionBarController.Config(screenTitleString, null));
     }
 
-    @OnClick(R.id.submit) void onSubmit() {
+    @OnClick(R.id.submit)
+    void onSubmit() {
       if (PermissionService.get(getView()).isGranted()) {
         if (!formIsValid()) {
           return;
@@ -272,7 +300,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
             .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override public void onClick(View view) {
+              @Override
+              public void onClick(View view) {
                 PermissionService.get(getView()).requestPermission();
               }
             })
@@ -306,14 +335,16 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
     }
 
     private Observer<Location> locationObserver = new Observer<Location>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         locationRequestCompleted = true;
         if (addressAndLocationSet()) {
           createEmailUser();
         }
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         locationRequestCompleted = true;
         Timber.e(e, "locationObserver onError");
         if (addressAndLocationSet()) {
@@ -321,21 +352,24 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
         }
       }
 
-      @Override public void onNext(Location location) {
+      @Override
+      public void onNext(Location location) {
         Timber.v("location on next" + location);
         Presenter.this.location = location;
       }
     };
 
     private Observer<String> stateCodeObserver = new Observer<String>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         stateCodeRequestCompleted = true;
         if (addressAndLocationSet()) {
           createEmailUser();
         }
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         stateCodeRequestCompleted = true;
         Timber.e(e, "stateCodeObserver onError");
         if (addressAndLocationSet()) {
@@ -343,7 +377,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
         }
       }
 
-      @Override public void onNext(String stateCode) {
+      @Override
+      public void onNext(String stateCode) {
         Timber.v("stateCodeObserver on next" + stateCode);
         Presenter.this.stateCode = stateCode;
       }
@@ -380,11 +415,13 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
     }
 
     Observer<User> observer = new Observer<User>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.d("createUserRequest done.");
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         Timber.e(e, "createUserRequest error");
         if (getView() == null) {
           return;
@@ -401,7 +438,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
         }
       }
 
-      @Override public void onNext(User user) {
+      @Override
+      public void onNext(User user) {
         Timber.d("user created! user: %s", user.toString());
         ProgressDialogService.get(getView()).dismiss();
         showPleaseWait = false;
@@ -415,10 +453,12 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
       }
     };
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(SignupView view) {
+    @Override
+    public void dropView(SignupView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }

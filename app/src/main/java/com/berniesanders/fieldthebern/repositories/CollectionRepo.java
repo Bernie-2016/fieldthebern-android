@@ -54,7 +54,8 @@ import timber.log.Timber;
 /**
  * Data repository for loading the tiles on the "home" page
  */
-@Singleton public class CollectionRepo {
+@Singleton
+public class CollectionRepo {
 
   final Gson gson;
   private final Context context;
@@ -63,7 +64,8 @@ import timber.log.Timber;
 
   private static final String JSON_FILE_PATH = "ftb.json";
 
-  @Inject public CollectionRepo(Gson gson, Context context, Config config) {
+  @Inject
+  public CollectionRepo(Gson gson, Context context, Config config) {
     this.gson = gson;
     this.context = context;
     this.config = config;
@@ -91,7 +93,8 @@ import timber.log.Timber;
 
     return getFromHttp(spec.url()).map(new Func1<Collection, Collection>() {
 
-      @Override public Collection call(Collection collection) {
+      @Override
+      public Collection call(Collection collection) {
         collectionMemCache = collection;
         return collectionMemCache;
       }
@@ -102,7 +105,8 @@ import timber.log.Timber;
 
     return Observable.create(new Observable.OnSubscribe<Collection>() {
 
-      @Override public void call(Subscriber<? super Collection> subscriber) {
+      @Override
+      public void call(Subscriber<? super Collection> subscriber) {
 
         Timber.v("getFromFile()");
         File file = new File(context.getFilesDir(), JSON_FILE_PATH);
@@ -140,7 +144,8 @@ import timber.log.Timber;
     }
 
     HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override public void log(String message) {
+      @Override
+      public void log(String message) {
         Timber.v(message);
       }
     };
@@ -150,7 +155,8 @@ import timber.log.Timber;
     OkHttpClient client =
         new OkHttpClient.Builder().addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
             .addInterceptor(new Interceptor() {
-              @Override public Response intercept(Interceptor.Chain chain) throws IOException {
+              @Override
+              public Response intercept(Interceptor.Chain chain) throws IOException {
                 Response response = chain.proceed(chain.request());
                 MediaType contentType = response.body().contentType();
                 String bodyString = response.body().string();

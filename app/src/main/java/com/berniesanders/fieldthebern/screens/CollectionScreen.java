@@ -38,7 +38,8 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(R.layout.screen_collection) public class CollectionScreen extends FlowPathBase {
+@Layout(R.layout.screen_collection)
+public class CollectionScreen extends FlowPathBase {
 
   private final Collection collection;
   public Parcelable savedState;
@@ -47,44 +48,53 @@ import timber.log.Timber;
     this.collection = collection;
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerCollectionScreen_Component.builder().module(new Module(collection)).build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return CollectionScreen.class.getName() + collection.hashCode();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
     private final Collection collection;
 
     public Module(Collection collection) {
       this.collection = collection;
     }
 
-    @Provides public Collection provideCollection() {
+    @Provides
+    public Collection provideCollection() {
       return collection;
     }
   }
 
-  @Singleton @dagger.Component(modules = Module.class) public interface Component {
+  @Singleton
+  @dagger.Component(modules = Module.class)
+  public interface Component {
     void inject(CollectionView target);
 
     Collection getCollection();
   }
 
-  @Singleton static public class Presenter extends ViewPresenter<CollectionView> {
+  @Singleton
+  static public class Presenter extends ViewPresenter<CollectionView> {
 
     private final Collection collection;
     Parcelable recyclerViewState;
 
     private static final String BUNDLE_RECYCLER_LAYOUT = "CollectionScreen.recycler.layout";
 
-    @Inject Presenter(Collection collection) {
+    @Inject
+    Presenter(Collection collection) {
       this.collection = collection;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
 
       Timber.v("onLoad passed collection: %s", collection);
 
@@ -120,7 +130,8 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(collection.getTitle(), menu));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
       Timber.v("onSave");
       saveState(outState);
     }
@@ -140,18 +151,21 @@ import timber.log.Timber;
           getView().getLayoutManager().onSaveInstanceState();
     }
 
-    @Override public void dropView(CollectionView view) {
+    @Override
+    public void dropView(CollectionView view) {
       saveState(new Bundle());
       super.dropView(view);
     }
 
-    @Override protected void onEnterScope(MortarScope scope) {
+    @Override
+    protected void onEnterScope(MortarScope scope) {
       super.onEnterScope(scope);
       Timber.v("onEnterScope: %s", scope);
     }
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof CollectionScreen)) return false;
 
@@ -160,7 +174,8 @@ import timber.log.Timber;
     return collection.equals(that.collection);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     return collection.hashCode();
   }
 }

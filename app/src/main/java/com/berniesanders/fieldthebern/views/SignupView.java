@@ -45,19 +45,26 @@ public class SignupView extends RelativeLayout {
 
   /**
    */
-  @Inject SignupScreen.Presenter presenter;
+  @Inject
+  SignupScreen.Presenter presenter;
 
-  @Bind(R.id.first_name) AppCompatEditText firstName;
+  @Bind(R.id.first_name)
+  AppCompatEditText firstName;
 
-  @Bind(R.id.last_name) AppCompatEditText lastName;
+  @Bind(R.id.last_name)
+  AppCompatEditText lastName;
 
-  @Bind(R.id.email) AutoCompleteTextView email;
+  @Bind(R.id.email)
+  AutoCompleteTextView email;
 
-  @Bind(R.id.password) AppCompatEditText password;
+  @Bind(R.id.password)
+  AppCompatEditText password;
 
-  @Bind(R.id.user_photo) ImageView userImageView;
+  @Bind(R.id.user_photo)
+  ImageView userImageView;
 
-  @Bind(R.id.mask) ImageView mask;
+  @Bind(R.id.mask)
+  ImageView mask;
 
   public SignupView(Context context) {
     super(context);
@@ -105,7 +112,8 @@ public class SignupView extends RelativeLayout {
     emailAutocompleteTV.setThreshold(0);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -114,7 +122,8 @@ public class SignupView extends RelativeLayout {
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -122,7 +131,8 @@ public class SignupView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

@@ -22,5 +22,6 @@ import javax.inject.Scope;
 /**
  *
  */
-@Scope public @interface FtbActivityScope {
+@Scope
+public @interface FtbActivityScope {
 }

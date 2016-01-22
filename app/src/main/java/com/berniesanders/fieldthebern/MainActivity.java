@@ -97,7 +97,8 @@ import static com.berniesanders.fieldthebern.apilevels.ApiLevel.isLollipopOrAbov
 import static mortar.MortarScope.buildChild;
 import static mortar.MortarScope.findChild;
 
-@FtbActivityScope public class MainActivity extends AppCompatActivity
+@FtbActivityScope
+public class MainActivity extends AppCompatActivity
     implements ActionBarController.Activity, DialogController.Activity, FacebookController.Activity,
     PermissionController.Activity, ProgressDialogController.Activity, ToastController.Activity,
     PhotoController.Activity, Flow.Dispatcher {
@@ -111,43 +112,62 @@ import static mortar.MortarScope.findChild;
   private InitialScreen initialScreen;
   CallbackManager callbackManager;
 
-  @Bind(R.id.container_main) MortarScreenSwitcherFrame container;
+  @Bind(R.id.container_main)
+  MortarScreenSwitcherFrame container;
 
-  @Bind(R.id.backdrop) ImageView backgroundImage;
+  @Bind(R.id.backdrop)
+  ImageView backgroundImage;
 
-  @Bind(R.id.shading) View shading;
+  @Bind(R.id.shading)
+  View shading;
 
-  @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbar;
+  @Bind(R.id.collapsing_toolbar)
+  CollapsingToolbarLayout collapsingToolbar;
 
-  @Bind(R.id.appbar) AppBarLayout appBarLayout;
+  @Bind(R.id.appbar)
+  AppBarLayout appBarLayout;
 
-  @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
+  @Bind(R.id.drawer_layout)
+  DrawerLayout drawerLayout;
 
-  @Bind(R.id.toolbar) Toolbar toolbar;
+  @Bind(R.id.toolbar)
+  Toolbar toolbar;
 
-  @BindColor(R.color.bernie_dark_blue) int bernieDarkBlue;
+  @BindColor(R.color.bernie_dark_blue)
+  int bernieDarkBlue;
 
-  @Inject Gson gson;
+  @Inject
+  Gson gson;
 
-  @Inject ActionBarController actionBarController;
+  @Inject
+  ActionBarController actionBarController;
 
-  @Inject ToastController toastController;
+  @Inject
+  ToastController toastController;
 
-  @Inject DialogController dialogController;
+  @Inject
+  DialogController dialogController;
 
-  @Inject FacebookController facebookController;
+  @Inject
+  FacebookController facebookController;
 
-  @Inject LocationController locationController;
+  @Inject
+  LocationController locationController;
 
-  @Inject ProgressDialogController progressDialogController;
+  @Inject
+  ProgressDialogController progressDialogController;
 
-  @Inject PermissionController permissionController;
+  @Inject
+  PermissionController permissionController;
 
-  @Inject PhotoController photoController;
+  @Inject
+  PhotoController photoController;
 
-  @Inject RankingsRepo rankingsRepo;
+  @Inject
+  RankingsRepo rankingsRepo;
 
-  @Override public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
+  @Override
+  public void dispatch(Flow.Traversal traversal, Flow.TraversalCallback callback) {
 
     if (menu != null && menu.findItem(R.id.menu_search) != null) {
       MenuItemCompat.collapseActionView(
@@ -158,7 +178,8 @@ import static mortar.MortarScope.findChild;
 
   //------------- Mortar ----------------//
 
-  @Override public Object getSystemService(String name) {
+  @Override
+  public Object getSystemService(String name) {
 
     if (flowDelegate != null) {
       Object flowService = flowDelegate.getSystemService(name);
@@ -174,7 +195,8 @@ import static mortar.MortarScope.findChild;
 
   FlowDelegate.NonConfigurationInstance nonConfig;
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     initialScreen = new InitialScreen();
     FTBApplication.getComponent().inject(this);
@@ -218,7 +240,8 @@ import static mortar.MortarScope.findChild;
     photoController.takeView(this);
   }
 
-  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     facebookController.onActivityResult(requestCode, resultCode, data);
     photoController.onResult(requestCode, resultCode, data);
@@ -227,7 +250,8 @@ import static mortar.MortarScope.findChild;
   /**
    * Callback received when a permissions request has been completed.
    */
-  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
       @NonNull int[] grantResults) {
     permissionController.onResult(requestCode, permissions, grantResults);
   }
@@ -238,7 +262,8 @@ import static mortar.MortarScope.findChild;
     drawerLayout.setDrawerListener(drawerToggle);
   }
 
-  @Override protected void onPostCreate(Bundle savedInstanceState) {
+  @Override
+  protected void onPostCreate(Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
     drawerToggle.syncState();
   }
@@ -269,27 +294,32 @@ import static mortar.MortarScope.findChild;
     return History.single(initialScreen.get());
   }
 
-  @Override protected void onResume() {
+  @Override
+  protected void onResume() {
     super.onResume();
     flowDelegate.onResume();
   }
 
-  @Override protected void onPause() {
+  @Override
+  protected void onPause() {
     flowDelegate.onPause();
     super.onPause();
   }
 
-  @Override public Object onRetainCustomNonConfigurationInstance() {
+  @Override
+  public Object onRetainCustomNonConfigurationInstance() {
     return flowDelegate.onRetainNonConfigurationInstance();
   }
 
-  @Override protected void onSaveInstanceState(Bundle outState) {
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     BundleServiceRunner.getBundleServiceRunner(this).onSaveInstanceState(outState);
     flowDelegate.onSaveInstanceState(outState);
   }
 
-  @Override protected void onDestroy() {
+  @Override
+  protected void onDestroy() {
     actionBarController.dropView(this);
     dialogController.dropView(this);
     facebookController.dropView(this);
@@ -314,7 +344,8 @@ import static mortar.MortarScope.findChild;
   /**
    * Inform the view about back events.
    */
-  @Override public void onBackPressed() {
+  @Override
+  public void onBackPressed() {
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
       drawerLayout.closeDrawer(GravityCompat.START);
     } else {
@@ -325,7 +356,8 @@ import static mortar.MortarScope.findChild;
   /**
    * Required for the custom font library
    */
-  @Override protected void attachBaseContext(Context newBase) {
+  @Override
+  protected void attachBaseContext(Context newBase) {
     super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
   }
 
@@ -353,14 +385,16 @@ import static mortar.MortarScope.findChild;
         .start();
   }
 
-  @TargetApi(21) void setStatusBarColor(int color) {
+  @TargetApi(21)
+  void setStatusBarColor(int color) {
     Window window = getWindow();
     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
     window.setStatusBarColor(color);
   }
 
-  @Override public boolean onPrepareOptionsMenu(Menu menu) {
+  @Override
+  public boolean onPrepareOptionsMenu(Menu menu) {
     this.menu = menu;
     handleOptionsMenu(menu);
     return true;
@@ -375,7 +409,8 @@ import static mortar.MortarScope.findChild;
         menu.add(actionBarMenuAction.label())
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
             .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-              @Override public boolean onMenuItemClick(MenuItem menuItem) {
+              @Override
+              public boolean onMenuItemClick(MenuItem menuItem) {
                 actionBarMenuAction.action().call();
                 return true;
               }
@@ -400,12 +435,14 @@ import static mortar.MortarScope.findChild;
     searchView.setBackgroundColor(bernieDarkBlue);
   }
 
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
     //handleOptionsMenu(menu);
     return true;
   }
 
-  @Override protected void onNewIntent(Intent intent) {
+  @Override
+  protected void onNewIntent(Intent intent) {
     flowDelegate.onNewIntent(intent);
     handleIntent(intent);
   }
@@ -431,7 +468,8 @@ import static mortar.MortarScope.findChild;
         final Page searchItem = (Page) item;
         Timber.v("Showing page from search: %s", searchItem.getTitle());
         container.post(new Runnable() {
-          @Override public void run() {
+          @Override
+          public void run() {
             Flow.get(MainActivity.this).set(new PageScreen(searchItem));
           }
         });
@@ -449,7 +487,8 @@ import static mortar.MortarScope.findChild;
         final Collection searchItem = (Collection) item;
         Timber.v("Showing Collection from search: %s", item.getTitle());
         container.post(new Runnable() {
-          @Override public void run() {
+          @Override
+          public void run() {
             Flow.get(MainActivity.this).set(new CollectionScreen(searchItem));
           }
         });
@@ -458,25 +497,29 @@ import static mortar.MortarScope.findChild;
     }
   }
 
-  @Override public void setMenu(ActionBarController.MenuAction action) {
+  @Override
+  public void setMenu(ActionBarController.MenuAction action) {
     if (action != actionBarMenuAction) {
       actionBarMenuAction = action;
       invalidateOptionsMenu();
     }
   }
 
-  @Override public AppCompatActivity getActivity() {
+  @Override
+  public AppCompatActivity getActivity() {
     return this;
   }
 
-  @Override public void setTitle(CharSequence title) {
+  @Override
+  public void setTitle(CharSequence title) {
     collapsingToolbar.setTitle(title);
   }
 
   /**
    * TODO: move this animation and toolbar code to it's own controller thing...
    */
-  @Override public void setMainImage(String url) {
+  @Override
+  public void setMainImage(String url) {
 
     animateShading(false);
 
@@ -485,7 +528,8 @@ import static mortar.MortarScope.findChild;
         .transform(PaletteTransformation.instance())
         .placeholder(backgroundImage.getDrawable())
         .into(backgroundImage, new Callback.EmptyCallback() {
-          @Override public void onSuccess() {
+          @Override
+          public void onSuccess() {
             Bitmap bitmap = ((BitmapDrawable) backgroundImage.getDrawable()).getBitmap(); // Ew!
             Palette palette = PaletteTransformation.getPalette(bitmap);
 
@@ -507,7 +551,8 @@ import static mortar.MortarScope.findChild;
     }
   }
 
-  @Override public void hideToolbar() {
+  @Override
+  public void hideToolbar() {
     AppBarLayout.LayoutParams params =
         (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
@@ -515,7 +560,8 @@ import static mortar.MortarScope.findChild;
     collapsingToolbar.requestLayout();
   }
 
-  @Override public void showToolbar() {
+  @Override
+  public void showToolbar() {
     AppBarLayout.LayoutParams params =
         (AppBarLayout.LayoutParams) collapsingToolbar.getLayoutParams();
     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
@@ -525,21 +571,25 @@ import static mortar.MortarScope.findChild;
     appBarLayout.setExpanded(false, true);
   }
 
-  @Override public void openAppbar() {
+  @Override
+  public void openAppbar() {
     appBarLayout.setExpanded(true, true);
   }
 
-  @Override public void closeAppbar() {
+  @Override
+  public void closeAppbar() {
     appBarLayout.setExpanded(false, true);
   }
 
-  @Override public void lockDrawer() {
+  @Override
+  public void lockDrawer() {
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     drawerToggle.setDrawerIndicatorEnabled(false);
     drawerToggle.syncState();
   }
 
-  @Override public void unlockDrawer() {
+  @Override
+  public void unlockDrawer() {
     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     drawerToggle.setDrawerIndicatorEnabled(true);
     drawerToggle.syncState();

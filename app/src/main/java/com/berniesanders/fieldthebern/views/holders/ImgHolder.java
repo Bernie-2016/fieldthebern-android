@@ -38,7 +38,8 @@ public class ImgHolder extends BaseViewHolder<Img> {
     imageView = (ImageView) itemView.findViewById(R.id.img);
   }
 
-  @Override public void setModel(final Img model) {
+  @Override
+  public void setModel(final Img model) {
     super.setModel(model);
     Picasso.with(imageView.getContext()).load(model.getText()).into(imageView);
 
@@ -46,7 +47,8 @@ public class ImgHolder extends BaseViewHolder<Img> {
   }
 
   View.OnClickListener onClickListener = new View.OnClickListener() {
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
       Flow.get(v).set(new PhotoScreen(model));
     }
   };

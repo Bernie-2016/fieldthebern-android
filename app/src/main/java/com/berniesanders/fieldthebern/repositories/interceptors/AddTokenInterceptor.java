@@ -32,7 +32,8 @@ public class AddTokenInterceptor implements Interceptor {
     this.tokenRepo = tokenRepo;
   }
 
-  @Override public Response intercept(Chain chain) throws IOException {
+  @Override
+  public Response intercept(Chain chain) throws IOException {
 
     Request.Builder builder = chain.request().newBuilder();
 

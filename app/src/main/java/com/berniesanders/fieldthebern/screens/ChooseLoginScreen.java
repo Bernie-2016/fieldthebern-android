@@ -64,7 +64,8 @@ import timber.log.Timber;
  *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_choose_login) public class ChooseLoginScreen extends FlowPathBase {
+@Layout(R.layout.screen_choose_login)
+public class ChooseLoginScreen extends FlowPathBase {
 
   /**
    */
@@ -73,7 +74,8 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerChooseLoginScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .build();
@@ -81,37 +83,44 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return ChooseLoginScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class) public interface Component {
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class)
+  public interface Component {
     void inject(ChooseLoginView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<ChooseLoginView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<ChooseLoginView> {
 
     private final Gson gson;
     private final RxSharedPreferences rxPrefs;
     private final TokenRepo tokenRepo;
     private final UserRepo userRepo;
-    @BindString(R.string.login_title) String screenTitleString;
+    @BindString(R.string.login_title)
+    String screenTitleString;
     private boolean showPleaseWait = false;
 
-    @Inject Presenter(Gson gson, RxSharedPreferences rxPrefs, TokenRepo tokenRepo,
-        UserRepo userRepo) {
+    @Inject
+    Presenter(Gson gson, RxSharedPreferences rxPrefs, TokenRepo tokenRepo, UserRepo userRepo) {
       this.gson = gson;
       this.rxPrefs = rxPrefs;
       this.tokenRepo = tokenRepo;
       this.userRepo = userRepo;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -131,15 +140,18 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(screenTitleString, null));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(ChooseLoginView view) {
+    @Override
+    public void dropView(ChooseLoginView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.login_email) void loginEmail() {
+    @OnClick(R.id.login_email)
+    void loginEmail() {
       Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
       String userString = userPref.get();
 
@@ -152,16 +164,19 @@ import timber.log.Timber;
     }
 
     //TODO: pass a pre-crafted user?
-    @OnClick(R.id.login_facebook) void loginFacebook() {
+    @OnClick(R.id.login_facebook)
+    void loginFacebook() {
       FacebookService.get(getView()).loginWithFacebook(new Action0() {
-        @Override public void call() {
+        @Override
+        public void call() {
           Timber.v("Action0.call()");
 
           Bundle parameters = new Bundle();
           parameters.putString("fields", "id,first_name,last_name,picture,email,friends");
           GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
               new GraphRequest.GraphJSONObjectCallback() {
-                @Override public void onCompleted(JSONObject object, GraphResponse response) {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
                   Timber.v("GraphRequest onCompleted response:%s",
                       response.getJSONObject().toString());
                   FacebookUser facebookUser =
@@ -184,7 +199,8 @@ import timber.log.Timber;
       });
     }
 
-    @OnClick(R.id.no_account) void noAccount() {
+    @OnClick(R.id.no_account)
+    void noAccount() {
       Flow.get(getView().getContext()).goBack();
     }
 
@@ -216,7 +232,8 @@ import timber.log.Timber;
     }
 
     Observer<Token> refreshObserver = new Observer<Token>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.d("refreshObserver done.");
         if (getView() == null) {
           return;
@@ -225,7 +242,8 @@ import timber.log.Timber;
         showPleaseWait = false;
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         if (getView() == null) {
           Timber.e(e, "refreshObserver onError");
           return;
@@ -239,13 +257,15 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(Token token) {
+      @Override
+      public void onNext(Token token) {
         Timber.d("refreshObserver onNext: %s", token.toString());
         userRepo.getMe()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Action1<User>() {
-              @Override public void call(User user) {
+              @Override
+              public void call(User user) {
                 ProgressDialogService.get(getView()).dismiss();
                 showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));

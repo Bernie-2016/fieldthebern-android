@@ -60,21 +60,30 @@ public class TokenSpec {
    */
   public interface TokenEndpoint {
 
-    @FormUrlEncoded @Headers({
+    @FormUrlEncoded
+    @Headers({
         "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
-    }) @POST("oauth/token") Observable<Token> loginEmail(@Header("Authorization") String authString,
+    })
+    @POST("oauth/token")
+    Observable<Token> loginEmail(@Header("Authorization") String authString,
         @Field("grant_type") String grantType, @Field("username") String username,
         @Field("password") String password);
 
-    @FormUrlEncoded @Headers({
+    @FormUrlEncoded
+    @Headers({
         "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
-    }) @POST("oauth/token") Observable<Token> loginFacebook(
-        @Header("Authorization") String authString, @Field("grant_type") String grantType,
-        @Field("username") String username, @Field("password") String password);
+    })
+    @POST("oauth/token")
+    Observable<Token> loginFacebook(@Header("Authorization") String authString,
+        @Field("grant_type") String grantType, @Field("username") String username,
+        @Field("password") String password);
 
-    @FormUrlEncoded @Headers({
+    @FormUrlEncoded
+    @Headers({
         "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
-    }) @POST("oauth/token") Observable<Token> refresh(
+    })
+    @POST("oauth/token")
+    Observable<Token> refresh(
         //@Header("Authorization") String authString,
         @Field("grant_type") String grantType, @Field("client_id") String clientId,
         @Field("client_secret") String clientSecret, @Field("refresh_token") String refreshToken);

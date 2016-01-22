@@ -35,7 +35,8 @@ import timber.log.Timber;
  * Example for creating new Mortar Screen that helps explain how it all works.
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_example) public class ExampleScreen extends FlowPathBase {
+@Layout(R.layout.screen_example)
+public class ExampleScreen extends FlowPathBase {
 
   private final String someData;
 
@@ -62,7 +63,8 @@ import timber.log.Timber;
    * Note:
    * Generally common types like "String" are not injected because injection works based on type
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerExampleScreen_Component.builder()
         .mainComponent(
             FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
@@ -70,11 +72,13 @@ import timber.log.Timber;
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return ExampleScreen.class.getName();
   }
 
-  @dagger.Module class ExampleModule {
+  @dagger.Module
+  class ExampleModule {
 
     private final String someDataToInject;
 
@@ -85,7 +89,8 @@ import timber.log.Timber;
       this.someDataToInject = someDataToInject;
     }
 
-    @Provides String provideSomeData() {
+    @Provides
+    String provideSomeData() {
       return someDataToInject;
     }
   }
@@ -111,7 +116,8 @@ import timber.log.Timber;
     // Gson exposeGson();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<ExampleView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<ExampleView> {
 
     /**
      * Since the presenter is static it should survive rotation
@@ -122,7 +128,8 @@ import timber.log.Timber;
      * When the view is inflated, this presented is automatically injected to the ExampleView
      * Constructor parameters here are injected automatically
      */
-    @Inject Presenter(String someInjectedData) {
+    @Inject
+    Presenter(String someInjectedData) {
       this.someInjectedData = someInjectedData;
     }
 
@@ -133,7 +140,8 @@ import timber.log.Timber;
      * @param savedInstanceState This bundle is only passed on rotation not passed on navigating
      * back
      */
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
     }
@@ -152,7 +160,8 @@ import timber.log.Timber;
     /**
      * Called on rotation only
      */
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
     /**
@@ -162,7 +171,8 @@ import timber.log.Timber;
      *
      * ((ExampleScreen)Path.get(view.getContext())).somePublicField = "Something you want to save"
      */
-    @Override public void dropView(ExampleView view) {
+    @Override
+    public void dropView(ExampleView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }

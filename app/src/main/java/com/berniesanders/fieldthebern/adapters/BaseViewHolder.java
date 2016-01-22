@@ -45,7 +45,8 @@ public abstract class BaseViewHolder<M> extends RecyclerView.ViewHolder
    * {@code this.setOnClickListener(this);} <br /><br />
    * in your constructor.
    */
-  @Override public void onClick(View v) {
+  @Override
+  public void onClick(View v) {
     Timber.v("onClick" + v);
 
     if (getModel() == null) {
@@ -62,7 +63,8 @@ public abstract class BaseViewHolder<M> extends RecyclerView.ViewHolder
     this.model = model;
   }
 
-  @SuppressWarnings("UnusedDeclaration") public M getModel() {
+  @SuppressWarnings("UnusedDeclaration")
+  public M getModel() {
     return model;
   }
 

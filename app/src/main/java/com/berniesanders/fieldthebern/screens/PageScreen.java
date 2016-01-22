@@ -39,7 +39,8 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(R.layout.screen_page) public class PageScreen extends FlowPathBase {
+@Layout(R.layout.screen_page)
+public class PageScreen extends FlowPathBase {
 
   private final Page page;
 
@@ -50,44 +51,53 @@ import timber.log.Timber;
     this.page = page;
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerPageScreen_Component.builder().pageModule(new PageModule(page)).build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return PageScreen.class.getName() + page.getTitle();// TODO temp scope name?
   }
 
-  @Module class PageModule {
+  @Module
+  class PageModule {
     private final Page p;
 
     public PageModule(Page p) {
       this.p = p;
     }
 
-    @Provides public Page providePage() {
+    @Provides
+    public Page providePage() {
       return p;
     }
   }
 
-  @FtbScreenScope @dagger.Component(modules = PageModule.class) public interface Component {
+  @FtbScreenScope
+  @dagger.Component(modules = PageModule.class)
+  public interface Component {
     void inject(PageView t);
 
     Page getPage();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<PageView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<PageView> {
 
     final Page page;
     Parcelable recyclerViewState;
 
     private static final String BUNDLE_RECYCLER_LAYOUT = "PageScreen.recycler.layout";
 
-    @Inject Presenter(Page page) {
+    @Inject
+    Presenter(Page page) {
       this.page = page;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       super.onLoad(savedInstanceState);
 
@@ -127,7 +137,8 @@ import timber.log.Timber;
     /**
      * Called on rotation only
      */
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
       saveState(outState);
     }
 
@@ -146,12 +157,14 @@ import timber.log.Timber;
     /**
      * Called on navigation
      */
-    @Override public void dropView(PageView view) {
+    @Override
+    public void dropView(PageView view) {
       saveState(new Bundle());
       super.dropView(view);
     }
 
-    @Override protected void onEnterScope(MortarScope scope) {
+    @Override
+    protected void onEnterScope(MortarScope scope) {
       super.onEnterScope(scope);
       Timber.v("onEnterScope: %s", scope);
     }

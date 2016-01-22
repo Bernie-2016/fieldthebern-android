@@ -34,7 +34,8 @@ public class ProfileEditView extends FrameLayout {
    * Make sure you are pointing at the correct presenter type
    * YourScreen.Presenter
    */
-  @Inject ProfileEditScreen.Presenter presenter;
+  @Inject
+  ProfileEditScreen.Presenter presenter;
 
   public ProfileEditView(Context context) {
     super(context);
@@ -63,7 +64,8 @@ public class ProfileEditView extends FrameLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -71,7 +73,8 @@ public class ProfileEditView extends FrameLayout {
     //ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -79,7 +82,8 @@ public class ProfileEditView extends FrameLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

@@ -38,19 +38,26 @@ import timber.log.Timber;
  */
 public class StatePrimaryView extends RelativeLayout {
 
-  @Inject StatePrimaryScreen.Presenter presenter;
+  @Inject
+  StatePrimaryScreen.Presenter presenter;
 
-  @Bind(R.id.state_primary_image) AppCompatImageView primaryImage;
+  @Bind(R.id.state_primary_image)
+  AppCompatImageView primaryImage;
 
-  @Bind(R.id.state_primary_name) TextView stateName;
+  @Bind(R.id.state_primary_name)
+  TextView stateName;
 
-  @Bind(R.id.state_primary_type) TextView primaryType;
+  @Bind(R.id.state_primary_type)
+  TextView primaryType;
 
-  @Bind(R.id.state_primary_date) TextView primaryDate;
+  @Bind(R.id.state_primary_date)
+  TextView primaryDate;
 
-  @Bind(R.id.state_primary_deadline) TextView primaryDeadline;
+  @Bind(R.id.state_primary_deadline)
+  TextView primaryDeadline;
 
-  @Bind(R.id.state_primary_description) TextView primaryDescription;
+  @Bind(R.id.state_primary_description)
+  TextView primaryDescription;
 
   public StatePrimaryView(Context context) {
     super(context);
@@ -147,7 +154,8 @@ public class StatePrimaryView extends RelativeLayout {
     primaryDescription.setText(description);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -156,7 +164,8 @@ public class StatePrimaryView extends RelativeLayout {
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -164,7 +173,8 @@ public class StatePrimaryView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

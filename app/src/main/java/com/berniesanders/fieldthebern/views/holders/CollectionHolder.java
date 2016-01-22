@@ -32,9 +32,11 @@ import com.squareup.picasso.Picasso;
  */
 public class CollectionHolder extends BaseViewHolder<Collection> {
 
-  @Bind(R.id.img) ImageView imageView;
+  @Bind(R.id.img)
+  ImageView imageView;
 
-  @Bind(R.id.txt) TextView textView;
+  @Bind(R.id.txt)
+  TextView textView;
 
   CollectionHolder(View itemView) {
     super(itemView);
@@ -42,7 +44,8 @@ public class CollectionHolder extends BaseViewHolder<Collection> {
     itemView.setOnClickListener(this);
   }
 
-  @Override public void setModel(final Collection model) {
+  @Override
+  public void setModel(final Collection model) {
     super.setModel(model);
 
     Picasso.with(imageView.getContext()).load(model.getImageUrlThumb()).into(imageView);

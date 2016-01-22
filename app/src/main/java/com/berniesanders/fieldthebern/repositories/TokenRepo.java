@@ -45,7 +45,8 @@ import timber.log.Timber;
 /**
  * Data repository for oauth2
  */
-@Singleton public class TokenRepo {
+@Singleton
+public class TokenRepo {
 
   final Gson gson;
   private OkHttpClient client;
@@ -55,14 +56,16 @@ import timber.log.Timber;
   final Retrofit retrofit;
   final TokenSpec.TokenEndpoint endpoint;
 
-  @Inject public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config, Context context) {
+  @Inject
+  public TokenRepo(Gson gson, RxSharedPreferences rxPrefs, Config config, Context context) {
     this.gson = gson;
     this.rxPrefs = rxPrefs;
     this.config = config;
     this.context = context;
 
     HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override public void log(String message) {
+      @Override
+      public void log(String message) {
         Timber.v(message);
       }
     };
@@ -107,7 +110,8 @@ import timber.log.Timber;
     }
 
     return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
-      @Override public Token call(Token token) {
+      @Override
+      public Token call(Token token) {
         Timber.v("loginEmail() saving token");
         Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
         tokenPref.set(gson.toJson(token));
@@ -126,7 +130,8 @@ import timber.log.Timber;
     }
 
     return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
-      @Override public Token call(Token token) {
+      @Override
+      public Token call(Token token) {
         Timber.v("loginFacebook() saving token");
         Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
         tokenPref.set(gson.toJson(token));
@@ -174,7 +179,8 @@ import timber.log.Timber;
 
     return endpoint.refresh(Token.GRANT_REFRESH, config.getClientId(), config.getClientSecret(),
         refreshToken).map(new Func1<Token, Token>() {
-      @Override public Token call(Token token) {
+      @Override
+      public Token call(Token token) {
 
         Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
         tokenPref.set(gson.toJson(token));

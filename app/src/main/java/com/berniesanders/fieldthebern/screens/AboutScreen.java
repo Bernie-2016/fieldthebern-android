@@ -44,48 +44,63 @@ import javax.inject.Inject;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
-@Layout(R.layout.screen_about) public class AboutScreen extends FlowPathBase {
+@Layout(R.layout.screen_about)
+public class AboutScreen extends FlowPathBase {
 
   public AboutScreen() {
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerAboutScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .aboutModule(new AboutModule())
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return AboutScreen.class.getName();
   }
 
-  @dagger.Module class AboutModule {
+  @dagger.Module
+  class AboutModule {
 
     public AboutModule() {
     }
   }
 
-  @FtbScreenScope @dagger.Component(modules = AboutModule.class, dependencies = MainComponent.class)
+  @FtbScreenScope
+  @dagger.Component(modules = AboutModule.class, dependencies = MainComponent.class)
   public interface Component {
     void inject(AboutView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<AboutView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<AboutView> {
 
-    @BindString(R.string.about) String screenTitleString;
-    @BindString(R.string.about_text) String versionUnformatted;
-    @BindString(R.string.email_support) String supportEmail;
-    @BindString(R.string.gitHash) String gitHash;
-    @BindString(R.string.buildDate) String buildDate;
+    @BindString(R.string.about)
+    String screenTitleString;
+    @BindString(R.string.about_text)
+    String versionUnformatted;
+    @BindString(R.string.email_support)
+    String supportEmail;
+    @BindString(R.string.gitHash)
+    String gitHash;
+    @BindString(R.string.buildDate)
+    String buildDate;
 
-    @Bind(R.id.email) TextView emailText;
-    @Bind(R.id.textView) TextView versionText;
+    @Bind(R.id.email)
+    TextView emailText;
+    @Bind(R.id.textView)
+    TextView versionText;
 
-    @Inject Presenter() {
+    @Inject
+    Presenter() {
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -111,7 +126,8 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(screenTitleString, null));
     }
 
-    @OnClick(R.id.email) void emailSupport() {
+    @OnClick(R.id.email)
+    void emailSupport() {
       String body = "Version: " + BuildConfig.VERSION_NAME + "\n" +
           "\n" +
           "-- Device --" + "\n" +
@@ -136,10 +152,12 @@ import timber.log.Timber;
       }
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(AboutView view) {
+    @Override
+    public void dropView(AboutView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }

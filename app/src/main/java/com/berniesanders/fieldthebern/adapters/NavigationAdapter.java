@@ -38,19 +38,23 @@ public class NavigationAdapter extends BaseAdapter {
     this.icons = icons;
   }
 
-  @Override public int getCount() {
+  @Override
+  public int getCount() {
     return items.length;
   }
 
-  @Override public Object getItem(int position) {
+  @Override
+  public Object getItem(int position) {
     return items[position];
   }
 
-  @Override public long getItemId(int position) {
+  @Override
+  public long getItemId(int position) {
     return position;
   }
 
-  @Override public View getView(int position, View convertView, ViewGroup parent) {
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
 
     if (convertView == null) {
       convertView = LayoutInflater.from(parent.getContext())

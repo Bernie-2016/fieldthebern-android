@@ -41,7 +41,8 @@ import timber.log.Timber;
 /**
  * For loading address canvass data from the API
  */
-@Singleton public class AddressRepo {
+@Singleton
+public class AddressRepo {
 
   final Gson gson;
   private final TokenRepo tokenRepo;
@@ -60,7 +61,8 @@ import timber.log.Timber;
     this.context = context;
 
     HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override public void log(String message) {
+      @Override
+      public void log(String message) {
         Timber.v(message);
       }
     };

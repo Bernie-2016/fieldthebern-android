@@ -37,7 +37,8 @@ public class ListHolder extends BaseViewHolder<List> {
     container = (LinearLayout) itemView;
   }
 
-  @Override public void setModel(final List model) {
+  @Override
+  public void setModel(final List model) {
     super.setModel(model);
     setTextList(model.getList());
   }

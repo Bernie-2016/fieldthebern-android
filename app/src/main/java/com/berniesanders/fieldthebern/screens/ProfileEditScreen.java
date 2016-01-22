@@ -49,7 +49,8 @@ import timber.log.Timber;
 /**
  * Profile Screen for updating user profiles
  */
-@Layout(R.layout.screen_profile_edit) public class ProfileEditScreen extends FlowPathBase {
+@Layout(R.layout.screen_profile_edit)
+public class ProfileEditScreen extends FlowPathBase {
 
   /**
    * Constructor called by Flow throughout the app
@@ -73,7 +74,8 @@ import timber.log.Timber;
    * Note:
    * Generally common types like "String" are not injected because injection works based on type
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerProfileEditScreen_Component.builder()
         .mainComponent(
             FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
@@ -81,11 +83,13 @@ import timber.log.Timber;
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return ProfileEditScreen.class.getName();
   }
 
-  @dagger.Module class ProfileEditModule {
+  @dagger.Module
+  class ProfileEditModule {
 
     /**
      * pass variables to the component that will then be injected to the presenter
@@ -110,10 +114,12 @@ import timber.log.Timber;
     void inject(ProfileEditView t);
 
     // Expose UserRepo through injection
-    @SuppressWarnings("unused") UserRepo userRepo();
+    @SuppressWarnings("unused")
+    UserRepo userRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<ProfileEditView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<ProfileEditView> {
 
     /**
      * Since the presenter is static it should survive rotation
@@ -123,20 +129,24 @@ import timber.log.Timber;
     private Bitmap userPhoto;
     private String base64PhotoData;
 
-    @Bind(R.id.first_name) EditText firstNameEditText;
+    @Bind(R.id.first_name)
+    EditText firstNameEditText;
 
-    @Bind(R.id.last_name) EditText lastNameEditText;
+    @Bind(R.id.last_name)
+    EditText lastNameEditText;
 
     //        @Bind(R.id.email)
     //        EditText emailEditText;
 
-    @Bind(R.id.photo_edit) PhotoEditView photoEditView;
+    @Bind(R.id.photo_edit)
+    PhotoEditView photoEditView;
 
     /**
      * When the view is inflated, this presented is automatically injected to the ProfileEditView
      * Constructor parameters here are injected automatically
      */
-    @Inject Presenter(UserRepo userRepo) {
+    @Inject
+    Presenter(UserRepo userRepo) {
       this.userRepo = userRepo;
     }
 
@@ -147,14 +157,16 @@ import timber.log.Timber;
      * @param savedInstanceState This bundle is only passed on rotation not passed on navigating
      * back
      */
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       userRepo.getMe()
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<User>() {
-            @Override public void call(User user) {
+            @Override
+            public void call(User user) {
               String firstName = user.getData().attributes().getFirstName();
               String lastName = user.getData().attributes().getLastName();
               //                    String email = user.getData().attributes().getEmail();
@@ -164,7 +176,8 @@ import timber.log.Timber;
               photoEditView.load(user.getData().attributes(), userPhoto);
             }
           }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
               Timber.e(throwable, "Unable to retrieve profile");
               Crashlytics.logException(throwable);
               ProfileEditView view = getView();
@@ -178,14 +191,16 @@ import timber.log.Timber;
           });
 
       photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
-        @Override public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
+        @Override
+        public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
           userPhoto = bitmap;
           Presenter.this.base64PhotoData = base64PhotoData;
         }
       });
 
       getView().postDelayed(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           photoEditView.toggleAvatarWidget(true);
         }
       }, 300);
@@ -194,7 +209,8 @@ import timber.log.Timber;
     /**
      * Called on rotation only
      */
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
     /**
@@ -205,12 +221,14 @@ import timber.log.Timber;
      * ((ProfileEditView)Path.get(view.getContext())).somePublicField = "Something you want to
      * save"
      */
-    @Override public void dropView(ProfileEditView view) {
+    @Override
+    public void dropView(ProfileEditView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.submit_profile) void onSaveProfileClicked() {
+    @OnClick(R.id.submit_profile)
+    void onSaveProfileClicked() {
       Timber.v("Attempting to save profile");
       String firstName = firstNameEditText.getText().toString();
       String lastName = lastNameEditText.getText().toString();
@@ -227,7 +245,8 @@ import timber.log.Timber;
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<User>() {
-            @Override public void call(User user) {
+            @Override
+            public void call(User user) {
               Timber.v("Profile saved");
               ProfileEditView view = getView();
               if (view != null) {
@@ -239,7 +258,8 @@ import timber.log.Timber;
               }
             }
           }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
               Timber.e(throwable, "Unable to save profile");
               Crashlytics.logException(throwable);
               ProfileEditView view = getView();

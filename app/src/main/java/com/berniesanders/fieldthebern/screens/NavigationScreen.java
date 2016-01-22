@@ -52,17 +52,20 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  * Layout only really needed for Flow screens
  */
-@Layout(R.layout.screen_navigation_drawer) public class NavigationScreen extends FlowPathBase {
+@Layout(R.layout.screen_navigation_drawer)
+public class NavigationScreen extends FlowPathBase {
 
   /**
    * Not used in this case as flow isn't involved to call this method.
    * NavigationView injects itself directly
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return null;
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return NavigationScreen.class.getName();
   }
 
@@ -78,29 +81,37 @@ import timber.log.Timber;
    * Only use "dependencies = MainComponent.class" if you need something from the main component
    * Only use "modules = Module.class" if you need a module
    */
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class) public interface Component {
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class)
+  public interface Component {
     void inject(NavigationView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<NavigationView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<NavigationView> {
 
     private final UserRepo userRepo;
     // in case needed later to show expandable issue list
     DrawerLayout drawerLayout;
 
-    @Bind(R.id.drawer_listview) ListView drawerListView;
+    @Bind(R.id.drawer_listview)
+    ListView drawerListView;
 
-    @Bind(R.id.drawer_header_avatar) ImageView avatar;
+    @Bind(R.id.drawer_header_avatar)
+    ImageView avatar;
 
-    @Bind(R.id.drawer_header_name) TextView name;
+    @Bind(R.id.drawer_header_name)
+    TextView name;
 
-    @Bind(R.id.drawer_header_email) TextView email;
+    @Bind(R.id.drawer_header_email)
+    TextView email;
 
     /**
      * When the view is inflated, this presented is automatically injected to the View
      * Constructor parameters are injected here automatically
      */
-    @Inject Presenter(UserRepo userRepo) {
+    @Inject
+    Presenter(UserRepo userRepo) {
       this.userRepo = userRepo;
     }
 
@@ -108,7 +119,8 @@ import timber.log.Timber;
      * called when the presenter and view are ready.
      * getView() will not be null
      */
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
 
       drawerLayout = (DrawerLayout) getView().getParent();
@@ -121,7 +133,8 @@ import timber.log.Timber;
       }
     }
 
-    @Subscribe public void onLoginEvent(LoginEvent event) {
+    @Subscribe
+    public void onLoginEvent(LoginEvent event) {
       switch (event.getEventType()) {
         case LoginEvent.LOGIN:
           showUserInfo(event.getUser());
@@ -162,13 +175,15 @@ import timber.log.Timber;
       }));
 
       drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
           final Flow flow = Flow.get(view);
           switch (position) {
             case 0:
               if (!(flow.getHistory().top() instanceof MapScreen)) {
                 view.postDelayed(new Runnable() {
-                  @Override public void run() {
+                  @Override
+                  public void run() {
                     flow.set(new MapScreen());
                   }
                 }, 150);
@@ -177,7 +192,8 @@ import timber.log.Timber;
             case 1:
               if (!(flow.getHistory().top() instanceof Main)) {
                 view.post(new Runnable() {
-                  @Override public void run() {
+                  @Override
+                  public void run() {
                     flow.set(new Main());
                   }
                 });
@@ -186,7 +202,8 @@ import timber.log.Timber;
             case 2:
               if (!(flow.getHistory().top() instanceof LearnScreen)) {
                 view.post(new Runnable() {
-                  @Override public void run() {
+                  @Override
+                  public void run() {
                     flow.set(new LearnScreen());
                   }
                 });
@@ -195,7 +212,8 @@ import timber.log.Timber;
             case 3:
               userRepo.logout();
               view.post(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                   flow.setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
                 }
               });
@@ -203,7 +221,8 @@ import timber.log.Timber;
             case 4:
               if (!(flow.getHistory().top() instanceof AboutScreen)) {
                 view.post(new Runnable() {
-                  @Override public void run() {
+                  @Override
+                  public void run() {
                     flow.set(new AboutScreen());
                   }
                 });
@@ -218,13 +237,15 @@ import timber.log.Timber;
     /**
      * called on rotation only -- may not be applicable here, because no-flow
      */
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
     /**
      * last chance at the view before it is detached
      */
-    @Override public void dropView(NavigationView view) {
+    @Override
+    public void dropView(NavigationView view) {
       super.dropView(view);
       drawerLayout = null;
       drawerListView.setOnItemClickListener(null);
@@ -232,7 +253,8 @@ import timber.log.Timber;
       FTBApplication.getEventBus().unregister(this);
     }
 
-    @OnClick(R.id.drawer_profile) void onProfileClicked() {
+    @OnClick(R.id.drawer_profile)
+    void onProfileClicked() {
       if (!(Flow.get(getView().getContext()).getHistory().top() instanceof ProfileScreen)) {
         Flow.get(getView().getContext()).set(new ProfileScreen());
       }

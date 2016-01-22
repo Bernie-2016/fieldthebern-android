@@ -34,7 +34,8 @@ public class ProfileView extends LinearLayout {
    * Make sure you are pointing at the correct presenter type
    * YourScreen.Presenter
    */
-  @Inject ProfileScreen.Presenter presenter;
+  @Inject
+  ProfileScreen.Presenter presenter;
 
   public ProfileView(Context context) {
     super(context);
@@ -63,7 +64,8 @@ public class ProfileView extends LinearLayout {
         .inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -71,7 +73,8 @@ public class ProfileView extends LinearLayout {
     //ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -79,7 +82,8 @@ public class ProfileView extends LinearLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

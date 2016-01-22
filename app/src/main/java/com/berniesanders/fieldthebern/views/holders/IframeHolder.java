@@ -35,7 +35,8 @@ public class IframeHolder extends BaseViewHolder<Iframe> {
     textView = (TextView) itemView.findViewById(R.id.text);
   }
 
-  @Override public void setModel(final Iframe model) {
+  @Override
+  public void setModel(final Iframe model) {
     super.setModel(model);
     textView.setText(model.getText());
   }

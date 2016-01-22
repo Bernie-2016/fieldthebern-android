@@ -44,9 +44,11 @@ public class LoginView extends RelativeLayout {
 
   /**
    */
-  @Inject LoginScreen.Presenter presenter;
+  @Inject
+  LoginScreen.Presenter presenter;
 
-  @Bind(R.id.email) AppCompatAutoCompleteTextView email;
+  @Bind(R.id.email)
+  AppCompatAutoCompleteTextView email;
 
   public LoginView(Context context) {
     super(context);
@@ -94,7 +96,8 @@ public class LoginView extends RelativeLayout {
     emailAutocompleteTV.setThreshold(0);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -103,7 +106,8 @@ public class LoginView extends RelativeLayout {
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -111,7 +115,8 @@ public class LoginView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

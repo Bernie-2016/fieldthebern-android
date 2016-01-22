@@ -64,7 +64,8 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(R.layout.screen_map) public class MapScreen extends FlowPathBase {
+@Layout(R.layout.screen_map)
+public class MapScreen extends FlowPathBase {
 
   public CameraPosition cameraPosition;
   public ApiAddress address;
@@ -73,11 +74,13 @@ import timber.log.Timber;
   public MapScreen() {
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerMapScreen_Component.builder().mainComponent(FTBApplication.getComponent()).build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return MapScreen.class.getName();// TODO temp scope name?
   }
 
@@ -85,7 +88,9 @@ import timber.log.Timber;
   //    class Module {
   //    }
 
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class) public interface Component {
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class)
+  public interface Component {
     void inject(MapScreenView t);
 
     AddressRepo addressRepo();
@@ -93,7 +98,8 @@ import timber.log.Timber;
     ErrorResponseParser errorResponseParser();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<MapScreenView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<MapScreenView> {
 
     public static final String CAMERA_POSITION = "camera_position";
     public static final String ADDRESS = "address";
@@ -109,17 +115,21 @@ import timber.log.Timber;
     private ApiAddress address;
     boolean showInProgressDialog = false;
 
-    @BindString(R.string.visit_in_progress_message) String inProgressMessage;
-    @BindString(R.string.visit_in_progress_title) String inProgressTitle;
+    @BindString(R.string.visit_in_progress_message)
+    String inProgressMessage;
+    @BindString(R.string.visit_in_progress_title)
+    String inProgressTitle;
 
-    @Inject Presenter(AddressRepo addressRepo, ErrorResponseParser errorResponseParser,
+    @Inject
+    Presenter(AddressRepo addressRepo, ErrorResponseParser errorResponseParser,
         VisitRepo visitRepo) {
       this.addressRepo = addressRepo;
       this.errorResponseParser = errorResponseParser;
       this.visitRepo = visitRepo;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -174,7 +184,8 @@ import timber.log.Timber;
 
       DialogController.DialogAction confirmAction =
           new DialogController.DialogAction().label(R.string.yes).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               Timber.d("yes button click");
               showInProgressDialog = false;
               Flow.get(getView()).set(new NewVisitScreen(inProgressAddress));
@@ -183,7 +194,8 @@ import timber.log.Timber;
 
       DialogController.DialogAction cancelAction =
           new DialogController.DialogAction().label(R.string.no).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               showInProgressDialog = false;
               visitRepo.clear();
               Iterator<Object> iterator = Flow.get(getView()).getHistory().iterator();
@@ -223,7 +235,8 @@ import timber.log.Timber;
     };
 
     MapScreenView.OnAddressChange onAddressChange = new MapScreenView.OnAddressChange() {
-      @Override public void onAddressChange(ApiAddress address) {
+      @Override
+      public void onAddressChange(ApiAddress address) {
         Presenter.this.address = address;
 
         if (singleAddressSubscription != null && !singleAddressSubscription.isUnsubscribed()) {
@@ -239,7 +252,8 @@ import timber.log.Timber;
     };
 
     MapScreenView.OnMarkerClick onMarkerClick = new MapScreenView.OnMarkerClick() {
-      @Override public void onMarkerClick() {
+      @Override
+      public void onMarkerClick() {
         if (singleAddressSubscription != null && !singleAddressSubscription.isUnsubscribed()) {
           singleAddressSubscription.unsubscribe();
         }
@@ -250,11 +264,13 @@ import timber.log.Timber;
     };
 
     Observer<MultiAddressResponse> multiAddressObserver = new Observer<MultiAddressResponse>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
 
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         Timber.e(e, "multiAddressObserver onError");
         if (AuthFailRedirect.redirectOnFailure(e, getView())) {
           return;
@@ -266,7 +282,8 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(MultiAddressResponse multiAddressResponse) {
+      @Override
+      public void onNext(MultiAddressResponse multiAddressResponse) {
         Timber.v("multiAddressObserver onNext \n%s", multiAddressResponse);
 
         nearbyAddresses = multiAddressResponse.addresses();
@@ -276,10 +293,12 @@ import timber.log.Timber;
     };
 
     Observer<SingleAddressResponse> singleAddressObserver = new Observer<SingleAddressResponse>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         if (getView() == null) {
           Timber.e(e, "singleAddressObserver onError");
           return;
@@ -293,7 +312,8 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(SingleAddressResponse response) {
+      @Override
+      public void onNext(SingleAddressResponse response) {
         Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s",
             response.addresses().get(0));
         address = response.addresses().get(0);
@@ -305,7 +325,8 @@ import timber.log.Timber;
       ActionBarService.get(getView()).hideToolbar().closeAppbar().setMainImage(null);
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
 
       if (cameraPosition != null) {
         outState.putParcelable(CAMERA_POSITION, cameraPosition);
@@ -320,13 +341,15 @@ import timber.log.Timber;
       }
     }
 
-    @Override public void dropView(MapScreenView view) {
+    @Override
+    public void dropView(MapScreenView view) {
       super.dropView(view);
       dropListeners(view);
       ButterKnife.unbind(this);
     }
 
-    @Override protected void onEnterScope(MortarScope scope) {
+    @Override
+    protected void onEnterScope(MortarScope scope) {
       super.onEnterScope(scope);
       Timber.v("onEnterScope: %s", scope);
     }
@@ -337,7 +360,8 @@ import timber.log.Timber;
       mapScreenView.setOnMarkerClick(null);
     }
 
-    @OnClick(R.id.address_btn) void onAddAddressClick() {
+    @OnClick(R.id.address_btn)
+    void onAddAddressClick() {
       address = getView().getCurrentAddress();
 
       if (address == null) {

@@ -38,7 +38,8 @@ import timber.log.Timber;
 
 /**
  */
-@Layout(R.layout.screen_home) public class HomeScreen extends FlowPathBase {
+@Layout(R.layout.screen_home)
+public class HomeScreen extends FlowPathBase {
   /**
    */
   public HomeScreen() {
@@ -46,37 +47,45 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerHomeScreen_Component.builder().build();
   }
 
   /**
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     // note someData.hashCode() makes the screen unique
     return HomeScreen.class.getName();
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component() public interface Component {
+  @FtbScreenScope
+  @dagger.Component()
+  public interface Component {
     /**
      */
     void inject(HomeView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<HomeView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<HomeView> {
 
-    @BindString(R.string.app_name) String screenTitle;
+    @BindString(R.string.app_name)
+    String screenTitle;
 
     /**
      */
-    @Inject Presenter() {
+    @Inject
+    Presenter() {
     }
 
     /**
      */
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       ActionBarService.get(getView())
@@ -91,21 +100,25 @@ import timber.log.Timber;
     /**
      * called on rotation only
      */
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
     /**
      */
-    @Override public void dropView(HomeView view) {
+    @Override
+    public void dropView(HomeView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.screen_home_canvass) void onCanvassClicked() {
+    @OnClick(R.id.screen_home_canvass)
+    void onCanvassClicked() {
 
       if (PermissionService.get(getView()).isGranted()) {
         getView().post(new Runnable() {
-          @Override public void run() {
+          @Override
+          public void run() {
             Flow.get(getView().getContext()).set(new MapScreen());
           }
         });
@@ -113,7 +126,8 @@ import timber.log.Timber;
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
             .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override public void onClick(View view) {
+              @Override
+              public void onClick(View view) {
                 PermissionService.get(getView()).requestPermission();
               }
             })
@@ -121,17 +135,21 @@ import timber.log.Timber;
       }
     }
 
-    @OnClick(R.id.screen_home_issues) void onIssuesClicked() {
+    @OnClick(R.id.screen_home_issues)
+    void onIssuesClicked() {
       getView().post(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           Flow.get(getView().getContext()).set(new Main());
         }
       });
     }
 
-    @OnClick(R.id.screen_home_learn) void onLearnClicked() {
+    @OnClick(R.id.screen_home_learn)
+    void onLearnClicked() {
       getView().post(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           Flow.get(getView().getContext()).set(new LearnScreen());
         }
       });

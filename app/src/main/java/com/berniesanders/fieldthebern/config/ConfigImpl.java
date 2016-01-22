@@ -73,23 +73,28 @@ public class ConfigImpl implements Config {
     USER_AGENT = nameAndVersion + comment;
   }
 
-  @Override public String getFeelTheBernUrl() {
+  @Override
+  public String getFeelTheBernUrl() {
     return BASE_URL;
   }
 
-  @Override public String getCanvassUrl() {
+  @Override
+  public String getCanvassUrl() {
     return CANVASS_URL;
   }
 
-  @Override public String getClientId() {
+  @Override
+  public String getClientId() {
     return CLIENT_ID;
   }
 
-  @Override public String getClientSecret() {
+  @Override
+  public String getClientSecret() {
     return CLIENT_SECRET;
   }
 
-  @Override public String getUserAgent() {
+  @Override
+  public String getUserAgent() {
     return USER_AGENT;
   }
 }

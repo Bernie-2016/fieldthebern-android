@@ -83,7 +83,8 @@ public class Visit {
     /**
      * Visit duration in seconds
      */
-    @SerializedName("duration_sec") int duration = 0;
+    @SerializedName("duration_sec")
+    int duration = 0;
 
     public int duration() {
       return this.duration;

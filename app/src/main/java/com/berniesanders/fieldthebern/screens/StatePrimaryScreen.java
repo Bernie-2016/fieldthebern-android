@@ -48,7 +48,8 @@ import timber.log.Timber;
 /**
  * Mortar screen for State primaries
  */
-@Layout(R.layout.screen_state_primary) public class StatePrimaryScreen extends FlowPathBase {
+@Layout(R.layout.screen_state_primary)
+public class StatePrimaryScreen extends FlowPathBase {
 
   private final ApiAddress apiAddress;
 
@@ -56,30 +57,36 @@ import timber.log.Timber;
     this.apiAddress = apiAddress;
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerStatePrimaryScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(apiAddress))
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return StatePrimaryScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
     private final ApiAddress apiAddress;
 
     Module(ApiAddress apiAddress) {
       this.apiAddress = apiAddress;
     }
 
-    @Provides @FtbScreenScope public ApiAddress provideApiAddress() {
+    @Provides
+    @FtbScreenScope
+    public ApiAddress provideApiAddress() {
       return apiAddress;
     }
   }
 
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
   public interface Component {
     void inject(StatePrimaryView t);
 
@@ -90,7 +97,8 @@ import timber.log.Timber;
     StatesRepo statesRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<StatePrimaryView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<StatePrimaryView> {
 
     private final VisitRepo visitRepo;
     private final ApiAddress apiAddress;
@@ -99,15 +107,18 @@ import timber.log.Timber;
     Subscription subscription;
     private StatePrimaryResponse.StatePrimary[] statePrimaries;
 
-    @BindString(android.R.string.cancel) String cancel;
+    @BindString(android.R.string.cancel)
+    String cancel;
 
-    @Inject Presenter(ApiAddress apiAddress, VisitRepo visitRepo, StatesRepo statesRepo) {
+    @Inject
+    Presenter(ApiAddress apiAddress, VisitRepo visitRepo, StatesRepo statesRepo) {
       this.visitRepo = visitRepo;
       this.apiAddress = apiAddress;
       this.statesRepo = statesRepo;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -120,23 +131,27 @@ import timber.log.Timber;
 
     Observer<StatePrimaryResponse.StatePrimary[]> observer =
         new Observer<StatePrimaryResponse.StatePrimary[]>() {
-          @Override public void onCompleted() {
+          @Override
+          public void onCompleted() {
             if (getView() == null) {
               return;
             }
             getView().populateStateInfo(statePrimaries, apiAddress);
           }
 
-          @Override public void onError(Throwable e) {
+          @Override
+          public void onError(Throwable e) {
             Timber.e("Error on stateprimaryobserver");
           }
 
-          @Override public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
+          @Override
+          public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
             Presenter.this.statePrimaries = statePrimary;
           }
         };
 
-    @Override public void dropView(StatePrimaryView view) {
+    @Override
+    public void dropView(StatePrimaryView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
@@ -144,7 +159,8 @@ import timber.log.Timber;
     void setActionBar() {
       ActionBarController.MenuAction menu =
           new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               visitRepo.clear();
               Flow.get(getView())
                   .setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);

@@ -32,7 +32,8 @@ public class LoginEvent {
 
   @StringDef({ LOGIN, LOGOUT })
 
-  @Retention(RetentionPolicy.SOURCE) public @interface EventType {
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface EventType {
   }
 
   public LoginEvent(@EventType String eventType, User user) {
@@ -41,7 +42,8 @@ public class LoginEvent {
     this.user = user;
   }
 
-  @EventType public String getEventType() {
+  @EventType
+  public String getEventType() {
     return eventType;
   }
 

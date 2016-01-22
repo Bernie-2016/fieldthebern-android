@@ -64,7 +64,8 @@ import timber.log.Timber;
  * Example for creating new Mortar Screen that helps explain how it all works
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_new_visit) public class NewVisitScreen extends FlowPathBase {
+@Layout(R.layout.screen_new_visit)
+public class NewVisitScreen extends FlowPathBase {
 
   private final ApiAddress apiAddress;
 
@@ -81,7 +82,8 @@ import timber.log.Timber;
    * You can pass data (someData) from the Screen to its Presenter through this component.
    * Remember you must run the gradle 'build' class for Dagger to generate to component code
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerNewVisitScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(apiAddress))
@@ -93,25 +95,30 @@ import timber.log.Timber;
    * If you show "someData" then add "someData.hashCode()" to the end of this method
    * This will define the uniqueness that mortar and flow will see this screen for comparisons
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return NewVisitScreen.class.getName();
   }
 
-  @dagger.Module class Module { // expose module to presenter and pass the data
+  @dagger.Module
+  class Module { // expose module to presenter and pass the data
     private final ApiAddress apiAddress;
 
     Module(ApiAddress apiAddress) {
       this.apiAddress = apiAddress;
     }
 
-    @Provides @FtbScreenScope public ApiAddress provideApiAddress() {
+    @Provides
+    @FtbScreenScope
+    public ApiAddress provideApiAddress() {
       return apiAddress;
     }
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
   public interface Component {
     void inject(NewVisitView t);
 
@@ -124,7 +131,8 @@ import timber.log.Timber;
     StatesRepo statesRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<NewVisitView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<NewVisitView> {
 
     private final ApiAddress apiAddress;
     private final VisitRepo visitRepo;
@@ -136,20 +144,26 @@ import timber.log.Timber;
     Subscription statePrimarySubscription;
     private StatePrimaryResponse.StatePrimary[] statePrimaries;
 
-    @BindString(android.R.string.cancel) String cancel;
-    @BindString(R.string.new_visit) String newVisit;
-    @BindString(R.string.err_no_visit) String errorVisitInvalid;
+    @BindString(android.R.string.cancel)
+    String cancel;
+    @BindString(R.string.new_visit)
+    String newVisit;
+    @BindString(R.string.err_no_visit)
+    String errorVisitInvalid;
 
     boolean noOneHome = false;
     boolean askedToLeave = false;
 
-    @Bind(R.id.no_one_home) SwitchCompat noOneHomeSwitch;
+    @Bind(R.id.no_one_home)
+    SwitchCompat noOneHomeSwitch;
 
-    @Bind(R.id.asked_to_leave) SwitchCompat askedToLeaveSwitch;
+    @Bind(R.id.asked_to_leave)
+    SwitchCompat askedToLeaveSwitch;
     private boolean showPleaseWait = false;
 
-    @Inject Presenter(ApiAddress apiAddress, VisitRepo visitRepo,
-        ErrorResponseParser errorResponseParser, StatesRepo statesRepo) {
+    @Inject
+    Presenter(ApiAddress apiAddress, VisitRepo visitRepo, ErrorResponseParser errorResponseParser,
+        StatesRepo statesRepo) {
       this.apiAddress = apiAddress;
       this.visitRepo = visitRepo;
       this.errorResponseParser = errorResponseParser;
@@ -162,7 +176,8 @@ import timber.log.Timber;
       }
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -181,18 +196,21 @@ import timber.log.Timber;
 
     Observer<StatePrimaryResponse.StatePrimary[]> observer =
         new Observer<StatePrimaryResponse.StatePrimary[]>() {
-          @Override public void onCompleted() {
+          @Override
+          public void onCompleted() {
             if (getView() == null) {
               return;
             }
             getView().showPrimary(statePrimaries, apiAddress);
           }
 
-          @Override public void onError(Throwable e) {
+          @Override
+          public void onError(Throwable e) {
             Timber.e("Error on stateprimaryobserver");
           }
 
-          @Override public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
+          @Override
+          public void onNext(StatePrimaryResponse.StatePrimary[] statePrimary) {
             Presenter.this.statePrimaries = statePrimary;
           }
         };
@@ -224,7 +242,8 @@ import timber.log.Timber;
 
     CompoundButton.OnCheckedChangeListener noOneHomeListener =
         new CompoundButton.OnCheckedChangeListener() {
-          @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
             noOneHome = isChecked;
 
@@ -241,7 +260,8 @@ import timber.log.Timber;
 
     CompoundButton.OnCheckedChangeListener askedToLeaveListener =
         new CompoundButton.OnCheckedChangeListener() {
-          @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
             askedToLeave = isChecked;
 
@@ -258,7 +278,8 @@ import timber.log.Timber;
     void setActionBar() {
       ActionBarController.MenuAction menu =
           new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               visitRepo.clear();
               Flow.get(getView())
                   .setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
@@ -271,28 +292,34 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(apiAddress.attributes().street1(), menu));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(NewVisitView view) {
+    @Override
+    public void dropView(NewVisitView view) {
       super.dropView(view);
       clearSwitchListeners();
       ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.add_person) public void addPerson() {
+    @OnClick(R.id.add_person)
+    public void addPerson() {
       Flow.get(getView()).set(new AddPersonScreen(null));
     }
 
-    @OnClick(R.id.view_state_primary) public void viewStatePrimaryInfo() {
+    @OnClick(R.id.view_state_primary)
+    public void viewStatePrimaryInfo() {
       Flow.get(getView()).set(new StatePrimaryScreen(apiAddress));
     }
 
-    @OnClick(R.id.view_bernie_issues) public void viewBernieIssues() {
+    @OnClick(R.id.view_bernie_issues)
+    public void viewBernieIssues() {
       Flow.get(getView()).set(new Main());
     }
 
-    @OnClick(R.id.submit) public void score() {
+    @OnClick(R.id.submit)
+    public void score() {
 
       if (noOneHome) {
         //the first item in the included() array is the address
@@ -341,7 +368,8 @@ import timber.log.Timber;
     }
 
     Observer<VisitResult> visitResultObserver = new Observer<VisitResult>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.v("visitResultObserver.onCompleted");
         if (getView() == null) {
           return;
@@ -350,7 +378,8 @@ import timber.log.Timber;
         showPleaseWait = false;
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         Timber.e(e, "error submitting visit");
         if (getView() == null) {
           return;
@@ -374,7 +403,8 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(VisitResult visitResult) {
+      @Override
+      public void onNext(VisitResult visitResult) {
         Flow.get(getView()).set(new ScoreScreen(visitResult, visitRepo.get()));
         visitRepo.clear();
       }

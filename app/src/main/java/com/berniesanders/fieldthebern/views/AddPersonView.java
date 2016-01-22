@@ -46,27 +46,38 @@ public class AddPersonView extends RelativeLayout {
 
   /**
    */
-  @Inject AddPersonScreen.Presenter presenter;
+  @Inject
+  AddPersonScreen.Presenter presenter;
 
-  @Bind(R.id.party) AppCompatSpinner partySpinner;
+  @Bind(R.id.party)
+  AppCompatSpinner partySpinner;
 
-  @Bind(R.id.interest) AppCompatSpinner interestSpinner;
+  @Bind(R.id.interest)
+  AppCompatSpinner interestSpinner;
 
-  @Bind(R.id.first_name) EditText firstNameEditText;
+  @Bind(R.id.first_name)
+  EditText firstNameEditText;
 
-  @Bind(R.id.last_name) EditText lastNameEditText;
+  @Bind(R.id.last_name)
+  EditText lastNameEditText;
 
-  @Bind(R.id.email) EditText emailEditText;
+  @Bind(R.id.email)
+  EditText emailEditText;
 
-  @Bind(R.id.phone) EditText phoneEditText;
+  @Bind(R.id.phone)
+  EditText phoneEditText;
 
-  @Bind(R.id.phone_checkbox) CheckBox phoneCheckBox;
+  @Bind(R.id.phone_checkbox)
+  CheckBox phoneCheckBox;
 
-  @Bind(R.id.email_checkbox) CheckBox emailCheckBox;
+  @Bind(R.id.email_checkbox)
+  CheckBox emailCheckBox;
 
-  @Bind(R.id.previously_participated) SwitchCompat prevParticipatedSwitch;
+  @Bind(R.id.previously_participated)
+  SwitchCompat prevParticipatedSwitch;
 
-  @Bind(R.id.asked_to_leave) SwitchCompat askedToLeave;
+  @Bind(R.id.asked_to_leave)
+  SwitchCompat askedToLeave;
 
   public AddPersonView(Context context) {
     super(context);
@@ -93,7 +104,8 @@ public class AddPersonView extends RelativeLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -117,7 +129,8 @@ public class AddPersonView extends RelativeLayout {
     interestSpinner.setAdapter(interestAdapter);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -125,18 +138,21 @@ public class AddPersonView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }
 
-  @CanvassResponse.Response private String getCanvassResponse() {
+  @CanvassResponse.Response
+  private String getCanvassResponse() {
     String selectedItem = (String) interestSpinner.getSelectedItem();
     String[] interest = getContext().getResources().getStringArray(R.array.interest);
     return CanvassResponseEvaluator.getResponse(selectedItem, interest);
   }
 
-  @Party.Affiliation private String getParty() {
+  @Party.Affiliation
+  private String getParty() {
     String selectedItem = (String) partySpinner.getSelectedItem();
     String[] partyArray = getContext().getResources().getStringArray(R.array.party);
     return PartyEvaluator.getParty(selectedItem, partyArray);
@@ -164,14 +180,16 @@ public class AddPersonView extends RelativeLayout {
     }
   }
 
-  @OnCheckedChanged(R.id.email_checkbox) void onEmailChecked(boolean checked) {
+  @OnCheckedChanged(R.id.email_checkbox)
+  void onEmailChecked(boolean checked) {
 
     if (checked) {
       phoneCheckBox.setChecked(false);
     }
   }
 
-  @OnCheckedChanged(R.id.phone_checkbox) void onPhoneChecked(boolean checked) {
+  @OnCheckedChanged(R.id.phone_checkbox)
+  void onPhoneChecked(boolean checked) {
     if (checked) {
       emailCheckBox.setChecked(false);
     }

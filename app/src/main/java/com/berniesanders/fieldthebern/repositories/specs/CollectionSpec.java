@@ -41,6 +41,7 @@ public class CollectionSpec {
    * Retrofit 2 endpoint definition
    */
   public interface CollectionEndpoint {
-    @GET("ftb-json/{urlStub}") Observable<Collection> load(@Path("urlStub") String urlStub);
+    @GET("ftb-json/{urlStub}")
+    Observable<Collection> load(@Path("urlStub") String urlStub);
   }
 }

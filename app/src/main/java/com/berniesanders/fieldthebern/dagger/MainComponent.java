@@ -47,14 +47,16 @@ import javax.inject.Singleton;
 
 /**
  */
-@Singleton @Component(
+@Singleton
+@Component(
     modules = {
         MainModule.class, ActionBarController.ActionBarModule.class,
         DialogController.DialogModule.class, FacebookController.FacebookModule.class,
         ProgressDialogController.ProgressDialogModule.class,
         LocationController.LocationModule.class, PermissionController.PermissionModule.class,
         ToastController.ToastModule.class, PhotoController.PhotoModule.class
-    }) public interface MainComponent {
+    })
+public interface MainComponent {
   void inject(SearchMatrixCursor smc);
 
   void inject(MainActivity mainActivity);

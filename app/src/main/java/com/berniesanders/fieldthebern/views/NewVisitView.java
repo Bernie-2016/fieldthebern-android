@@ -58,11 +58,14 @@ public class NewVisitView extends RelativeLayout {
    * Make sure you are pointing at the correct presenter type
    * YourScreen.Presenter
    */
-  @Inject NewVisitScreen.Presenter presenter;
+  @Inject
+  NewVisitScreen.Presenter presenter;
 
-  @Bind(R.id.person_container) ViewGroup personContainer;
+  @Bind(R.id.person_container)
+  ViewGroup personContainer;
 
-  @Bind(R.id.view_state_primary) AppCompatButton primariesButton;
+  @Bind(R.id.view_state_primary)
+  AppCompatButton primariesButton;
 
   public NewVisitView(Context context) {
     super(context);
@@ -92,7 +95,8 @@ public class NewVisitView extends RelativeLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -101,7 +105,8 @@ public class NewVisitView extends RelativeLayout {
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -109,7 +114,8 @@ public class NewVisitView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }
@@ -166,7 +172,8 @@ public class NewVisitView extends RelativeLayout {
     }
   }
 
-  @SuppressLint("SetTextI18n") private void showPerson(Person person) {
+  @SuppressLint("SetTextI18n")
+  private void showPerson(Person person) {
     View personRow =
         LayoutInflater.from(getContext()).inflate(R.layout.row_person, personContainer, false);
 
@@ -197,14 +204,16 @@ public class NewVisitView extends RelativeLayout {
 
   CompoundButton.OnCheckedChangeListener onCheckChange =
       new CompoundButton.OnCheckedChangeListener() {
-        @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
           Person person = (Person) buttonView.getTag();
           person.spokenTo(isChecked);
         }
       };
 
   OnClickListener onClickListener = new OnClickListener() {
-    @Override public void onClick(View v) {
+    @Override
+    public void onClick(View v) {
       editPerson((Person) v.getTag());
     }
   };

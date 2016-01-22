@@ -61,21 +61,27 @@ public class ProgressDialogController extends Presenter<ProgressDialogController
   }
 
   /////////////////////// Mortar //////////////////////////////////////
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     super.dropView(view);
     dismiss();
   }
 
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
-  @Module public static class ProgressDialogModule {
+  @Module
+  public static class ProgressDialogModule {
 
-    @Provides @Singleton ProgressDialogController provideTemplateController() {
+    @Provides
+    @Singleton
+    ProgressDialogController provideTemplateController() {
       return new ProgressDialogController();
     }
   }

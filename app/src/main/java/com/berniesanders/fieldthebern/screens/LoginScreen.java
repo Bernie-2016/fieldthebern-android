@@ -84,7 +84,8 @@ import timber.log.Timber;
  *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_login) public class LoginScreen extends FlowPathBase {
+@Layout(R.layout.screen_login)
+public class LoginScreen extends FlowPathBase {
 
   private final User user;
 
@@ -96,7 +97,8 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerLoginScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(user))
@@ -105,25 +107,30 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return LoginScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
     private final User user;
 
     Module(User user) {
       this.user = user;
     }
 
-    @Provides @FtbScreenScope public User provideUser() {
+    @Provides
+    @FtbScreenScope
+    public User provideUser() {
       return user;
     }
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component(modules = Module.class, dependencies = MainComponent.class)
+  @FtbScreenScope
+  @dagger.Component(modules = Module.class, dependencies = MainComponent.class)
   public interface Component {
     void inject(LoginView t);
 
@@ -132,13 +139,19 @@ import timber.log.Timber;
     ErrorResponseParser errorParser();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<LoginView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<LoginView> {
 
-    @BindString(R.string.login_title) String screenTitleString;
-    @BindString(R.string.err_email_blank) String emailBlank;
-    @BindString(R.string.err_password_blank) String passwordBlank;
-    @BindString(R.string.location_disabled_title) String locationDisableTitle;
-    @BindString(R.string.location_disabled_message) String locationDisabledBody;
+    @BindString(R.string.login_title)
+    String screenTitleString;
+    @BindString(R.string.err_email_blank)
+    String emailBlank;
+    @BindString(R.string.err_password_blank)
+    String passwordBlank;
+    @BindString(R.string.location_disabled_title)
+    String locationDisableTitle;
+    @BindString(R.string.location_disabled_message)
+    String locationDisabledBody;
 
     private final User user;
     private final UserRepo userRepo;
@@ -153,18 +166,23 @@ import timber.log.Timber;
     private Location location;
     private String stateCode;
 
-    @Bind(R.id.password) EditText passwordEditText;
+    @Bind(R.id.password)
+    EditText passwordEditText;
 
-    @Bind(R.id.email) AutoCompleteTextView emailEditText;
+    @Bind(R.id.email)
+    AutoCompleteTextView emailEditText;
 
-    @Bind(R.id.user_photo) ImageView userImageView;
+    @Bind(R.id.user_photo)
+    ImageView userImageView;
 
-    @Bind(R.id.mask) ImageView mask;
+    @Bind(R.id.mask)
+    ImageView mask;
     private Subscription stateCodeSubscription;
     private Subscription locationSubscription;
     private boolean showPleaseWait = false;
 
-    @Inject Presenter(User user, UserRepo userRepo, TokenRepo tokenRepo,
+    @Inject
+    Presenter(User user, UserRepo userRepo, TokenRepo tokenRepo,
         ErrorResponseParser errorResponseParser, RxSharedPreferences rxPrefs, Gson gson,
         MessageScreen messageScreen) {
       this.user = user;
@@ -177,7 +195,8 @@ import timber.log.Timber;
       this.userAttributes = user.getData().attributes();
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -205,7 +224,8 @@ import timber.log.Timber;
     private void showEnableLocationDialog() {
       DialogController.DialogAction confirmAction =
           new DialogController.DialogAction().label(android.R.string.ok).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               Timber.d("ok button click");
               Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
               getView().getContext().startActivity(myIntent);
@@ -254,15 +274,18 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(screenTitleString, null));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(LoginView view) {
+    @Override
+    public void dropView(LoginView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnTouch(R.id.email_input_layout) boolean showEmailsInputLayout() {
+    @OnTouch(R.id.email_input_layout)
+    boolean showEmailsInputLayout() {
       if (Build.VERSION.SDK_INT >= 21) {
         emailEditText.showDropDown();
         emailEditText.setFocusable(true);
@@ -271,7 +294,8 @@ import timber.log.Timber;
       return false;
     }
 
-    @OnTouch(R.id.email) boolean showEmails() {
+    @OnTouch(R.id.email)
+    boolean showEmails() {
       if (Build.VERSION.SDK_INT >= 21) {
         emailEditText.showDropDown();
         emailEditText.setFocusable(true);
@@ -284,17 +308,20 @@ import timber.log.Timber;
       Picasso.with(getView().getContext())
           .load(userAttributes.getPhotoLargeUrl())
           .into(userImageView, new Callback() {
-            @Override public void onSuccess() {
+            @Override
+            public void onSuccess() {
               mask.setVisibility(View.VISIBLE);
             }
 
-            @Override public void onError() {
+            @Override
+            public void onError() {
               Timber.e("error loading facebook image");
             }
           });
     }
 
-    @OnClick(R.id.login_email) void loginEmail() {
+    @OnClick(R.id.login_email)
+    void loginEmail() {
 
       if (PermissionService.get(getView()).isGranted()) {
 
@@ -303,7 +330,8 @@ import timber.log.Timber;
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
             .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override public void onClick(View view) {
+              @Override
+              public void onClick(View view) {
                 PermissionService.get(getView()).requestPermission();
               }
             })
@@ -354,7 +382,8 @@ import timber.log.Timber;
     }
 
     Observer<Token> observer = new Observer<Token>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.d("loginEmail done.");
         if (getView() == null) {
           return;
@@ -363,7 +392,8 @@ import timber.log.Timber;
         showPleaseWait = false;
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         if (getView() == null) {
           Timber.e(e, "loginEmail onError");
           return;
@@ -377,14 +407,16 @@ import timber.log.Timber;
         showPleaseWait = false;
       }
 
-      @Override public void onNext(Token token) {
+      @Override
+      public void onNext(Token token) {
         Timber.d("loginEmail onNext: %s", token.toString());
 
         userRepo.getMe()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Action1<User>() {
-              @Override public void call(User user) {
+              @Override
+              public void call(User user) {
                 ProgressDialogService.get(getView()).dismiss();
                 showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
@@ -401,14 +433,16 @@ import timber.log.Timber;
     }
 
     private Observer<Location> locationObserver = new Observer<Location>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         locationRequestCompleted = true;
         if (addressAndLocationSet()) {
           login();
         }
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         locationRequestCompleted = true;
         Timber.e(e, "locationObserver onError");
         if (addressAndLocationSet()) {
@@ -416,21 +450,24 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(Location location) {
+      @Override
+      public void onNext(Location location) {
         Timber.v("location on next" + location);
         Presenter.this.location = location;
       }
     };
 
     private Observer<String> stateCodeObserver = new Observer<String>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         stateCodeRequestCompleted = true;
         if (addressAndLocationSet()) {
           login();
         }
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         stateCodeRequestCompleted = true;
         Timber.e(e, "stateCodeObserver onError");
         if (addressAndLocationSet()) {
@@ -438,7 +475,8 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(String stateCode) {
+      @Override
+      public void onNext(String stateCode) {
         Timber.v("stateCodeObserver on next" + stateCode);
         Presenter.this.stateCode = stateCode;
       }
@@ -451,7 +489,8 @@ import timber.log.Timber;
     }
 
     Observer<Token> refreshObserver = new Observer<Token>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.d("refreshObserver done.");
         if (getView() == null) {
           return;
@@ -460,7 +499,8 @@ import timber.log.Timber;
         showPleaseWait = false;
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         if (getView() == null) {
           Timber.e(e, "refreshObserver onError");
           return;
@@ -474,13 +514,15 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(Token token) {
+      @Override
+      public void onNext(Token token) {
         Timber.d("refreshObserver onNext: %s", token.toString());
         userRepo.getMe()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Action1<User>() {
-              @Override public void call(User user) {
+              @Override
+              public void call(User user) {
                 ProgressDialogService.get(getView()).dismiss();
                 showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
@@ -492,7 +534,8 @@ import timber.log.Timber;
       }
     };
 
-    @OnClick(R.id.no_account) void noAccount() {
+    @OnClick(R.id.no_account)
+    void noAccount() {
       Flow.get(getView())
           .setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.BACKWARD);
     }

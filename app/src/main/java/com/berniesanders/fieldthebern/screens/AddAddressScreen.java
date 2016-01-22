@@ -65,7 +65,8 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(R.layout.screen_add_address) public class AddAddressScreen extends FlowPathBase {
+@Layout(R.layout.screen_add_address)
+public class AddAddressScreen extends FlowPathBase {
 
   private final ApiAddress address;
 
@@ -73,18 +74,21 @@ import timber.log.Timber;
     this.address = address;
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerAddAddressScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(address))
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return AddAddressScreen.class.getName();// TODO temp scope name?
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
 
     private final ApiAddress address;
 
@@ -92,12 +96,15 @@ import timber.log.Timber;
       this.address = address;
     }
 
-    @Provides @FtbScreenScope public ApiAddress provideAddress() {
+    @Provides
+    @FtbScreenScope
+    public ApiAddress provideAddress() {
       return address;
     }
   }
 
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
   public interface Component {
     void inject(AddAddressView t);
 
@@ -110,30 +117,39 @@ import timber.log.Timber;
     VisitRepo visitRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<AddAddressView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<AddAddressView> {
 
     private ApiAddress address;
     private final AddressRepo addressRepo;
     private final ErrorResponseParser errorResponseParser;
     private final VisitRepo visitRepo;
-    @BindString(android.R.string.cancel) String cancel;
+    @BindString(android.R.string.cancel)
+    String cancel;
 
-    @BindString(R.string.add_address) String screenTitle;
-    @BindString(R.string.are_you_sure_address_correct) String confirmTitle;
-    @BindString(R.string.are_you_sure_address_body) String confirmBody;
-    @BindString(R.string.err_address_blank) String addressBlank;
-    @BindString(R.string.min_time_not_elapsed) String minTimeNotElapsed;
+    @BindString(R.string.add_address)
+    String screenTitle;
+    @BindString(R.string.are_you_sure_address_correct)
+    String confirmTitle;
+    @BindString(R.string.are_you_sure_address_body)
+    String confirmBody;
+    @BindString(R.string.err_address_blank)
+    String addressBlank;
+    @BindString(R.string.min_time_not_elapsed)
+    String minTimeNotElapsed;
     private boolean showPleaseWait = false;
 
-    @Inject Presenter(ApiAddress address, AddressRepo addressRepo,
-        ErrorResponseParser errorResponseParser, VisitRepo visitRepo) {
+    @Inject
+    Presenter(ApiAddress address, AddressRepo addressRepo, ErrorResponseParser errorResponseParser,
+        VisitRepo visitRepo) {
       this.address = address;
       this.addressRepo = addressRepo;
       this.errorResponseParser = errorResponseParser;
       this.visitRepo = visitRepo;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -147,7 +163,8 @@ import timber.log.Timber;
     void setActionBar() {
       ActionBarController.MenuAction menu =
           new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               if (getView() != null) {
                 visitRepo.clear();
                 showPleaseWait = false;
@@ -163,16 +180,19 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(screenTitle, menu));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(AddAddressView view) {
+    @Override
+    public void dropView(AddAddressView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
       address = view.getAddress(); //grab the address in case the user is rotating
     }
 
-    @OnClick(R.id.submit) public void startNewVisit() {
+    @OnClick(R.id.submit)
+    public void startNewVisit() {
       address = getView().getAddress();
       if (!formIsValid()) {
         return;
@@ -186,7 +206,8 @@ import timber.log.Timber;
 
       DialogAction confirmAction =
           new DialogAction().label(android.R.string.ok).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               Timber.d("ok button click");
               loadAddressFromApi();
             }
@@ -194,7 +215,8 @@ import timber.log.Timber;
 
       DialogAction cancelAction =
           new DialogAction().label(android.R.string.cancel).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               Timber.d("cancel button click");
             }
           });
@@ -226,13 +248,15 @@ import timber.log.Timber;
     }
 
     Observer<SingleAddressResponse> singleAddressObserver = new Observer<SingleAddressResponse>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.v("singleAddressObserver onCompleted");
         ProgressDialogService.get(getView()).dismiss();
         showPleaseWait = false;
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
 
         if (getView() == null) {
           Timber.e(e, "singleAddressObserver onError");
@@ -273,7 +297,8 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(SingleAddressResponse response) {
+      @Override
+      public void onNext(SingleAddressResponse response) {
         Timber.v("singleAddressObserver onNext  response.addresses().get(0) =\n%s",
             response.addresses().get(0));
 

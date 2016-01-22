@@ -13,7 +13,8 @@ public class EarlyStateView extends LinearLayout {
 
   /**
    */
-  @Inject EarlyStateScreen.Presenter presenter;
+  @Inject
+  EarlyStateScreen.Presenter presenter;
 
   public EarlyStateView(Context context) {
     super(context);
@@ -42,7 +43,8 @@ public class EarlyStateView extends LinearLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -50,7 +52,8 @@ public class EarlyStateView extends LinearLayout {
     //ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -58,7 +61,8 @@ public class EarlyStateView extends LinearLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

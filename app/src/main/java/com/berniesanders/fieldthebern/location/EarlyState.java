@@ -31,9 +31,11 @@ public class EarlyState {
   private FieldOfficeList offices;
   private float distance;
 
-  @ScreenType String type;
+  @ScreenType
+  String type;
 
-  @StringDef({ PHONEBANK, FIELD_OFFICE }) @Retention(RetentionPolicy.SOURCE)
+  @StringDef({ PHONEBANK, FIELD_OFFICE })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface ScreenType {
   }
 
@@ -151,7 +153,8 @@ public class EarlyState {
     return this.offices;
   }
 
-  @ScreenType public String type() {
+  @ScreenType
+  public String type() {
     return this.type;
   }
 

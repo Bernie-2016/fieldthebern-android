@@ -75,26 +75,31 @@ public class LocationController extends Presenter<LocationController.Activity> {
   }
 
   ////////////////////////////////// Mortar boilerplate ///////////////////////////////////////
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
     Timber.v("onLoad()");
     //you can safely call getView() to get the activity here
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     super.dropView(view);
     //after this it is no longer safe to call getView()
   }
 
   //required by mortar
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
   //used to inject this singleton present onto the Activity
-  @Module public static class LocationModule {
+  @Module
+  public static class LocationModule {
 
-    @Provides @Singleton LocationController provideTemplateController(Context context,
-        LocationManager locationManager) {
+    @Provides
+    @Singleton
+    LocationController provideTemplateController(Context context, LocationManager locationManager) {
       return new LocationController(context, locationManager);
     }
   }
@@ -103,7 +108,8 @@ public class LocationController extends Presenter<LocationController.Activity> {
 
   public Observable<Location> get() {
     return Observable.create(new Observable.OnSubscribe<Location>() {
-      @Override public void call(Subscriber<? super Location> subscriber) {
+      @Override
+      public void call(Subscriber<? super Location> subscriber) {
         try {
           subscriber.onNext(getLocation());
           subscriber.onCompleted();
@@ -116,7 +122,8 @@ public class LocationController extends Presenter<LocationController.Activity> {
 
   public Observable<String> getAddress() {
     return Observable.create(new Observable.OnSubscribe<String>() {
-      @Override public void call(Subscriber<? super String> subscriber) {
+      @Override
+      public void call(Subscriber<? super String> subscriber) {
         try {
           String stateCode = getStateForLocation(getLocation());
           subscriber.onNext(stateCode);
@@ -131,7 +138,8 @@ public class LocationController extends Presenter<LocationController.Activity> {
   public Observable<Address> reverseGeocode(final LatLng latLng) {
 
     return Observable.create(new Observable.OnSubscribe<Address>() {
-      @Override public void call(Subscriber<? super Address> subscriber) {
+      @Override
+      public void call(Subscriber<? super Address> subscriber) {
         try {
           Address address = getAddressForLocation(latLng.latitude, latLng.longitude);
           subscriber.onNext(address);
@@ -145,7 +153,8 @@ public class LocationController extends Presenter<LocationController.Activity> {
 
   //////////////////////////////////// Location ////////////////////////////////////////
 
-  @TargetApi(23) private Location getLocation() throws LocationUnavailableException {
+  @TargetApi(23)
+  private Location getLocation() throws LocationUnavailableException {
     if (Build.VERSION.SDK_INT >= 23 &&
         ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED &&
         ContextCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {

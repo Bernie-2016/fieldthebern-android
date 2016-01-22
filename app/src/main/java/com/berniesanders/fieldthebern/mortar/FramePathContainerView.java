@@ -47,32 +47,38 @@ public class FramePathContainerView extends FrameLayout implements HandlesBack, 
     this.container = container;
   }
 
-  @Override public boolean dispatchTouchEvent(MotionEvent ev) {
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent ev) {
     return !disabled && super.dispatchTouchEvent(ev);
   }
 
-  @Override public ViewGroup getContainerView() {
+  @Override
+  public ViewGroup getContainerView() {
     return this;
   }
 
-  @Override public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
+  @Override
+  public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
     disabled = true;
 
     //TODO   add a method to container to hold a ref to the traversal, then we can get
     //TODO   a view for a SceneAction and for trying to use the Transitions framework
     container.executeTraversal(this, traversal, new Flow.TraversalCallback() {
-      @Override public void onTraversalCompleted() {
+      @Override
+      public void onTraversalCompleted() {
         callback.onTraversalCompleted();
         disabled = false;
       }
     });
   }
 
-  @Override public boolean onBackPressed() {
+  @Override
+  public boolean onBackPressed() {
     return BackSupport.onBackPressed(getCurrentChild());
   }
 
-  @Override public ViewGroup getCurrentChild() {
+  @Override
+  public ViewGroup getCurrentChild() {
     return (ViewGroup) getContainerView().getChildAt(0);
   }
 }

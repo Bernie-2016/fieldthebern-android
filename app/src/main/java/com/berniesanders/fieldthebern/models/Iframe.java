@@ -25,19 +25,23 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 /**
  *
  */
-@Layout(R.layout.row_iframe) public class Iframe extends Content implements Parcelable {
+@Layout(R.layout.row_iframe)
+public class Iframe extends Content implements Parcelable {
 
   private String src;
 
-  @Override public String getText() {
+  @Override
+  public String getText() {
     return src;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeString(this.src);
   }

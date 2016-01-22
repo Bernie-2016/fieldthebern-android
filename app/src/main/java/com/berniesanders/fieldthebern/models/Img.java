@@ -30,7 +30,8 @@ import com.berniesanders.fieldthebern.annotations.Layout;
  * caption: "Source",
  * source: "http://www.washingtonpost.com/news/wonkblog/wp/2014/04/30/the-meteoric-costly-and-unprecedented-rise-of-incarceration-in-america/"
  */
-@Layout(R.layout.row_img) public class Img extends Content implements Parcelable {
+@Layout(R.layout.row_img)
+public class Img extends Content implements Parcelable {
 
   public static final String IMG_PARCEL_KEY = "img_parcel_key";
 
@@ -67,11 +68,13 @@ import com.berniesanders.fieldthebern.annotations.Layout;
     return source;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeInt(this.width);
     dest.writeInt(this.height);

@@ -87,15 +87,20 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
   Observer<Location> locationObserver;
   ApiAddress address;
 
-  @Bind(R.id.address) TextView addressTextView;
+  @Bind(R.id.address)
+  TextView addressTextView;
 
-  @Bind(R.id.leaning) TextView leaningTextView;
+  @Bind(R.id.leaning)
+  TextView leaningTextView;
 
-  @Bind(R.id.pin_drop) ImageView pinDrop;
+  @Bind(R.id.pin_drop)
+  ImageView pinDrop;
 
-  @Bind(R.id.progressBar) ProgressBar progressBar;
+  @Bind(R.id.progressBar)
+  ProgressBar progressBar;
 
-  @Inject MapScreen.Presenter presenter;
+  @Inject
+  MapScreen.Presenter presenter;
   private OnCameraChange onCameraChangeListener;
   private OnAddressChange onAddressChangeListener;
   private OnMarkerClick onMarkerClick;
@@ -145,7 +150,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     Timber.v("onFinishInflate");
 
@@ -156,7 +162,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
       mapFragment.getMapAsync(new OnMapReadyCallback() {
 
-        @Override public void onMapReady(GoogleMap gmap) {
+        @Override
+        public void onMapReady(GoogleMap gmap) {
           Timber.v("OnMapReadyCallback");
           MapScreenView.this.googleMap = gmap;
           gmap.setMyLocationEnabled(true);
@@ -170,14 +177,16 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     handler = new Handler();
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     Timber.v("onAttachToWindow");
     super.onAttachedToWindow();
     presenter.takeView(this);
     isAttached = true;
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     isAttached = false;
     presenter.dropView(this);
     super.onDetachedFromWindow();
@@ -240,7 +249,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         connectCameraObservable(map);
       } else {
         handler.postDelayed(new Runnable() {
-          @Override public void run() {
+          @Override
+          public void run() {
             connectCameraObservable(map);
           }
         }, 1000);
@@ -249,15 +259,18 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     }
 
     locationObserver = new Observer<Location>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         Timber.v("initCameraPosition onCompleted");
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         Timber.e(e, "initCameraPosition onError");
       }
 
-      @Override public void onNext(Location location) {
+      @Override
+      public void onNext(Location location) {
         map.moveCamera(CameraUpdateFactory.newCameraPosition(getCameraPosition(location)));
         connectCameraObservable(map);
 
@@ -288,18 +301,22 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
   }
 
   Observer<CameraPosition> cameraObserver = new Observer<CameraPosition>() {
-    @Override public void onCompleted() {
+    @Override
+    public void onCompleted() {
 
     }
 
-    @Override public void onError(Throwable e) {
+    @Override
+    public void onError(Throwable e) {
       Timber.e(e, "onError");
     }
 
-    @Override public void onNext(final CameraPosition cameraPosition) {
+    @Override
+    public void onNext(final CameraPosition cameraPosition) {
 
       post(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
 
           if (isAttached) {
             LatLng latLng = cameraPosition.target;
@@ -321,14 +338,17 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
   Observer<Address> geocodeObserver = new Observer<Address>() {
 
-    @Override public void onCompleted() {
+    @Override
+    public void onCompleted() {
     }
 
-    @Override public void onError(Throwable e) {
+    @Override
+    public void onError(Throwable e) {
       Timber.e(e, "geocodeObserver onError");
     }
 
-    @Override public void onNext(Address address) {
+    @Override
+    public void onNext(Address address) {
       MapScreenView.this.address = ApiAddress.from(address, address.getPremises());
 
       setAddress(MapScreenView.this.address);
@@ -347,12 +367,14 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
     return Observable.create(new Observable.OnSubscribe<CameraPosition>() {
 
-      @Override public void call(final Subscriber<? super CameraPosition> subscriber) {
+      @Override
+      public void call(final Subscriber<? super CameraPosition> subscriber) {
 
         GoogleMap.OnCameraChangeListener camChangeListener =
             new GoogleMap.OnCameraChangeListener() {
 
-              @Override public void onCameraChange(CameraPosition camPosition) {
+              @Override
+              public void onCameraChange(CameraPosition camPosition) {
                 address = null;
                 addressTextView.setText("");
                 leaningTextView.setText("");
@@ -367,7 +389,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     });
   }
 
-  @Override public boolean onBackPressed() {
+  @Override
+  public boolean onBackPressed() {
 
     ActionBarService.get(this).showToolbar();
     return false;
@@ -451,7 +474,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
   }
 
   GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
-    @Override public boolean onMarkerClick(Marker marker) {
+    @Override
+    public boolean onMarkerClick(Marker marker) {
 
       //stop watching the camera change while the map moves to the maker
       unsubscribe();
@@ -469,7 +493,8 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
 
       //re-enable the camera watch
       handler.postDelayed(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           if (onCameraChangeListener != null) {
             //notify the listener that the camera moved
             onCameraChangeListener.onCameraChange(googleMap.getCameraPosition(), false, 100);

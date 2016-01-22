@@ -56,14 +56,16 @@ public class FacebookController extends Presenter<FacebookController.Activity> {
   FacebookController() {
   }
 
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
     Timber.v("FacebookController.onLoad()");
     if (callbackManager == null) {
       setupFacebookAuth();
     }
   }
 
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
@@ -86,17 +88,20 @@ public class FacebookController extends Presenter<FacebookController.Activity> {
 
     LoginManager.getInstance()
         .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-          @Override public void onSuccess(LoginResult loginResult) {
+          @Override
+          public void onSuccess(LoginResult loginResult) {
             Timber.v("FacebookCallback.onSuccess()");
             AccessToken accessToken = loginResult.getAccessToken();
             onSuccess.call();
           }
 
-          @Override public void onCancel() {
+          @Override
+          public void onCancel() {
             Timber.v("FacebookCallback.onCancel()");
           }
 
-          @Override public void onError(FacebookException exception) {
+          @Override
+          public void onError(FacebookException exception) {
             Timber.e(exception, "FacebookCallback.onError()");
           }
         });
@@ -107,9 +112,12 @@ public class FacebookController extends Presenter<FacebookController.Activity> {
     callbackManager.onActivityResult(requestCode, resultCode, data);
   }
 
-  @Module public static class FacebookModule {
+  @Module
+  public static class FacebookModule {
 
-    @Provides @Singleton FacebookController provideFacebookController() {
+    @Provides
+    @Singleton
+    FacebookController provideFacebookController() {
       return new FacebookController();
     }
   }

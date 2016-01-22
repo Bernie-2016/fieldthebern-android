@@ -53,9 +53,11 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
  *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_add_person) public class AddPersonScreen extends FlowPathBase {
+@Layout(R.layout.screen_add_person)
+public class AddPersonScreen extends FlowPathBase {
 
-  @Nullable private final Person personToEdit;
+  @Nullable
+  private final Person personToEdit;
 
   /**
    */
@@ -65,7 +67,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
 
   /**
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerAddPersonScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(personToEdit))
@@ -74,32 +77,39 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
 
   /**
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return AddPersonScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
     private final Person personToEdit;
 
     public Module(Person personToEdit) {
       this.personToEdit = personToEdit;
     }
 
-    @Provides @FtbScreenScope @Nullable public Person providePerson() {
+    @Provides
+    @FtbScreenScope
+    @Nullable
+    public Person providePerson() {
       return personToEdit;
     }
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
   public interface Component {
     void inject(AddPersonView t);
 
     VisitRepo visitRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<AddPersonView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<AddPersonView> {
 
     private final VisitRepo visitRepo;
     private Person personToEdit;
@@ -107,18 +117,28 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
     private Person currentPerson;
     private boolean isNewPerson;
 
-    @Bind(R.id.submit) Button submitButton;
-    @Bind(R.id.instructions_label) TextView instructionsLabel;
+    @Bind(R.id.submit)
+    Button submitButton;
+    @Bind(R.id.instructions_label)
+    TextView instructionsLabel;
 
-    @BindString(android.R.string.cancel) String cancel;
-    @BindString(R.string.add_person) String addPerson;
-    @BindString(R.string.edit_person) String editPerson;
-    @BindString(R.string.editing_person) String editing;
-    @BindString(R.string.err_their_first_name_blank) String blankFirstName;
-    @BindString(R.string.err_invalid_email) String invalidEmailError;
-    @BindString(R.string.err_invalid_phone) String invalidPhoneError;
+    @BindString(android.R.string.cancel)
+    String cancel;
+    @BindString(R.string.add_person)
+    String addPerson;
+    @BindString(R.string.edit_person)
+    String editPerson;
+    @BindString(R.string.editing_person)
+    String editing;
+    @BindString(R.string.err_their_first_name_blank)
+    String blankFirstName;
+    @BindString(R.string.err_invalid_email)
+    String invalidEmailError;
+    @BindString(R.string.err_invalid_phone)
+    String invalidPhoneError;
 
-    @Inject Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
+    @Inject
+    Presenter(VisitRepo visitRepo, @Nullable Person personToEdit) {
       this.visitRepo = visitRepo;
       this.personToEdit = personToEdit;
       isNewPerson = (personToEdit == null);
@@ -128,7 +148,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
       }
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -146,7 +167,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
     void setActionBar() {
       ActionBarController.MenuAction menu =
           new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override public void call() {
+            @Override
+            public void call() {
               if (getView() != null) {
                 Flow.get(getView()).goBack();
               }
@@ -159,10 +181,12 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
           .setConfig(new ActionBarController.Config(getScreenTitle(), menu));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(AddPersonView view) {
+    @Override
+    public void dropView(AddPersonView view) {
       super.dropView(view);
 
       if (currentPerson != null) {
@@ -172,7 +196,8 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
       }
     }
 
-    @OnClick(R.id.submit) public void addPerson() {
+    @OnClick(R.id.submit)
+    public void addPerson() {
 
       //update our "temp" person with value from the form
       getView().updatePerson(currentPerson);

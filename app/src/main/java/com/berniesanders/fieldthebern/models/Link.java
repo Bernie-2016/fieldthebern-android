@@ -60,11 +60,13 @@ public class Link implements Parcelable {
     return end;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.href);
     dest.writeInt(this.start);
     dest.writeInt(this.end);

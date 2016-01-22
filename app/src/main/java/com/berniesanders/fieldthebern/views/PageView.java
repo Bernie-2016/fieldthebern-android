@@ -31,7 +31,8 @@ import timber.log.Timber;
  */
 public class PageView extends RecyclerView {
 
-  @Inject PageScreen.Presenter presenter;
+  @Inject
+  PageScreen.Presenter presenter;
 
   public PageView(Context context) {
     super(context);
@@ -58,18 +59,21 @@ public class PageView extends RecyclerView {
     setLayoutManager(llm);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     Timber.v("onFinishInflate");
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     setLayoutManager(getContext());
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     presenter.dropView(this);
     super.onDetachedFromWindow();
   }

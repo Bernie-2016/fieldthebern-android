@@ -12,7 +12,8 @@ public class MessageScreen {
   private final FieldOfficeRepo fieldOfficeRepo;
   private final RxSharedPreferences rxPrefs;
 
-  @Inject public MessageScreen(FieldOfficeRepo fieldOfficeRepo, RxSharedPreferences rxPrefs) {
+  @Inject
+  public MessageScreen(FieldOfficeRepo fieldOfficeRepo, RxSharedPreferences rxPrefs) {
 
     this.fieldOfficeRepo = fieldOfficeRepo;
     this.rxPrefs = rxPrefs;

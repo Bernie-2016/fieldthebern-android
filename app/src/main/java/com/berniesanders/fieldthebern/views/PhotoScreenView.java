@@ -38,10 +38,12 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 public class PhotoScreenView extends FrameLayout implements HandlesBack {
 
-  @Inject PhotoScreen.Presenter presenter;
+  @Inject
+  PhotoScreen.Presenter presenter;
   PhotoViewAttacher attacher;
 
-  @Bind(R.id.tv_current_matrix) TextView sourceTextView;
+  @Bind(R.id.tv_current_matrix)
+  TextView sourceTextView;
 
   public PhotoScreenView(Context context) {
     super(context);
@@ -63,7 +65,8 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     Timber.v("onFinishInflate");
     ButterKnife.bind(this, this);
@@ -71,12 +74,14 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     attacher.setScaleType(ImageView.ScaleType.CENTER_CROP);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     presenter.dropView(this);
     if (attacher != null) {
       attacher.cleanup();
@@ -93,7 +98,8 @@ public class PhotoScreenView extends FrameLayout implements HandlesBack {
     return sourceTextView;
   }
 
-  @Override public boolean onBackPressed() {
+  @Override
+  public boolean onBackPressed() {
     if (attacher != null) {
       attacher.cleanup();
       attacher = null;

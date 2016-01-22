@@ -66,11 +66,13 @@ public class Content implements Parcelable {
     this.type = type;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.text);
     dest.writeString(this.type);
   }

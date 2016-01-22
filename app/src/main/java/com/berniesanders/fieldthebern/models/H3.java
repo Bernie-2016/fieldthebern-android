@@ -27,7 +27,8 @@ import java.util.List;
 /**
  *
  */
-@Layout(R.layout.row_h3) public class H3 extends Content implements Parcelable, Linkable {
+@Layout(R.layout.row_h3)
+public class H3 extends Content implements Parcelable, Linkable {
   private List<Anchor> anchors;
   private List<Link> links;
 
@@ -39,11 +40,13 @@ import java.util.List;
     return links;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeList(this.anchors);
     dest.writeList(this.links);

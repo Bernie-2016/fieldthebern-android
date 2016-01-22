@@ -30,6 +30,7 @@ public class VisitSpec {
    */
   public interface VisitEndpoint {
 
-    @POST("visits") Observable<VisitResult> submit(@Body Visit visit);
+    @POST("visits")
+    Observable<VisitResult> submit(@Body Visit visit);
   }
 }

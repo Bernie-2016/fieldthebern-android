@@ -53,7 +53,8 @@ import timber.log.Timber;
 /**
  * Data repository for loading, creating users
  */
-@Singleton public class UserRepo {
+@Singleton
+public class UserRepo {
 
   final Gson gson;
   private final TokenRepo tokenRepo;
@@ -74,7 +75,8 @@ import timber.log.Timber;
     this.context = context;
 
     HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override public void log(String message) {
+      @Override
+      public void log(String message) {
         Timber.v(message);
       }
     };
@@ -99,7 +101,8 @@ import timber.log.Timber;
     FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGOUT, null));
   }
 
-  @Subscribe public void onLoginEvent(LoginEvent event) {
+  @Subscribe
+  public void onLoginEvent(LoginEvent event) {
     switch (event.getEventType()) {
       case LoginEvent.LOGIN:
         currentUser = event.getUser();
@@ -120,7 +123,8 @@ import timber.log.Timber;
    * Current user could be null, this should generally only be called after receiving a
    * LoginEvent.LOGIN
    */
-  @Nullable public User getCurrentUser() {
+  @Nullable
+  public User getCurrentUser() {
     if (currentUser == null) {
       Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
       String userString = userPref.get();
@@ -157,7 +161,8 @@ import timber.log.Timber;
 
     return create(spec.getCreateUserRequest()).map(
         new Func1<User, User>() { //save the user, this give the late .flatMap access to it
-          @Override public User call(User user) {
+          @Override
+          public User call(User user) {
             Timber.v("user created, saving in memory...");
             currentUser = user;
             Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
@@ -165,7 +170,8 @@ import timber.log.Timber;
             return user;
           }
         }).flatMap(new Func1<User, Observable<Token>>() { //log them in
-      @Override public Observable<Token> call(User user) {
+      @Override
+      public Observable<Token> call(User user) {
         Timber.v("user created, calling tokenRepo to sign in...");
 
         //get the username and pass right out of the create user request
@@ -186,7 +192,8 @@ import timber.log.Timber;
       }
     }).flatMap(new Func1<Token, Observable<User>>() { //upload photo
 
-      @Override public Observable<User> call(Token user) {
+      @Override
+      public Observable<User> call(Token user) {
         Timber.v("user signed in, calling update to upload the photo");
 
         final UserAttributes userAttributes = spec.getCreateUserRequest().getData().getAttributes();
@@ -200,7 +207,8 @@ import timber.log.Timber;
         return update(spec);
       }
     }).map(new Func1<User, User>() {  //re-save the user to be sure they are an awesome user
-      @Override public User call(User user) {
+      @Override
+      public User call(User user) {
         Timber.v("photo uploaded, saving user and returning to the subscriber");
         currentUser = user;
         Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
@@ -219,7 +227,8 @@ import timber.log.Timber;
     }
 
     return getMe().flatMap(new Func1<User, Observable<User>>() {
-      @Override public Observable<User> call(User user) {
+      @Override
+      public Observable<User> call(User user) {
         Timber.v("getMe flatmap");
         String firstName = spec.user().getData().attributes().getFirstName();
         String lastName = spec.user().getData().attributes().getLastName();

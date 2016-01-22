@@ -28,11 +28,13 @@ public class UserVisit implements Parcelable {
 
   java.util.List<Visit> data;
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeList(this.data);
   }
 

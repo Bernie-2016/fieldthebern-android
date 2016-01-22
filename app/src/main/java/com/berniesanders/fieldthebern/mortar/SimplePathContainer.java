@@ -47,7 +47,8 @@ public class SimplePathContainer extends PathContainer {
     this.contextFactory = contextFactory;
   }
 
-  @Override protected void performTraversal(final ViewGroup containerView,
+  @Override
+  protected void performTraversal(final ViewGroup containerView,
       final TraversalState traversalState, final Flow.Direction direction,
       final Flow.TraversalCallback callback) {
 
@@ -83,9 +84,11 @@ public class SimplePathContainer extends PathContainer {
       containerView.addView(newView);
       final View finalFromView = fromView;
       Utils.waitForMeasure(newView, new Utils.OnMeasuredCallback() {
-        @Override public void onMeasured(View view, int width, int height) {
+        @Override
+        public void onMeasured(View view, int width, int height) {
           runAnimation(containerView, finalFromView, view, direction, new Flow.TraversalCallback() {
-            @Override public void onTraversalCompleted() {
+            @Override
+            public void onTraversalCompleted() {
               containerView.removeView(finalFromView);
               oldPath.destroyNotIn(context, contextFactory);
               callback.onTraversalCompleted();
@@ -116,7 +119,8 @@ public class SimplePathContainer extends PathContainer {
       Flow.Direction direction, final Flow.TraversalCallback callback) {
     Animator animator = createSegue(from, to, direction);
     animator.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationEnd(Animator animation) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
         container.removeView(from);
         callback.onTraversalCompleted();
       }

@@ -28,11 +28,13 @@ public class Anchor implements Parcelable {
   private int point;
   //i THINK this is the zero-based index of the item it points to.... or something
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.name);
     dest.writeInt(this.point);
   }

@@ -138,11 +138,13 @@ public class DialogController extends Presenter<DialogController.Activity> {
   DialogController() {
   }
 
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
     update();
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     super.dropView(view);
   }
 
@@ -151,7 +153,8 @@ public class DialogController extends Presenter<DialogController.Activity> {
     update();
   }
 
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
@@ -185,7 +188,8 @@ public class DialogController extends Presenter<DialogController.Activity> {
       config = DialogController.dialogConfig;
     }
 
-    @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
       builder.setTitle(config.title())
@@ -201,13 +205,15 @@ public class DialogController extends Presenter<DialogController.Activity> {
       return dialog;
     }
 
-    @Override public void onCancel(DialogInterface dialog) {
+    @Override
+    public void onCancel(DialogInterface dialog) {
       super.onCancel(dialog);
       DialogController.dialogConfig = null;
       Timber.v("onCancel");
     }
 
-    @Override public void onDismiss(DialogInterface dialog) {
+    @Override
+    public void onDismiss(DialogInterface dialog) {
       super.onDismiss(dialog);
       //dialogConfig = null;
       Timber.v("onDismiss");
@@ -215,7 +221,8 @@ public class DialogController extends Presenter<DialogController.Activity> {
 
     DialogInterface.OnClickListener createClickListener(final int actionIndex) {
       return new DialogInterface.OnClickListener() {
-        @Override public void onClick(DialogInterface dialog, int which) {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
           dialogConfig.actions[actionIndex].action().call();
           dialogConfig = null;
         }
@@ -223,9 +230,12 @@ public class DialogController extends Presenter<DialogController.Activity> {
     }
   }
 
-  @Module public static class DialogModule {
+  @Module
+  public static class DialogModule {
 
-    @Provides @Singleton DialogController provideDialogController() {
+    @Provides
+    @Singleton
+    DialogController provideDialogController() {
       return new DialogController();
     }
   }

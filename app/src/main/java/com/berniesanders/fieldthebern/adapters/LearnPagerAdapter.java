@@ -32,7 +32,8 @@ public class LearnPagerAdapter extends PagerAdapter {
     this.context = context;
   }
 
-  @Override public Object instantiateItem(ViewGroup viewGroup, int position) {
+  @Override
+  public Object instantiateItem(ViewGroup viewGroup, int position) {
 
     LayoutInflater inflater = LayoutInflater.from(context);
     ViewGroup layout = null;
@@ -65,19 +66,23 @@ public class LearnPagerAdapter extends PagerAdapter {
     return layout;
   }
 
-  @Override public void destroyItem(ViewGroup viewGroup, int position, Object view) {
+  @Override
+  public void destroyItem(ViewGroup viewGroup, int position, Object view) {
     viewGroup.removeView((View) view);
   }
 
-  @Override public int getCount() {
+  @Override
+  public int getCount() {
     return 7;
   }
 
-  @Override public boolean isViewFromObject(View view, Object object) {
+  @Override
+  public boolean isViewFromObject(View view, Object object) {
     return view == object;
   }
 
-  @Override public CharSequence getPageTitle(int position) {
+  @Override
+  public CharSequence getPageTitle(int position) {
     return "";
   }
 }

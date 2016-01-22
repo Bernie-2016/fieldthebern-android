@@ -29,7 +29,8 @@ public class UserRelationships implements Parcelable {
   UserFollowers followers;
   UsersFollowing following;
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "UserRelationships{" +
         "visits=" + visits +
         ", followers=" + followers +
@@ -37,11 +38,13 @@ public class UserRelationships implements Parcelable {
         '}';
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeParcelable(this.visits, flags);
     dest.writeParcelable(this.followers, flags);
     dest.writeParcelable(this.following, flags);

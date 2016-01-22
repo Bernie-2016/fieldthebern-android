@@ -28,7 +28,8 @@ public class ErrorResponseParser {
 
   private final Gson gson;
 
-  @Inject public ErrorResponseParser(Gson gson) {
+  @Inject
+  public ErrorResponseParser(Gson gson) {
     this.gson = gson;
   }
 

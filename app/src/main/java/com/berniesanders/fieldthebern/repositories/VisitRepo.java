@@ -46,7 +46,8 @@ import timber.log.Timber;
 /**
  * For starting a visit, updating it, then submitting to the API
  */
-@Singleton public class VisitRepo {
+@Singleton
+public class VisitRepo {
 
   final Gson gson;
   private final TokenRepo tokenRepo;
@@ -68,7 +69,8 @@ import timber.log.Timber;
     this.context = context;
 
     HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override public void log(String message) {
+      @Override
+      public void log(String message) {
         Timber.v(message);
       }
     };

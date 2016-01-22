@@ -44,28 +44,34 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
-@Layout(R.layout.main_view) public class Main extends FlowPathBase {
+@Layout(R.layout.main_view)
+public class Main extends FlowPathBase {
 
   Parcelable savedState;
 
   public Main() {
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerMain_Component.builder().mainComponent(FTBApplication.getComponent()).build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return Main.class.getName();
   }
 
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class) public interface Component {
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class)
+  public interface Component {
     void inject(MainView t);
 
     CollectionRepo collectionRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<MainView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<MainView> {
 
     final CollectionRepo repo;
     Subscription subscription;
@@ -73,15 +79,18 @@ import timber.log.Timber;
     private Collection collection;
     Parcelable recyclerViewState;
 
-    @BindString(R.string.main_issues_screen_title) String issuesScreenTitle;
+    @BindString(R.string.main_issues_screen_title)
+    String issuesScreenTitle;
 
     private static final String BUNDLE_RECYCLER_LAYOUT = "Main.recycler.layout";
 
-    @Inject Presenter(CollectionRepo repo) {
+    @Inject
+    Presenter(CollectionRepo repo) {
       this.repo = repo;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
 
       ButterKnife.bind(this, getView());
 
@@ -133,11 +142,13 @@ import timber.log.Timber;
     }
 
     Observer<Collection> observer = new Observer<Collection>() {
-      @Override public void onCompleted() {
+      @Override
+      public void onCompleted() {
         setDataAndState();
       }
 
-      @Override public void onError(Throwable e) {
+      @Override
+      public void onError(Throwable e) {
         Timber.e(e, "Main presenter error in observer/rx");
         if (e instanceof NetworkUnavailableException) {
           ToastService.get(getView())
@@ -145,13 +156,15 @@ import timber.log.Timber;
         }
       }
 
-      @Override public void onNext(Collection collection) {
+      @Override
+      public void onNext(Collection collection) {
         Presenter.this.collection = collection;
         Timber.v("main repo returned the collection");
       }
     };
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
       saveState(outState);
     }
 
@@ -169,7 +182,8 @@ import timber.log.Timber;
           getView().getLayoutManager().onSaveInstanceState();
     }
 
-    @Override public void dropView(MainView view) {
+    @Override
+    public void dropView(MainView view) {
       saveState(new Bundle());
       if (subscription != null && !subscription.isUnsubscribed()) {
         subscription.unsubscribe();
@@ -177,7 +191,8 @@ import timber.log.Timber;
       super.dropView(view);
     }
 
-    @Override protected void onEnterScope(MortarScope scope) {
+    @Override
+    protected void onEnterScope(MortarScope scope) {
       super.onEnterScope(scope);
       Timber.v("onEnterScope: %s", scope);
     }

@@ -37,11 +37,13 @@ public class CanvassData implements Parcelable {
     return this;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.type);
   }
 

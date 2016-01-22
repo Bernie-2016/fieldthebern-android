@@ -37,11 +37,14 @@ import timber.log.Timber;
 
 public class MainView extends FrameLayout {
 
-  @Inject Main.Presenter presenter;
+  @Inject
+  Main.Presenter presenter;
 
-  @Bind(R.id.mainRecyclerView) RecyclerView recyclerView;
+  @Bind(R.id.mainRecyclerView)
+  RecyclerView recyclerView;
 
-  @Bind(R.id.progressWheel) ProgressBar progressWheel;
+  @Bind(R.id.progressWheel)
+  ProgressBar progressWheel;
 
   public MainView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -59,7 +62,8 @@ public class MainView extends FrameLayout {
     return (GridLayoutManager) recyclerView.getLayoutManager();
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     ButterKnife.bind(this, this);
     setLayoutManager(this.getContext());
@@ -68,12 +72,14 @@ public class MainView extends FrameLayout {
     Timber.v("onFinishInflate");
   }
 
-  @Override public void onAttachedToWindow() {
+  @Override
+  public void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     presenter.dropView(this);
     super.onDetachedFromWindow();
   }

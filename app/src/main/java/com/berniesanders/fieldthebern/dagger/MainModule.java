@@ -49,7 +49,9 @@ import javax.inject.Singleton;
 /**
  *
  */
-@Module @Singleton public class MainModule {
+@Module
+@Singleton
+public class MainModule {
   private final Context context;
   private final Gson gson;
   private final RxSharedPreferences rxPrefs;
@@ -71,59 +73,87 @@ import javax.inject.Singleton;
     config = new ConfigImpl(context);
   }
 
-  @Provides @Singleton public Gson provideGson() {
+  @Provides
+  @Singleton
+  public Gson provideGson() {
     return gson;
   }
 
-  @Provides @Singleton public Context provideContext() {
+  @Provides
+  @Singleton
+  public Context provideContext() {
     return context;
   }
 
-  @Provides @Singleton public CollectionRepo provideCollectionRepo() {
+  @Provides
+  @Singleton
+  public CollectionRepo provideCollectionRepo() {
     return new CollectionRepo(gson, context, config);
   }
 
-  @Provides @Singleton public TokenRepo provideTokenRepo() {
+  @Provides
+  @Singleton
+  public TokenRepo provideTokenRepo() {
     return new TokenRepo(this.gson, rxPrefs, config, context);
   }
 
-  @Provides @Singleton public UserRepo provideUserRepo(TokenRepo tokenRepo) {
+  @Provides
+  @Singleton
+  public UserRepo provideUserRepo(TokenRepo tokenRepo) {
     return new UserRepo(gson, tokenRepo, rxPrefs, config, context);
   }
 
-  @Provides @Singleton public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
+  @Provides
+  @Singleton
+  public AddressRepo provideAddressRepo(TokenRepo tokenRepo) {
     return new AddressRepo(gson, tokenRepo, rxPrefs, config, context);
   }
 
-  @Provides @Singleton public StatesRepo provideStatesRepo() {
+  @Provides
+  @Singleton
+  public StatesRepo provideStatesRepo() {
     return new StatesRepo(gson, context);
   }
 
-  @Provides @Singleton public RxSharedPreferences provideRxPrefs() {
+  @Provides
+  @Singleton
+  public RxSharedPreferences provideRxPrefs() {
     return rxPrefs;
   }
 
-  @Provides @Singleton public LocationManager provideLocationManager() {
+  @Provides
+  @Singleton
+  public LocationManager provideLocationManager() {
     return (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
   }
 
-  @Provides @Singleton public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
+  @Provides
+  @Singleton
+  public VisitRepo provideVisitRepo(TokenRepo tokenRepo) {
     return new VisitRepo(gson, tokenRepo, rxPrefs, config, context);
   }
 
-  @Provides @Singleton public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
+  @Provides
+  @Singleton
+  public RankingsRepo provideRankingsRepo(TokenRepo tokenRepo) {
     return new RankingsRepo(gson, tokenRepo, rxPrefs, config, context);
   }
 
-  @Provides @Singleton public FieldOfficeRepo provideFieldOfficeRepo(TokenRepo tokenRepo) {
+  @Provides
+  @Singleton
+  public FieldOfficeRepo provideFieldOfficeRepo(TokenRepo tokenRepo) {
     return new FieldOfficeRepo(gson, config, context);
   }
 
-  @Provides @Singleton public MessageScreen provideMessageScreen(FieldOfficeRepo fieldOfficeRepo) {
+  @Provides
+  @Singleton
+  public MessageScreen provideMessageScreen(FieldOfficeRepo fieldOfficeRepo) {
     return new MessageScreen(fieldOfficeRepo, rxPrefs);
   }
 
-  @Provides @Singleton public ErrorResponseParser provideErrorParser() {
+  @Provides
+  @Singleton
+  public ErrorResponseParser provideErrorParser() {
     return new ErrorResponseParser(gson);
   }
 }

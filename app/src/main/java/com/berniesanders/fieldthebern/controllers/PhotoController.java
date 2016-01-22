@@ -62,10 +62,12 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
   PhotoController() {
   }
 
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     //after this it is no longer safe to call getView()
     super.dropView(view);
   }
@@ -138,15 +140,19 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
   /**
    * required by mortar
    */
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
   /**
    */
-  @Module public static class PhotoModule {
+  @Module
+  public static class PhotoModule {
 
-    @Provides @Singleton PhotoController providePhotoontroller() {
+    @Provides
+    @Singleton
+    PhotoController providePhotoontroller() {
       return new PhotoController();
     }
   }

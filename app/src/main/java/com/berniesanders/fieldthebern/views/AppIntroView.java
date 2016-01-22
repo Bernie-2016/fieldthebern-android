@@ -39,12 +39,17 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class AppIntroView extends FrameLayout {
 
-  @Bind(R.id.viewpager) ViewPager viewPager;
-  @Bind(R.id.circleIndicator) CircleIndicator circleIndicator;
-  @Bind(R.id.doneButton) Button doneButton;
+  @Bind(R.id.viewpager)
+  ViewPager viewPager;
+  @Bind(R.id.circleIndicator)
+  CircleIndicator circleIndicator;
+  @Bind(R.id.doneButton)
+  Button doneButton;
 
-  @Inject AppIntroScreen.Presenter presenter;
-  @Inject RxSharedPreferences rxPrefs;
+  @Inject
+  AppIntroScreen.Presenter presenter;
+  @Inject
+  RxSharedPreferences rxPrefs;
 
   public AppIntroView(Context context) {
     super(context);
@@ -69,7 +74,8 @@ public class AppIntroView extends FrameLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     ButterKnife.bind(this, this);
     viewPager.setAdapter(new AppIntroPagerAdapter(getContext()));
@@ -81,30 +87,35 @@ public class AppIntroView extends FrameLayout {
 
       }
 
-      @Override public void onPageSelected(int position) {
+      @Override
+      public void onPageSelected(int position) {
         if (position == 4) {
           done();
         }
         doneButton.setText(position == 3 ? R.string.done : R.string.skip);
       }
 
-      @Override public void onPageScrollStateChanged(int state) {
+      @Override
+      public void onPageScrollStateChanged(int state) {
 
       }
     });
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }
 
-  @OnClick(R.id.doneButton) public void done() {
+  @OnClick(R.id.doneButton)
+  public void done() {
     Flow.get(this).setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
     rxPrefs.getBoolean(User.PREF_SEEN_APP_INTRO).set(true);
   }

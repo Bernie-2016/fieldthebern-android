@@ -124,7 +124,8 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
   ActionBarController() {
   }
 
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
     if (config != null) update();
   }
 
@@ -137,7 +138,8 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
     return config;
   }
 
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
@@ -193,9 +195,12 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
     return this;
   }
 
-  @Module public static class ActionBarModule {
+  @Module
+  public static class ActionBarModule {
 
-    @Provides @Singleton ActionBarController provideActionBarOwner() {
+    @Provides
+    @Singleton
+    ActionBarController provideActionBarOwner() {
       return new ActionBarController();
     }
   }

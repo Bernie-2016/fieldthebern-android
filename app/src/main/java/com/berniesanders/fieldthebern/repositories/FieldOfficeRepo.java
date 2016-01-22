@@ -17,7 +17,8 @@ public class FieldOfficeRepo {
   private final Context context;
   FieldOfficeList fieldOfficeList = new FieldOfficeList();
 
-  @Inject public FieldOfficeRepo(Gson gson, Config config, Context context) {
+  @Inject
+  public FieldOfficeRepo(Gson gson, Config config, Context context) {
     this.gson = gson;
     this.context = context;
   }

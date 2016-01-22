@@ -37,20 +37,24 @@ public class PageRecyclerAdapter extends MultiAdapter {
     this.items = page.getContent();
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return items.size();
   }
 
-  @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     return ViewHolderFactory.create(viewType, parent);
   }
 
-  @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+  @Override
+  public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     ((BaseViewHolder) holder).setModel(items.get(position));
     //((BaseViewHolder) holder).setItemClickListener(itemClickListener);
   }
 
-  @Override public int getItemViewType(final int position) {
+  @Override
+  public int getItemViewType(final int position) {
     Content item = items.get(position);
     Annotation annotation = item.getClass().getAnnotation(Layout.class);
     Layout layoutAnnotation = (Layout) annotation;

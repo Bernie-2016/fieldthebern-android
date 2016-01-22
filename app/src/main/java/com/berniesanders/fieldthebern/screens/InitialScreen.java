@@ -29,9 +29,11 @@ import javax.inject.Inject;
  */
 public class InitialScreen {
 
-  @Inject RxSharedPreferences rxPrefs;
+  @Inject
+  RxSharedPreferences rxPrefs;
 
-  @Inject Gson gson;
+  @Inject
+  Gson gson;
 
   /**
    * Quickly checks if the user is logged in and returns the screen to show the user.

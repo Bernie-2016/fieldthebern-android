@@ -45,14 +45,17 @@ import java.util.List;
  * +-page {obj}
  * +-content [array]
  */
-@Layout(R.layout.item_page) public class Page extends ApiItem implements Parcelable {
+@Layout(R.layout.item_page)
+public class Page extends ApiItem implements Parcelable {
   public static final String PAGE_PARCEL = "PageParcelKey";
 
   private int data;
   private String url;
   private List<Content> content;
-  @SerializedName("image_url_thumb") private String imageUrlThumb;
-  @SerializedName("image_url_full") private String imageUrlFull;
+  @SerializedName("image_url_thumb")
+  private String imageUrlThumb;
+  @SerializedName("image_url_full")
+  private String imageUrlFull;
 
   public List<Content> getContent() {
     return content;
@@ -67,11 +70,13 @@ import java.util.List;
     return imageUrlFull;
   }
 
-  @Override public String getImageUrlThumb() {
+  @Override
+  public String getImageUrlThumb() {
     return imageUrlThumb;
   }
 
-  @Override public String getTitle() {
+  @Override
+  public String getTitle() {
     return title;
   }
 
@@ -91,11 +96,13 @@ import java.util.List;
     this.content = contentList;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeInt(this.data);
     dest.writeString(this.url);
@@ -127,7 +134,8 @@ import java.util.List;
     }
   };
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "Page{" +
         "data id=" + data +
         ", title='" + title + '\'' +
@@ -135,7 +143,8 @@ import java.util.List;
         '}';
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Page)) return false;
 
@@ -152,7 +161,8 @@ import java.util.List;
         : page.imageUrlFull != null);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     int result = data;
     result = 31 * result + (title != null ? title.hashCode() : 0);
     result = 31 * result + (url != null ? url.hashCode() : 0);

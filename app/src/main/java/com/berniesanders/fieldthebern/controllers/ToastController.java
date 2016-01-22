@@ -71,21 +71,27 @@ public class ToastController extends Presenter<ToastController.Activity> {
     toast.show();
   }
 
-  @Override protected void onLoad(Bundle savedInstanceState) {
+  @Override
+  protected void onLoad(Bundle savedInstanceState) {
     super.onLoad(savedInstanceState);
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     super.dropView(view);
   }
 
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
-  @Module public static class ToastModule {
+  @Module
+  public static class ToastModule {
 
-    @Provides @Singleton ToastController provideToastController() {
+    @Provides
+    @Singleton
+    ToastController provideToastController() {
       return new ToastController();
     }
   }

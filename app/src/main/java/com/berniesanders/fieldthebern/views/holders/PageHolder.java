@@ -32,9 +32,11 @@ import com.squareup.picasso.Picasso;
  */
 public class PageHolder extends BaseViewHolder<Page> {
 
-  @Bind(R.id.img) ImageView imageView;
+  @Bind(R.id.img)
+  ImageView imageView;
 
-  @Bind(R.id.txt) TextView textView;
+  @Bind(R.id.txt)
+  TextView textView;
 
   PageHolder(View itemView) {
     super(itemView);
@@ -42,7 +44,8 @@ public class PageHolder extends BaseViewHolder<Page> {
     itemView.setOnClickListener(this);
   }
 
-  @Override public void setModel(final Page model) {
+  @Override
+  public void setModel(final Page model) {
     super.setModel(model);
 
     Picasso.with(imageView.getContext()).load(model.getImageUrlThumb()).into(imageView);

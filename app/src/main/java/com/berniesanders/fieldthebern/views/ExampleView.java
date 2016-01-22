@@ -34,7 +34,8 @@ public class ExampleView extends FrameLayout {
    * Make sure you are pointing at the correct presenter type
    * YourScreen.Presenter
    */
-  @Inject ExampleScreen.Presenter presenter;
+  @Inject
+  ExampleScreen.Presenter presenter;
 
   public ExampleView(Context context) {
     super(context);
@@ -63,7 +64,8 @@ public class ExampleView extends FrameLayout {
         .inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -71,12 +73,14 @@ public class ExampleView extends FrameLayout {
     //ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

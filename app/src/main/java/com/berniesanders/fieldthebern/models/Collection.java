@@ -45,14 +45,17 @@ import java.util.List;
  * +-page {obj}
  * +-content [array]
  */
-@Layout(R.layout.item_collection) public class Collection extends ApiItem implements Parcelable {
+@Layout(R.layout.item_collection)
+public class Collection extends ApiItem implements Parcelable {
   public static final String COLLECTION_PARCEL = "CollectionParcelKey";
 
   private String url;
 
-  @SerializedName("image_url_thumb") private String imageUrlThumb;
+  @SerializedName("image_url_thumb")
+  private String imageUrlThumb;
 
-  @SerializedName("image_url_full") private String imageUrlFull;
+  @SerializedName("image_url_full")
+  private String imageUrlFull;
   private List<ApiItem> items;
 
   public List<ApiItem> getApiItems() {
@@ -63,7 +66,8 @@ import java.util.List;
     return imageUrlFull;
   }
 
-  @Override public String getImageUrlThumb() {
+  @Override
+  public String getImageUrlThumb() {
     return imageUrlThumb;
   }
 
@@ -71,11 +75,13 @@ import java.util.List;
     return url;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeString(this.url);
     dest.writeString(this.imageUrlThumb);
@@ -106,7 +112,8 @@ import java.util.List;
         }
       };
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     //simple toString so we don't return the whole damn collection
     return "Collection{" +
         "title='" + title + '\'' +

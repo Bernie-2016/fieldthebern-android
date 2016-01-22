@@ -62,7 +62,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
   Relationships relationships = new Relationships();//if only life were so easy
   List<CanvassData> included = new ArrayList<>();
 
-  @NonNull public static ApiAddress from(@NonNull Address address, @Nullable String apartment) {
+  @NonNull
+  public static ApiAddress from(@NonNull Address address, @Nullable String apartment) {
 
     String city =
         address.getSubLocality() == null ? address.getSubAdminArea() : address.getSubLocality();
@@ -77,7 +78,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
             .longitude(address.getLongitude()));
   }
 
-  @NonNull public static Address to(@NonNull ApiAddress apiAddress) {
+  @NonNull
+  public static Address to(@NonNull ApiAddress apiAddress) {
 
     Address address = new Address(Locale.US);
     address.setAddressLine(0, apiAddress.attributes().street1());
@@ -91,8 +93,10 @@ public class ApiAddress extends CanvassData implements Parcelable {
   }
 
   public static class Relationships implements Parcelable {
-    @SerializedName("most_supportive_resident") Person mostSupportiveResident;
-    @SerializedName("last_visited_by") User lastVisitedBy;
+    @SerializedName("most_supportive_resident")
+    Person mostSupportiveResident;
+    @SerializedName("last_visited_by")
+    User lastVisitedBy;
 
     public Person mostSupportiveResident() {
       return this.mostSupportiveResident;
@@ -116,7 +120,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
       List<Person> data;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
@@ -130,17 +135,20 @@ public class ApiAddress extends CanvassData implements Parcelable {
           : that.lastVisitedBy != null);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
       int result = mostSupportiveResident != null ? mostSupportiveResident.hashCode() : 0;
       result = 31 * result + (lastVisitedBy != null ? lastVisitedBy.hashCode() : 0);
       return result;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
       return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
       dest.writeParcelable(this.mostSupportiveResident, flags);
       dest.writeParcelable(this.lastVisitedBy, flags);
     }
@@ -167,14 +175,21 @@ public class ApiAddress extends CanvassData implements Parcelable {
   public static class Attributes implements Parcelable {
     Double longitude;
     Double latitude;
-    @SerializedName("street_1") String street1;
-    @SerializedName("street_2") String street2;
+    @SerializedName("street_1")
+    String street1;
+    @SerializedName("street_2")
+    String street2;
     String city;
-    @SerializedName("state_code") String state;
-    @SerializedName("zip_code") String zip;
-    @SerializedName("visited_at") String visitedAt;
-    @SerializedName("best_canvass_response") String bestCanvassResponse;
-    @SerializedName("last_canvass_response") String lastCanvassResponse;
+    @SerializedName("state_code")
+    String state;
+    @SerializedName("zip_code")
+    String zip;
+    @SerializedName("visited_at")
+    String visitedAt;
+    @SerializedName("best_canvass_response")
+    String bestCanvassResponse;
+    @SerializedName("last_canvass_response")
+    String lastCanvassResponse;
 
     public Double longitude() {
       return this.longitude;
@@ -208,11 +223,13 @@ public class ApiAddress extends CanvassData implements Parcelable {
       return this.visitedAt;
     }
 
-    @CanvassResponse.Response public String bestCanvassResponse() {
+    @CanvassResponse.Response
+    public String bestCanvassResponse() {
       return this.bestCanvassResponse;
     }
 
-    @CanvassResponse.Response public String lastCanvassResponse() {
+    @CanvassResponse.Response
+    public String lastCanvassResponse() {
       return this.lastCanvassResponse;
     }
 
@@ -266,7 +283,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
       return this;
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
@@ -292,7 +310,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
           : that.lastCanvassResponse != null);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
       int result = longitude != null ? longitude.hashCode() : 0;
       result = 31 * result + (latitude != null ? latitude.hashCode() : 0);
       result = 31 * result + (street1 != null ? street1.hashCode() : 0);
@@ -306,11 +325,13 @@ public class ApiAddress extends CanvassData implements Parcelable {
       return result;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
       return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
       dest.writeValue(this.longitude);
       dest.writeValue(this.latitude);
       dest.writeString(this.street1);
@@ -359,11 +380,13 @@ public class ApiAddress extends CanvassData implements Parcelable {
     return this;
   }
 
-  @Override public String type() {
+  @Override
+  public String type() {
     return TYPE;
   }
 
-  @Override public ApiAddress type(String type) {
+  @Override
+  public ApiAddress type(String type) {
     this.type = type;
     return this;
   }
@@ -395,7 +418,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
     return this;
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
@@ -413,7 +437,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
     return !(included != null ? !included.equals(that.included) : that.included != null);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     int result = id != null ? id.hashCode() : 0;
     result = 31 * result + (type != null ? type.hashCode() : 0);
     result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
@@ -422,7 +447,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
     return result;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "ApiAddress{" +
         "id=" + id +
         ", type='" + type + '\'' +
@@ -432,11 +458,13 @@ public class ApiAddress extends CanvassData implements Parcelable {
         '}';
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeValue(this.id);
     dest.writeString(this.type);

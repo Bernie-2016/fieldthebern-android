@@ -45,11 +45,15 @@ public class RequestSingleAddress {
 
   Double latitude;
   Double longitude;
-  @SerializedName("street_1") String street1;
-  @SerializedName("street_2") String street2;
+  @SerializedName("street_1")
+  String street1;
+  @SerializedName("street_2")
+  String street2;
   String city;
-  @SerializedName("state_code") String state;
-  @SerializedName("zip_code") String zip;
+  @SerializedName("state_code")
+  String state;
+  @SerializedName("zip_code")
+  String zip;
 
   public RequestSingleAddress() {
   }
@@ -130,7 +134,8 @@ public class RequestSingleAddress {
     return this;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "RequestSingleAddress{" +
         "latitude=" + latitude +
         ", longitude=" + longitude +

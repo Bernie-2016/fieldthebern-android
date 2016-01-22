@@ -32,7 +32,8 @@ import timber.log.Timber;
  */
 public class CollectionView extends RecyclerView {
 
-  @Inject CollectionScreen.Presenter presenter;
+  @Inject
+  CollectionScreen.Presenter presenter;
 
   public CollectionView(Context context) {
     super(context);
@@ -63,17 +64,20 @@ public class CollectionView extends RecyclerView {
     setLayoutManager(gridLayoutManager);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     Timber.v("onFinishInflate");
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     presenter.dropView(this);
     super.onDetachedFromWindow();
   }

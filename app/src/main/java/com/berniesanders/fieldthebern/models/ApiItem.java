@@ -40,11 +40,13 @@ public class ApiItem implements Parcelable {
     return type;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.type);
     dest.writeString(this.title);
   }

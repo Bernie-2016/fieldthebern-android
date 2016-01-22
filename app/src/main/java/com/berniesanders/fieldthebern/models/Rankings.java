@@ -97,7 +97,8 @@ public class Rankings {
     String rank;
     int score;
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return "Attributes{" +
           "rank='" + rank + '\'' +
           ", score=" + score +
@@ -135,14 +136,16 @@ public class Rankings {
       return this;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return "Relationships{" +
           "user=" + user +
           '}';
     }
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "Rankings{" +
         "included=" + included +
         ", data=" + data +

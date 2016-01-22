@@ -36,7 +36,8 @@ public class NavigationView extends LinearLayout {
    * Make sure you are pointing at the correct presenter type
    * YourScreen.Presenter
    */
-  @Inject NavigationScreen.Presenter presenter;
+  @Inject
+  NavigationScreen.Presenter presenter;
 
   NavigationScreen.Component daggerComponent;
 
@@ -72,12 +73,14 @@ public class NavigationView extends LinearLayout {
         .build();
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     Timber.v("onFinishInflate");
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -85,7 +88,8 @@ public class NavigationView extends LinearLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

@@ -46,7 +46,8 @@ public class SquareRelativeLayout extends RelativeLayout {
     super(context, attrs, defStyleAttr, defStyleRes);
   }
 
-  @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     // Set a square layout.
     super.onMeasure(widthMeasureSpec, widthMeasureSpec);
   }

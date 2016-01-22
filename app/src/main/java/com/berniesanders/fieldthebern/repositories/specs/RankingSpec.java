@@ -33,7 +33,8 @@ public class RankingSpec {
   public static final String STATE = "state";
   public static final String FRIENDS = "friends";
 
-  @RankType private final String type;
+  @RankType
+  private final String type;
 
   /**
    * type: EVERYONE | STATE | FRIENDS
@@ -42,11 +43,13 @@ public class RankingSpec {
     this.type = type;
   }
 
-  @RankType public String type() {
+  @RankType
+  public String type() {
     return type;
   }
 
-  @StringDef({ EVERYONE, STATE, FRIENDS }) @Retention(RetentionPolicy.SOURCE)
+  @StringDef({ EVERYONE, STATE, FRIENDS })
+  @Retention(RetentionPolicy.SOURCE)
   public @interface RankType {
   }
 
@@ -55,6 +58,7 @@ public class RankingSpec {
    */
   public interface RankEndpoint {
 
-    @GET("rankings") Observable<Rankings> get(@Query("type") @RankType String type);
+    @GET("rankings")
+    Observable<Rankings> get(@Query("type") @RankType String type);
   }
 }

@@ -36,12 +36,17 @@ import me.relex.circleindicator.CircleIndicator;
 
 public class LearnView extends FrameLayout {
 
-  @Bind(R.id.viewpager) ViewPager viewPager;
-  @Bind(R.id.circleIndicator) CircleIndicator circleIndicator;
-  @Bind(R.id.doneButton) Button doneButton;
+  @Bind(R.id.viewpager)
+  ViewPager viewPager;
+  @Bind(R.id.circleIndicator)
+  CircleIndicator circleIndicator;
+  @Bind(R.id.doneButton)
+  Button doneButton;
 
-  @Inject LearnScreen.Presenter presenter;
-  @Inject RxSharedPreferences rxPrefs;
+  @Inject
+  LearnScreen.Presenter presenter;
+  @Inject
+  RxSharedPreferences rxPrefs;
 
   public LearnView(Context context) {
     super(context);
@@ -66,24 +71,28 @@ public class LearnView extends FrameLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     ButterKnife.bind(this, this);
     viewPager.setAdapter(new LearnPagerAdapter(getContext()));
     circleIndicator.setViewPager(viewPager);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }
 
-  @OnClick(R.id.doneButton) public void done() {
+  @OnClick(R.id.doneButton)
+  public void done() {
     Flow.get(this).goBack();
   }
 }

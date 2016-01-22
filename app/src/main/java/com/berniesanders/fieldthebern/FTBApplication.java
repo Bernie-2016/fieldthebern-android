@@ -39,7 +39,8 @@ public class FTBApplication extends MultiDexApplication {
   static MainComponent component;
   static Bus bus;
 
-  @Override public Object getSystemService(String name) {
+  @Override
+  public Object getSystemService(String name) {
     if (rootScope == null && component != null) {
       rootScope = MortarScope.buildRootScope()
           .withService(DaggerService.DAGGER_SERVICE, getComponent())
@@ -52,7 +53,8 @@ public class FTBApplication extends MultiDexApplication {
     return rootScope.hasService(name) ? rootScope.getService(name) : super.getSystemService(name);
   }
 
-  @Override public void onCreate() {
+  @Override
+  public void onCreate() {
     super.onCreate();
 
     if (BuildConfig.DEBUG) {

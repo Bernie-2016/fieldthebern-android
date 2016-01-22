@@ -44,21 +44,25 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
     this.items = parentCollection.getApiItems();
   }
 
-  @Override public int getItemCount() {
+  @Override
+  public int getItemCount() {
     return items.size();
   }
 
-  @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+  @Override
+  public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     BaseViewHolder holder = ViewHolderFactory.create(viewType, parent);
     return holder;
   }
 
-  @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+  @Override
+  public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     ((BaseViewHolder) holder).setModel(items.get(position));
     ((BaseViewHolder) holder).setItemClickListener(onGridItemClick);
   }
 
-  @Override public int getItemViewType(final int position) {
+  @Override
+  public int getItemViewType(final int position) {
     ApiItem item = items.get(position);
     Annotation annotation = item.getClass().getAnnotation(Layout.class);
     Layout layoutAnnotation = (Layout) annotation;
@@ -67,7 +71,8 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
 
   MultiAdapter.ClickListener onGridItemClick = new MultiAdapter.ClickListener() {
 
-    @Override public void onClick(Object model, View v) {
+    @Override
+    public void onClick(Object model, View v) {
       animateClick(v);
 
       ApiItem apiItem = (ApiItem) model;

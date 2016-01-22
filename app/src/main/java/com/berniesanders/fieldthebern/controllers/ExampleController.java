@@ -47,11 +47,13 @@ public class ExampleController extends Presenter<ExampleController.Activity> {
   ExampleController() {
   }
 
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
     //you can safely call getView() to get the activity here
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     //after this it is no longer safe to call getView()
     super.dropView(view);
   }
@@ -59,7 +61,8 @@ public class ExampleController extends Presenter<ExampleController.Activity> {
   /**
    * required by mortar
    */
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
@@ -69,9 +72,12 @@ public class ExampleController extends Presenter<ExampleController.Activity> {
    * Then you can add the "service" to access this presenter/controller
    * in MainActivity.initActivityScope()
    */
-  @Module public static class ExampleControllerModule {
+  @Module
+  public static class ExampleControllerModule {
 
-    @Provides @Singleton ExampleController provideTemplateController() {
+    @Provides
+    @Singleton
+    ExampleController provideTemplateController() {
       return new ExampleController();
     }
   }

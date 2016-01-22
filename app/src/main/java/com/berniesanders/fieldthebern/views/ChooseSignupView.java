@@ -31,7 +31,8 @@ public class ChooseSignupView extends RelativeLayout {
 
   /**
    */
-  @Inject ChooseSignupScreen.Presenter presenter;
+  @Inject
+  ChooseSignupScreen.Presenter presenter;
 
   public ChooseSignupView(Context context) {
     super(context);
@@ -58,7 +59,8 @@ public class ChooseSignupView extends RelativeLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -67,7 +69,8 @@ public class ChooseSignupView extends RelativeLayout {
     //ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -75,7 +78,8 @@ public class ChooseSignupView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

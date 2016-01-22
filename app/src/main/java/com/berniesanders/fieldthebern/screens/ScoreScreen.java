@@ -46,7 +46,8 @@ import timber.log.Timber;
  *
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
-@Layout(R.layout.screen_score) public class ScoreScreen extends FlowPathBase {
+@Layout(R.layout.screen_score)
+public class ScoreScreen extends FlowPathBase {
 
   private final VisitResult visitResult;
   private final Visit visit;
@@ -62,7 +63,8 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerScoreScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(visitResult, visit))
@@ -71,11 +73,13 @@ import timber.log.Timber;
 
   /**
    */
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return ScoreScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
 
     private final VisitResult visitResult;
     private final Visit visit;
@@ -85,18 +89,23 @@ import timber.log.Timber;
       this.visit = visit;
     }
 
-    @Provides @FtbScreenScope public VisitResult provideVisitResult() {
+    @Provides
+    @FtbScreenScope
+    public VisitResult provideVisitResult() {
       return visitResult;
     }
 
-    @Provides @FtbScreenScope public Visit provideVisit() {
+    @Provides
+    @FtbScreenScope
+    public Visit provideVisit() {
       return visit;
     }
   }
 
   /**
    */
-  @FtbScreenScope @dagger.Component(modules = Module.class, dependencies = MainComponent.class)
+  @FtbScreenScope
+  @dagger.Component(modules = Module.class, dependencies = MainComponent.class)
   public interface Component {
     void inject(ScoreView t);
 
@@ -105,25 +114,30 @@ import timber.log.Timber;
     Visit visit();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<ScoreView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<ScoreView> {
 
     private final VisitResult visitResult;
     private final Visit visit;
-    @BindString(R.string.score) String screenTitleString;
+    @BindString(R.string.score)
+    String screenTitleString;
 
-    @Inject Presenter(VisitResult visitResult, Visit visit) {
+    @Inject
+    Presenter(VisitResult visitResult, Visit visit) {
       this.visitResult = visitResult;
       this.visit = visit;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
 
       //let the gif load a bit
       getView().post(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           String firstName = null;
           try {
             // TODO This doesn't account for who the canvasser actually talked to,
@@ -152,17 +166,21 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(screenTitleString, null));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(ScoreView view) {
+    @Override
+    public void dropView(ScoreView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.back_to_map) public void backToMap() {
+    @OnClick(R.id.back_to_map)
+    public void backToMap() {
       getView().post(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           Flow.get(getView()).setHistory(History.single(new MapScreen()), Flow.Direction.BACKWARD);
         }
       });

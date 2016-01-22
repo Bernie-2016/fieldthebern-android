@@ -28,8 +28,10 @@ import javax.inject.Inject;
 
 public class AboutView extends ScrollView {
 
-  @Inject AboutScreen.Presenter presenter;
-  @Inject RxSharedPreferences rxPrefs;
+  @Inject
+  AboutScreen.Presenter presenter;
+  @Inject
+  RxSharedPreferences rxPrefs;
 
   public AboutView(Context context) {
     super(context);
@@ -54,18 +56,21 @@ public class AboutView extends ScrollView {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) return;
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

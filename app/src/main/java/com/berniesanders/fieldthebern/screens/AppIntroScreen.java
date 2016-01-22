@@ -30,23 +30,27 @@ import javax.inject.Inject;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
-@Layout(R.layout.app_intro) public class AppIntroScreen extends FlowPathBase {
+@Layout(R.layout.app_intro)
+public class AppIntroScreen extends FlowPathBase {
 
   public AppIntroScreen() {
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerAppIntroScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .appIntroModule(new AppIntroModule())
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return AppIntroScreen.class.getName();
   }
 
-  @dagger.Module class AppIntroModule {
+  @dagger.Module
+  class AppIntroModule {
 
     public AppIntroModule() {
     }
@@ -58,12 +62,15 @@ import timber.log.Timber;
     void inject(AppIntroView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<AppIntroView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<AppIntroView> {
 
-    @Inject Presenter() {
+    @Inject
+    Presenter() {
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       setActionBar();
     }
@@ -72,10 +79,12 @@ import timber.log.Timber;
       ActionBarService.get(getView()).hideToolbar().closeAppbar().lockDrawer();
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(AppIntroView view) {
+    @Override
+    public void dropView(AppIntroView view) {
       super.dropView(view);
     }
   }

@@ -54,7 +54,8 @@ import timber.log.Timber;
 /**
  * Profile Screen for updating user profiles
  */
-@Layout(R.layout.screen_profile) public class ProfileScreen extends FlowPathBase {
+@Layout(R.layout.screen_profile)
+public class ProfileScreen extends FlowPathBase {
 
   /**
    * Constructor called by Flow throughout the app
@@ -78,7 +79,8 @@ import timber.log.Timber;
    * Note:
    * Generally common types like "String" are not injected because injection works based on type
    */
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerProfileScreen_Component.builder()
         .mainComponent(
             FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
@@ -86,11 +88,13 @@ import timber.log.Timber;
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return ProfileScreen.class.getName();
   }
 
-  @dagger.Module class ProfileModule {
+  @dagger.Module
+  class ProfileModule {
 
     /**
      * pass variables to the component that will then be injected to the presenter
@@ -115,12 +119,14 @@ import timber.log.Timber;
     void inject(ProfileView t);
 
     // Expose UserRepo through injection
-    @SuppressWarnings("unused") UserRepo userRepo();
+    @SuppressWarnings("unused")
+    UserRepo userRepo();
 
     RankingsRepo rankingsRepo();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<ProfileView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<ProfileView> {
 
     /**
      * Since the presenter is static it should survive rotation
@@ -129,30 +135,42 @@ import timber.log.Timber;
 
     private final RankingsRepo rankingsRepo;
 
-    @BindString(R.string.profile) String screenTitle;
-    @BindString(R.string.invite_subject) String inviteSubject;
-    @BindString(R.string.invite_body) String inviteBody;
-    @BindString(R.string.invite_friends) String inviteFriends;
+    @BindString(R.string.profile)
+    String screenTitle;
+    @BindString(R.string.invite_subject)
+    String inviteSubject;
+    @BindString(R.string.invite_body)
+    String inviteBody;
+    @BindString(R.string.invite_friends)
+    String inviteFriends;
 
-    @Bind(R.id.full_name) TextView fullNameTextView;
+    @Bind(R.id.full_name)
+    TextView fullNameTextView;
 
-    @Bind(R.id.ranking_listview) ListView rankingsListView;
+    @Bind(R.id.ranking_listview)
+    ListView rankingsListView;
 
-    @Bind(R.id.ranking_listview2) ListView rankingsListView2;
+    @Bind(R.id.ranking_listview2)
+    ListView rankingsListView2;
 
-    @Bind(R.id.ranking_listview3) ListView rankingsListView3;
+    @Bind(R.id.ranking_listview3)
+    ListView rankingsListView3;
 
-    @Bind(R.id.point_count) TextView pointCountTextView;
+    @Bind(R.id.point_count)
+    TextView pointCountTextView;
 
-    @Bind(R.id.door_count) TextView doorCountTextView;
+    @Bind(R.id.door_count)
+    TextView doorCountTextView;
 
-    @Bind(R.id.avatar) ImageView avatar;
+    @Bind(R.id.avatar)
+    ImageView avatar;
 
     /**
      * When the view is inflated, this presented is automatically injected to the ProfileView
      * Constructor parameters here are injected automatically
      */
-    @Inject Presenter(UserRepo userRepo, RankingsRepo rankingRepo) {
+    @Inject
+    Presenter(UserRepo userRepo, RankingsRepo rankingRepo) {
       this.userRepo = userRepo;
       this.rankingsRepo = rankingRepo;
     }
@@ -164,7 +182,8 @@ import timber.log.Timber;
      * @param savedInstanceState This bundle is only passed on rotation not passed on navigating
      * back
      */
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       ActionBarService.get(getView())
@@ -200,7 +219,8 @@ import timber.log.Timber;
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<User>() {
-            @Override public void call(User user) {
+            @Override
+            public void call(User user) {
               String firstName = user.getData().attributes().getFirstName();
               String lastName = user.getData().attributes().getLastName();
               if (fullNameTextView != null) {
@@ -213,7 +233,8 @@ import timber.log.Timber;
               loadAvatar(user);
             }
           }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
               Timber.wtf(throwable, "rankings failed");
             }
           });
@@ -222,7 +243,8 @@ import timber.log.Timber;
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<Rankings>() {
-            @Override public void call(Rankings rankings) {
+            @Override
+            public void call(Rankings rankings) {
               ProfileView view1 = getView();
               if (rankings != null && view1 != null) {
                 rankingsListView.setAdapter(
@@ -230,7 +252,8 @@ import timber.log.Timber;
               }
             }
           }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
               Timber.wtf(throwable, "rankings failed");
             }
           });
@@ -239,7 +262,8 @@ import timber.log.Timber;
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<Rankings>() {
-            @Override public void call(Rankings rankings) {
+            @Override
+            public void call(Rankings rankings) {
               ProfileView view1 = getView();
               if (rankings != null && view1 != null) {
                 rankingsListView2.setAdapter(
@@ -247,7 +271,8 @@ import timber.log.Timber;
               }
             }
           }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
               Timber.wtf(throwable, "rankings failed");
             }
           });
@@ -256,7 +281,8 @@ import timber.log.Timber;
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
           .subscribe(new Action1<Rankings>() {
-            @Override public void call(Rankings rankings) {
+            @Override
+            public void call(Rankings rankings) {
               ProfileView view1 = getView();
               if (rankings != null && view1 != null) {
                 rankingsListView3.setAdapter(
@@ -264,7 +290,8 @@ import timber.log.Timber;
               }
             }
           }, new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
               Timber.wtf(throwable, "rankings failed");
             }
           });
@@ -282,7 +309,8 @@ import timber.log.Timber;
     /**
      * Called on rotation only
      */
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
     /**
@@ -292,16 +320,19 @@ import timber.log.Timber;
      * <p/>
      * ((ProfileView)Path.get(view.getContext())).somePublicField = "Something you want to save"
      */
-    @Override public void dropView(ProfileView view) {
+    @Override
+    public void dropView(ProfileView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnClick({ R.id.submit_profile_settings, R.id.avatar }) void onEditProfileClicked() {
+    @OnClick({ R.id.submit_profile_settings, R.id.avatar })
+    void onEditProfileClicked() {
       Flow.get(getView()).set(new ProfileEditScreen());
     }
 
-    @OnClick(R.id.fab) void invite() {
+    @OnClick(R.id.fab)
+    void invite() {
       Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, inviteSubject);
       emailIntent.putExtra(Intent.EXTRA_TEXT, inviteBody);

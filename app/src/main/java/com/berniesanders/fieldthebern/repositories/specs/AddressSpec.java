@@ -58,14 +58,14 @@ public class AddressSpec {
    */
   public interface AddressEndpoint {
 
-    @GET("addresses") Observable<MultiAddressResponse> getMultiple(
-        @Query("latitude") Double latitude, @Query("longitude") Double longitude,
-        @Query("radius") Integer radius);
+    @GET("addresses")
+    Observable<MultiAddressResponse> getMultiple(@Query("latitude") Double latitude,
+        @Query("longitude") Double longitude, @Query("radius") Integer radius);
 
-    @GET("addresses") Observable<SingleAddressResponse> getSingle(
-        @Query("latitude") Double latitude, @Query("longitude") Double longitude,
-        @Query("street_1") String street1, @Query("street_2") String street2,
-        @Query("city") String city, @Query("state_code") String state,
-        @Query("zip_code") String zip);
+    @GET("addresses")
+    Observable<SingleAddressResponse> getSingle(@Query("latitude") Double latitude,
+        @Query("longitude") Double longitude, @Query("street_1") String street1,
+        @Query("street_2") String street2, @Query("city") String city,
+        @Query("state_code") String state, @Query("zip_code") String zip);
   }
 }

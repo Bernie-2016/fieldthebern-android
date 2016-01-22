@@ -30,7 +30,8 @@ import timber.log.Timber;
 
 /**
  */
-@Layout(R.layout.screen_early_state) public class EarlyStateScreen extends FlowPathBase {
+@Layout(R.layout.screen_early_state)
+public class EarlyStateScreen extends FlowPathBase {
 
   private final EarlyState earlyState;
 
@@ -38,18 +39,21 @@ import timber.log.Timber;
     this.earlyState = earlyState;
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerEarlyStateScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .module(new Module(earlyState))
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return EarlyStateScreen.class.getName();
   }
 
-  @dagger.Module class Module {
+  @dagger.Module
+  class Module {
 
     private final EarlyState earlyState;
 
@@ -57,37 +61,48 @@ import timber.log.Timber;
       this.earlyState = earlyState;
     }
 
-    @Provides @FtbScreenScope EarlyState provideEarlyState() {
+    @Provides
+    @FtbScreenScope
+    EarlyState provideEarlyState() {
       return earlyState;
     }
   }
 
-  @FtbScreenScope @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
+  @FtbScreenScope
+  @dagger.Component(dependencies = MainComponent.class, modules = Module.class)
   public interface Component {
     void inject(EarlyStateView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<EarlyStateView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<EarlyStateView> {
 
     private final EarlyState earlyState;
     private final RxSharedPreferences rxPrefs;
 
-    @Bind(R.id.field_office_container) View fieldOfficeContainer;
+    @Bind(R.id.field_office_container)
+    View fieldOfficeContainer;
 
-    @Bind(R.id.phonebank_container) View phonebankContainer;
+    @Bind(R.id.phonebank_container)
+    View phonebankContainer;
 
-    @Bind(R.id.field_office_address) TextView address;
+    @Bind(R.id.field_office_address)
+    TextView address;
 
-    @Bind(R.id.call) AppCompatButton callButton;
+    @Bind(R.id.call)
+    AppCompatButton callButton;
 
-    @Bind(R.id.map) AppCompatButton mapButton;
+    @Bind(R.id.map)
+    AppCompatButton mapButton;
 
-    @Inject Presenter(EarlyState earlyState, RxSharedPreferences rxPrefs) {
+    @Inject
+    Presenter(EarlyState earlyState, RxSharedPreferences rxPrefs) {
       this.earlyState = earlyState;
       this.rxPrefs = rxPrefs;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -111,22 +126,26 @@ import timber.log.Timber;
       ActionBarService.get(getView()).hideToolbar();
     }
 
-    @Override public void dropView(EarlyStateView view) {
+    @Override
+    public void dropView(EarlyStateView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.continueButton) void onContinueClick() {
+    @OnClick(R.id.continueButton)
+    void onContinueClick() {
       Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
     }
 
-    @OnClick(R.id.call) void onCallClick() {
+    @OnClick(R.id.call)
+    void onCallClick() {
       Intent intent = new Intent(Intent.ACTION_DIAL);
       intent.setData(Uri.parse("tel:" + earlyState.fieldOffice().phone()));
       getView().getContext().startActivity(intent);
     }
 
-    @OnClick(R.id.map) void onMapClick() {
+    @OnClick(R.id.map)
+    void onMapClick() {
       Uri gmmIntentUri = Uri.parse("geo:"
           + earlyState.fieldOffice().lat()
           + ","
@@ -140,7 +159,8 @@ import timber.log.Timber;
       }
     }
 
-    @OnCheckedChanged(R.id.dont_show_again) void onDontShowAgainChecked(boolean checked) {
+    @OnCheckedChanged(R.id.dont_show_again)
+    void onDontShowAgainChecked(boolean checked) {
 
       if (earlyState.type().equals(EarlyState.FIELD_OFFICE)) {
         rxPrefs.getBoolean(EarlyState.PREF_SHOW_FIELD_OFFICE, true).set(!checked);

@@ -33,41 +33,50 @@ import javax.inject.Inject;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
-@Layout(R.layout.screen_learn) public class LearnScreen extends FlowPathBase {
+@Layout(R.layout.screen_learn)
+public class LearnScreen extends FlowPathBase {
 
   public LearnScreen() {
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerLearnScreen_Component.builder()
         .mainComponent(FTBApplication.getComponent())
         .learnModule(new LearnModule())
         .build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return LearnScreen.class.getName();
   }
 
-  @dagger.Module class LearnModule {
+  @dagger.Module
+  class LearnModule {
 
     public LearnModule() {
     }
   }
 
-  @FtbScreenScope @dagger.Component(modules = LearnModule.class, dependencies = MainComponent.class)
+  @FtbScreenScope
+  @dagger.Component(modules = LearnModule.class, dependencies = MainComponent.class)
   public interface Component {
     void inject(LearnView t);
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<LearnView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<LearnView> {
 
-    @BindString(R.string.learn_screen_title) String screenTitleString;
+    @BindString(R.string.learn_screen_title)
+    String screenTitleString;
 
-    @Inject Presenter() {
+    @Inject
+    Presenter() {
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
       ButterKnife.bind(this, getView());
       setActionBar();
@@ -80,10 +89,12 @@ import timber.log.Timber;
           .setConfig(new ActionBarController.Config(screenTitleString, null));
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @Override public void dropView(LearnView view) {
+    @Override
+    public void dropView(LearnView view) {
       super.dropView(view);
       ButterKnife.unbind(this);
     }

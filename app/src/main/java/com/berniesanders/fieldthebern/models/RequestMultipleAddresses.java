@@ -59,7 +59,8 @@ public class RequestMultipleAddresses {
     return this;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "RequestMultipleAddresses{" +
         "latitude=" + latitude +
         ", longitude=" + longitude +

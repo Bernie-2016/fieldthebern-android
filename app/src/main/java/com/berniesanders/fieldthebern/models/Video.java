@@ -25,12 +25,14 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 /**
  *
  */
-@Layout(R.layout.row_video) public class Video extends Content implements Parcelable {
+@Layout(R.layout.row_video)
+public class Video extends Content implements Parcelable {
 
   private String src;
   private String id;
 
-  @Override public String getText() {
+  @Override
+  public String getText() {
     return src;
   }
 
@@ -46,11 +48,13 @@ import com.berniesanders.fieldthebern.annotations.Layout;
     this.id = id;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeString(this.src);
     dest.writeString(this.id);
@@ -75,7 +79,8 @@ import com.berniesanders.fieldthebern.annotations.Layout;
     }
   };
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "Video{" +
         "src='" + src + '\'' +
         "id='" + id + '\'' +

@@ -34,8 +34,8 @@ public class CanvassResponseEvaluator {
    *
    * TODO better way to do this?!
    */
-  @CanvassResponse.Response public static String getResponse(String selectedItem,
-      String[] interest) {
+  @CanvassResponse.Response
+  public static String getResponse(String selectedItem, String[] interest) {
     if (selectedItem.equals(interest[0])) {
       Timber.e("CanvassResponseEvaluator.getResponse() called but selection is not valid");
       return CanvassResponse.UNKNOWN;

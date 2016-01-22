@@ -35,7 +35,8 @@ public class ErrorViewHolder extends BaseViewHolder<Content> {
     textView = (TextView) itemView.findViewById(R.id.text);
   }
 
-  @Override public void setModel(final Content model) {
+  @Override
+  public void setModel(final Content model) {
     super.setModel(model);
     textView.setText(model.getText());
   }

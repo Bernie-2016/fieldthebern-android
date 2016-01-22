@@ -47,14 +47,19 @@ public class ScoreView extends RelativeLayout {
 
   /**
    */
-  @Inject ScoreScreen.Presenter presenter;
+  @Inject
+  ScoreScreen.Presenter presenter;
 
-  @Bind(R.id.points_container) ViewGroup pointsContainer;
+  @Bind(R.id.points_container)
+  ViewGroup pointsContainer;
 
-  @Bind(R.id.for_knocking) TextView forKnocking;
-  @Bind(R.id.for_updating) TextView forUpdating;
+  @Bind(R.id.for_knocking)
+  TextView forKnocking;
+  @Bind(R.id.for_updating)
+  TextView forUpdating;
 
-  @Bind(R.id.points_label) TextView pointsLabel;
+  @Bind(R.id.points_label)
+  TextView pointsLabel;
 
   public ScoreView(Context context) {
     super(context);
@@ -81,7 +86,8 @@ public class ScoreView extends RelativeLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -90,7 +96,8 @@ public class ScoreView extends RelativeLayout {
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     if (isInEditMode()) {
       return;
@@ -98,12 +105,14 @@ public class ScoreView extends RelativeLayout {
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }
 
-  @OnClick(R.id.back_to_map) public void score() {
+  @OnClick(R.id.back_to_map)
+  public void score() {
     Flow.get(this).setHistory(History.single(new MapScreen()), Flow.Direction.REPLACE);
   }
 
@@ -119,7 +128,8 @@ public class ScoreView extends RelativeLayout {
     ValueAnimator valueAnimator = ValueAnimator.ofInt(values).setDuration(1000);
     valueAnimator.setInterpolator(new DecelerateInterpolator());
     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override public void onAnimationUpdate(ValueAnimator animation) {
+      @Override
+      public void onAnimationUpdate(ValueAnimator animation) {
         TextView pointstextView1 = (TextView) LayoutInflater.from(getContext())
             .inflate(R.layout.points, pointsContainer, false);
         int val = (int) animation.getAnimatedValue();

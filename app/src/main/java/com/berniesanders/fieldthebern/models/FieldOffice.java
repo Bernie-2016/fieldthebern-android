@@ -111,7 +111,8 @@ public class FieldOffice {
     return this;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "FieldOffice{" +
         "state='" + state + '\'' +
         ", address='" + address + '\'' +

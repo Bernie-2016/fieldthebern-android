@@ -52,7 +52,8 @@ public class SearchMatrixCursor extends MatrixCursor {
   Subscription subscription;
   public static Set<ApiItem> allItems;
 
-  @Inject CollectionRepo repo;
+  @Inject
+  CollectionRepo repo;
   private String query;
 
   public SearchMatrixCursor() {
@@ -151,15 +152,18 @@ public class SearchMatrixCursor extends MatrixCursor {
   }
 
   Observer<Collection> observer = new Observer<Collection>() {
-    @Override public void onCompleted() {
+    @Override
+    public void onCompleted() {
       parsePageList(SearchMatrixCursor.this.query);
     }
 
-    @Override public void onError(Throwable e) {
+    @Override
+    public void onError(Throwable e) {
       Timber.e(e, "onError in observer/rx");
     }
 
-    @Override public void onNext(Collection col) {
+    @Override
+    public void onNext(Collection col) {
       collection = col;
       Timber.v("... repo returned the collection");
     }

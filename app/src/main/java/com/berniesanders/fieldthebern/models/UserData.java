@@ -32,11 +32,13 @@ public class UserData extends CanvassData implements Parcelable {
   UserAttributes attributes = new UserAttributes();
   UserRelationships relationships;
 
-  @Override public String type() {
+  @Override
+  public String type() {
     return TYPE;
   }
 
-  @Override public CanvassData type(String type) {
+  @Override
+  public CanvassData type(String type) {
     this.type = type;
     return this;
   }
@@ -45,7 +47,8 @@ public class UserData extends CanvassData implements Parcelable {
     return this.id;
   }
 
-  @NonNull public UserAttributes attributes() {
+  @NonNull
+  public UserAttributes attributes() {
     return attributes;
   }
 
@@ -68,7 +71,8 @@ public class UserData extends CanvassData implements Parcelable {
     return this;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "UserData{" +
         "type='" + type + '\'' +
         ", id=" + id +
@@ -77,7 +81,8 @@ public class UserData extends CanvassData implements Parcelable {
         '}';
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
@@ -93,7 +98,8 @@ public class UserData extends CanvassData implements Parcelable {
         : userData.relationships != null);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     int result = type != null ? type.hashCode() : 0;
     result = 31 * result + (id != null ? id.hashCode() : 0);
     result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
@@ -101,11 +107,13 @@ public class UserData extends CanvassData implements Parcelable {
     return result;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeString(this.type);
     dest.writeValue(this.id);

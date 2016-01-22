@@ -61,7 +61,8 @@ public class Person extends CanvassData implements Parcelable {
     return this.id;
   }
 
-  @Override public String type() {
+  @Override
+  public String type() {
     return TYPE;
   }
 
@@ -74,7 +75,8 @@ public class Person extends CanvassData implements Parcelable {
     return this;
   }
 
-  @Override public Person type(final String type) {
+  @Override
+  public Person type(final String type) {
     this.type = type;
     return this;
   }
@@ -132,14 +134,20 @@ public class Person extends CanvassData implements Parcelable {
 
   public static class Attributes implements Parcelable {
 
-    @SerializedName("first_name") String firstName;
-    @SerializedName("last_name") String lastName;
+    @SerializedName("first_name")
+    String firstName;
+    @SerializedName("last_name")
+    String lastName;
     String email;
     String phone;
-    @SerializedName("preferred_contact_method") String preferredContact;
-    @SerializedName("previously_participated_in_caucus_or_primary") boolean previouslyParticipated;
-    @SerializedName("party_affiliation") String party;
-    @SerializedName("canvass_response") String canvassResponse;
+    @SerializedName("preferred_contact_method")
+    String preferredContact;
+    @SerializedName("previously_participated_in_caucus_or_primary")
+    boolean previouslyParticipated;
+    @SerializedName("party_affiliation")
+    String party;
+    @SerializedName("canvass_response")
+    String canvassResponse;
 
     public String firstName() {
       return this.firstName;
@@ -157,7 +165,8 @@ public class Person extends CanvassData implements Parcelable {
       return this.phone;
     }
 
-    @Contact.Method public String preferredContact() {
+    @Contact.Method
+    public String preferredContact() {
       return this.preferredContact;
     }
 
@@ -165,11 +174,13 @@ public class Person extends CanvassData implements Parcelable {
       return this.previouslyParticipated;
     }
 
-    @Party.Affiliation public String party() {
+    @Party.Affiliation
+    public String party() {
       return this.party;
     }
 
-    @CanvassResponse.Response public String canvassResponse() {
+    @CanvassResponse.Response
+    public String canvassResponse() {
       return this.canvassResponse;
     }
 
@@ -213,7 +224,8 @@ public class Person extends CanvassData implements Parcelable {
       return this;
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return "Attributes{" +
           "firstName='" + firstName + '\'' +
           ", lastName='" + lastName + '\'' +
@@ -226,7 +238,8 @@ public class Person extends CanvassData implements Parcelable {
           '}';
     }
 
-    @Override public boolean equals(Object o) {
+    @Override
+    public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
 
@@ -248,7 +261,8 @@ public class Person extends CanvassData implements Parcelable {
           : that.canvassResponse != null);
     }
 
-    @Override public int hashCode() {
+    @Override
+    public int hashCode() {
       int result = firstName != null ? firstName.hashCode() : 0;
       result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
       result = 31 * result + (email != null ? email.hashCode() : 0);
@@ -260,11 +274,13 @@ public class Person extends CanvassData implements Parcelable {
       return result;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
       return 0;
     }
 
-    @Override public void writeToParcel(Parcel dest, int flags) {
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
       dest.writeString(this.firstName);
       dest.writeString(this.lastName);
       dest.writeString(this.email);
@@ -300,7 +316,8 @@ public class Person extends CanvassData implements Parcelable {
     };
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "Person{" +
         "id=" + id +
         ", type='" + type + '\'' +
@@ -308,7 +325,8 @@ public class Person extends CanvassData implements Parcelable {
         '}';
   }
 
-  @Override public boolean equals(Object o) {
+  @Override
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
@@ -320,18 +338,21 @@ public class Person extends CanvassData implements Parcelable {
         : person.attributes != null);
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     int result = id != null ? id.hashCode() : 0;
     result = 31 * result + (type != null ? type.hashCode() : 0);
     result = 31 * result + (attributes != null ? attributes.hashCode() : 0);
     return result;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     super.writeToParcel(dest, flags);
     dest.writeValue(this.id);
     dest.writeString(this.type);

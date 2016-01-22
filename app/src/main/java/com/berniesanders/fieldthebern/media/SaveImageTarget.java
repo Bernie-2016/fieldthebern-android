@@ -51,7 +51,8 @@ public class SaveImageTarget implements Target {
    * <p/>
    * <strong>Note:</strong> You must not recycle the bitmap.
    */
-  @Override public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+  @Override
+  public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
     Timber.v("onBitmapLoaded %s", from.toString());
 
     String encodedString = base64EncodeBitmap(bitmap, context);
@@ -99,7 +100,8 @@ public class SaveImageTarget implements Target {
    * specified via {@link com.squareup.picasso.RequestCreator#error(Drawable)}
    * or {@link com.squareup.picasso.RequestCreator#error(int)}.
    */
-  @Override public void onBitmapFailed(Drawable errorDrawable) {
+  @Override
+  public void onBitmapFailed(Drawable errorDrawable) {
     Timber.w("onBitmapFailed");
   }
 
@@ -110,7 +112,8 @@ public class SaveImageTarget implements Target {
    * specified via {@link com.squareup.picasso.RequestCreator#placeholder(Drawable)}
    * or {@link com.squareup.picasso.RequestCreator#placeholder(int)}.
    */
-  @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+  @Override
+  public void onPrepareLoad(Drawable placeHolderDrawable) {
 
   }
 }

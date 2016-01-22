@@ -35,14 +35,16 @@ import static com.berniesanders.fieldthebern.parsing.Linky.linkify;
  */
 public class LinkableTextHolder<M extends Linkable> extends BaseViewHolder<M> {
 
-  @Bind(R.id.text) TextView textView;
+  @Bind(R.id.text)
+  TextView textView;
 
   LinkableTextHolder(View itemView) {
     super(itemView);
     ButterKnife.bind(this, itemView);
   }
 
-  @Override public void setModel(final M model) {
+  @Override
+  public void setModel(final M model) {
     super.setModel(model);
     setText(model);
   }

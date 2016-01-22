@@ -34,7 +34,8 @@ public class ApiAuthenticator implements Authenticator {
     this.tokenRepo = tokenRepo;
   }
 
-  @Override public Request authenticate(Route route, Response response) throws IOException {
+  @Override
+  public Request authenticate(Route route, Response response) throws IOException {
     //      System.out.println("Authenticating for response: " + response);
     //      System.out.println("Challenges: " + response.challenges());
 

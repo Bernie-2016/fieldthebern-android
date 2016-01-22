@@ -31,12 +31,14 @@ import rx.Subscriber;
 /**
  *
  */
-@Singleton public class StatesRepo {
+@Singleton
+public class StatesRepo {
 
   final Gson gson;
   private final Context context;
 
-  @Inject public StatesRepo(Gson gson, Context context) {
+  @Inject
+  public StatesRepo(Gson gson, Context context) {
     this.gson = gson;
     this.context = context;
   }

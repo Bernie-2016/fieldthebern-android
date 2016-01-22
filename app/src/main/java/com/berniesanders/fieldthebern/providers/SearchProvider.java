@@ -59,11 +59,13 @@ public class SearchProvider extends ContentProvider {
     return matcher;
   }
 
-  @Override public boolean onCreate() {
+  @Override
+  public boolean onCreate() {
     return true;
   }
 
-  @Override public String getType(Uri uri) {
+  @Override
+  public String getType(Uri uri) {
     return null;
   }
 
@@ -95,7 +97,8 @@ public class SearchProvider extends ContentProvider {
   // Unsupported operations
   //------------------------------------------------------------
 
-  @Override public Uri insert(Uri uri, ContentValues values) {
+  @Override
+  public Uri insert(Uri uri, ContentValues values) {
     throw new UnsupportedOperationException();
   }
 
@@ -104,7 +107,8 @@ public class SearchProvider extends ContentProvider {
     throw new UnsupportedOperationException();
   }
 
-  @Override public int delete(Uri uri, String selection, String[] selectionArgs) {
+  @Override
+  public int delete(Uri uri, String selection, String[] selectionArgs) {
     throw new UnsupportedOperationException();
   }
 }

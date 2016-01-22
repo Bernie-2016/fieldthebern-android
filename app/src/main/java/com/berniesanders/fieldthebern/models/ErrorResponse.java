@@ -43,7 +43,8 @@ public class ErrorResponse {
     public String detail;
     public int status;
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
       return title + " " + detail;
     }
   }

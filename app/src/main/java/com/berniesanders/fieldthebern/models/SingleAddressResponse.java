@@ -35,10 +35,12 @@ import java.util.List;
  */
 public class SingleAddressResponse {
 
-  @SerializedName("data") List<ApiAddress> addresses;
+  @SerializedName("data")
+  List<ApiAddress> addresses;
 
   //I guess this is a list in case multiple users hav visited the house
-  @SerializedName("included") List<CanvassData> included;
+  @SerializedName("included")
+  List<CanvassData> included;
 
   public List<ApiAddress> addresses() {
     return this.addresses;

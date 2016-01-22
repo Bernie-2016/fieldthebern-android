@@ -34,7 +34,8 @@ public final class Utils {
     }
 
     view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-      @Override public boolean onPreDraw() {
+      @Override
+      public boolean onPreDraw() {
         final ViewTreeObserver observer = view.getViewTreeObserver();
         if (observer.isAlive()) {
           observer.removeOnPreDrawListener(this);

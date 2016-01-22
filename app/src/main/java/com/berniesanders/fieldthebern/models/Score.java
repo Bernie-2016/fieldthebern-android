@@ -78,9 +78,11 @@ public class Score {
 
   public static class Attributes {
 
-    @SerializedName("points_for_updates") int pointsForUpdates;
+    @SerializedName("points_for_updates")
+    int pointsForUpdates;
 
-    @SerializedName("points_for_knock") int pointsForKnock;
+    @SerializedName("points_for_knock")
+    int pointsForKnock;
 
     public int pointsForUpdates() {
       return this.pointsForUpdates;

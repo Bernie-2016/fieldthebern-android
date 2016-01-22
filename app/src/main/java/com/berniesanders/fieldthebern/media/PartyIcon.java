@@ -24,7 +24,8 @@ import timber.log.Timber;
 
 public class PartyIcon {
 
-  @DrawableRes public static int get(@Party.Affiliation String party) {
+  @DrawableRes
+  public static int get(@Party.Affiliation String party) {
 
     switch (party) {
       case Party.DEMOCRAT:

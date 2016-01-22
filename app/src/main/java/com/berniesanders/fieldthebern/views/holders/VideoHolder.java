@@ -44,12 +44,14 @@ public class VideoHolder extends BaseViewHolder<Video> {
   //@Bind(R.id.text)
   //TextView textView;
 
-  @Bind(R.id.youtubethumbnailview) YouTubeThumbnailView thumbnail;
+  @Bind(R.id.youtubethumbnailview)
+  YouTubeThumbnailView thumbnail;
 
   VideoContainerView videoContainer;
   YouTubeThumbnailLoader loader;
 
-  @Bind(R.id.play_arrow_icon) ImageView playIcon;
+  @Bind(R.id.play_arrow_icon)
+  ImageView playIcon;
 
   ViewGroup.LayoutParams layoutParams;
 
@@ -60,7 +62,8 @@ public class VideoHolder extends BaseViewHolder<Video> {
     layoutParams = thumbnail.getLayoutParams();
   }
 
-  @Override public void setModel(final Video model) {
+  @Override
+  public void setModel(final Video model) {
     super.setModel(model);
     removeTextView();
     playIcon.setVisibility(View.INVISIBLE);
@@ -99,7 +102,8 @@ public class VideoHolder extends BaseViewHolder<Video> {
       videoContainer.addView(thumbnailView, 0);
       thumbnailView.initialize(thumbnail.getContext().getString(R.string.googleApiKey),
           new YouTubeThumbnailView.OnInitializedListener() {
-            @Override public void onInitializationSuccess(YouTubeThumbnailView view,
+            @Override
+            public void onInitializationSuccess(YouTubeThumbnailView view,
                 YouTubeThumbnailLoader loader) {
               Timber.v("onInitializationSuccess");
               loader.setOnThumbnailLoadedListener(thumbnailLoadedListener);
@@ -107,14 +111,16 @@ public class VideoHolder extends BaseViewHolder<Video> {
               loader.setVideo(model.getId());
             }
 
-            @Override public void onInitializationFailure(YouTubeThumbnailView view,
+            @Override
+            public void onInitializationFailure(YouTubeThumbnailView view,
                 YouTubeInitializationResult result) {
               Timber.e("onInitializationFailure: %s", result.toString());
             }
           });
 
       thumbnailView.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
+        @Override
+        public void onClick(View v) {
           Intent intent = YouTubeIntents.createPlayVideoIntent(v.getContext(), model.getId());
           v.getContext().startActivity(intent);
         }
@@ -136,7 +142,8 @@ public class VideoHolder extends BaseViewHolder<Video> {
   }
 
   VideoContainerView.OnDetachListener onDetachListener = new VideoContainerView.OnDetachListener() {
-    @Override public void onDetach(VideoContainerView videoContainerView) {
+    @Override
+    public void onDetach(VideoContainerView videoContainerView) {
       if (loader != null) {
         loader.release();
       }
@@ -161,7 +168,8 @@ public class VideoHolder extends BaseViewHolder<Video> {
           playIcon.setVisibility(View.VISIBLE);
         }
 
-        @Override public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView,
+        @Override
+        public void onThumbnailError(YouTubeThumbnailView youTubeThumbnailView,
             YouTubeThumbnailLoader.ErrorReason errorReason) {
           Timber.e("Youtube thumbnail loader error %s", errorReason.toString());
         }

@@ -40,7 +40,8 @@ public class VideoContainerView extends FrameLayout {
     super(context, attrs, defStyleAttr);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     if (onDetachListener != null) {
       onDetachListener.onDetach(this);

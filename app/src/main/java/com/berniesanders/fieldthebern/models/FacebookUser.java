@@ -56,8 +56,10 @@ import java.util.List;
 public class FacebookUser {
 
   String id;
-  @SerializedName("first_name") String firstName;
-  @SerializedName("last_name") String lastName;
+  @SerializedName("first_name")
+  String firstName;
+  @SerializedName("last_name")
+  String lastName;
   String email;
   Friends friends;
   Picture picture;
@@ -72,16 +74,19 @@ public class FacebookUser {
   }
 
   public static class Friends {
-    @SerializedName("data") List<FacebookFriend> facebookFriends;
+    @SerializedName("data")
+    List<FacebookFriend> facebookFriends;
     Paging paging;
     Summary summary;
 
     public static class Paging {
-      @SerializedName("next") String nextPageUrl;
+      @SerializedName("next")
+      String nextPageUrl;
     }
 
     public static class Summary {
-      @SerializedName("total_count") int totalCount;
+      @SerializedName("total_count")
+      int totalCount;
     }
   }
 

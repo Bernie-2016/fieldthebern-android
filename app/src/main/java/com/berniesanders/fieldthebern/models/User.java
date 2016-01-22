@@ -31,7 +31,8 @@ public class User implements Parcelable {
 
   UserData data = new UserData();
 
-  @NonNull public UserData getData() {
+  @NonNull
+  public UserData getData() {
     return data;
   }
 
@@ -39,7 +40,8 @@ public class User implements Parcelable {
     this.data = data;
   }
 
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "User Data{" +
         "id=" + data.id +
         ", type='" + data.type + '\'' +
@@ -48,11 +50,13 @@ public class User implements Parcelable {
         '}';
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeParcelable(this.data, 0);
   }
 

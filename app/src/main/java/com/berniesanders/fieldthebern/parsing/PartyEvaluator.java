@@ -34,7 +34,8 @@ public class PartyEvaluator {
    * <item>Other</item>
    * TODO better way to do this?!
    */
-  @Party.Affiliation public static String getParty(String selectedParty, String[] partyArray) {
+  @Party.Affiliation
+  public static String getParty(String selectedParty, String[] partyArray) {
     if (selectedParty.equals(partyArray[0])) {
       Timber.e("PartyEvaluator.getParty() called but selection is not valid");
       return Party.UNKNOWN;

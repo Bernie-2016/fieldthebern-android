@@ -98,13 +98,16 @@ public class VisitResult {
 
     public static class Attributes {
       //<duration_in_seconds>,
-      @SerializedName("duration_sec") int durationSeconds;
+      @SerializedName("duration_sec")
+      int durationSeconds;
 
-      @SerializedName("total_points") int totalPoints;
+      @SerializedName("total_points")
+      int totalPoints;
 
       //<date_and_time_of_creation>
       //ISO-8601  2015-12-03T23:19:48.480Z
-      @SerializedName("created_at") String createdAt;
+      @SerializedName("created_at")
+      String createdAt;
 
       public int durationSeconds() {
         return this.durationSeconds;
@@ -124,13 +127,15 @@ public class VisitResult {
       User user;
 
       // tracks when and in what way the address was updated by the visit
-      @SerializedName("address_update") ApiAddress addressUpdate;
+      @SerializedName("address_update")
+      ApiAddress addressUpdate;
 
       // tracks the address that was updated
       ApiAddress address;
 
       // tracks when, in what way and which people were updated by the visit
-      @SerializedName("person_updates") PersonUpdates personUpdates;
+      @SerializedName("person_updates")
+      PersonUpdates personUpdates;
 
       // tracks people updated by the visit
       PeopleUpdates people;

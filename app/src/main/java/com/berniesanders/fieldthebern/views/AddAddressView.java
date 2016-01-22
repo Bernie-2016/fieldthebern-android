@@ -35,13 +35,16 @@ import timber.log.Timber;
  */
 public class AddAddressView extends RelativeLayout {
 
-  @Inject AddAddressScreen.Presenter presenter;
+  @Inject
+  AddAddressScreen.Presenter presenter;
 
   private ApiAddress address;
 
-  @Bind(R.id.address) EditText addressEditText;
+  @Bind(R.id.address)
+  EditText addressEditText;
 
-  @Bind(R.id.apartment) EditText apartmentEditText;
+  @Bind(R.id.apartment)
+  EditText apartmentEditText;
 
   public AddAddressView(Context context) {
     super(context);
@@ -66,7 +69,8 @@ public class AddAddressView extends RelativeLayout {
         DaggerService.DAGGER_SERVICE).inject(this);
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -75,12 +79,14 @@ public class AddAddressView extends RelativeLayout {
     ButterKnife.bind(this, this);
   }
 
-  @Override protected void onAttachedToWindow() {
+  @Override
+  protected void onAttachedToWindow() {
     super.onAttachedToWindow();
     presenter.takeView(this);
   }
 
-  @Override protected void onDetachedFromWindow() {
+  @Override
+  protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
     presenter.dropView(this);
   }

@@ -48,13 +48,17 @@ public class PhotoEditView extends FrameLayout {
   private PhotoChangeListener photoChangeListener;
   private boolean avatarButtonSliderOpen;
 
-  @Bind(R.id.user_photo) ImageView userImageView;
+  @Bind(R.id.user_photo)
+  ImageView userImageView;
 
-  @Bind(R.id.mask) ImageView mask;
+  @Bind(R.id.mask)
+  ImageView mask;
 
-  @Bind(R.id.avatar_buttons) View avatarButtons;
+  @Bind(R.id.avatar_buttons)
+  View avatarButtons;
 
-  @Bind(R.id.avatar_container) View avatarContainer;
+  @Bind(R.id.avatar_container)
+  View avatarContainer;
 
   public interface PhotoChangeListener {
     void onPhotoChanged(Bitmap bitmap, String base64PhotoData);
@@ -76,7 +80,8 @@ public class PhotoEditView extends FrameLayout {
     this.photoChangeListener = photoChangeListener;
   }
 
-  @Override protected void onFinishInflate() {
+  @Override
+  protected void onFinishInflate() {
     super.onFinishInflate();
     if (isInEditMode()) {
       return;
@@ -91,15 +96,18 @@ public class PhotoEditView extends FrameLayout {
     }
 
     Picasso.with(getContext()).load(userAttributes.getPhotoLargeUrl()).into(new Target() {
-      @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+      @Override
+      public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
         showPhoto(bitmap);
       }
 
-      @Override public void onBitmapFailed(Drawable errorDrawable) {
+      @Override
+      public void onBitmapFailed(Drawable errorDrawable) {
         Timber.w("Failed to load user photo bitmap");
       }
 
-      @Override public void onPrepareLoad(Drawable placeHolderDrawable) {
+      @Override
+      public void onPrepareLoad(Drawable placeHolderDrawable) {
       }
     });
   }
@@ -110,7 +118,8 @@ public class PhotoEditView extends FrameLayout {
     }
   }
 
-  @OnClick(R.id.user_photo) void showAvatarButtons() {
+  @OnClick(R.id.user_photo)
+  void showAvatarButtons() {
     if (avatarButtonSliderOpen) {
       toggleAvatarWidget(false); //close the widget
     } else {
@@ -122,7 +131,8 @@ public class PhotoEditView extends FrameLayout {
     userImageView.setImageBitmap(bitmap);
     mask.setVisibility(View.VISIBLE);
     post(new Runnable() {
-      @Override public void run() {
+      @Override
+      public void run() {
         toggleAvatarWidget(false);
       }
     });
@@ -152,7 +162,8 @@ public class PhotoEditView extends FrameLayout {
   }
 
   private Action1<Bitmap> receiveNewBitmap = new Action1<Bitmap>() {
-    @Override public void call(Bitmap bitmap) {
+    @Override
+    public void call(Bitmap bitmap) {
       if (bitmap != null) {
         showPhoto(bitmap);
         String base64 = SaveImageTarget.base64EncodeBitmap(bitmap, getContext());
@@ -161,7 +172,8 @@ public class PhotoEditView extends FrameLayout {
     }
   };
 
-  @OnClick(R.id.takePhoto) void takePicture() {
+  @OnClick(R.id.takePhoto)
+  void takePicture() {
     final View view = this;
     if (PermissionService.get(view).isPhotoGranted()) {
       PhotoService.get(view).takePhoto(receiveNewBitmap);
@@ -170,7 +182,8 @@ public class PhotoEditView extends FrameLayout {
     }
   }
 
-  @OnClick(R.id.pickGallery) void choosePhoto() {
+  @OnClick(R.id.pickGallery)
+  void choosePhoto() {
     final View view = this;
     if (PermissionService.get(view).isPhotoGranted()) {
       PhotoService.get(view).pickImage(receiveNewBitmap);
@@ -181,11 +194,13 @@ public class PhotoEditView extends FrameLayout {
 
   private void requestTakePhotoPermission() {
     PermissionService.get(this).requestGalleryPermission(new Action0() {
-      @Override public void call() {
+      @Override
+      public void call() {
         takePicture();
       }
     }, new Action0() {
-      @Override public void call() {
+      @Override
+      public void call() {
         showTakePhotoSnackbar();
       }
     });
@@ -196,9 +211,11 @@ public class PhotoEditView extends FrameLayout {
     // to trigger the request.
     Snackbar.make(this, R.string.permission_photo_rationale, Snackbar.LENGTH_INDEFINITE)
         .setAction(android.R.string.ok, new View.OnClickListener() {
-          @Override public void onClick(View view) {
+          @Override
+          public void onClick(View view) {
             PermissionService.get(PhotoEditView.this).requestGalleryPermission(new Action0() {
-              @Override public void call() {
+              @Override
+              public void call() {
                 takePicture();
               }
             }, null);
@@ -209,11 +226,13 @@ public class PhotoEditView extends FrameLayout {
 
   private void requestGalleryPermission() {
     PermissionService.get(this).requestGalleryPermission(new Action0() {
-      @Override public void call() {
+      @Override
+      public void call() {
         choosePhoto();
       }
     }, new Action0() {
-      @Override public void call() {
+      @Override
+      public void call() {
         showGalleryPhotoSnackbar();
       }
     });
@@ -224,9 +243,11 @@ public class PhotoEditView extends FrameLayout {
     // to trigger the request.
     Snackbar.make(this, R.string.permission_photo_rationale, Snackbar.LENGTH_INDEFINITE)
         .setAction(android.R.string.ok, new View.OnClickListener() {
-          @Override public void onClick(View view) {
+          @Override
+          public void onClick(View view) {
             PermissionService.get(PhotoEditView.this).requestGalleryPermission(new Action0() {
-              @Override public void call() {
+              @Override
+              public void call() {
                 choosePhoto();
               }
             }, null);

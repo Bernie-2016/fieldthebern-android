@@ -62,10 +62,12 @@ public class PermissionController extends Presenter<PermissionController.Activit
   PermissionController() {
   }
 
-  @Override public void onLoad(Bundle savedInstanceState) {
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
   }
 
-  @Override public void dropView(Activity view) {
+  @Override
+  public void dropView(Activity view) {
     //after this it is no longer safe to call getView()
     super.dropView(view);
   }
@@ -95,7 +97,8 @@ public class PermissionController extends Presenter<PermissionController.Activit
     }
   }
 
-  @TargetApi(23) public void requestGalleryPermission(Action0 onComplete, Action0 onFail) {
+  @TargetApi(23)
+  public void requestGalleryPermission(Action0 onComplete, Action0 onFail) {
     this.onComplete = onComplete;
     this.onFail = onFail;
     //Action0 onComplete
@@ -131,15 +134,19 @@ public class PermissionController extends Presenter<PermissionController.Activit
   /**
    * required by mortar
    */
-  @Override protected BundleService extractBundleService(Activity activity) {
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
     return getBundleService(activity.getActivity());
   }
 
   /**
    */
-  @Module public static class PermissionModule {
+  @Module
+  public static class PermissionModule {
 
-    @Provides @Singleton PermissionController providePermissionController() {
+    @Provides
+    @Singleton
+    PermissionController providePermissionController() {
       return new PermissionController();
     }
   }

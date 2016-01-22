@@ -41,33 +41,39 @@ public final class Token implements Parcelable {
   /**
    * zeee token
    */
-  @SerializedName("access_token") private String accessToken;
+  @SerializedName("access_token")
+  private String accessToken;
 
   /**
    * zeee most freshiest token
    */
-  @SerializedName("refresh_token") private String refreshToken;
+  @SerializedName("refresh_token")
+  private String refreshToken;
 
   /**
    * should be 'bearer' or ?
    */
-  @SerializedName("token_type") private String type;
+  @SerializedName("token_type")
+  private String type;
 
   /**
    * User id
    */
-  @SerializedName("user_id") private int userId;
+  @SerializedName("user_id")
+  private int userId;
 
   /**
    * time_in_seconds, usually about 2hrs
    */
-  @SerializedName("expires_in") private int expires;
+  @SerializedName("expires_in")
+  private int expires;
 
   /**
    * time_of_creation_as_integer
    * seconds since epoch...?
    */
-  @SerializedName("created_at") private long created;
+  @SerializedName("created_at")
+  private long created;
 
   public boolean isExpired(long currentTimeMs) {
     return (currentTimeMs >= ((created + expires) * 1000));
@@ -127,11 +133,13 @@ public final class Token implements Parcelable {
     return this;
   }
 
-  @Override public int describeContents() {
+  @Override
+  public int describeContents() {
     return 0;
   }
 
-  @Override public void writeToParcel(Parcel dest, int flags) {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
     dest.writeString(this.accessToken);
     dest.writeString(this.refreshToken);
     dest.writeString(this.type);

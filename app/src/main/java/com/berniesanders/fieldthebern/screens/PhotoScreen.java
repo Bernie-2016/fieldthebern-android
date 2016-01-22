@@ -37,7 +37,8 @@ import timber.log.Timber;
 /**
  *
  */
-@Layout(R.layout.screen_photo_view) public class PhotoScreen extends FlowPathBase {
+@Layout(R.layout.screen_photo_view)
+public class PhotoScreen extends FlowPathBase {
 
   private final Img img;
 
@@ -45,41 +46,50 @@ import timber.log.Timber;
     this.img = img;
   }
 
-  @Override public Object createComponent() {
+  @Override
+  public Object createComponent() {
     return DaggerPhotoScreen_Component.builder().imgModule(new ImgModule(img)).build();
   }
 
-  @Override public String getScopeName() {
+  @Override
+  public String getScopeName() {
     return PhotoScreen.class.getName();// TODO temp scope name?
   }
 
-  @Module class ImgModule {
+  @Module
+  class ImgModule {
     private final Img imgage;
 
     public ImgModule(Img imgage) {
       this.imgage = imgage;
     }
 
-    @Provides public Img provideImg() {
+    @Provides
+    public Img provideImg() {
       return imgage;
     }
   }
 
-  @FtbScreenScope @dagger.Component(modules = ImgModule.class) public interface Component {
+  @FtbScreenScope
+  @dagger.Component(modules = ImgModule.class)
+  public interface Component {
     void inject(PhotoScreenView t);
 
     Img getImg();
   }
 
-  @FtbScreenScope static public class Presenter extends ViewPresenter<PhotoScreenView> {
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<PhotoScreenView> {
 
     private final Img img;
 
-    @Inject Presenter(Img img) {
+    @Inject
+    Presenter(Img img) {
       this.img = img;
     }
 
-    @Override protected void onLoad(Bundle savedInstanceState) {
+    @Override
+    protected void onLoad(Bundle savedInstanceState) {
       Timber.v("onLoad");
 
       Picasso.with(getView().getContext()).load(img.getText()).into(getView().getImageView());
@@ -95,15 +105,18 @@ import timber.log.Timber;
       ActionBarService.get(getView()).hideToolbar().closeAppbar();
     }
 
-    @Override protected void onSave(Bundle outState) {
+    @Override
+    protected void onSave(Bundle outState) {
       outState.putParcelable(Img.IMG_PARCEL_KEY, img);
     }
 
-    @Override public void dropView(PhotoScreenView view) {
+    @Override
+    public void dropView(PhotoScreenView view) {
       super.dropView(view);
     }
 
-    @Override protected void onEnterScope(MortarScope scope) {
+    @Override
+    protected void onEnterScope(MortarScope scope) {
       super.onEnterScope(scope);
       Timber.v("onEnterScope: %s", scope);
     }

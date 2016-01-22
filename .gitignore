@@ -56,8 +56,7 @@ proguard/
 *~
 *.swp
 
-.idea/workspace.xml
-.idea/tasks.xml
+.idea/!codeStyleSettings.xml
 
 
 ##############################################

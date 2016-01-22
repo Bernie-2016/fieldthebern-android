@@ -120,7 +120,7 @@ public class Page extends ApiItem implements Parcelable {
     this.url = in.readString();
     this.imageUrlThumb = in.readString();
     this.imageUrlFull = in.readString();
-    this.content = new ArrayList<Content>();
+    this.content = new ArrayList<>();
     in.readTypedList(this.content, Content.CREATOR);
   }
 

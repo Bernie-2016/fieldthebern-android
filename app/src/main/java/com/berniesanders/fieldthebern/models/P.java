@@ -57,7 +57,7 @@ public class P extends Content implements Parcelable, Linkable {
 
   protected P(Parcel in) {
     super(in);
-    this.anchors = new ArrayList<Anchor>();
+    this.anchors = new ArrayList<>();
     in.readList(this.anchors, List.class.getClassLoader());
     this.links = in.createTypedArrayList(Link.CREATOR);
   }

@@ -42,7 +42,7 @@ public class UserFollowers implements Parcelable {
   }
 
   protected UserFollowers(Parcel in) {
-    this.data = new ArrayList<FollowedUser>();
+    this.data = new ArrayList<>();
     in.readList(this.data, List.class.getClassLoader());
   }
 

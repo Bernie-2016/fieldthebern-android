@@ -57,9 +57,9 @@ public class H3 extends Content implements Parcelable, Linkable {
 
   protected H3(Parcel in) {
     super(in);
-    this.anchors = new ArrayList<Anchor>();
+    this.anchors = new ArrayList<>();
     in.readList(this.anchors, List.class.getClassLoader());
-    this.links = new ArrayList<Link>();
+    this.links = new ArrayList<>();
     in.readList(this.links, List.class.getClassLoader());
   }
 

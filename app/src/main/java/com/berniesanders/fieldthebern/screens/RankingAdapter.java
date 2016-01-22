@@ -52,7 +52,7 @@ public class RankingAdapter extends ArrayAdapter<String> {
     if (view != null) {
       viewHolder = (ViewHolder) view.getTag();
     } else {
-      view = LayoutInflater.from(context).inflate(R.layout.screen_profile_row, null, true);
+      view = LayoutInflater.from(context).inflate(R.layout.screen_profile_row, viewGroup, false);
       viewHolder = new ViewHolder(view);
     }
     UserAttributes attributes = this.userDatas.get(position).attributes();

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,36 +15,32 @@
   ~
   -->
 
-<com.berniesanders.fieldthebern.views.SquareRelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.berniesanders.fieldthebern.views.SquareRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/black">
+
+  <ImageView
+    android:id="@+id/img"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    >
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+    android:scaleType="centerCrop" />
 
 
-    <TextView
-        android:id="@+id/txt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:textColor="@color/white"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:ignore="MissingPrefix"
-        fontPath="fonts/Dosis-SemiBold.otf"
-        android:textSize="20sp"
-        android:textAllCaps="true"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="16"
-        android:shadowColor="@android:color/black"
-        />
+  <TextView android:id="@+id/txt"
+    fontPath="fonts/Dosis-SemiBold.otf"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    android:shadowColor="@android:color/black"
+    android:shadowDx="0"
+    android:shadowDy="0"
+    android:shadowRadius="16"
+    android:textAllCaps="true"
+    android:textColor="@color/white"
+    android:textSize="20sp"
+    tools:ignore="MissingPrefix" />
 
 </com.berniesanders.fieldthebern.views.SquareRelativeLayout>

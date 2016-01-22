@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,115 +14,105 @@
   ~ limitations under the License.
   ~
   -->
-<com.berniesanders.fieldthebern.views.AddAddressView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.berniesanders.fieldthebern.views.AddAddressView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bernie_dark_blue">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:background="@color/bernie_dark_blue"
-    >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="72dp"
-        android:orientation="vertical"
-        android:padding="8dp"
-        >
-
-        <TextView
-            android:id="@+id/instructions_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
-            android:drawableLeft="@drawable/ic_pin_drop_white_48dp"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:text="@string/correct_address_reminder"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            />
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/address"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                />
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/apartment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:hint="@string/apartment_number"
-                android:singleLine="true"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                />
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/reminder_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:padding="4dp"
-            android:text="@string/remind_add_apt"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="@color/dark_blue2"
-        />
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/submit"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_button_height"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:text="@string/start_visit_btn"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:textAllCaps="false"
-        />
+    android:layout_height="wrap_content"
+    android:minHeight="72dp"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
+      android:id="@+id/instructions_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="8dp"
+      android:layout_marginLeft="2dp"
+      android:layout_marginRight="8dp"
+      android:layout_marginTop="8dp"
+      android:drawableLeft="@drawable/ic_pin_drop_white_48dp"
+      android:drawablePadding="8dp"
+      android:gravity="center_vertical"
+      android:text="@string/correct_address_reminder"
+      android:textColor="@android:color/white"
+      android:textSize="16sp" />
+
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/submit"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:gravity="left|center_horizontal"
-        android:text="@string/ready_to_knock"
-        android:textColor="@color/b_light_blue2"
-        android:textSize="16sp"
-        />
+        android:layout_margin="8dp"
+        android:hint="@string/address"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/apartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:hint="@string/apartment_number"
+        android:singleLine="true"
+        android:textColor="@android:color/white"
+        android:textSize="24sp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+      android:id="@+id/reminder_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="8dp"
+      android:padding="4dp"
+      android:text="@string/remind_add_apt"
+      android:textColor="@android:color/white"
+      android:textSize="16sp" />
+  </LinearLayout>
+
+  <View
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/large_button_height"
+    android:layout_alignParentBottom="true"
+    android:layout_margin="16dp"
+    android:background="@color/dark_blue2" />
+
+  <android.support.v7.widget.AppCompatButton
+    android:id="@+id/submit"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/large_button_height"
+    android:layout_alignParentBottom="true"
+    android:layout_margin="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:text="@string/start_visit_btn"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"
+    android:textSize="22sp" />
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@id/submit"
+    android:layout_marginBottom="0dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:gravity="left|center_horizontal"
+    android:text="@string/ready_to_knock"
+    android:textColor="@color/b_light_blue2"
+    android:textSize="16sp" />
 </com.berniesanders.fieldthebern.views.AddAddressView>

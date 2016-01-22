@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,90 +15,89 @@
   ~
   -->
 
-<com.berniesanders.fieldthebern.views.HomeView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.berniesanders.fieldthebern.views.HomeView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@color/bernie_dark_blue">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bernie_dark_blue"
-    >
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageView
+      android:layout_width="200dp"
+      android:layout_height="200dp"
+      android:src="@drawable/logo_final" />
+
     <LinearLayout
+      android:id="@+id/button_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:orientation="vertical"
+      android:padding="16dp">
+
+      <FrameLayout
+        style="@style/HomeButtonMargins"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/logo_final"
-            />
-        <LinearLayout
-            android:id="@+id/button_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_alignParentBottom="true"
-            android:padding="16dp"
-            >
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/large_button_height"
-                style="@style/HomeButtonMargins"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/dark_blue2"
-                    />
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/screen_home_canvass"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawableLeft="@drawable/ic_pin_drop_white_24dp"
-                    android:text="@string/screen_home_canvass"
-                    style="@style/HomeButton"
-                    />
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/large_button_height"
-                style="@style/HomeButtonMargins"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/dark_blue2"
-                    />
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/screen_home_issues"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawableLeft="@drawable/ic_issues"
-                    android:text="@string/screen_home_issues"
-                    style="@style/HomeButton"
-                    />
-            </FrameLayout>
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/large_button_height"
-                style="@style/HomeButtonMargins"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/dark_blue2"
-                    />
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/screen_home_learn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/large_button_height"
-                    android:drawableLeft="@drawable/ic_live_help_white_24dp"
-                    android:text="@string/learn_btn"
-                    style="@style/HomeButton"
-                    />
-            </FrameLayout>
+        android:layout_height="@dimen/large_button_height">
 
-        </LinearLayout>
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/dark_blue2" />
 
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/screen_home_canvass"
+          style="@style/HomeButton"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:drawableLeft="@drawable/ic_pin_drop_white_24dp"
+          android:text="@string/screen_home_canvass" />
+      </FrameLayout>
+
+      <FrameLayout
+        style="@style/HomeButtonMargins"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height">
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/dark_blue2" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/screen_home_issues"
+          style="@style/HomeButton"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:drawableLeft="@drawable/ic_issues"
+          android:text="@string/screen_home_issues" />
+      </FrameLayout>
+
+      <FrameLayout
+        style="@style/HomeButtonMargins"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_button_height">
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/dark_blue2" />
+
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/screen_home_learn"
+          style="@style/HomeButton"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/large_button_height"
+          android:drawableLeft="@drawable/ic_live_help_white_24dp"
+          android:text="@string/learn_btn" />
+      </FrameLayout>
 
     </LinearLayout>
+
+
+  </LinearLayout>
 </com.berniesanders.fieldthebern.views.HomeView>

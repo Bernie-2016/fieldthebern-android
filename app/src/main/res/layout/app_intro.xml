@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,29 +16,29 @@
   -->
 
 <com.berniesanders.fieldthebern.views.AppIntroView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <android.support.v4.view.ViewPager
+    android:id="@+id/viewpager"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_marginBottom="12dp" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="12dp" />
+  <me.relex.circleindicator.CircleIndicator
+    android:id="@+id/circleIndicator"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:layout_gravity="bottom|center_horizontal" />
 
-    <me.relex.circleindicator.CircleIndicator
-        android:id="@+id/circleIndicator"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_gravity="bottom|center_horizontal" />
-
-    <Button
-        android:id="@+id/doneButton"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:text="@string/skip"
-        android:textColor="@android:color/white" />
+  <Button
+    android:id="@+id/doneButton"
+    style="?android:attr/borderlessButtonStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|end"
+    android:text="@string/skip"
+    android:textColor="@android:color/white" />
 
 </com.berniesanders.fieldthebern.views.AppIntroView>

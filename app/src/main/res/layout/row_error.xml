@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +16,12 @@
   -->
 
 <TextView android:id="@+id/text"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:orientation="vertical"
-          xmlns:tools="http://schemas.android.com/tools"
-          tools:ignore="MissingPrefix"
-          android:textSize="14sp"
-          android:textIsSelectable="true"
-    />
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  android:textIsSelectable="true"
+  android:textSize="14sp"
+  tools:ignore="MissingPrefix" />
 

@@ -15,56 +15,52 @@
   ~
   -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              tools:background="@color/bernie_dark_blue"
-    >
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="horizontal"
+  tools:background="@color/bernie_dark_blue">
 
-    <TextView
-        android:id="@+id/position"
-        android:layout_width="24dp"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        tools:text="12"
-        android:layout_marginRight="8dp"
-        android:textColor="@android:color/white"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        />
+  <TextView
+    android:id="@+id/position"
+    android:layout_width="24dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_centerVertical="true"
+    android:layout_marginRight="8dp"
+    android:gravity="right"
+    android:textColor="@android:color/white"
+    tools:text="12" />
 
-    <ImageView
-        android:id="@+id/profile_image"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_face_white_48dp"
-        android:layout_toRightOf="@id/position"
-        android:layout_margin="8dp"
-        android:layout_centerVertical="true"
-        />
+  <ImageView
+    android:id="@+id/profile_image"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_centerVertical="true"
+    android:layout_margin="8dp"
+    android:layout_toRightOf="@id/position"
+    android:src="@drawable/ic_face_white_48dp" />
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:gravity="center_vertical"
-        tools:text="Captain America"
-        android:textColor="@android:color/white"
-        android:layout_toRightOf="@id/profile_image"
-        android:layout_centerVertical="true"
-        />
+  <TextView
+    android:id="@+id/name"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:layout_margin="8dp"
+    android:layout_toRightOf="@id/profile_image"
+    android:gravity="center_vertical"
+    android:textColor="@android:color/white"
+    tools:text="Captain America" />
 
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_alignParentRight="true"
-        android:text="0"
-        android:textColor="@android:color/white"
-        android:layout_centerVertical="true"
+  <TextView
+    android:id="@+id/score"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_centerVertical="true"
+    android:layout_margin="8dp"
+    android:text="0"
+    android:textColor="@android:color/white"
 
-        />
+    />
 </RelativeLayout>

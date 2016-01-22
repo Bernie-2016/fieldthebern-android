@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,37 +16,35 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_centerInParent="true"
+  android:gravity="center"
+  android:orientation="vertical">
+
+  <ImageView
+    android:id="@+id/imageView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_centerInParent="true"
-    android:gravity="center"
-    >
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/intro_users"
-        />
+    android:src="@drawable/intro_users" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:text="@string/track"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        android:textColor="@android:color/white"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        />
-    <TextView
-        android:id="@+id/textViewDesc"
-        android:layout_width="220dp"
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:text="@string/intro_track_desc"
-        android:textColor="@android:color/white"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        />
+  <TextView
+    android:id="@+id/textView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:gravity="center"
+    android:text="@string/track"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:textColor="@android:color/white"
+    android:textStyle="bold" />
+
+  <TextView
+    android:id="@+id/textViewDesc"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:text="@string/intro_track_desc"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textColor="@android:color/white" />
 </LinearLayout>

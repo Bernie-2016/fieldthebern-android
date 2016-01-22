@@ -49,14 +49,16 @@ proguard/
 ##############################################
 # Intellij 
 ##############################################
-#.idea/
+.idea/
 *.iml
 *.iws
 *.ipr
 *~
 *.swp
 
-.idea/!codeStyleSettings.xml
+!.idea/codeStyleSettings.xml
+#.idea/workspace.xml
+#.idea/tasks.xml
 
 
 ##############################################

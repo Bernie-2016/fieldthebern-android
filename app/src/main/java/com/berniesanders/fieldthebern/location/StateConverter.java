@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public class StateConverter {
 
-  static Map<String, String> states = new HashMap<String, String>();
+  static Map<String, String> states = new HashMap<>();
 
   public static String getStateCode(String fullStateName) {
     if (states.isEmpty()) {

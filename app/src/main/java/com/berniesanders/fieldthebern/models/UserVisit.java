@@ -42,7 +42,7 @@ public class UserVisit implements Parcelable {
   }
 
   protected UserVisit(Parcel in) {
-    this.data = new ArrayList<Visit>();
+    this.data = new ArrayList<>();
     in.readList(this.data, List.class.getClassLoader());
   }
 

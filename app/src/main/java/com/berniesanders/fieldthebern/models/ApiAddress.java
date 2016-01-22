@@ -482,7 +482,7 @@ public class ApiAddress extends CanvassData implements Parcelable {
     this.type = in.readString();
     this.attributes = in.readParcelable(Attributes.class.getClassLoader());
     this.relationships = in.readParcelable(Relationships.class.getClassLoader());
-    this.included = new ArrayList<CanvassData>();
+    this.included = new ArrayList<>();
     in.readList(this.included, List.class.getClassLoader());
   }
 

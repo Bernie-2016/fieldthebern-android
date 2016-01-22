@@ -142,7 +142,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
     for (Context ctx : contextMap.values()) {
       if (ctx instanceof Activity) {
         Timber.v("We found an activity!");
-        activityWeakReference = new WeakReference<Activity>((Activity) ctx);
+        activityWeakReference = new WeakReference<>((Activity) ctx);
       }
     }
 

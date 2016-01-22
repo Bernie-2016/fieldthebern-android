@@ -17,7 +17,6 @@
 package com.berniesanders.fieldthebern.repositories;
 
 import android.content.Context;
-
 import com.berniesanders.fieldthebern.config.Config;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.MultiAddressResponse;
@@ -29,12 +28,10 @@ import com.berniesanders.fieldthebern.repositories.interceptors.UserAgentInterce
 import com.berniesanders.fieldthebern.repositories.specs.AddressSpec;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.google.gson.Gson;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
@@ -47,100 +44,81 @@ import timber.log.Timber;
 @Singleton
 public class AddressRepo {
 
-    final Gson gson;
-    private final TokenRepo tokenRepo;
-    private final RxSharedPreferences rxPrefs;
-    private OkHttpClient client;
-    private final Config config;
-    private final Context context;
+  final Gson gson;
+  private final TokenRepo tokenRepo;
+  private final RxSharedPreferences rxPrefs;
+  private OkHttpClient client;
+  private final Config config;
+  private final Context context;
 
+  @Inject
+  public AddressRepo(Gson gson, TokenRepo tokenRepo, RxSharedPreferences rxPrefs, Config config,
+      Context context) {
+    this.gson = gson;
+    this.tokenRepo = tokenRepo;
+    this.rxPrefs = rxPrefs;
+    this.config = config;
+    this.context = context;
 
-    @Inject
-    public AddressRepo(Gson gson,
-                       TokenRepo tokenRepo,
-                       RxSharedPreferences rxPrefs,
-                       Config config,
-                       Context context) {
-        this.gson = gson;
-        this.tokenRepo = tokenRepo;
-        this.rxPrefs = rxPrefs;
-        this.config = config;
-        this.context = context;
+    HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
+      @Override
+      public void log(String message) {
+        Timber.v(message);
+      }
+    };
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Timber.v(message);
-            }
-        };
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    client =
+        new OkHttpClient.Builder().addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
+            .addInterceptor(new AddTokenInterceptor(tokenRepo))
+            .addInterceptor(loggingInterceptor)
+            .authenticator(new ApiAuthenticator(tokenRepo))
+            .build();
+  }
 
-        client = new OkHttpClient.Builder()
-                .addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
-                .addInterceptor(new AddTokenInterceptor(tokenRepo))
-                .addInterceptor(loggingInterceptor)
-                .authenticator(new ApiAuthenticator(tokenRepo))
-                .build();
+  /**
+   *
+   */
+  public Observable<MultiAddressResponse> getMultiple(final AddressSpec spec) {
+    Timber.v("getMultiple()");
+
+    if (!NetChecker.connected(context)) {
+      return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getCanvassUrl())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        .client(client)
+        .build();
 
+    AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
 
-    /**
-     *
-     */
-    public Observable<MultiAddressResponse> getMultiple(final AddressSpec spec) {
-        Timber.v("getMultiple()");
+    return endpoint.getMultiple(spec.multipleAddresses().latitude(),
+        spec.multipleAddresses().longitude(), spec.multipleAddresses().radius());
+  }
 
-        if (!NetChecker.connected(context)) {
-            return Observable.error(new NetworkUnavailableException("No internet available"));
-        }
+  /**
+   *
+   */
+  public Observable<SingleAddressResponse> getSingle(final AddressSpec spec) {
+    Timber.v("getSingle()");
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-
-        AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
-
-        return endpoint.getMultiple(
-                spec.multipleAddresses().latitude(),
-                spec.multipleAddresses().longitude(),
-                spec.multipleAddresses().radius()
-        );
+    if (!NetChecker.connected(context)) {
+      return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
-    /**
-     *
-     */
-    public Observable<SingleAddressResponse> getSingle(final AddressSpec spec) {
-        Timber.v("getSingle()");
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(config.getCanvassUrl())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        .client(client)
+        .build();
 
-        if (!NetChecker.connected(context)) {
-            return Observable.error(new NetworkUnavailableException("No internet available"));
-        }
+    AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(config.getCanvassUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(client)
-                .build();
-
-        AddressSpec.AddressEndpoint endpoint = retrofit.create(AddressSpec.AddressEndpoint.class);
-
-        return endpoint.getSingle(
-                spec.singleAddress().latitude(),
-                spec.singleAddress().longitude(),
-                spec.singleAddress().street1(),
-                spec.singleAddress().street2(),
-                spec.singleAddress().city(),
-                spec.singleAddress().state(),
-                spec.singleAddress().zip()
-        );
-
-    }
-
+    return endpoint.getSingle(spec.singleAddress().latitude(), spec.singleAddress().longitude(),
+        spec.singleAddress().street1(), spec.singleAddress().street2(), spec.singleAddress().city(),
+        spec.singleAddress().state(), spec.singleAddress().zip());
+  }
 }

@@ -17,7 +17,6 @@
 package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.Collection;
-
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import rx.Observable;
@@ -28,23 +27,21 @@ import rx.Observable;
  */
 public class CollectionSpec {
 
+  //    private final String url = Config.getCollectionJsonUrlStub();
+  private final String url = "";
 
-//    private final String url = Config.getCollectionJsonUrlStub();
-    private final String url = "";
+  public CollectionSpec() {
+  }
 
-    public CollectionSpec() {
-    }
+  public String url() {
+    return url;
+  }
 
-    public String url() {
-        return url;
-    }
-
-
-    /**
-     * Retrofit 2 endpoint definition
-     */
-    public interface CollectionEndpoint {
-        @GET("ftb-json/{urlStub}")
-        Observable<Collection> load(@Path("urlStub") String urlStub);
-    }
+  /**
+   * Retrofit 2 endpoint definition
+   */
+  public interface CollectionEndpoint {
+    @GET("ftb-json/{urlStub}")
+    Observable<Collection> load(@Path("urlStub") String urlStub);
+  }
 }

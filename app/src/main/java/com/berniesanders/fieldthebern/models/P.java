@@ -19,10 +19,8 @@ package com.berniesanders.fieldthebern.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,47 +29,46 @@ import java.util.List;
  */
 @Layout(R.layout.row_p)
 public class P extends Content implements Parcelable, Linkable {
-    private List<Anchor> anchors;
-    private List<Link> links;
+  private List<Anchor> anchors;
+  private List<Link> links;
 
-    public List<Anchor> getAnchors() {
-        return anchors;
+  public List<Anchor> getAnchors() {
+    return anchors;
+  }
+
+  public List<Link> getLinks() {
+    return links;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    super.writeToParcel(dest, flags);
+    dest.writeList(this.anchors);
+    dest.writeTypedList(links);
+  }
+
+  public P() {
+  }
+
+  protected P(Parcel in) {
+    super(in);
+    this.anchors = new ArrayList<Anchor>();
+    in.readList(this.anchors, List.class.getClassLoader());
+    this.links = in.createTypedArrayList(Link.CREATOR);
+  }
+
+  public static final Parcelable.Creator<P> CREATOR = new Parcelable.Creator<P>() {
+    public P createFromParcel(Parcel source) {
+      return new P(source);
     }
 
-    public List<Link> getLinks() {
-        return links;
+    public P[] newArray(int size) {
+      return new P[size];
     }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest,flags);
-        dest.writeList(this.anchors);
-        dest.writeTypedList(links);
-    }
-
-    public P() {
-    }
-
-    protected P(Parcel in) {
-        super(in);
-        this.anchors = new ArrayList<Anchor>();
-        in.readList(this.anchors, List.class.getClassLoader());
-        this.links = in.createTypedArrayList(Link.CREATOR);
-    }
-
-    public static final Parcelable.Creator<P> CREATOR = new Parcelable.Creator<P>() {
-        public P createFromParcel(Parcel source) {
-            return new P(source);
-        }
-
-        public P[] newArray(int size) {
-            return new P[size];
-        }
-    };
+  };
 }

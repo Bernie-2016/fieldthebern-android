@@ -18,13 +18,13 @@
 package com.berniesanders.fieldthebern.config;
 
 public interface Config {
-    String getFeelTheBernUrl();
+  String getFeelTheBernUrl();
 
-    String getCanvassUrl();
+  String getCanvassUrl();
 
-    String getClientId();
+  String getClientId();
 
-    String getClientSecret();
+  String getClientSecret();
 
-    String getUserAgent();
+  String getUserAgent();
 }

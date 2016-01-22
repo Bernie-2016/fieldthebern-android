@@ -20,45 +20,44 @@ package com.berniesanders.fieldthebern.media;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
-
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.models.CanvassResponse;
 
 public class ResponseColor {
 
-    /**
-     * Returns the user displayable string based off the supplied response
-     *
-     * <item>(select support level)</item>
-     * <item>Strongly for Bernie</item>
-     * <item>Leaning for Bernie</item>
-     * <item>Undecided</item>
-     * <item>Leaning against Bernie</item>
-     * <item>Strongly against Bernie</item>
-     *
-     * TODO better way to do this?!
-     */
-    public static int getColor(@CanvassResponse.Response final String response, Context context) {
+  /**
+   * Returns the user displayable string based off the supplied response
+   *
+   * <item>(select support level)</item>
+   * <item>Strongly for Bernie</item>
+   * <item>Leaning for Bernie</item>
+   * <item>Undecided</item>
+   * <item>Leaning against Bernie</item>
+   * <item>Strongly against Bernie</item>
+   *
+   * TODO better way to do this?!
+   */
+  public static int getColor(@CanvassResponse.Response final String response, Context context) {
 
-        switch (response) {
-            case CanvassResponse.UNKNOWN:
-                return ContextCompat.getColor(context, R.color.bernie_grey);
-            case CanvassResponse.STRONGLY_FOR:
-                return ContextCompat.getColor(context, R.color.bernie_dark_blue);
-            case CanvassResponse.LEANING_FOR:
-                return ContextCompat.getColor(context, R.color.b_light_blue);
-            case CanvassResponse.UNDECIDED:
-                return ContextCompat.getColor(context, R.color.bernie_green);
-            case CanvassResponse.LEANING_AGAINST:
-                return ContextCompat.getColor(context, R.color.bernie_light_red);
-            case CanvassResponse.STRONGLY_AGAINST:
-                return ContextCompat.getColor(context, R.color.bernie_red);
-            case CanvassResponse.ASKED_TO_LEAVE:
-                return Color.BLACK;
-            case CanvassResponse.NO_ONE_HOME:
-                return Color.GRAY;
-            default:
-                return Color.WHITE;
-        }
+    switch (response) {
+      case CanvassResponse.UNKNOWN:
+        return ContextCompat.getColor(context, R.color.bernie_grey);
+      case CanvassResponse.STRONGLY_FOR:
+        return ContextCompat.getColor(context, R.color.bernie_dark_blue);
+      case CanvassResponse.LEANING_FOR:
+        return ContextCompat.getColor(context, R.color.b_light_blue);
+      case CanvassResponse.UNDECIDED:
+        return ContextCompat.getColor(context, R.color.bernie_green);
+      case CanvassResponse.LEANING_AGAINST:
+        return ContextCompat.getColor(context, R.color.bernie_light_red);
+      case CanvassResponse.STRONGLY_AGAINST:
+        return ContextCompat.getColor(context, R.color.bernie_red);
+      case CanvassResponse.ASKED_TO_LEAVE:
+        return Color.BLACK;
+      case CanvassResponse.NO_ONE_HOME:
+        return Color.GRAY;
+      default:
+        return Color.WHITE;
     }
+  }
 }

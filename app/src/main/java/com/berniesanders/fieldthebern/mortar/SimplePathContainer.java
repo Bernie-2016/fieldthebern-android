@@ -23,17 +23,14 @@ import android.animation.ObjectAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.berniesanders.fieldthebern.annotations.Layout;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;
 import flow.path.PathContext;
 import flow.path.PathContextFactory;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static flow.Flow.Direction.REPLACE;
 
@@ -50,7 +47,8 @@ public class SimplePathContainer extends PathContainer {
     this.contextFactory = contextFactory;
   }
 
-  @Override protected void performTraversal(final ViewGroup containerView,
+  @Override
+  protected void performTraversal(final ViewGroup containerView,
       final TraversalState traversalState, final Flow.Direction direction,
       final Flow.TraversalCallback callback) {
 
@@ -67,9 +65,8 @@ public class SimplePathContainer extends PathContainer {
     View newView;
     context = PathContext.create(oldPath, to, contextFactory);
     int layout = getLayout(to);
-    newView = LayoutInflater.from(context)
-        .cloneInContext(context)
-        .inflate(layout, containerView, false);
+    newView =
+        LayoutInflater.from(context).cloneInContext(context).inflate(layout, containerView, false);
 
     View fromView = null;
     if (traversalState.fromPath() != null) {
@@ -87,9 +84,11 @@ public class SimplePathContainer extends PathContainer {
       containerView.addView(newView);
       final View finalFromView = fromView;
       Utils.waitForMeasure(newView, new Utils.OnMeasuredCallback() {
-        @Override public void onMeasured(View view, int width, int height) {
+        @Override
+        public void onMeasured(View view, int width, int height) {
           runAnimation(containerView, finalFromView, view, direction, new Flow.TraversalCallback() {
-            @Override public void onTraversalCompleted() {
+            @Override
+            public void onTraversalCompleted() {
               containerView.removeView(finalFromView);
               oldPath.destroyNotIn(context, contextFactory);
               callback.onTraversalCompleted();
@@ -120,7 +119,8 @@ public class SimplePathContainer extends PathContainer {
       Flow.Direction direction, final Flow.TraversalCallback callback) {
     Animator animator = createSegue(from, to, direction);
     animator.addListener(new AnimatorListenerAdapter() {
-      @Override public void onAnimationEnd(Animator animation) {
+      @Override
+      public void onAnimationEnd(Animator animation) {
         container.removeView(from);
         callback.onTraversalCompleted();
       }

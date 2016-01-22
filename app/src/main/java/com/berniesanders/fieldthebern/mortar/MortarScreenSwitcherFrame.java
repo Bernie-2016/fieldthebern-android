@@ -17,9 +17,7 @@ package com.berniesanders.fieldthebern.mortar;
 
 import android.content.Context;
 import android.util.AttributeSet;
-
 import com.berniesanders.fieldthebern.R;
-
 import flow.path.Path;
 
 public class MortarScreenSwitcherFrame extends FramePathContainerView {

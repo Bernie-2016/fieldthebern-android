@@ -32,6 +32,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * public class MyScreen { ... }
  * </code></pre>
  */
-@Retention(RUNTIME) @Target(TYPE) public @interface Layout {
-    int value();
+@Retention(RUNTIME)
+@Target(TYPE)
+public @interface Layout {
+  int value();
 }

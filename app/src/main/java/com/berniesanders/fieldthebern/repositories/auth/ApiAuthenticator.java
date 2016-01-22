@@ -19,43 +19,38 @@ package com.berniesanders.fieldthebern.repositories.auth;
 
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
+import java.io.IOException;
 import okhttp3.Authenticator;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import java.io.IOException;
-import java.net.Proxy;
-
 import okhttp3.Route;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 public class ApiAuthenticator implements Authenticator {
 
-    private final TokenRepo tokenRepo;
+  private final TokenRepo tokenRepo;
 
+  public ApiAuthenticator(TokenRepo tokenRepo) {
+    this.tokenRepo = tokenRepo;
+  }
 
-    public ApiAuthenticator(TokenRepo tokenRepo) {
-        this.tokenRepo = tokenRepo;
+  @Override
+  public Request authenticate(Route route, Response response) throws IOException {
+    //      System.out.println("Authenticating for response: " + response);
+    //      System.out.println("Challenges: " + response.challenges());
+
+    // Refresh access token using a synchronous api request
+    Timber.d("authenticating");
+
+    Token token = tokenRepo.refresh().toBlocking().first();
+
+    if (token == null) {
+      return null;
     }
 
-
-    @Override
-    public Request authenticate(Route route, Response response) throws IOException {
-        //      System.out.println("Authenticating for response: " + response);
-        //      System.out.println("Challenges: " + response.challenges());
-
-        // Refresh access token using a synchronous api request
-        Timber.d("authenticating");
-
-        Token token = tokenRepo.refresh().toBlocking().first();
-
-        if (token==null) {
-            return null;
-        }
-
-        return response.request().newBuilder()
-                .header("Authorization", "Bearer " + token.accessToken())
-                .build();
-    }
+    return response.request()
+        .newBuilder()
+        .header("Authorization", "Bearer " + token.accessToken())
+        .build();
+  }
 }

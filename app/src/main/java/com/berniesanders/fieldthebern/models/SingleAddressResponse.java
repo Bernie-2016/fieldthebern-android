@@ -18,7 +18,6 @@
 package com.berniesanders.fieldthebern.models;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /*
@@ -36,30 +35,28 @@ import java.util.List;
  */
 public class SingleAddressResponse {
 
-    @SerializedName("data")
-    List<ApiAddress> addresses;
+  @SerializedName("data")
+  List<ApiAddress> addresses;
 
-    //I guess this is a list in case multiple users hav visited the house
-    @SerializedName("included")
-    List<CanvassData> included;
+  //I guess this is a list in case multiple users hav visited the house
+  @SerializedName("included")
+  List<CanvassData> included;
 
-    public List<ApiAddress> addresses() {
-        return this.addresses;
-    }
+  public List<ApiAddress> addresses() {
+    return this.addresses;
+  }
 
-    public List<CanvassData> included() {
-        return this.included;
-    }
+  public List<CanvassData> included() {
+    return this.included;
+  }
 
-    public SingleAddressResponse addresses(final List<ApiAddress> addresses) {
-        this.addresses = addresses;
-        return this;
-    }
+  public SingleAddressResponse addresses(final List<ApiAddress> addresses) {
+    this.addresses = addresses;
+    return this;
+  }
 
-    public SingleAddressResponse included(final List<CanvassData> included) {
-        this.included = included;
-        return this;
-    }
-
-
+  public SingleAddressResponse included(final List<CanvassData> included) {
+    this.included = included;
+    return this;
+  }
 }

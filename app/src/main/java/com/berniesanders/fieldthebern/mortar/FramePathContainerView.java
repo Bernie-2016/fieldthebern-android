@@ -21,18 +21,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import com.berniesanders.fieldthebern.R;
-
 import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContainer;
 import flow.path.PathContainerView;
 
-
 /** A FrameLayout that can show screens for a {@link flow.Flow}. */
-public class FramePathContainerView extends FrameLayout
-    implements HandlesBack, PathContainerView {
+public class FramePathContainerView extends FrameLayout implements HandlesBack, PathContainerView {
   private final PathContainer container;
   private boolean disabled;
 
@@ -42,7 +38,8 @@ public class FramePathContainerView extends FrameLayout
   }
 
   /**
-   * Allows subclasses to use custom {@link flow.path.PathContainer} implementations. Allows the use
+   * Allows subclasses to use custom {@link flow.path.PathContainer} implementations. Allows the
+   * use
    * of more sophisticated transition schemes, and customized context wrappers.
    */
   protected FramePathContainerView(Context context, AttributeSet attrs, PathContainer container) {
@@ -50,32 +47,38 @@ public class FramePathContainerView extends FrameLayout
     this.container = container;
   }
 
-  @Override public boolean dispatchTouchEvent(MotionEvent ev) {
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent ev) {
     return !disabled && super.dispatchTouchEvent(ev);
   }
 
-  @Override public ViewGroup getContainerView() {
+  @Override
+  public ViewGroup getContainerView() {
     return this;
   }
 
-  @Override public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
+  @Override
+  public void dispatch(Flow.Traversal traversal, final Flow.TraversalCallback callback) {
     disabled = true;
 
     //TODO   add a method to container to hold a ref to the traversal, then we can get
     //TODO   a view for a SceneAction and for trying to use the Transitions framework
     container.executeTraversal(this, traversal, new Flow.TraversalCallback() {
-      @Override public void onTraversalCompleted() {
+      @Override
+      public void onTraversalCompleted() {
         callback.onTraversalCompleted();
         disabled = false;
       }
     });
   }
 
-  @Override public boolean onBackPressed() {
+  @Override
+  public boolean onBackPressed() {
     return BackSupport.onBackPressed(getCurrentChild());
   }
 
-  @Override public ViewGroup getCurrentChild() {
+  @Override
+  public ViewGroup getCurrentChild() {
     return (ViewGroup) getContainerView().getChildAt(0);
   }
 }

@@ -17,9 +17,8 @@
 
 package com.berniesanders.fieldthebern.mortar;
 
-
 /**
  */
 public interface HasComponent {
-    Object getComponent();
+  Object getComponent();
 }

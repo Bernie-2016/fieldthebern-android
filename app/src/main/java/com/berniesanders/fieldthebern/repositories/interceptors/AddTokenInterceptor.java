@@ -19,31 +19,30 @@ package com.berniesanders.fieldthebern.repositories.interceptors;
 
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
+import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.io.IOException;
-
 public class AddTokenInterceptor implements Interceptor {
 
-    private final TokenRepo tokenRepo;
+  private final TokenRepo tokenRepo;
 
-    public AddTokenInterceptor(TokenRepo tokenRepo) {
-        this.tokenRepo = tokenRepo;
+  public AddTokenInterceptor(TokenRepo tokenRepo) {
+    this.tokenRepo = tokenRepo;
+  }
+
+  @Override
+  public Response intercept(Chain chain) throws IOException {
+
+    Request.Builder builder = chain.request().newBuilder();
+
+    Token token = tokenRepo.get();
+
+    if (token != null) {
+      builder.addHeader("Authorization", "Bearer " + token.accessToken());
     }
 
-    @Override
-    public Response intercept(Chain chain) throws IOException {
-
-        Request.Builder builder = chain.request().newBuilder();
-
-        Token token = tokenRepo.get();
-
-        if (token != null) {
-            builder.addHeader("Authorization", "Bearer " + token.accessToken());
-        }
-
-        return chain.proceed(builder.build());
-    }
+    return chain.proceed(builder.build());
+  }
 }

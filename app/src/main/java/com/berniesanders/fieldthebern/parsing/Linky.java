@@ -18,7 +18,6 @@
 package com.berniesanders.fieldthebern.parsing;
 
 import com.berniesanders.fieldthebern.models.Link;
-
 import java.util.List;
 
 /**
@@ -32,38 +31,36 @@ import java.util.List;
  */
 public class Linky {
 
-    private static final String aherf = "<a href=\"%s\">";
-    private static final String closeTag = "</a>";
+  private static final String aherf = "<a href=\"%s\">";
+  private static final String closeTag = "</a>";
 
-    public static String linkify(List<Link> links, String text) {
+  public static String linkify(List<Link> links, String text) {
 
-        //if(!hasLinks(links)) { return text; }
+    //if(!hasLinks(links)) { return text; }
 
-        int addedChars = 0; //offset for inserting
+    int addedChars = 0; //offset for inserting
 
-        for (Link link : links) {
-            StringBuilder stringBuilder = new StringBuilder(text);
+    for (Link link : links) {
+      StringBuilder stringBuilder = new StringBuilder(text);
 
-            int start           = link.getStart();
-            int end             = link.getEnd();
-            String href         = link.getHref();
-            String openTag      = String.format(aherf, href);
+      int start = link.getStart();
+      int end = link.getEnd();
+      String href = link.getHref();
+      String openTag = String.format(aherf, href);
 
-            stringBuilder.insert(addedChars + start, openTag);
-            addedChars += openTag.length();
+      stringBuilder.insert(addedChars + start, openTag);
+      addedChars += openTag.length();
 
-            stringBuilder.insert(addedChars + end, closeTag);
-            addedChars += closeTag.length();
+      stringBuilder.insert(addedChars + end, closeTag);
+      addedChars += closeTag.length();
 
-            text = stringBuilder.toString();
-        }
-
-        return text;
+      text = stringBuilder.toString();
     }
 
+    return text;
+  }
 
-    public static boolean hasLinks(List<Link> links) {
-        return  links!=null &&
-                !links.isEmpty();
-    }
+  public static boolean hasLinks(List<Link> links) {
+    return links != null && !links.isEmpty();
+  }
 }

@@ -20,7 +20,9 @@ package com.berniesanders.fieldthebern.screens;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.EditText;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
@@ -36,16 +38,10 @@ import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.PhotoEditView;
 import com.berniesanders.fieldthebern.views.ProfileEditView;
 import com.crashlytics.android.Crashlytics;
-
-import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import flow.Flow;
+import javax.inject.Inject;
 import mortar.ViewPresenter;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -56,222 +52,225 @@ import timber.log.Timber;
 @Layout(R.layout.screen_profile_edit)
 public class ProfileEditScreen extends FlowPathBase {
 
+  /**
+   * Constructor called by Flow throughout the app
+   * <p/>
+   * Example:
+   * Flow.get(context).set(new ExampleScreen("Some Data To Pass");
+   * <p/>
+   * Note:
+   * Generally common types like "String" are not injected because injection works based on type
+   */
+  public ProfileEditScreen() {
+  }
+
+  /**
+   * Create the component defined as an inner class below.
+   * This component will inject the presenter on the view, and dependencies/module on the
+   * presenter.
+   * You can pass data (someData) from the Screen to its Presenter through this component.
+   * Remember you must run the gradle 'build' class for Dagger to generate to component code
+   * <p/>
+   * Note:
+   * Generally common types like "String" are not injected because injection works based on type
+   */
+  @Override
+  public Object createComponent() {
+    return DaggerProfileEditScreen_Component.builder()
+        .mainComponent(
+            FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
+        .profileEditModule(new ProfileEditModule()) //pass data to the presenter here
+        .build();
+  }
+
+  @Override
+  public String getScopeName() {
+    return ProfileEditScreen.class.getName();
+  }
+
+  @dagger.Module
+  class ProfileEditModule {
+
     /**
-     * Constructor called by Flow throughout the app
-     * <p/>
-     * Example:
-     * Flow.get(context).set(new ExampleScreen("Some Data To Pass");
-     * <p/>
-     * Note:
-     * Generally common types like "String" are not injected because injection works based on type
+     * pass variables to the component that will then be injected to the presenter
      */
-    public ProfileEditScreen() {
+    public ProfileEditModule() {
+    }
+  }
+
+  /**
+   * This component is used to inject the view with the presenter once the view is inflated.
+   * The view will injected itself using this component on inflate.
+   * Expose anything you want injected to the presenter here
+   * Only use "dependencies = MainComponent.class" if you need something from the main component
+   * Only use "modules = ExampleModule.class" if you need a module
+   */
+  @FtbScreenScope
+  @dagger.Component(modules = ProfileEditModule.class, dependencies = MainComponent.class)
+  public interface Component {
+    /**
+     * injection target = the view (ProfileEditView) to have the presented injected on it
+     */
+    void inject(ProfileEditView t);
+
+    // Expose UserRepo through injection
+    @SuppressWarnings("unused")
+    UserRepo userRepo();
+  }
+
+  @FtbScreenScope
+  static public class Presenter extends ViewPresenter<ProfileEditView> {
+
+    /**
+     * Since the presenter is static it should survive rotation
+     */
+    private final UserRepo userRepo;
+
+    private Bitmap userPhoto;
+    private String base64PhotoData;
+
+    @Bind(R.id.first_name)
+    EditText firstNameEditText;
+
+    @Bind(R.id.last_name)
+    EditText lastNameEditText;
+
+    //        @Bind(R.id.email)
+    //        EditText emailEditText;
+
+    @Bind(R.id.photo_edit)
+    PhotoEditView photoEditView;
+
+    /**
+     * When the view is inflated, this presented is automatically injected to the ProfileEditView
+     * Constructor parameters here are injected automatically
+     */
+    @Inject
+    Presenter(UserRepo userRepo) {
+      this.userRepo = userRepo;
     }
 
     /**
-     * Create the component defined as an inner class below.
-     * This component will inject the presenter on the view, and dependencies/module on the presenter.
-     * You can pass data (someData) from the Screen to its Presenter through this component.
-     * Remember you must run the gradle 'build' class for Dagger to generate to component code
-     * <p/>
-     * Note:
-     * Generally common types like "String" are not injected because injection works based on type
+     * called when the presenter and view are ready.
+     * getView() will not be null
+     *
+     * @param savedInstanceState This bundle is only passed on rotation not passed on navigating
+     * back
      */
     @Override
-    public Object createComponent() {
-        return DaggerProfileEditScreen_Component
-                .builder()
-                .mainComponent(FTBApplication.getComponent()) //must set if module has (dependencies = MainComponent.class)
-                .profileEditModule(new ProfileEditModule()) //pass data to the presenter here
-                .build();
-    }
+    protected void onLoad(Bundle savedInstanceState) {
+      Timber.v("onLoad");
+      ButterKnife.bind(this, getView());
+      userRepo.getMe()
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Action1<User>() {
+            @Override
+            public void call(User user) {
+              String firstName = user.getData().attributes().getFirstName();
+              String lastName = user.getData().attributes().getLastName();
+              //                    String email = user.getData().attributes().getEmail();
+              firstNameEditText.setText(firstName);
+              lastNameEditText.setText(lastName);
+              //                    emailEditText.setText(email);
+              photoEditView.load(user.getData().attributes(), userPhoto);
+            }
+          }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+              Timber.e(throwable, "Unable to retrieve profile");
+              Crashlytics.logException(throwable);
+              ProfileEditView view = getView();
+              if (view != null) {
+                ToastService.get(view)
+                    .bern(view.getContext().getString(R.string.error_retrieving_profile));
+              } else {
+                Timber.w("getView() null, can not notify user of failed profile retrieval.");
+              }
+            }
+          });
 
-    @Override
-    public String getScopeName() {
-        return ProfileEditScreen.class.getName();
-    }
-
-
-    @dagger.Module
-    class ProfileEditModule {
-
-        /**
-         * pass variables to the component that will then be injected to the presenter
-         */
-        public ProfileEditModule() {
+      photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
+        @Override
+        public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
+          userPhoto = bitmap;
+          Presenter.this.base64PhotoData = base64PhotoData;
         }
+      });
+
+      getView().postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          photoEditView.toggleAvatarWidget(true);
+        }
+      }, 300);
     }
 
     /**
-     * This component is used to inject the view with the presenter once the view is inflated.
-     * The view will injected itself using this component on inflate.
-     * Expose anything you want injected to the presenter here
-     * Only use "dependencies = MainComponent.class" if you need something from the main component
-     * Only use "modules = ExampleModule.class" if you need a module
+     * Called on rotation only
      */
-    @FtbScreenScope
-    @dagger.Component(modules = ProfileEditModule.class, dependencies = MainComponent.class)
-    public interface Component {
-        /**
-         * injection target = the view (ProfileEditView) to have the presented injected on it
-         */
-        void inject(ProfileEditView t);
-
-        // Expose UserRepo through injection
-        @SuppressWarnings("unused")
-        UserRepo userRepo();
+    @Override
+    protected void onSave(Bundle outState) {
     }
 
-    @FtbScreenScope
-    static public class Presenter extends ViewPresenter<ProfileEditView> {
-
-        /**
-         * Since the presenter is static it should survive rotation
-         */
-        private final UserRepo userRepo;
-
-        private Bitmap userPhoto;
-        private String base64PhotoData;
-
-        @Bind(R.id.first_name)
-        EditText firstNameEditText;
-
-        @Bind(R.id.last_name)
-        EditText lastNameEditText;
-
-//        @Bind(R.id.email)
-//        EditText emailEditText;
-
-        @Bind(R.id.photo_edit)
-        PhotoEditView photoEditView;
-
-
-        /**
-         * When the view is inflated, this presented is automatically injected to the ProfileEditView
-         * Constructor parameters here are injected automatically
-         */
-        @Inject
-        Presenter(UserRepo userRepo) {
-            this.userRepo = userRepo;
-        }
-
-        /**
-         * called when the presenter and view are ready.
-         * getView() will not be null
-         *
-         * @param savedInstanceState This bundle is only passed on rotation not passed on navigating back
-         */
-        @Override
-        protected void onLoad(Bundle savedInstanceState) {
-            Timber.v("onLoad");
-            ButterKnife.bind(this, getView());
-            userRepo.getMe().subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<User>() {
-                @Override
-                public void call(User user) {
-                    String firstName = user.getData().attributes().getFirstName();
-                    String lastName = user.getData().attributes().getLastName();
-//                    String email = user.getData().attributes().getEmail();
-                    firstNameEditText.setText(firstName);
-                    lastNameEditText.setText(lastName);
-//                    emailEditText.setText(email);
-                    photoEditView.load(user.getData().attributes(), userPhoto);
-                }
-            }, new Action1<Throwable>() {
-                @Override
-                public void call(Throwable throwable) {
-                    Timber.e(throwable, "Unable to retrieve profile");
-                    Crashlytics.logException(throwable);
-                    ProfileEditView view = getView();
-                    if (view != null) {
-                        ToastService.get(view).bern(view.getContext().getString(R.string.error_retrieving_profile));
-                    } else {
-                        Timber.w("getView() null, can not notify user of failed profile retrieval.");
-                    }
-                }
-            });
-
-            photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
-                @Override
-                public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
-                    userPhoto = bitmap;
-                    Presenter.this.base64PhotoData = base64PhotoData;
-                }
-            });
-
-            getView().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    photoEditView.toggleAvatarWidget(true);
-                }
-            }, 300) ;
-        }
-
-        /**
-         * Called on rotation only
-         */
-        @Override
-        protected void onSave(Bundle outState) {
-        }
-
-
-        /**
-         * Last chance at the view before it is detached.
-         * You can save state with hack, (restore it the same way by reading the field).
-         * objects saved with be "parceled" by gson. Example:
-         * <p/>
-         * ((ProfileEditView)Path.get(view.getContext())).somePublicField = "Something you want to save"
-         */
-        @Override
-        public void dropView(ProfileEditView view) {
-            super.dropView(view);
-            ButterKnife.unbind(this);
-        }
-
-        @OnClick(R.id.submit_profile)
-        void onSaveProfileClicked() {
-            Timber.v("Attempting to save profile");
-            String firstName = firstNameEditText.getText().toString();
-            String lastName = lastNameEditText.getText().toString();
-//            String email = emailEditText.getText().toString();
-            UserSpec spec = new UserSpec();
-            final User user = new User();
-            user.getData().attributes().firstName(firstName);
-            user.getData().attributes().lastName(lastName);
-            user.getData().attributes().base64PhotoData(base64PhotoData);
-//            user.getData().attributes().email(email);
-            spec.create(new CreateUserRequest());
-            spec.update(user);
-            userRepo.update(spec)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<User>() {
-                        @Override
-                        public void call(User user) {
-                            Timber.v("Profile saved");
-                            ProfileEditView view = getView();
-                            if (view != null) {
-                                ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
-                                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                                Flow.get(view.getContext()).set(new HomeScreen());
-                            } else {
-                                Timber.w("getView() null, cannot notify user of successful profile save");
-                            }
-                        }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Timber.e(throwable, "Unable to save profile");
-                            Crashlytics.logException(throwable);
-                            ProfileEditView view = getView();
-                            if (view != null) {
-                                ToastService.get(view).bern(view.getContext().getString(R.string.error_saving_profile));
-                            } else {
-                                Timber.w("getView() null, cannot notify user of failed profile save");
-                            }
-                        }
-                    });
-        }
+    /**
+     * Last chance at the view before it is detached.
+     * You can save state with hack, (restore it the same way by reading the field).
+     * objects saved with be "parceled" by gson. Example:
+     * <p/>
+     * ((ProfileEditView)Path.get(view.getContext())).somePublicField = "Something you want to
+     * save"
+     */
+    @Override
+    public void dropView(ProfileEditView view) {
+      super.dropView(view);
+      ButterKnife.unbind(this);
     }
+
+    @OnClick(R.id.submit_profile)
+    void onSaveProfileClicked() {
+      Timber.v("Attempting to save profile");
+      String firstName = firstNameEditText.getText().toString();
+      String lastName = lastNameEditText.getText().toString();
+      //            String email = emailEditText.getText().toString();
+      UserSpec spec = new UserSpec();
+      final User user = new User();
+      user.getData().attributes().firstName(firstName);
+      user.getData().attributes().lastName(lastName);
+      user.getData().attributes().base64PhotoData(base64PhotoData);
+      //            user.getData().attributes().email(email);
+      spec.create(new CreateUserRequest());
+      spec.update(user);
+      userRepo.update(spec)
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread())
+          .subscribe(new Action1<User>() {
+            @Override
+            public void call(User user) {
+              Timber.v("Profile saved");
+              ProfileEditView view = getView();
+              if (view != null) {
+                ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
+                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+                Flow.get(view.getContext()).set(new HomeScreen());
+              } else {
+                Timber.w("getView() null, cannot notify user of successful profile save");
+              }
+            }
+          }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+              Timber.e(throwable, "Unable to save profile");
+              Crashlytics.logException(throwable);
+              ProfileEditView view = getView();
+              if (view != null) {
+                ToastService.get(view)
+                    .bern(view.getContext().getString(R.string.error_saving_profile));
+              } else {
+                Timber.w("getView() null, cannot notify user of failed profile save");
+              }
+            }
+          });
+    }
+  }
 }

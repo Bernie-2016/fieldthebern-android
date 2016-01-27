@@ -236,7 +236,15 @@
         android:text="@string/previously_participated"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
-
+      <android.support.v7.widget.SwitchCompat
+        android:id="@+id/asked_to_leave"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:checked="false"
+        android:text="@string/asked_to_leave"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
       <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

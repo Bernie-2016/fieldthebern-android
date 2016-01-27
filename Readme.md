@@ -2,8 +2,6 @@
 
 #Field the Bern (Android)
 
-This app is under development. 
-
 FieldTheBern helps you go door to door and canvass for Bernie. Knock on doors, tell people about Bernie, find out their level of interest. Next to phonebanking, canvassing is probably the second most crucial and effective way to get votes.The app allows volunteers to enter data about the visit. For example: if no one was home, or the resident strongly supports Bernie, and if they have been contacted before, or want to be contacted again.  A map shows pins for houses that have already been visited so that other volunteers don't overlap each other.  The app includes all the issues information from http://FeelTheBern.org/ (cached for offline) as well as primary and caucus dates and info for all 50 states. Canvassers can also track progress and score points and compete with other volunteers.
 
 Issue info is provided by [FeelTheBern.org](http://FeelTheBern.org)
@@ -27,7 +25,7 @@ We also use the following open-source libraries.
 * [Timber](https://github.com/JakeWharton/timber) (for logging)
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [RxJava](https://github.com/ReactiveX/RxJava)
-
+* [Otto](https://github.com/square/otto)
 
 Before contributing, please be sure your are familiar with the design patterns and libraries. 
 Feel free to reach out on Slack if you have questions!
@@ -38,25 +36,17 @@ Feel free to reach out on Slack if you have questions!
 Because all these API keys are based on your debug key, you will need to ask for a 
 valid `debug.keystore` from the current app developers.  
 
-All these keys **must** be generated with the same `debug.keystore`
+You should create a folder `/secure` in the root of your project, (already gitignored). 
 
-You will need a **YouTube API key** and **Google Maps Android API Key**. 
-Easiest way to get the Google API keys would be to ask a current **fieldthebern-android** developer.
- 
-You can also set up your own API keys (for YouTube and Google Maps) by following the instructions here: [Registering your application](https://developers.google.com/youtube/android/player/register)
-Both APIs use the same key, just add both to your application in the Google API Console.  
+This folder is where you will put a file called `debug_keys.properties` which has the API and OAuth keys you will need to build a functioning build of the app.
 
-In order to have the app work with **Facebook** you will need to ask us for the Facebook App ID.  
-You cannot setup your own facebook app because it needs to use the same app as the **fieldthebern-api**
-
-Once you have your key, create a `keys.xml` file under the `app/src/main/res/values` folder.  
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="googleApiKey">YOUR-API-KEY</string>
-    <string name="facebook_app_id">1234567890</string>
-</resources>
 ```
+key.google=...
+key.oathclient=...
+key.oathsecret=...
+key.facebookid=...
+```
+Please contact the current app devs for the `debug.keystore` and `debug_keys.properties` files
 
 ##Mortar and Flow
 
@@ -101,7 +91,7 @@ Example code using the `ActionBarController` to show the Toolbar from a presente
 ```java
 @Override
 protected void onLoad(Bundle savedInstanceState) {
-    ActionBarService.getActionbarController(getView()).showToolbar();
+    ActionBarService.get(getView()).showToolbar();
 }
 ```
 

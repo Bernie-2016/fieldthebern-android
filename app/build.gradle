@@ -1,186 +1,177 @@
 buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
+  repositories {
+    maven { url 'https://maven.fabric.io/public' }
+  }
 
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
+  dependencies {
+    classpath 'io.fabric.tools:gradle:1.+'
+  }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 repositories {
-    maven { url 'https://maven.fabric.io/public' }
+  maven { url 'https://maven.fabric.io/public' }
 }
 
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+  compileSdkVersion 23
+  buildToolsVersion "23.0.1"
 
-    signingConfigs {
-        ftb {
-                def propsFile = rootProject.file( "secure/secure.properties" )
-                //this check is to stop ci from failing
-                if (propsFile.exists()) {
-                    def props = new Properties()
-                    props.load(new FileInputStream(propsFile))
+  signingConfigs {
+    ftb {
+      def propsFile = rootProject.file("secure/secure.properties")
+      //this check is to stop ci from failing
+      if (propsFile.exists()) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
 
-                    storeFile = file("../secure/" + props['key.store'])
-                    storePassword = props['key.store.password']
-                    keyAlias = props['key.alias']
-                    keyPassword = props['key.alias.password']
-                }
-        }
+        storeFile = file("../secure/" + props['key.store'])
+        storePassword = props['key.store.password']
+        keyAlias = props['key.alias']
+        keyPassword = props['key.alias.password']
+      }
     }
+  }
 
-    defaultConfig {
-        applicationId "com.berniesanders.fieldthebern"
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 14
-        versionName "1.0.2"
-        multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
+  defaultConfig {
+    applicationId "com.berniesanders.fieldthebern"
+    minSdkVersion 15
+    targetSdkVersion 23
+    versionCode 15
+    versionName "1.0.3"
+    multiDexEnabled true
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+  buildTypes {
 
-        def ftbSigningConfig = signingConfigs.ftb
+    def ftbSigningConfig = signingConfigs.ftb
 
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig ftbSigningConfig
-        }
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig ftbSigningConfig
     }
-    packagingOptions {
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
-    }
-    lintOptions {
-        disable 'InvalidPackage','WrongConstant','ResourceType'
-    }
+  }
+  packagingOptions {
+    exclude 'META-INF/LICENSE'
+    exclude 'META-INF/NOTICE'
+    exclude 'META-INF/NOTICE.txt'
+    exclude 'LICENSE.txt'
+    exclude 'META-INF/services/javax.annotation.processing.Processor'
+  }
+  lintOptions {
+    disable 'InvalidPackage', 'WrongConstant', 'ResourceType'
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:recyclerview-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
-    compile 'com.android.support:palette-v7:23.1.0'
-    compile 'com.google.android.gms:play-services-maps:8.3.0'
-    compile 'com.google.android.gms:play-services-location:8.3.0'
-    compile 'com.android.support:multidex:1.0.1'
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile 'com.android.support:appcompat-v7:23.1.0'
+  compile 'com.android.support:recyclerview-v7:23.1.0'
+  compile 'com.android.support:design:23.1.0'
+  compile 'com.android.support:palette-v7:23.1.0'
+  compile 'com.google.android.gms:play-services-maps:8.3.0'
+  compile 'com.google.android.gms:play-services-location:8.3.0'
+  compile 'com.android.support:multidex:1.0.1'
 
-    compile 'com.google.code.gson:gson:2.5'
-    compile 'com.squareup.okhttp3:okhttp:3.0.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
-    compile 'com.google.guava:guava:18.0'
-    compile 'org.apache.commons:commons-lang3:3.4'
+  compile 'com.google.code.gson:gson:2.5'
+  compile 'com.squareup.okhttp3:okhttp:3.0.1'
+  compile 'com.squareup.okhttp3:logging-interceptor:3.0.1'
+  compile 'com.google.guava:guava:18.0'
+  compile 'org.apache.commons:commons-lang3:3.4'
 
-    compile 'com.google.dagger:dagger:2.0'
-    provided 'com.google.dagger:dagger-compiler:2.0'
-    provided 'org.glassfish:javax.annotation:10.0-b28'
+  compile 'com.google.dagger:dagger:2.0'
+  provided 'com.google.dagger:dagger-compiler:2.0'
+  provided 'org.glassfish:javax.annotation:10.0-b28'
 
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.jakewharton.timber:timber:3.0.2'
-    compile 'com.squareup:otto:1.3.7'
-    compile 'io.reactivex:rxandroid:0.24.0'
-    compile 'io.reactivex:rxjava:1.0.12'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.squareup.mortar:mortar:0.19'
-    compile 'com.squareup.flow:flow:0.12'
-    compile 'com.squareup.flow:flow-path:0.12'
-    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3'
-    compile 'uk.co.chrisjenx:calligraphy:2.1.0'
-    compile 'com.squareup:otto:1.3.8'
-    compile 'com.commit451:PhotoView:1.2.4'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.10'
-    compile 'com.facebook.android:facebook-android-sdk:4.6.0'
-    compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
-    compile 'me.relex:circleindicator:1.1.6@aar'
+  compile 'com.squareup.picasso:picasso:2.5.2'
+  compile 'com.jakewharton.timber:timber:3.0.2'
+  compile 'com.squareup:otto:1.3.7'
+  compile 'io.reactivex:rxandroid:0.24.0'
+  compile 'io.reactivex:rxjava:1.0.12'
+  compile 'com.jakewharton:butterknife:7.0.1'
+  compile 'com.squareup.mortar:mortar:0.19'
+  compile 'com.squareup.flow:flow:0.12'
+  compile 'com.squareup.flow:flow-path:0.12'
+  compile 'com.squareup.retrofit2:retrofit:2.0.0-beta3'
+  compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta3'
+  compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta3'
+  compile 'uk.co.chrisjenx:calligraphy:2.1.0'
+  compile 'com.squareup:otto:1.3.8'
+  compile 'com.commit451:PhotoView:1.2.4'
+  compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.10'
+  compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+  compile 'com.f2prateek.rx.preferences:rx-preferences:1.0.1'
+  compile 'me.relex:circleindicator:1.1.6@aar'
 
-    testCompile ('com.squareup.assertj:assertj-android:1.1.1') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    testCompile 'junit:junit:4.12'
+  testCompile('com.squareup.assertj:assertj-android:1.1.1') {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  }
+  testCompile 'junit:junit:4.12'
 
-    androidTestCompile ('com.android.support.test:runner:0.4') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestCompile ('com.android.support.test:rules:0.4') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+  androidTestCompile('com.android.support.test:runner:0.4') {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  }
+  androidTestCompile('com.android.support.test:rules:0.4') {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  }
 
-    testCompile "org.mockito:mockito-core:1.9.5"
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
+  testCompile "org.mockito:mockito-core:1.9.5"
+  compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    transitive = true;
+  }
 }
-android.applicationVariants.all{ variant ->
-    variant.mergeResources.doLast{
-        def gitHash = getGitHash()
-        def timeStamp = getDate()
+android.applicationVariants.all { variant ->
+  variant.mergeResources.doLast {
+    def gitHash = getGitHash()
+    def timeStamp = getDate()
 
-        File valuesFile = file("${buildDir}/intermediates/res/merged/${variant.dirName}/values/values.xml")
-        println("Replacing keys in file: " + valuesFile)
-        println("Git Hash: " + gitHash)
-        String content = valuesFile.getText('UTF-8')
-        content = content.replaceAll(/##HASHCODE##/, gitHash)
-        content = content.replaceAll(/##DATETIME##/, timeStamp)
-
-        if(variant.buildType.name.equals('release')) {
-            println "updating release keys and build info"
-
-            content = content.replaceAll(/##API_URL##/, "https://api.fieldthebern.com/")
-            def propsFile = rootProject.file( "secure/api_keys.properties" )
-            //this check is to stop ci from failing
-            if (propsFile.exists()) {
-                def props = new Properties()
-                props.load(new FileInputStream(propsFile))
-                def googleApiKey = props['key.google']
-                def oauthId = props['key.oathclient']
-                def oauthSecret = props['key.oathsecret']
-                content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
-                content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
-                content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
-            }
-        } else {
-            content = content.replaceAll(/##API_URL##/, "http://api.groundgameapp-staging.com/")
-            println "updating debug keys and build info"
-            def propsFile = rootProject.file( "secure/debug_keys.properties" )
-            //this check is to stop ci from failing
-            if (propsFile.exists()) {
-                def props = new Properties()
-                props.load(new FileInputStream(propsFile))
-                def googleApiKey = props['key.google']
-                def oauthId = props['key.oathclient']
-                def oauthSecret = props['key.oathsecret']
-                content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
-                content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
-                content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
-            }
-        }
-
-        valuesFile.write(content, 'UTF-8')
+    File valuesFile = file(
+        "${buildDir}/intermediates/res/merged/${variant.dirName}/values/values.xml")
+    println("Replacing keys in file: " + valuesFile)
+    println("Git Hash: " + gitHash)
+    String content = valuesFile.getText('UTF-8')
+    content = content.replaceAll(/##HASHCODE##/, gitHash)
+    content = content.replaceAll(/##DATETIME##/, timeStamp)
+    def propsFile
+    if (variant.buildType.name.equals('release')) {
+      println "updating release keys and build info"
+      content = content.replaceAll(/##API_URL##/, "https://api.fieldthebern.com/")
+      propsFile = rootProject.file("secure/api_keys.properties")
+    } else {
+      println "updating debug keys and build info"
+      content = content.replaceAll(/##API_URL##/, "http://api.groundgameapp-staging.com/")
+      propsFile = rootProject.file("secure/debug_keys.properties")
     }
+    //this check is to stop ci from failing
+    if (propsFile.exists()) {
+      def props = new Properties()
+      props.load(new FileInputStream(propsFile))
+      def googleApiKey = props['key.google']
+      def oauthId = props['key.oathclient']
+      def oauthSecret = props['key.oathsecret']
+      def facebookId = props['key.facebookid']
+      content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
+      content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
+      content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
+      content = content.replaceAll(/##FACEBOOK_ID##/, "$facebookId")
+    }
+
+    valuesFile.write(content, 'UTF-8')
+  }
 }
 
 def getDate() {
-    def date = new Date()
-    def formattedDate = date.format('yyyy-MM-dd_HHmm')
-    return formattedDate
+  def date = new Date()
+  def formattedDate = date.format('yyyy-MM-dd_HHmm')
+  return formattedDate
 }
 
 def getGitHash() {
-    def cmd = "git rev-parse --short HEAD"
-    def proc = cmd.execute()
-    return "(" + proc.text.trim() + ")"
+  def cmd = "git rev-parse --short HEAD"
+  def proc = cmd.execute()
+  return "(" + proc.text.trim() + ")"
 }

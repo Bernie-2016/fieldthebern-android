@@ -17,7 +17,6 @@
 
 package com.berniesanders.fieldthebern.views;
 
-
 import android.content.Context;
 import android.graphics.LightingColorFilter;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,83 +25,76 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.berniesanders.fieldthebern.R;
-import com.berniesanders.fieldthebern.screens.Main;
 import com.berniesanders.fieldthebern.adapters.CollectionRecyclerAdapter;
 import com.berniesanders.fieldthebern.models.Collection;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
-
+import com.berniesanders.fieldthebern.screens.Main;
 import javax.inject.Inject;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class MainView extends FrameLayout {
 
-    @Inject
-    Main.Presenter presenter;
+  @Inject
+  Main.Presenter presenter;
 
-    @Bind(R.id.mainRecyclerView)
-    RecyclerView recyclerView;
+  @Bind(R.id.mainRecyclerView)
+  RecyclerView recyclerView;
 
-    @Bind(R.id.progressWheel)
-    ProgressBar progressWheel;
+  @Bind(R.id.progressWheel)
+  ProgressBar progressWheel;
 
+  public MainView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    DaggerService.<Main.Component>getDaggerComponent(context, DaggerService.DAGGER_SERVICE).inject(
+        this);
+  }
 
-    public MainView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        DaggerService.<Main.Component>
-                getDaggerComponent(context, DaggerService.DAGGER_SERVICE)
-                .inject(this);
+  private void setLayoutManager(Context context) {
+    GridLayoutManager gridLayoutManager =
+        new GridLayoutManager(context, context.getResources().getInteger(R.integer.num_cols));
+    recyclerView.setLayoutManager(gridLayoutManager);
+  }
 
-    }
+  public GridLayoutManager getLayoutManager() {
+    return (GridLayoutManager) recyclerView.getLayoutManager();
+  }
 
-    private void setLayoutManager(Context context) {
-        GridLayoutManager gridLayoutManager
-                = new GridLayoutManager(context, context.getResources().getInteger(R.integer.num_cols));
-        recyclerView.setLayoutManager(gridLayoutManager);
-    }
+  @Override
+  protected void onFinishInflate() {
+    super.onFinishInflate();
+    ButterKnife.bind(this, this);
+    setLayoutManager(this.getContext());
+    progressWheel.getIndeterminateDrawable()
+        .setColorFilter(new LightingColorFilter(0xFF000000, 0xFFFFFF));
+    Timber.v("onFinishInflate");
+  }
 
-    public GridLayoutManager getLayoutManager() {
-        return (GridLayoutManager) recyclerView.getLayoutManager();
-    }
+  @Override
+  public void onAttachedToWindow() {
+    super.onAttachedToWindow();
+    presenter.takeView(this);
+  }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        ButterKnife.bind(this, this);
-        setLayoutManager(this.getContext());
-        progressWheel.getIndeterminateDrawable().setColorFilter(new LightingColorFilter(0xFF000000, 0xFFFFFF));
-        Timber.v("onFinishInflate");
-    }
+  @Override
+  protected void onDetachedFromWindow() {
+    presenter.dropView(this);
+    super.onDetachedFromWindow();
+  }
 
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        presenter.takeView(this);
-    }
+  public void setData(Collection collection) {
+    recyclerView.setAdapter(new CollectionRecyclerAdapter(collection));
+  }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        presenter.dropView(this);
-        super.onDetachedFromWindow();
-    }
+  public void showLoadingAnimation() {
+    progressWheel.setVisibility(View.VISIBLE);
+    recyclerView.setVisibility(View.INVISIBLE);
+  }
 
-
-    public void setData(Collection collection) {
-        recyclerView.setAdapter(new CollectionRecyclerAdapter(collection));
-    }
-
-    public void showLoadingAnimation() {
-        progressWheel.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.INVISIBLE);
-    }
-
-    public void hideLoadingAnimation() {
-        progressWheel.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
-    }
-
+  public void hideLoadingAnimation() {
+    progressWheel.setVisibility(View.GONE);
+    recyclerView.setVisibility(View.VISIBLE);
+  }
 }

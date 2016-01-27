@@ -17,9 +17,8 @@
 package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
-import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
-
+import com.berniesanders.fieldthebern.models.Token;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Header;
@@ -32,72 +31,61 @@ import rx.Observable;
  */
 public class TokenSpec {
 
-    LoginEmailRequest loginEmailRequest;
-    LoginFacebookRequest loginFacebookRequest;
+  LoginEmailRequest loginEmailRequest;
+  LoginFacebookRequest loginFacebookRequest;
 
-    public TokenSpec() {
-    }
+  public TokenSpec() {
+  }
 
+  public TokenSpec email(LoginEmailRequest loginEmailRequest) {
+    this.loginEmailRequest = loginEmailRequest;
+    return this;
+  }
 
-    public TokenSpec email(LoginEmailRequest loginEmailRequest) {
-        this.loginEmailRequest = loginEmailRequest;
-        return this;
-    }
+  public TokenSpec facebook(LoginFacebookRequest loginFacebookRequest) {
+    this.loginFacebookRequest = loginFacebookRequest;
+    return this;
+  }
 
-    public TokenSpec facebook(LoginFacebookRequest loginFacebookRequest) {
-        this.loginFacebookRequest = loginFacebookRequest;
-        return this;
-    }
+  public LoginEmailRequest getEmail() {
+    return loginEmailRequest;
+  }
 
+  public LoginFacebookRequest getFacebook() {
+    return loginFacebookRequest;
+  }
 
-    public LoginEmailRequest getEmail() {
-        return loginEmailRequest;
-    }
+  /**
+   * Retrofit 2 endpoint definition
+   */
+  public interface TokenEndpoint {
 
-    public LoginFacebookRequest getFacebook() {
-        return loginFacebookRequest;
-    }
+    @FormUrlEncoded
+    @Headers({
+        "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+    })
+    @POST("oauth/token")
+    Observable<Token> loginEmail(@Header("Authorization") String authString,
+        @Field("grant_type") String grantType, @Field("username") String username,
+        @Field("password") String password);
 
-    /**
-     * Retrofit 2 endpoint definition
-     */
-    public interface TokenEndpoint {
+    @FormUrlEncoded
+    @Headers({
+        "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+    })
+    @POST("oauth/token")
+    Observable<Token> loginFacebook(@Header("Authorization") String authString,
+        @Field("grant_type") String grantType, @Field("username") String username,
+        @Field("password") String password);
 
-        @FormUrlEncoded
-        @Headers({"Accept:application/json",
-                "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
-        })
-        @POST("oauth/token")
-        Observable<Token> loginEmail(
-                @Header("Authorization") String authString,
-                @Field("grant_type") String grantType,
-                @Field("username") String username,
-                @Field("password") String password);
-
-
-        @FormUrlEncoded
-        @Headers({"Accept:application/json",
-                "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
-        })
-        @POST("oauth/token")
-        Observable<Token> loginFacebook(
-                @Header("Authorization") String authString,
-                @Field("grant_type") String grantType,
-                @Field("username") String username,
-                @Field("password") String password);
-
-        @FormUrlEncoded
-        @Headers({"Accept:application/json",
-                "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
-        })
-        @POST("oauth/token")
-        Observable<Token> refresh(
-                //@Header("Authorization") String authString,
-                @Field("grant_type") String grantType,
-                @Field("client_id") String clientId,
-                @Field("client_secret") String clientSecret,
-                @Field("refresh_token") String refreshToken
-                                 );
-
-    }
+    @FormUrlEncoded
+    @Headers({
+        "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+    })
+    @POST("oauth/token")
+    Observable<Token> refresh(
+        //@Header("Authorization") String authString,
+        @Field("grant_type") String grantType, @Field("client_id") String clientId,
+        @Field("client_secret") String clientSecret, @Field("refresh_token") String refreshToken);
+  }
 }

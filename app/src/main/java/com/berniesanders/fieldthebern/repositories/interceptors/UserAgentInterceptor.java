@@ -17,26 +17,26 @@
 
 package com.berniesanders.fieldthebern.repositories.interceptors;
 
+import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import java.io.IOException;
-
 public class UserAgentInterceptor implements Interceptor {
 
-    private final String userAgent;
+  private final String userAgent;
 
-    public  UserAgentInterceptor(String userAgent) {
-        this.userAgent = userAgent;
-    }
+  public UserAgentInterceptor(String userAgent) {
+    this.userAgent = userAgent;
+  }
 
-    @Override
-    public Response intercept(Chain chain) throws IOException {
-        Request request = chain.request().newBuilder()
-                .removeHeader("User-Agent")
-                .addHeader("User-Agent", userAgent)
-                .build();
-        return chain.proceed(request);
-    }
+  @Override
+  public Response intercept(Chain chain) throws IOException {
+    Request request = chain.request()
+        .newBuilder()
+        .removeHeader("User-Agent")
+        .addHeader("User-Agent", userAgent)
+        .build();
+    return chain.proceed(request);
+  }
 }

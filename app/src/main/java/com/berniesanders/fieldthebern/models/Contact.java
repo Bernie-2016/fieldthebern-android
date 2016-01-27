@@ -18,24 +18,22 @@
 package com.berniesanders.fieldthebern.models;
 
 import android.support.annotation.StringDef;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 public class Contact {
 
-    // Contact Method
-    // <'email'|'phone'>,
-    @StringDef({
-            EMAIL,
-            PHONE
-    })
+  // Contact Method
+  // <'email'|'phone'>,
+  @StringDef({
+      EMAIL, PHONE
+  })
 
-    @Retention(RetentionPolicy.SOURCE)
+  @Retention(RetentionPolicy.SOURCE)
 
-    public @interface Method{}
+  public @interface Method {
+  }
 
-    public static final String EMAIL = "email";
-    public static final String PHONE = "phone";
-
+  public static final String EMAIL = "email";
+  public static final String PHONE = "phone";
 }

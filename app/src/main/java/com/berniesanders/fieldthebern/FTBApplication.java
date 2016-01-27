@@ -18,17 +18,14 @@
 package com.berniesanders.fieldthebern;
 
 import android.support.multidex.MultiDexApplication;
-
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.DialogController;
 import com.berniesanders.fieldthebern.dagger.DaggerMainComponent;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.dagger.MainModule;
+import com.berniesanders.fieldthebern.mortar.DaggerService;
 import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Bus;
-
-import com.berniesanders.fieldthebern.mortar.DaggerService;
-
 import io.fabric.sdk.android.Fabric;
 import mortar.MortarScope;
 import timber.log.Timber;
@@ -38,56 +35,55 @@ import timber.log.Timber;
  */
 public class FTBApplication extends MultiDexApplication {
 
-    private MortarScope rootScope;
-    static MainComponent component;
-    static Bus bus;
+  private MortarScope rootScope;
+  static MainComponent component;
+  static Bus bus;
 
-    @Override
-    public Object getSystemService(String name) {
-        if (rootScope == null && component!=null) {
-            rootScope = MortarScope.buildRootScope()
-                    .withService(DaggerService.DAGGER_SERVICE, getComponent())
-                            .build("Root");
-        }
-
-        if (rootScope == null) {
-            return super.getSystemService(name);
-        }
-        return rootScope.hasService(name) ? rootScope.getService(name) : super.getSystemService(name);
-
+  @Override
+  public Object getSystemService(String name) {
+    if (rootScope == null && component != null) {
+      rootScope = MortarScope.buildRootScope()
+          .withService(DaggerService.DAGGER_SERVICE, getComponent())
+          .build("Root");
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree());
-        } else {
-            Fabric.with(this, new Crashlytics());
-        }
-        component = DaggerMainComponent.builder()
-                .mainModule(new MainModule(getApplicationContext()))
-                .actionBarModule(new ActionBarController.ActionBarModule())
-                .dialogModule(new DialogController.DialogModule())
-                .build();
-
-//How to set a default application font
-//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-//                .setDefaultFontPath("fonts/Dosis-Regular.otf")
-//                .setFontAttrId(R.attr.fontPath)
-//                .build()
-//        );
-
-        bus = new Bus();
+    if (rootScope == null) {
+      return super.getSystemService(name);
     }
+    return rootScope.hasService(name) ? rootScope.getService(name) : super.getSystemService(name);
+  }
 
-    public static Bus getEventBus() {
-        return bus;
-    }
+  @Override
+  public void onCreate() {
+    super.onCreate();
 
-    //TODO this is a bit of an anti-pattern
-    public static MainComponent getComponent() {
-        return component;
+    if (BuildConfig.DEBUG) {
+      Timber.plant(new Timber.DebugTree());
+    } else {
+      Fabric.with(this, new Crashlytics());
     }
+    component = DaggerMainComponent.builder()
+        .mainModule(new MainModule(getApplicationContext()))
+        .actionBarModule(new ActionBarController.ActionBarModule())
+        .dialogModule(new DialogController.DialogModule())
+        .build();
+
+    //How to set a default application font
+    //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+    //                .setDefaultFontPath("fonts/Dosis-Regular.otf")
+    //                .setFontAttrId(R.attr.fontPath)
+    //                .build()
+    //        );
+
+    bus = new Bus();
+  }
+
+  public static Bus getEventBus() {
+    return bus;
+  }
+
+  //TODO this is a bit of an anti-pattern
+  public static MainComponent getComponent() {
+    return component;
+  }
 }

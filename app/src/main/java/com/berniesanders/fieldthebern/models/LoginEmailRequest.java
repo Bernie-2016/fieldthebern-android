@@ -22,42 +22,42 @@ package com.berniesanders.fieldthebern.models;
  */
 public final class LoginEmailRequest {
 
-    private final String grant_type = "password";
+  private final String grant_type = "password";
 
-    /**
-     * email
-     */
-    private String username;
-    private String password;
+  /**
+   * email
+   */
+  private String username;
+  private String password;
 
-    public LoginEmailRequest() {
-    }
+  public LoginEmailRequest() {
+  }
 
-    public String getGrantType() {
-        return grant_type;
-    }
+  public String getGrantType() {
+    return grant_type;
+  }
 
-    /**
-     * email
-     */
-    public String username() {
-        return username;
-    }
+  /**
+   * email
+   */
+  public String username() {
+    return username;
+  }
 
-    public String password() {
-        return password;
-    }
+  public String password() {
+    return password;
+  }
 
-    /**
-     * email
-     */
-    public LoginEmailRequest username(String username) {
-        this.username = username;
-        return this;
-    }
+  /**
+   * email
+   */
+  public LoginEmailRequest username(String username) {
+    this.username = username;
+    return this;
+  }
 
-    public LoginEmailRequest password(String password) {
-        this.password = password;
-        return this;
-    }
+  public LoginEmailRequest password(String password) {
+    this.password = password;
+    return this;
+  }
 }

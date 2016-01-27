@@ -19,19 +19,18 @@ package com.berniesanders.fieldthebern.repositories.specs;
 
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
-
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import rx.Observable;
 
 public class VisitSpec {
 
-    /**
-     * Retrofit 2 endpoint definition
-     */
-    public interface VisitEndpoint {
+  /**
+   * Retrofit 2 endpoint definition
+   */
+  public interface VisitEndpoint {
 
-        @POST("visits")
-        Observable<VisitResult> submit(@Body Visit visit);
-    }
+    @POST("visits")
+    Observable<VisitResult> submit(@Body Visit visit);
+  }
 }

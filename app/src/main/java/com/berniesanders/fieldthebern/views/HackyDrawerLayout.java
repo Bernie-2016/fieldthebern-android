@@ -17,38 +17,38 @@
 
 package com.berniesanders.fieldthebern.views;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
+import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
-import android.widget.RelativeLayout;
+import android.view.MotionEvent;
+import timber.log.Timber;
 
 /**
- *
+ * see
+ * https://github.com/chrisbanes/PhotoView/blob/master/sample/src/main/java/uk/co/senab/photoview/sample/HackyDrawerLayout.java
  */
-public class SquareRelativeLayout extends RelativeLayout {
 
-  public SquareRelativeLayout(Context context) {
+public class HackyDrawerLayout extends DrawerLayout {
+
+  public HackyDrawerLayout(Context context) {
     super(context);
   }
 
-  public SquareRelativeLayout(Context context, AttributeSet attrs) {
+  public HackyDrawerLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public SquareRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-    super(context, attrs, defStyleAttr);
-  }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public SquareRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr,
-      int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
+  public HackyDrawerLayout(Context context, AttributeSet attrs, int defStyle) {
+    super(context, attrs, defStyle);
   }
 
   @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    // Set a square layout.
-    super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+  public boolean onInterceptTouchEvent(MotionEvent ev) {
+    try {
+      return super.onInterceptTouchEvent(ev);
+    } catch (IllegalArgumentException e) {
+      Timber.e(e, "HackyDrawerLayout IllegalArgumentException");
+      return false;
+    }
   }
 }

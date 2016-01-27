@@ -17,16 +17,13 @@ package com.berniesanders.fieldthebern.mortar;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-
+import flow.StateParceler;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-
-import flow.StateParceler;
 
 public class GsonParceler implements StateParceler {
   private final Gson gson;
@@ -35,7 +32,8 @@ public class GsonParceler implements StateParceler {
     this.gson = gson;
   }
 
-  @Override public Parcelable wrap(Object instance) {
+  @Override
+  public Parcelable wrap(Object instance) {
     try {
       String json = encode(instance);
       return new Wrapper(json);
@@ -44,7 +42,8 @@ public class GsonParceler implements StateParceler {
     }
   }
 
-  @Override public Object unwrap(Parcelable parcelable) {
+  @Override
+  public Object unwrap(Parcelable parcelable) {
     Wrapper wrapper = (Wrapper) parcelable;
     try {
       return decode(wrapper.json);
@@ -93,21 +92,25 @@ public class GsonParceler implements StateParceler {
       this.json = json;
     }
 
-    @Override public int describeContents() {
+    @Override
+    public int describeContents() {
       return 0;
     }
 
-    @Override public void writeToParcel(Parcel out, int flags) {
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
       out.writeString(json);
     }
 
     public static final Parcelable.Creator<Wrapper> CREATOR = new Parcelable.Creator<Wrapper>() {
-      @Override public Wrapper createFromParcel(Parcel in) {
+      @Override
+      public Wrapper createFromParcel(Parcel in) {
         String json = in.readString();
         return new Wrapper(json);
       }
 
-      @Override public Wrapper[] newArray(int size) {
+      @Override
+      public Wrapper[] newArray(int size) {
         return new Wrapper[size];
       }
     };

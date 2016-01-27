@@ -17,7 +17,6 @@
 package com.berniesanders.fieldthebern.mortar;
 
 import android.view.View;
-
 import flow.Flow;
 
 /**

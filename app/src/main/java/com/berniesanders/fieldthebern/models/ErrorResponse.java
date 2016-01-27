@@ -17,10 +17,7 @@
 
 package com.berniesanders.fieldthebern.models;
 
-
 import java.util.List;
-
-
 
 /**
  * ErrorResponse
@@ -38,35 +35,34 @@ import java.util.List;
  * }
  */
 public class ErrorResponse {
-    public List<Error> errors;
+  public List<Error> errors;
 
-    public static class Error {
-        public String id;
-        public String title;
-        public String detail;
-        public int status;
+  public static class Error {
+    public String id;
+    public String title;
+    public String detail;
+    public int status;
 
-        @Override
-        public String toString() {
-            return title + " " + detail;
-        }
+    @Override
+    public String toString() {
+      return title + " " + detail;
+    }
+  }
+
+  public String getAllDetails() {
+    try {
+      StringBuilder sb = new StringBuilder();
+      for (Error error : errors) {
+        sb.append(error.detail);
+        sb.append("\n");
+      }
+      //remove the extra blank line
+      sb.delete(sb.lastIndexOf("\n"), sb.length());
+      return sb.toString();
+    } catch (Exception e) {
+
     }
 
-
-    public String getAllDetails() {
-        try {
-            StringBuilder sb = new StringBuilder();
-            for (Error error : errors) {
-                sb.append(error.detail);
-                sb.append("\n");
-            }
-            //remove the extra blank line
-            sb.delete(sb.lastIndexOf("\n"), sb.length());
-            return sb.toString();
-        } catch (Exception e) {
-
-        }
-
-        return "Unknown Error";
-    }
+    return "Unknown Error";
+  }
 }

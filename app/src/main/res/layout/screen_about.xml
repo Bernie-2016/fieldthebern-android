@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,122 +16,117 @@
   -->
 
 <com.berniesanders.fieldthebern.views.AboutView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bernie_dark_blue"
+  tools:context=".MainActivity">
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    tools:background="@color/bernie_dark_blue">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/logo_final"
-            android:layout_gravity="center_horizontal"
-            />
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/about_text"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/white"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/buildDate"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/white"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/gitHash"
-            android:layout_margin="10dp"
-            android:textColor="@android:color/white"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+    <ImageView
+      android:id="@+id/imageView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:src="@drawable/logo_final" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/about_text_2"
-            android:autoLink="email"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white"
-            />
+    <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_margin="10dp"
+      android:gravity="center"
+      android:text="@string/about_text"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/email_support"
-            android:textColor="#99DDFF"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_margin="10dp"
+      android:gravity="center"
+      android:text="@string/buildDate"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/paidFor"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:text="@string/paid_for"
-            android:layout_margin="20dp"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textAllCaps="true"
-            android:background="@drawable/white_border"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_gravity="center_horizontal"
-            />
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_margin="10dp"
+      android:gravity="center"
+      android:text="@string/gitHash"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="@android:color/white" />
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/made"
-            android:layout_gravity="center_horizontal"
-            />
+    <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:autoLink="email"
+      android:gravity="center"
+      android:text="@string/about_text_2"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="@android:color/white" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/credits_header"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="64dp"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
-        <TextView
-            android:id="@+id/credits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/credits"
-            android:textColor="@android:color/white"
-            android:layout_margin="16dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
-    </LinearLayout>
+    <TextView
+      android:id="@+id/email"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:gravity="center"
+      android:text="@string/email_support"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="#99DDFF" />
+
+    <TextView
+      android:id="@+id/paidFor"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_margin="20dp"
+      android:background="@drawable/white_border"
+      android:gravity="center"
+      android:padding="10dp"
+      android:text="@string/paid_for"
+      android:textAllCaps="true"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="@android:color/white" />
+
+    <ImageView
+      android:id="@+id/imageView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:src="@drawable/made" />
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_marginTop="64dp"
+      android:gravity="center"
+      android:text="@string/credits_header"
+      android:textAppearance="?android:attr/textAppearanceMedium"
+      android:textColor="@android:color/white"
+      android:textStyle="bold" />
+
+    <TextView
+      android:id="@+id/credits"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal"
+      android:layout_margin="16dp"
+      android:gravity="center"
+      android:text="@string/credits"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textColor="@android:color/white" />
+  </LinearLayout>
 </com.berniesanders.fieldthebern.views.AboutView>

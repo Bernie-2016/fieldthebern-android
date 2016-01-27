@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,18 +15,16 @@
   ~
   -->
 
-<TextView
-    android:id="@+id/points"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_horizontal"
-    android:layout_margin="0dp"
-    android:gravity="center"
-    android:padding="0dp"
-    android:textColor="@android:color/white"
-    android:textSize="72sp"
-    android:textStyle="bold"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@color/bernie_dark_blue"
-    />
+<TextView android:id="@+id/points"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity="center_horizontal"
+  android:layout_margin="0dp"
+  android:gravity="center"
+  android:padding="0dp"
+  android:textColor="@android:color/white"
+  android:textSize="72sp"
+  android:textStyle="bold"
+  tools:background="@color/bernie_dark_blue" />

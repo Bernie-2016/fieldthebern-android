@@ -14,212 +14,194 @@
   ~ limitations under the License.
   ~
   -->
-<com.berniesanders.fieldthebern.views.ProfileView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:background="@color/bernie_dark_blue"
-    android:clipChildren="false"
-    >
+<com.berniesanders.fieldthebern.views.ProfileView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:clipChildren="false"
+  android:orientation="vertical"
+  tools:background="@color/bernie_dark_blue">
 
 
-<LinearLayout
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
 
-        <ImageView
-            android:id="@+id/avatar"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginLeft="16dp"
-            tools:src="@drawable/ic_face_white_48dp"
-            />
+    <ImageView
+      android:id="@+id/avatar"
+      android:layout_width="96dp"
+      android:layout_height="96dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      tools:src="@drawable/ic_face_white_48dp" />
     <!--android:src="@drawable/ic_face_white_48dp"-->
 
     <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:orientation="vertical">
+
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        >
+        android:layout_marginBottom="4dp"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="4dp"
-            >
+        <TextView
+          android:id="@+id/full_name"
+          fontPath="fonts/Lato-Medium.ttf"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@android:color/white"
+          android:textSize="28sp"
+          tools:ignore="MissingPrefix"
+          tools:text="@string/profile" />
 
-            <TextView
-                android:id="@+id/full_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@string/profile"
-                android:textColor="@android:color/white"
-                android:textSize="28sp"
-                tools:ignore="MissingPrefix"
-                fontPath="fonts/Lato-Medium.ttf"
-                />
+        <android.support.v7.widget.AppCompatButton
+          android:id="@+id/submit_profile_settings"
+          android:layout_width="48dp"
+          android:layout_height="24dp"
+          android:layout_gravity="top"
+          android:background="?attr/selectableItemBackground"
+          android:text="@string/settings"
+          android:textAllCaps="false"
+          android:textColor="@android:color/white"
+          android:textSize="12sp"
+          android:textStyle="normal" />
+      </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/submit_profile_settings"
-                android:layout_width="48dp"
-                android:layout_height="24dp"
-                android:background="?attr/selectableItemBackground"
-                android:text="@string/settings"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                android:layout_gravity="top"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom"
-            >
-
-
-            <TextView
-                android:id="@+id/point_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="20"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_gravity="bottom"
-                />
-            <TextView
-                android:id="@+id/point_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/points"
-                android:textSize="12sp"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:layout_gravity="bottom"
-                />
-
-            <TextView
-                android:id="@+id/door_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="45"
-                android:textSize="36sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_marginLeft="16dp"
-                android:layout_gravity="bottom"
-                />
-
-            <TextView
-                android:id="@+id/door_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/doors"
-                android:textSize="12sp"
-                android:textAllCaps="true"
-                android:textColor="@android:color/white"
-                android:layout_gravity="bottom"
-                />
-        </LinearLayout>
-
-        </LinearLayout>
-
-
-
-</LinearLayout>
-
-    <TextView
-        android:id="@+id/weekly_leaderboard"
-        android:layout_width="wrap_content"
+      <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="@string/weekly_leaderboard"
-        android:textColor="@color/b_light_blue2"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        />
+        android:gravity="bottom">
 
 
+        <TextView
+          android:id="@+id/point_count"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:textColor="@android:color/white"
+          android:textSize="36sp"
+          android:textStyle="bold"
+          tools:text="20" />
+
+        <TextView
+          android:id="@+id/point_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:text="@string/points"
+          android:textAllCaps="true"
+          android:textColor="@android:color/white"
+          android:textSize="12sp" />
+
+        <TextView
+          android:id="@+id/door_count"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:layout_marginLeft="16dp"
+          android:textColor="@android:color/white"
+          android:textSize="36sp"
+          android:textStyle="bold"
+          tools:text="45" />
+
+        <TextView
+          android:id="@+id/door_text"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:text="@string/doors"
+          android:textAllCaps="true"
+          android:textColor="@android:color/white"
+          android:textSize="12sp" />
+      </LinearLayout>
+
+    </LinearLayout>
 
 
-        <!--android:id="@+id/submit_friends"-->
-        <!--android:id="@+id/submit_state"-->
-        <!--android:id="@+id/submit_everyone"-->
-    <RelativeLayout
+  </LinearLayout>
+
+  <TextView
+    android:id="@+id/weekly_leaderboard"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="left"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="16dp"
+    android:text="@string/weekly_leaderboard"
+    android:textColor="@color/b_light_blue2" />
+
+
+  <!--android:id="@+id/submit_friends"-->
+  <!--android:id="@+id/submit_state"-->
+  <!--android:id="@+id/submit_everyone"-->
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false">
+
+    <TabHost
+      android:id="@+id/tabHost"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_margin="16dp">
+
+      <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        >
-        <TabHost
+        android:orientation="vertical">
+
+        <TabWidget
+          android:id="@android:id/tabs"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:background="@color/white" />
+
+        <FrameLayout
+          android:id="@android:id/tabcontent"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+          <ListView
+            android:id="@+id/ranking_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/tabHost"
-            android:layout_margin="16dp"
-            >
+            android:orientation="vertical" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+          <ListView
+            android:id="@+id/ranking_listview2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
 
-                <TabWidget
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:id="@android:id/tabs"
-                    >
-                </TabWidget>
+          <ListView
+            android:id="@+id/ranking_listview3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" />
+        </FrameLayout>
+      </LinearLayout>
+    </TabHost>
 
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                        <ListView
-                            android:id="@+id/ranking_listview"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"/>
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/fab"
+      android:layout_width="64dp"
+      android:layout_height="64dp"
+      android:layout_alignParentBottom="true"
+      android:layout_alignParentRight="true"
+      android:layout_margin="32dp"
+      android:src="@drawable/ic_add_white_24dp"
+      app:borderWidth="0dp"
+      app:elevation="4dp"
+      app:fabSize="normal" />
 
-                        <ListView
-                            android:id="@+id/ranking_listview2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"/>
-
-                        <ListView
-                            android:id="@+id/ranking_listview3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"/>
-                </FrameLayout>
-            </LinearLayout>
-        </TabHost>
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            app:elevation="4dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="32dp"
-            android:src="@drawable/ic_add_white_24dp"
-            app:fabSize="normal"
-            app:borderWidth="0dp"
-        />
-
-    </RelativeLayout>
+  </RelativeLayout>
 
 </com.berniesanders.fieldthebern.views.ProfileView>

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +16,12 @@
   -->
 
 <resources>
-    <string name="baseUrl">http://feelthebern.org/</string>
-    <string name="canvassUrl">##API_URL##</string>
-    <string name="buildDate">##DATETIME##</string>
-    <string name="gitHash">##HASHCODE##</string>
+  <string name="baseUrl">http://feelthebern.org/</string>
+  <string name="canvassUrl">##API_URL##</string>
+  <string name="buildDate">##DATETIME##</string>
+  <string name="gitHash">##HASHCODE##</string>
+  <string name="googleApiKey">##GOOGLE_API_KEY##</string>
+  <string name="facebook_app_id">##FACEBOOK_ID##</string>
+  <string name="oauth2ClientId">##OAUTH_ID##</string>
+  <string name="oauth2ClientSecret">##OAUTH_SECRET##</string>
 </resources>

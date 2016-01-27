@@ -18,7 +18,6 @@
 package com.berniesanders.fieldthebern.views.holders;
 
 import android.view.View;
-
 import com.berniesanders.fieldthebern.models.Quote;
 
 /**
@@ -26,8 +25,7 @@ import com.berniesanders.fieldthebern.models.Quote;
  */
 public class QuoteHolder extends LinkableTextHolder<Quote> {
 
-    QuoteHolder(View itemView) {
-        super(itemView);
-    }
-
+  QuoteHolder(View itemView) {
+    super(itemView);
+  }
 }

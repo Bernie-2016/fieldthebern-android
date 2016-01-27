@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 - Bernie 2016, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,15 +14,12 @@
   ~ limitations under the License.
   ~
   -->
-<com.berniesanders.fieldthebern.views.ExampleView
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-    >
+<com.berniesanders.fieldthebern.views.ExampleView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
 
-<TextView
+  <TextView
     android:id="@+id/example_textView"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"

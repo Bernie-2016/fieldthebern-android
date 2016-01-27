@@ -24,20 +24,16 @@ package com.berniesanders.fieldthebern.controllers;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-
-import java.util.Arrays;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import java.util.Arrays;
+import javax.inject.Singleton;
 import mortar.Presenter;
 import mortar.bundler.BundleService;
 import rx.functions.Action0;
@@ -50,84 +46,76 @@ import static mortar.bundler.BundleService.getBundleService;
  */
 public class FacebookController extends Presenter<FacebookController.Activity> {
 
-    public interface Activity {
-        AppCompatActivity getActivity();
+  public interface Activity {
+    AppCompatActivity getActivity();
+  }
+
+  CallbackManager callbackManager;
+  Action0 onSuccess;
+
+  FacebookController() {
+  }
+
+  @Override
+  public void onLoad(Bundle savedInstanceState) {
+    Timber.v("FacebookController.onLoad()");
+  }
+
+  @Override
+  protected BundleService extractBundleService(Activity activity) {
+    return getBundleService(activity.getActivity());
+  }
+
+  public void loginWithFacebook(Action0 onSuccess) {
+
+    Timber.v("FacebookController.loginWithFacebook()");
+
+    this.onSuccess = onSuccess;
+    setupFacebookAuth();
+
+    LoginManager.getInstance()
+        .logInWithReadPermissions(getView().getActivity(),
+            Arrays.asList("public_profile", "email", "user_friends"));
+  }
+
+  public void setupFacebookAuth() {
+    Timber.v("FacebookController.setupFacebookAuth()");
+
+    callbackManager = CallbackManager.Factory.create();
+
+    LoginManager.getInstance()
+        .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+          @Override
+          public void onSuccess(LoginResult loginResult) {
+            Timber.v("FacebookCallback.onSuccess()");
+            AccessToken accessToken = loginResult.getAccessToken();
+            onSuccess.call();
+          }
+
+          @Override
+          public void onCancel() {
+            Timber.v("FacebookCallback.onCancel()");
+          }
+
+          @Override
+          public void onError(FacebookException exception) {
+            Timber.e(exception, "FacebookCallback.onError()");
+          }
+        });
+  }
+
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    Timber.v("FacebookController.onActivityResult()");
+    callbackManager.onActivityResult(requestCode, resultCode, data);
+  }
+
+  @Module
+  public static class FacebookModule {
+
+    @Provides
+    @Singleton
+    FacebookController provideFacebookController() {
+      return new FacebookController();
     }
-
-    CallbackManager callbackManager;
-    Action0 onSuccess;
-
-    FacebookController() {
-    }
-
-    @Override
-    public void onLoad(Bundle savedInstanceState) {
-        Timber.v("FacebookController.onLoad()");
-        if (callbackManager==null) {
-            setupFacebookAuth();
-        }
-    }
-
-
-    @Override
-    protected BundleService extractBundleService(Activity activity) {
-        return getBundleService(activity.getActivity());
-    }
-
-
-
-    public void loginWithFacebook(Action0 onSuccess) {
-
-        Timber.v("FacebookController.loginWithFacebook()");
-
-        this.onSuccess = onSuccess;
-        setupFacebookAuth();
-
-        LoginManager.getInstance()
-                .logInWithReadPermissions(
-                        getView().getActivity(),
-                        Arrays.asList("public_profile", "email", "user_friends"));
-    }
-
-    public void setupFacebookAuth() {
-        Timber.v("FacebookController.setupFacebookAuth()");
-
-        callbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Timber.v("FacebookCallback.onSuccess()");
-                        AccessToken accessToken = loginResult.getAccessToken();
-                        onSuccess.call();
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Timber.v("FacebookCallback.onCancel()");
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Timber.e(exception, "FacebookCallback.onError()");
-                    }
-                });
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.v("FacebookController.onActivityResult()");
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-
-    @Module
-    public static class FacebookModule {
-
-        @Provides
-        @Singleton
-        FacebookController provideFacebookController() {
-            return new FacebookController();
-        }
-    }
+  }
 }

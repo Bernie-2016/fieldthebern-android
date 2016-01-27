@@ -223,8 +223,10 @@ public class DialogController extends Presenter<DialogController.Activity> {
       return new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
-          dialogConfig.actions[actionIndex].action().call();
-          dialogConfig = null;
+          if (dialogConfig!=null) {
+            dialogConfig.actions[actionIndex].action().call();
+            dialogConfig = null;
+          }
         }
       };
     }

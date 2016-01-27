@@ -136,38 +136,28 @@ android.applicationVariants.all { variant ->
     String content = valuesFile.getText('UTF-8')
     content = content.replaceAll(/##HASHCODE##/, gitHash)
     content = content.replaceAll(/##DATETIME##/, timeStamp)
-
+    def propsFile
     if (variant.buildType.name.equals('release')) {
       println "updating release keys and build info"
-
       content = content.replaceAll(/##API_URL##/, "https://api.fieldthebern.com/")
-      def propsFile = rootProject.file("secure/api_keys.properties")
-      //this check is to stop ci from failing
-      if (propsFile.exists()) {
-        def props = new Properties()
-        props.load(new FileInputStream(propsFile))
-        def googleApiKey = props['key.google']
-        def oauthId = props['key.oathclient']
-        def oauthSecret = props['key.oathsecret']
-        content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
-        content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
-        content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
-      }
+      propsFile = rootProject.file("secure/api_keys.properties")
     } else {
-      content = content.replaceAll(/##API_URL##/, "http://api.groundgameapp-staging.com/")
       println "updating debug keys and build info"
-      def propsFile = rootProject.file("secure/debug_keys.properties")
-      //this check is to stop ci from failing
-      if (propsFile.exists()) {
-        def props = new Properties()
-        props.load(new FileInputStream(propsFile))
-        def googleApiKey = props['key.google']
-        def oauthId = props['key.oathclient']
-        def oauthSecret = props['key.oathsecret']
-        content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
-        content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
-        content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
-      }
+      content = content.replaceAll(/##API_URL##/, "http://api.groundgameapp-staging.com/")
+      propsFile = rootProject.file("secure/debug_keys.properties")
+    }
+    //this check is to stop ci from failing
+    if (propsFile.exists()) {
+      def props = new Properties()
+      props.load(new FileInputStream(propsFile))
+      def googleApiKey = props['key.google']
+      def oauthId = props['key.oathclient']
+      def oauthSecret = props['key.oathsecret']
+      def facebookId = props['key.facebookid']
+      content = content.replaceAll(/##GOOGLE_API_KEY##/, "$googleApiKey")
+      content = content.replaceAll(/##OAUTH_ID##/, "$oauthId")
+      content = content.replaceAll(/##OAUTH_SECRET##/, "$oauthSecret")
+      content = content.replaceAll(/##FACEBOOK_ID##/, "$facebookId")
     }
 
     valuesFile.write(content, 'UTF-8')

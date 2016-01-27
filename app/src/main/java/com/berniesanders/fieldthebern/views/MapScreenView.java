@@ -29,6 +29,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.location.Address;
 import android.location.Location;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -40,6 +41,7 @@ import butterknife.ButterKnife;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.LocationService;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.media.ResponseColor;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.mortar.DaggerService;
@@ -55,6 +57,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContext;
 import java.lang.ref.WeakReference;
@@ -165,10 +168,22 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
         @Override
         public void onMapReady(GoogleMap gmap) {
           Timber.v("OnMapReadyCallback");
-          MapScreenView.this.googleMap = gmap;
-          gmap.setMyLocationEnabled(true);
-          gmap.getUiSettings().setMapToolbarEnabled(false);
-          initCameraPosition(gmap);
+          if (PermissionService.get(MapScreenView.this).isGranted()) {
+            MapScreenView.this.googleMap = gmap;
+            gmap.setMyLocationEnabled(true);
+            gmap.getUiSettings().setMapToolbarEnabled(false);
+            initCameraPosition(gmap);
+          } else {
+            // Display a SnackBar with an explanation and a button to trigger the request.
+            Snackbar.make(MapScreenView.this, R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
+                .setAction(android.R.string.ok, new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                    PermissionService.get(MapScreenView.this).requestPermission();
+                  }
+                })
+                .show();
+          }
         }
       });
     }

@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +32,7 @@ import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.NavigationAdapter;
 import com.berniesanders.fieldthebern.annotations.Layout;
+import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
@@ -181,12 +183,7 @@ public class NavigationScreen extends FlowPathBase {
           switch (position) {
             case 0:
               if (!(flow.getHistory().top() instanceof MapScreen)) {
-                view.postDelayed(new Runnable() {
-                  @Override
-                  public void run() {
-                    flow.set(new MapScreen());
-                  }
-                }, 150);
+                showMapScreen();
               }
               break;
             case 1:
@@ -232,6 +229,27 @@ public class NavigationScreen extends FlowPathBase {
           drawerLayout.closeDrawers();
         }
       });
+    }
+
+    private void showMapScreen() {
+      if (PermissionService.get(getView()).isGranted()) {
+        getView().post(new Runnable() {
+          @Override
+          public void run() {
+            Flow.get(getView().getContext()).set(new MapScreen());
+          }
+        });
+      } else {
+        // Display a SnackBar with an explanation and a button to trigger the request.
+        Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
+            .setAction(android.R.string.ok, new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                PermissionService.get(getView()).requestPermission();
+              }
+            })
+            .show();
+      }
     }
 
     /**

@@ -59,9 +59,6 @@ public class FacebookController extends Presenter<FacebookController.Activity> {
   @Override
   public void onLoad(Bundle savedInstanceState) {
     Timber.v("FacebookController.onLoad()");
-    if (callbackManager == null) {
-      setupFacebookAuth();
-    }
   }
 
   @Override

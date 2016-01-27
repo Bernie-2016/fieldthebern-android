@@ -15,7 +15,8 @@
   ~
   -->
 
-<android.support.v4.widget.DrawerLayout android:id="@+id/drawer_layout"
+<com.berniesanders.fieldthebern.views.HackyDrawerLayout
+  android:id="@+id/drawer_layout"
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
@@ -84,7 +85,7 @@
 
   <include layout="@layout/screen_navigation_drawer" />
 
-</android.support.v4.widget.DrawerLayout>
+</com.berniesanders.fieldthebern.views.HackyDrawerLayout>
 
 
 

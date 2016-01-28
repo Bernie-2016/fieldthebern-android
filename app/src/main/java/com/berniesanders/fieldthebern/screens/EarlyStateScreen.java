@@ -133,19 +133,19 @@ public class EarlyStateScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.continueButton)
-    void onContinueClick() {
-      Flow.get(getView()).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+    void onContinueClick(final View v) {
+      Flow.get(v).setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
     }
 
     @OnClick(R.id.call)
-    void onCallClick() {
+    void onCallClick(final View v) {
       Intent intent = new Intent(Intent.ACTION_DIAL);
       intent.setData(Uri.parse("tel:" + earlyState.fieldOffice().phone()));
-      getView().getContext().startActivity(intent);
+      v.getContext().startActivity(intent);
     }
 
     @OnClick(R.id.map)
-    void onMapClick() {
+    void onMapClick(final View v) {
       Uri gmmIntentUri = Uri.parse("geo:"
           + earlyState.fieldOffice().lat()
           + ","
@@ -154,8 +154,8 @@ public class EarlyStateScreen extends FlowPathBase {
           + Uri.encode(earlyState.fieldOffice().flatAddress()));
       Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
       mapIntent.setPackage("com.google.android.apps.maps");
-      if (mapIntent.resolveActivity(getView().getContext().getPackageManager()) != null) {
-        getView().getContext().startActivity(mapIntent);
+      if (mapIntent.resolveActivity(v.getContext().getPackageManager()) != null) {
+        v.getContext().startActivity(mapIntent);
       }
     }
 

@@ -20,6 +20,7 @@ package com.berniesanders.fieldthebern.screens;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -327,17 +328,17 @@ public class ProfileScreen extends FlowPathBase {
     }
 
     @OnClick({ R.id.submit_profile_settings, R.id.avatar })
-    void onEditProfileClicked() {
-      Flow.get(getView()).set(new ProfileEditScreen());
+    void onEditProfileClicked(final View v) {
+      Flow.get(v).set(new ProfileEditScreen());
     }
 
     @OnClick(R.id.fab)
-    void invite() {
+    void invite(final View v) {
       Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
       emailIntent.putExtra(Intent.EXTRA_SUBJECT, inviteSubject);
       emailIntent.putExtra(Intent.EXTRA_TEXT, inviteBody);
       emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {}); // String[] addresses
-      getView().getContext().startActivity(Intent.createChooser(emailIntent, inviteFriends));
+      v.getContext().startActivity(Intent.createChooser(emailIntent, inviteFriends));
     }
   }
 }

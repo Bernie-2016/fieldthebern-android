@@ -19,6 +19,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -197,7 +198,9 @@ public class AddPersonScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.submit)
-    public void addPerson() {
+    public void addPerson(final View v) {
+
+      if (getView() == null) { return; }
 
       //update our "temp" person with value from the form
       getView().updatePerson(currentPerson);
@@ -216,7 +219,7 @@ public class AddPersonScreen extends FlowPathBase {
         visitRepo.addPerson(currentPerson);
       }
 
-      Flow.get(getView()).goBack();
+      Flow.get(v).goBack();
     }
 
     private boolean formIsValid(Person person) {

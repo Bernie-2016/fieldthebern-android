@@ -19,6 +19,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -361,11 +362,11 @@ public class MapScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.address_btn)
-    void onAddAddressClick() {
+    void onAddAddressClick(final View v) {
       address = getView().getCurrentAddress();
 
       if (address == null) {
-        ToastService.get(getView())
+        ToastService.get(v)
             .bern(getView().getResources().getString(R.string.err_address_not_loaded));
         return;
       }
@@ -374,7 +375,7 @@ public class MapScreen extends FlowPathBase {
       ((MapScreen) Path.get(getView().getContext())).cameraPosition = cameraPosition;
       ((MapScreen) Path.get(getView().getContext())).address = address;
       ((MapScreen) Path.get(getView().getContext())).nearby = nearbyAddresses;
-      Flow.get(getView()).set(new AddAddressScreen(address));
+      Flow.get(v).set(new AddAddressScreen(address));
       dropListeners(getView());
     }
   }

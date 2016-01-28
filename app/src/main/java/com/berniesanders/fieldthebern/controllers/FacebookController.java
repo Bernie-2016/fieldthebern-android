@@ -106,7 +106,9 @@ public class FacebookController extends Presenter<FacebookController.Activity> {
 
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     Timber.v("FacebookController.onActivityResult()");
-    callbackManager.onActivityResult(requestCode, resultCode, data);
+    if (callbackManager!=null) {
+      callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
   }
 
   @Module

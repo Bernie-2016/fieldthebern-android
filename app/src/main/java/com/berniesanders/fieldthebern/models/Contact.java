@@ -26,8 +26,8 @@ public class Contact {
   // Contact Method
   // <'email'|'phone'>,
   @StringDef({
-      EMAIL, PHONE
-  })
+                 EMAIL, PHONE
+             })
 
   @Retention(RetentionPolicy.SOURCE)
 

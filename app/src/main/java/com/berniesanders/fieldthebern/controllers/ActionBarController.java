@@ -126,7 +126,7 @@ public class ActionBarController extends Presenter<ActionBarController.Activity>
 
   @Override
   public void onLoad(Bundle savedInstanceState) {
-    if (config != null) update();
+    if (config != null) { update(); }
   }
 
   public void setConfig(Config config) {

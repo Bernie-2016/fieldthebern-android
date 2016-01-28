@@ -65,7 +65,7 @@ public class AboutView extends ScrollView {
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-    if (isInEditMode()) return;
+    if (isInEditMode()) { return; }
     presenter.takeView(this);
   }
 

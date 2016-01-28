@@ -203,9 +203,7 @@ public class AddPersonScreen extends FlowPathBase {
       getView().updatePerson(currentPerson);
 
       //make sure they are valid
-      if (!formIsValid(currentPerson)) {
-        return;
-      }
+      if (!formIsValid(currentPerson)) { return; }
 
       if (!isNewPerson) {
         //if we're editing a person loaded from the API, update its values and update the visit

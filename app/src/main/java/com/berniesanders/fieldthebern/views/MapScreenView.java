@@ -175,7 +175,9 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
             initCameraPosition(gmap);
           } else {
             // Display a SnackBar with an explanation and a button to trigger the request.
-            Snackbar.make(MapScreenView.this, R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(MapScreenView.this,
+                R.string.permission_contacts_rationale,
+                Snackbar.LENGTH_INDEFINITE)
                 .setAction(android.R.string.ok, new View.OnClickListener() {
                   @Override
                   public void onClick(View view) {

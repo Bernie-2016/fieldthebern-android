@@ -83,13 +83,13 @@ public class UserData extends CanvassData implements Parcelable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) { return true; }
+    if (o == null || getClass() != o.getClass()) { return false; }
 
     UserData userData = (UserData) o;
 
-    if (type != null ? !type.equals(userData.type) : userData.type != null) return false;
-    if (id != null ? !id.equals(userData.id) : userData.id != null) return false;
+    if (type != null ? !type.equals(userData.type) : userData.type != null) { return false; }
+    if (id != null ? !id.equals(userData.id) : userData.id != null) { return false; }
     if (attributes != null ? !attributes.equals(userData.attributes)
         : userData.attributes != null) {
       return false;

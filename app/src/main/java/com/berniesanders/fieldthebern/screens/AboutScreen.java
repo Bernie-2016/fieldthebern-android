@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.style.UnderlineSpan;
+import android.view.View;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -127,7 +128,7 @@ public class AboutScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.email)
-    void emailSupport() {
+    void emailSupport(final View v) {
       String body = "Version: " + BuildConfig.VERSION_NAME + "\n" +
           "\n" +
           "-- Device --" + "\n" +
@@ -144,7 +145,7 @@ public class AboutScreen extends FlowPathBase {
           new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:")).putExtra(Intent.EXTRA_EMAIL,
               new String[] { supportEmail }).putExtra(Intent.EXTRA_TEXT, body);
 
-      Context context = getView().getContext();
+      Context context = v.getContext();
       if (intent.resolveActivity(context.getPackageManager()) != null) {
         context.startActivity(intent);
       } else {

@@ -19,6 +19,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.view.View;
 import android.widget.CompoundButton;
 import butterknife.Bind;
 import butterknife.BindString;
@@ -304,22 +305,22 @@ public class NewVisitScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.add_person)
-    public void addPerson() {
-      Flow.get(getView()).set(new AddPersonScreen(null));
+    public void addPerson(final View v) {
+      Flow.get(v).set(new AddPersonScreen(null));
     }
 
     @OnClick(R.id.view_state_primary)
-    public void viewStatePrimaryInfo() {
-      Flow.get(getView()).set(new StatePrimaryScreen(apiAddress));
+    public void viewStatePrimaryInfo(final View v) {
+      Flow.get(v).set(new StatePrimaryScreen(apiAddress));
     }
 
     @OnClick(R.id.view_bernie_issues)
-    public void viewBernieIssues() {
-      Flow.get(getView()).set(new Main());
+    public void viewBernieIssues(final View v) {
+      Flow.get(v).set(new Main());
     }
 
     @OnClick(R.id.submit)
-    public void score() {
+    public void score(final View v) {
 
       if (noOneHome) {
         //the first item in the included() array is the address
@@ -338,7 +339,7 @@ public class NewVisitScreen extends FlowPathBase {
         return;
       }
 
-      ProgressDialogService.get(getView()).show(R.string.please_wait);
+      ProgressDialogService.get(v).show(R.string.please_wait);
       showPleaseWait = true;
 
       visitSubscription = visitRepo.submit()

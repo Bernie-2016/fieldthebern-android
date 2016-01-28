@@ -272,9 +272,9 @@ public class NavigationScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.drawer_profile)
-    void onProfileClicked() {
-      if (!(Flow.get(getView().getContext()).getHistory().top() instanceof ProfileScreen)) {
-        Flow.get(getView().getContext()).set(new ProfileScreen());
+    void onProfileClicked(final View v) {
+      if (!(Flow.get(v).getHistory().top() instanceof ProfileScreen)) {
+        Flow.get(v).set(new ProfileScreen());
       }
 
       drawerLayout.closeDrawers();

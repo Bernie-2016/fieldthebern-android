@@ -163,6 +163,10 @@ public class ChooseSignupScreen extends FlowPathBase {
     @OnClick(R.id.sign_up_facebook)
     void signUpFacebook() {
 
+      if (getView() == null) {
+        return;
+      }
+      
       FacebookService.get(getView()).loginWithFacebook(new Action0() {
         @Override
         public void call() {

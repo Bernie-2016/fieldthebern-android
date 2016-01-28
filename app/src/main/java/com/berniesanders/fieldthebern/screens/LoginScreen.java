@@ -523,6 +523,8 @@ public class LoginScreen extends FlowPathBase {
             .subscribe(new Action1<User>() {
               @Override
               public void call(User user) {
+                if (getView() == null) { return; } //TODO need some kind of better error handling here
+
                 ProgressDialogService.get(getView()).dismiss();
                 showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));

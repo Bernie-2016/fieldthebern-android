@@ -29,8 +29,14 @@ public class Party {
   // |'republican_affiliation'|'independent_affiliation'
   // |'other_affiliation'>,
   @StringDef({
-                 UNKNOWN, UNAFFILIATED, UNDECLARED, DEMOCRAT, REPUBLICAN, INDEPENDENT, OTHER
-             })
+      UNKNOWN,
+      UNAFFILIATED,
+      UNDECLARED,
+      DEMOCRAT,
+      REPUBLICAN,
+      INDEPENDENT,
+      OTHER
+  })
 
   @Retention(RetentionPolicy.SOURCE)
 

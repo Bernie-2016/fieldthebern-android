@@ -27,9 +27,15 @@ public class CanvassResponse {
   // 'Unknown'|'Asked to leave'|'Strongly for'|'Leaning for'|
   // 'Undecided'|'Leaning against'|'Strongly against'
   @StringDef({
-                 UNKNOWN, ASKED_TO_LEAVE, STRONGLY_FOR, LEANING_FOR, UNDECIDED, LEANING_AGAINST,
-                 STRONGLY_AGAINST, NO_ONE_HOME
-             })
+      UNKNOWN,
+      ASKED_TO_LEAVE,
+      STRONGLY_FOR,
+      LEANING_FOR,
+      UNDECIDED,
+      LEANING_AGAINST,
+      STRONGLY_AGAINST,
+      NO_ONE_HOME
+  })
 
   @Retention(RetentionPolicy.SOURCE)
 

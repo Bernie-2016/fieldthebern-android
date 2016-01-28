@@ -80,7 +80,6 @@
         </AndroidXmlCodeStyleSettings>
         <JavaCodeStyleSettings>
           <option name="ANNOTATION_PARAMETER_WRAP" value="5" />
-          <option name="ALIGN_MULTILINE_ANNOTATION_PARAMETERS" value="true" />
           <option name="CLASS_NAMES_IN_JAVADOC" value="3" />
         </JavaCodeStyleSettings>
         <Objective-C-extensions>

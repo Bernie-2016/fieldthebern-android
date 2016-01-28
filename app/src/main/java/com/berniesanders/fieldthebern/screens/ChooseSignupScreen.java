@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -156,18 +157,14 @@ public class ChooseSignupScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.sign_up_email)
-    void signUpEmail() {
-      Flow.get(getView().getContext()).set(new SignupScreen(new UserAttributes()));
+    void signUpEmail(final View v) {
+      Flow.get(v).set(new SignupScreen(new UserAttributes()));
     }
 
     @OnClick(R.id.sign_up_facebook)
-    void signUpFacebook() {
+    void signUpFacebook(final View v) {
 
-      if (getView() == null) {
-        return;
-      }
-      
-      FacebookService.get(getView()).loginWithFacebook(new Action0() {
+      FacebookService.get(v).loginWithFacebook(new Action0() {
         @Override
         public void call() {
           Timber.v("Action0.call()");
@@ -187,8 +184,7 @@ public class ChooseSignupScreen extends FlowPathBase {
                     return;
                   }
 
-                  Flow.get(getView().getContext())
-                      .set(new SignupScreen(facebookUser.convertToApiUser()));
+                  Flow.get(getView()).set(new SignupScreen(facebookUser.convertToApiUser()));
                 }
               });
           graphRequest.setParameters(parameters);
@@ -198,8 +194,8 @@ public class ChooseSignupScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.have_an_account)
-    void haveAccount() {
-      Flow.get(getView().getContext()).set(new ChooseLoginScreen());
+    void haveAccount(final View v) {
+      Flow.get(v).set(new ChooseLoginScreen());
     }
 
     private void attemptLoginViaRefresh() {

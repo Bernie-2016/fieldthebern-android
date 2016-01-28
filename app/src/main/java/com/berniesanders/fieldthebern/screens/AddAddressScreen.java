@@ -193,7 +193,13 @@ public class AddAddressScreen extends FlowPathBase {
 
     @OnClick(R.id.submit)
     public void startNewVisit() {
+
+      if (getView() == null) {
+        return;
+      }
+
       address = getView().getAddress();
+
       if (!formIsValid()) {
         return;
       }

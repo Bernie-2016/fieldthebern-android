@@ -17,7 +17,9 @@
 package com.berniesanders.fieldthebern.mortar;
 
 import android.view.View;
+import com.crashlytics.android.Crashlytics;
 import flow.Flow;
+import timber.log.Timber;
 
 /**
  * Support for {@link HandlesBack}.
@@ -25,12 +27,19 @@ import flow.Flow;
 public class BackSupport {
 
   public static boolean onBackPressed(View childView) {
-    if (childView instanceof HandlesBack) {
-      if (((HandlesBack) childView).onBackPressed()) {
-        return true;
+
+    try {
+      if (childView instanceof HandlesBack) {
+        if (((HandlesBack) childView).onBackPressed()) {
+          return true;
+        }
       }
+      return Flow.get(childView).goBack();
+    } catch (Exception e) {
+      Timber.e(e, "error going back for: "+childView);
+      Crashlytics.logException(e);
+      return false;
     }
-    return Flow.get(childView).goBack();
   }
 
   private BackSupport() {

@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -177,11 +178,11 @@ public class ScoreScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.back_to_map)
-    public void backToMap() {
-      getView().post(new Runnable() {
+    public void backToMap(final View v) {
+      v.post(new Runnable() {
         @Override
         public void run() {
-          Flow.get(getView()).setHistory(History.single(new MapScreen()), Flow.Direction.BACKWARD);
+          Flow.get(v).setHistory(History.single(new MapScreen()), Flow.Direction.BACKWARD);
         }
       });
     }

@@ -283,8 +283,8 @@ public class SignupScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.submit)
-    void onSubmit() {
-      if (PermissionService.get(getView()).isGranted()) {
+    void onSubmit(final View v) {
+      if (PermissionService.get(v).isGranted()) {
         if (!formIsValid()) {
           return;
         }
@@ -302,7 +302,7 @@ public class SignupScreen extends FlowPathBase {
             .setAction(android.R.string.ok, new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                PermissionService.get(getView()).requestPermission();
+                PermissionService.get(v).requestPermission();
               }
             })
             .show();

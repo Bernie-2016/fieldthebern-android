@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -151,22 +152,22 @@ public class ChooseLoginScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.login_email)
-    void loginEmail() {
+    void loginEmail(final View v) {
       Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
       String userString = userPref.get();
 
       //if we have any store user info we can start with that
       User user = (userString == null) ? new User() : gson.fromJson(userString, User.class);
 
-      ProgressDialogService.get(getView()).dismiss();
+      ProgressDialogService.get(v).dismiss();
       showPleaseWait = false;
-      Flow.get(getView().getContext()).set(new LoginScreen(user));
+      Flow.get(v).set(new LoginScreen(user));
     }
 
     //TODO: pass a pre-crafted user?
     @OnClick(R.id.login_facebook)
-    void loginFacebook() {
-      FacebookService.get(getView()).loginWithFacebook(new Action0() {
+    void loginFacebook(final View v) {
+      FacebookService.get(v).loginWithFacebook(new Action0() {
         @Override
         public void call() {
           Timber.v("Action0.call()");
@@ -200,8 +201,8 @@ public class ChooseLoginScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.no_account)
-    void noAccount() {
-      Flow.get(getView().getContext()).goBack();
+    void noAccount(final View v) {
+      Flow.get(v).goBack();
     }
 
     private void attemptLoginViaRefresh() {

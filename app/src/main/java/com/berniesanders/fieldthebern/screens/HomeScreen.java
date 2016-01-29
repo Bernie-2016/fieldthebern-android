@@ -113,18 +113,18 @@ public class HomeScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.screen_home_canvass)
-    void onCanvassClicked() {
+    void onCanvassClicked(final View v) {
 
-      if (PermissionService.get(getView()).isGranted()) {
-        getView().post(new Runnable() {
+      if (PermissionService.get(v).isGranted()) {
+        v.post(new Runnable() {
           @Override
           public void run() {
-            Flow.get(getView().getContext()).set(new MapScreen());
+            Flow.get(v).set(new MapScreen());
           }
         });
       } else {
         // Display a SnackBar with an explanation and a button to trigger the request.
-        Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(v, R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
             .setAction(android.R.string.ok, new View.OnClickListener() {
               @Override
               public void onClick(View view) {
@@ -136,21 +136,21 @@ public class HomeScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.screen_home_issues)
-    void onIssuesClicked() {
-      getView().post(new Runnable() {
+    void onIssuesClicked(final View v) {
+      v.post(new Runnable() {
         @Override
         public void run() {
-          Flow.get(getView().getContext()).set(new Main());
+          Flow.get(v).set(new Main());
         }
       });
     }
 
     @OnClick(R.id.screen_home_learn)
-    void onLearnClicked() {
-      getView().post(new Runnable() {
+    void onLearnClicked(final View v) {
+      v.post(new Runnable() {
         @Override
         public void run() {
-          Flow.get(getView().getContext()).set(new LearnScreen());
+          Flow.get(v).set(new LearnScreen());
         }
       });
     }

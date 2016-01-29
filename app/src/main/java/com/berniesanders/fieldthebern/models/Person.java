@@ -240,23 +240,25 @@ public class Person extends CanvassData implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
 
       Attributes that = (Attributes) o;
 
-      if (previouslyParticipated != that.previouslyParticipated) return false;
+      if (previouslyParticipated != that.previouslyParticipated) { return false; }
       if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) {
         return false;
       }
-      if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
-      if (email != null ? !email.equals(that.email) : that.email != null) return false;
-      if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
+      if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) {
+        return false;
+      }
+      if (email != null ? !email.equals(that.email) : that.email != null) { return false; }
+      if (phone != null ? !phone.equals(that.phone) : that.phone != null) { return false; }
       if (preferredContact != null ? !preferredContact.equals(that.preferredContact)
           : that.preferredContact != null) {
         return false;
       }
-      if (party != null ? !party.equals(that.party) : that.party != null) return false;
+      if (party != null ? !party.equals(that.party) : that.party != null) { return false; }
       return !(canvassResponse != null ? !canvassResponse.equals(that.canvassResponse)
           : that.canvassResponse != null);
     }
@@ -327,13 +329,13 @@ public class Person extends CanvassData implements Parcelable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) { return true; }
+    if (o == null || getClass() != o.getClass()) { return false; }
 
     Person person = (Person) o;
 
-    if (id != null ? !id.equals(person.id) : person.id != null) return false;
-    if (type != null ? !type.equals(person.type) : person.type != null) return false;
+    if (id != null ? !id.equals(person.id) : person.id != null) { return false; }
+    if (type != null ? !type.equals(person.type) : person.type != null) { return false; }
     return !(attributes != null ? !attributes.equals(person.attributes)
         : person.attributes != null);
   }

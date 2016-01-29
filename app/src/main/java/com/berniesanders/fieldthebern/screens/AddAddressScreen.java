@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -192,8 +193,14 @@ public class AddAddressScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.submit)
-    public void startNewVisit() {
+    public void startNewVisit(final View v) {
+
+      if (getView() == null) {
+        return;
+      }
+
       address = getView().getAddress();
+
       if (!formIsValid()) {
         return;
       }

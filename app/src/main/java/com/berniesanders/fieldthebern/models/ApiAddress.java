@@ -122,8 +122,8 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
 
       Relationships that = (Relationships) o;
 
@@ -285,20 +285,22 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) { return true; }
+      if (o == null || getClass() != o.getClass()) { return false; }
 
       Attributes that = (Attributes) o;
 
       if (longitude != null ? !longitude.equals(that.longitude) : that.longitude != null) {
         return false;
       }
-      if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) return false;
-      if (street1 != null ? !street1.equals(that.street1) : that.street1 != null) return false;
-      if (street2 != null ? !street2.equals(that.street2) : that.street2 != null) return false;
-      if (city != null ? !city.equals(that.city) : that.city != null) return false;
-      if (state != null ? !state.equals(that.state) : that.state != null) return false;
-      if (zip != null ? !zip.equals(that.zip) : that.zip != null) return false;
+      if (latitude != null ? !latitude.equals(that.latitude) : that.latitude != null) {
+        return false;
+      }
+      if (street1 != null ? !street1.equals(that.street1) : that.street1 != null) { return false; }
+      if (street2 != null ? !street2.equals(that.street2) : that.street2 != null) { return false; }
+      if (city != null ? !city.equals(that.city) : that.city != null) { return false; }
+      if (state != null ? !state.equals(that.state) : that.state != null) { return false; }
+      if (zip != null ? !zip.equals(that.zip) : that.zip != null) { return false; }
       if (visitedAt != null ? !visitedAt.equals(that.visitedAt) : that.visitedAt != null) {
         return false;
       }
@@ -420,13 +422,13 @@ public class ApiAddress extends CanvassData implements Parcelable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) { return true; }
+    if (o == null || getClass() != o.getClass()) { return false; }
 
     ApiAddress that = (ApiAddress) o;
 
-    if (id != null ? !id.equals(that.id) : that.id != null) return false;
-    if (type != null ? !type.equals(that.type) : that.type != null) return false;
+    if (id != null ? !id.equals(that.id) : that.id != null) { return false; }
+    if (type != null ? !type.equals(that.type) : that.type != null) { return false; }
     if (attributes != null ? !attributes.equals(that.attributes) : that.attributes != null) {
       return false;
     }

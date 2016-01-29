@@ -20,6 +20,7 @@ package com.berniesanders.fieldthebern.views;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import butterknife.Bind;
@@ -92,7 +93,7 @@ public class LearnView extends FrameLayout {
   }
 
   @OnClick(R.id.doneButton)
-  public void done() {
-    Flow.get(this).goBack();
+  public void done(final View v) {
+    Flow.get(v).goBack();
   }
 }

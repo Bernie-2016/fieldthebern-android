@@ -321,18 +321,18 @@ public class LoginScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.login_email)
-    void loginEmail() {
+    void loginEmail(final View v) {
 
-      if (PermissionService.get(getView()).isGranted()) {
+      if (PermissionService.get(v).isGranted()) {
 
         requestLocation();
       } else {
         // Display a SnackBar with an explanation and a button to trigger the request.
-        Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(v, R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
             .setAction(android.R.string.ok, new View.OnClickListener() {
               @Override
               public void onClick(View view) {
-                PermissionService.get(getView()).requestPermission();
+                PermissionService.get(view).requestPermission();
               }
             })
             .show();
@@ -523,6 +523,8 @@ public class LoginScreen extends FlowPathBase {
             .subscribe(new Action1<User>() {
               @Override
               public void call(User user) {
+                if (getView() == null) { return; } //TODO need some kind of better error handling here
+
                 ProgressDialogService.get(getView()).dismiss();
                 showPleaseWait = false;
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
@@ -535,8 +537,8 @@ public class LoginScreen extends FlowPathBase {
     };
 
     @OnClick(R.id.no_account)
-    void noAccount() {
-      Flow.get(getView())
+    void noAccount(final View v) {
+      Flow.get(v)
           .setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.BACKWARD);
     }
   }

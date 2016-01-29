@@ -19,6 +19,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -228,7 +229,7 @@ public class ProfileEditScreen extends FlowPathBase {
     }
 
     @OnClick(R.id.submit_profile)
-    void onSaveProfileClicked() {
+    void onSaveProfileClicked(final View v) {
       Timber.v("Attempting to save profile");
       String firstName = firstNameEditText.getText().toString();
       String lastName = lastNameEditText.getText().toString();

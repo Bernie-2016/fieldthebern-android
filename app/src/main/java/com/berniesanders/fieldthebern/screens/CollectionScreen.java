@@ -166,8 +166,8 @@ public class CollectionScreen extends FlowPathBase {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof CollectionScreen)) return false;
+    if (this == o) { return true; }
+    if (!(o instanceof CollectionScreen)) { return false; }
 
     CollectionScreen that = (CollectionScreen) o;
 

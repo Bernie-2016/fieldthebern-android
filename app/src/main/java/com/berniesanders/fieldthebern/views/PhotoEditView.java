@@ -119,7 +119,7 @@ public class PhotoEditView extends FrameLayout {
   }
 
   @OnClick(R.id.user_photo)
-  void showAvatarButtons() {
+  void showAvatarButtons(final View v) {
     if (avatarButtonSliderOpen) {
       toggleAvatarWidget(false); //close the widget
     } else {
@@ -173,30 +173,28 @@ public class PhotoEditView extends FrameLayout {
   };
 
   @OnClick(R.id.takePhoto)
-  void takePicture() {
-    final View view = this;
-    if (PermissionService.get(view).isPhotoGranted()) {
-      PhotoService.get(view).takePhoto(receiveNewBitmap);
+  void takePicture(final View v) {
+    if (PermissionService.get(v).isPhotoGranted()) {
+      PhotoService.get(v).takePhoto(receiveNewBitmap);
     } else {
-      requestTakePhotoPermission();
+      requestTakePhotoPermission(v);
     }
   }
 
   @OnClick(R.id.pickGallery)
-  void choosePhoto() {
-    final View view = this;
-    if (PermissionService.get(view).isPhotoGranted()) {
-      PhotoService.get(view).pickImage(receiveNewBitmap);
+  void choosePhoto(final View v) {
+    if (PermissionService.get(v).isPhotoGranted()) {
+      PhotoService.get(v).pickImage(receiveNewBitmap);
     } else {
-      requestGalleryPermission();
+      requestGalleryPermission(v);
     }
   }
 
-  private void requestTakePhotoPermission() {
-    PermissionService.get(this).requestGalleryPermission(new Action0() {
+  private void requestTakePhotoPermission(final View v) {
+    PermissionService.get(v).requestGalleryPermission(new Action0() {
       @Override
       public void call() {
-        takePicture();
+        takePicture(v);
       }
     }, new Action0() {
       @Override
@@ -212,11 +210,11 @@ public class PhotoEditView extends FrameLayout {
     Snackbar.make(this, R.string.permission_photo_rationale, Snackbar.LENGTH_INDEFINITE)
         .setAction(android.R.string.ok, new View.OnClickListener() {
           @Override
-          public void onClick(View view) {
-            PermissionService.get(PhotoEditView.this).requestGalleryPermission(new Action0() {
+          public void onClick(final View view) {
+            PermissionService.get(view).requestGalleryPermission(new Action0() {
               @Override
               public void call() {
-                takePicture();
+                takePicture(view);
               }
             }, null);
           }
@@ -224,31 +222,31 @@ public class PhotoEditView extends FrameLayout {
         .show();
   }
 
-  private void requestGalleryPermission() {
-    PermissionService.get(this).requestGalleryPermission(new Action0() {
+  private void requestGalleryPermission(final View v) {
+    PermissionService.get(v).requestGalleryPermission(new Action0() {
       @Override
       public void call() {
-        choosePhoto();
+        choosePhoto(v);
       }
     }, new Action0() {
       @Override
       public void call() {
-        showGalleryPhotoSnackbar();
+        showGalleryPhotoSnackbar(v);
       }
     });
   }
 
-  private void showGalleryPhotoSnackbar() {
+  private void showGalleryPhotoSnackbar(final View v) {
     // Display a SnackBar with an explanation and a button
     // to trigger the request.
     Snackbar.make(this, R.string.permission_photo_rationale, Snackbar.LENGTH_INDEFINITE)
         .setAction(android.R.string.ok, new View.OnClickListener() {
           @Override
-          public void onClick(View view) {
-            PermissionService.get(PhotoEditView.this).requestGalleryPermission(new Action0() {
+          public void onClick(final View view) {
+            PermissionService.get(view).requestGalleryPermission(new Action0() {
               @Override
               public void call() {
-                choosePhoto();
+                choosePhoto(view);
               }
             }, null);
           }

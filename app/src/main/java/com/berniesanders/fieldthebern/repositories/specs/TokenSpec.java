@@ -62,7 +62,8 @@ public class TokenSpec {
 
     @FormUrlEncoded
     @Headers({
-        "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+        "Accept:application/json",
+        "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
     })
     @POST("oauth/token")
     Observable<Token> loginEmail(@Header("Authorization") String authString,
@@ -71,7 +72,8 @@ public class TokenSpec {
 
     @FormUrlEncoded
     @Headers({
-        "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+        "Accept:application/json",
+        "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
     })
     @POST("oauth/token")
     Observable<Token> loginFacebook(@Header("Authorization") String authString,
@@ -80,7 +82,8 @@ public class TokenSpec {
 
     @FormUrlEncoded
     @Headers({
-        "Accept:application/json", "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
+        "Accept:application/json",
+        "Content-Type:application/x-www-form-urlencoded; charset=utf-8",
     })
     @POST("oauth/token")
     Observable<Token> refresh(

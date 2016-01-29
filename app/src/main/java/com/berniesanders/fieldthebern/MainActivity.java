@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity
 
     if (flowDelegate != null) {
       Object flowService = flowDelegate.getSystemService(name);
-      if (flowService != null) return flowService;
+      if (flowService != null) { return flowService; }
     }
 
     if (activityScope != null && activityScope.hasService(name)) {
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity
     if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
       drawerLayout.closeDrawer(GravityCompat.START);
     } else {
-      if (!container.onBackPressed()) super.onBackPressed();
+      if (!container.onBackPressed()) { super.onBackPressed(); }
     }
   }
 

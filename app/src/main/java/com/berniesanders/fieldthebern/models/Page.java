@@ -145,14 +145,14 @@ public class Page extends ApiItem implements Parcelable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof Page)) return false;
+    if (this == o) { return true; }
+    if (!(o instanceof Page)) { return false; }
 
     Page page = (Page) o;
 
-    if (data != page.data) return false;
-    if (title != null ? !title.equals(page.title) : page.title != null) return false;
-    if (url != null ? !url.equals(page.url) : page.url != null) return false;
+    if (data != page.data) { return false; }
+    if (title != null ? !title.equals(page.title) : page.title != null) { return false; }
+    if (url != null ? !url.equals(page.url) : page.url != null) { return false; }
     if (imageUrlThumb != null ? !imageUrlThumb.equals(page.imageUrlThumb)
         : page.imageUrlThumb != null) {
       return false;

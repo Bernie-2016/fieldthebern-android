@@ -431,11 +431,15 @@ public class SignupScreen extends FlowPathBase {
         if (e instanceof HttpException) {
           ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
           ToastService.get(getView()).bern(errorResponse.getAllDetails(), Toast.LENGTH_SHORT);
+          return;
         }
         if (e instanceof NetworkUnavailableException) {
           ToastService.get(getView())
               .bern(getView().getResources().getString(R.string.err_internet_not_available));
+          return;
         }
+        ToastService.get(getView())
+                .bern(getView().getResources().getString((R.string.err_registration_generic)));
       }
 
       @Override

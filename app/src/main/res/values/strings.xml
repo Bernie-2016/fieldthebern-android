@@ -99,6 +99,7 @@
   <string name="err_address_blank">Please enter an address</string>
   <string name="err_cant_load_photo">Unable to load photo</string>
   <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
+  <string name="err_registration_generic">Error logging in. Please restart and try again or email support at support@fieldthebern.com</string>
   <string name="location_disabled_title">Location disabled</string>
   <string name="location_disabled_message">Please enable your phone\'s location setting (specifically WiFi and network location)</string>
   <string name="profile_saved">Profile saved</string>

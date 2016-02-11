@@ -399,9 +399,10 @@ public class LoginScreen extends FlowPathBase {
           return;
         }
 
-        if (e instanceof HttpException) {
-          ErrorResponse errorResponse = errorResponseParser.parse((HttpException) e);
-          ToastService.get(getView()).bern(errorResponse.getAllDetails());
+        if (e instanceof HttpException && ((HttpException) e).code() == 401) {
+          ToastService.get(getView()).bern(getView().getResources().getString(R.string.err_incorrect_email_pass));
+        } else {
+          ToastService.get(getView()).bern(getView().getResources().getString(R.string.err_login_failed_generic));
         }
         ProgressDialogService.get(getView()).dismiss();
         showPleaseWait = false;

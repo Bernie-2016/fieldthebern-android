@@ -253,7 +253,7 @@ public class ProfileEditScreen extends FlowPathBase {
               if (view != null) {
                 ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
                 FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                Flow.get(view.getContext()).set(new HomeScreen());
+                Flow.get(view.getContext()).goBack();
               } else {
                 Timber.w("getView() null, cannot notify user of successful profile save");
               }

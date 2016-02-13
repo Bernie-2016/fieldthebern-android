@@ -24,14 +24,14 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.AppIntroView;
 import javax.inject.Inject;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
 @Layout(R.layout.app_intro)
-public class AppIntroScreen extends FlowPathBase {
+public class AppIntroScreen extends ParcelableScreen {
 
   public AppIntroScreen() {
   }
@@ -55,6 +55,8 @@ public class AppIntroScreen extends FlowPathBase {
     public AppIntroModule() {
     }
   }
+
+  public static final Creator<AppIntroScreen> CREATOR = zeroArgsScreenCreator(AppIntroScreen.class);
 
   @FtbScreenScope
   @dagger.Component(modules = AppIntroModule.class, dependencies = MainComponent.class)

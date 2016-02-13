@@ -19,6 +19,7 @@ package com.berniesanders.fieldthebern.screens;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.EditText;
 import butterknife.Bind;
@@ -33,7 +34,7 @@ import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.User;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
 import com.berniesanders.fieldthebern.views.PhotoEditView;
@@ -51,7 +52,7 @@ import timber.log.Timber;
  * Profile Screen for updating user profiles
  */
 @Layout(R.layout.screen_profile_edit)
-public class ProfileEditScreen extends FlowPathBase {
+public class ProfileEditScreen extends ParcelableScreen {
 
   /**
    * Constructor called by Flow throughout the app
@@ -88,6 +89,9 @@ public class ProfileEditScreen extends FlowPathBase {
   public String getScopeName() {
     return ProfileEditScreen.class.getName();
   }
+
+  public static final Parcelable.Creator<ProfileEditScreen>
+      CREATOR = zeroArgsScreenCreator(ProfileEditScreen.class);
 
   @dagger.Module
   class ProfileEditModule {

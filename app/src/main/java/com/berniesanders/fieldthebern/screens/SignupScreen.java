@@ -22,6 +22,8 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -51,7 +53,7 @@ import com.berniesanders.fieldthebern.models.CreateUserRequest;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.UserSpec;
@@ -81,7 +83,7 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isNullOrBlank
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_signup)
-public class SignupScreen extends FlowPathBase {
+public class SignupScreen extends ParcelableScreen {
 
   private final UserAttributes userAttributes;
 
@@ -107,6 +109,22 @@ public class SignupScreen extends FlowPathBase {
   public String getScopeName() {
     return SignupScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(userAttributes, 0);
+  }
+
+  public static final Parcelable.Creator<SignupScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<SignupScreen>() {
+    @Override protected SignupScreen doCreateFromParcel(Parcel source) {
+      UserAttributes userAttributes = source.readParcelable(UserAttributes.class.getClassLoader());
+      return new SignupScreen(userAttributes);
+    }
+
+    @Override public SignupScreen[] newArray(int size) {
+      return new SignupScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

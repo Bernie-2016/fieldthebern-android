@@ -1,6 +1,9 @@
 package com.berniesanders.fieldthebern.models;
 
-public class FieldOffice {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class FieldOffice implements Parcelable {
 
   private String state;
   private String address;
@@ -124,5 +127,49 @@ public class FieldOffice {
         ", lat=" + lat +
         ", lng=" + lng +
         '}';
+  }
+
+  // Parcelable stuff
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(state);
+    dest.writeString(address);
+    dest.writeString(city);
+    dest.writeString(zipCode);
+    dest.writeString(officeNumber);
+    dest.writeString(notes);
+    dest.writeString(officeLead);
+    dest.writeDouble(lat);
+    dest.writeDouble(lng);
+    dest.writeFloat(distance);
+  }
+
+  public static final Parcelable.Creator<FieldOffice> CREATOR
+      = new Parcelable.Creator<FieldOffice>() {
+    public FieldOffice createFromParcel(Parcel in) {
+      return new FieldOffice(in);
+    }
+
+    public FieldOffice[] newArray(int size) {
+      return new FieldOffice[size];
+    }
+  };
+
+  private FieldOffice(Parcel in) {
+    state = in.readString();
+    address = in.readString();
+    city = in.readString();
+    zipCode = in.readString();
+    officeNumber = in.readString();
+    notes = in.readString();
+    officeLead = in.readString();
+    lat = in.readDouble();
+    lng = in.readDouble();
+    distance = in.readFloat();
   }
 }

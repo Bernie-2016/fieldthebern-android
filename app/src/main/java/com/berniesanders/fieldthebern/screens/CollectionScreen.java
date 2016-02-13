@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.CollectionRecyclerAdapter;
@@ -25,7 +26,7 @@ import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.models.Collection;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.CollectionView;
 import dagger.Provides;
 import flow.path.Path;
@@ -39,13 +40,18 @@ import timber.log.Timber;
  *
  */
 @Layout(R.layout.screen_collection)
-public class CollectionScreen extends FlowPathBase {
+public class CollectionScreen extends ParcelableScreen {
 
   private final Collection collection;
   public Parcelable savedState;
 
   public CollectionScreen(Collection collection) {
     this.collection = collection;
+  }
+
+  public CollectionScreen(Collection collection, Parcelable savedState) {
+    this.collection = collection;
+    this.savedState = savedState;
   }
 
   @Override
@@ -57,6 +63,23 @@ public class CollectionScreen extends FlowPathBase {
   public String getScopeName() {
     return CollectionScreen.class.getName() + collection.hashCode();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(collection, 0);
+    parcel.writeParcelable(savedState, 0);
+  }
+
+  public static final Creator<CollectionScreen> CREATOR = new ScreenCreator<CollectionScreen>() {
+    @Override protected CollectionScreen doCreateFromParcel(Parcel source) {
+      Collection collection = source.readParcelable(Collection.class.getClassLoader());
+      Parcelable savedState = source.readParcelable(Parcelable.class.getClassLoader());
+      return new CollectionScreen(collection, savedState);
+    }
+
+    @Override public CollectionScreen[] newArray(int size) {
+      return new CollectionScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

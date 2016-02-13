@@ -17,6 +17,8 @@
 
 package com.berniesanders.fieldthebern.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +72,7 @@ import java.util.List;
  * See json in comment above.
  * https://github.com/Bernie-2016/fieldthebern-api/wiki/API-Visits
  */
-public class VisitResult {
+public class VisitResult implements Parcelable {
 
   Data data = new Data();
   List<Score> included = new ArrayList<>(); // Data for the associated score object.
@@ -83,10 +85,38 @@ public class VisitResult {
     return this.included;
   }
 
-  public static class Data {
+  public int describeContents() {
+    return 0;
+  }
+
+  public void writeToParcel(Parcel out, int flags) {
+    out.writeParcelable(data, 0);
+    out.writeList(included);
+  }
+
+  public static final Parcelable.Creator<VisitResult> CREATOR
+      = new Parcelable.Creator<VisitResult>() {
+    public VisitResult createFromParcel(Parcel in) {
+      return new VisitResult(in);
+    }
+
+    public VisitResult[] newArray(int size) {
+      return new VisitResult[size];
+    }
+  };
+
+  private VisitResult(Parcel in) {
+    data = in.readParcelable(Data.class.getClassLoader());
+    included = in.readArrayList(Score.class.getClassLoader());
+  }
+
+  public static class Data implements Parcelable {
 
     Relationships relationships = new Relationships();
     Attributes attributes = new Attributes();
+
+    public Data() {
+    }
 
     public Relationships relationships() {
       return this.relationships;
@@ -96,7 +126,32 @@ public class VisitResult {
       return this.attributes;
     }
 
-    public static class Attributes {
+    public int describeContents() {
+      return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+      out.writeParcelable(relationships, 0);
+      out.writeParcelable(attributes, 0);
+    }
+
+    public static final Parcelable.Creator<Data> CREATOR
+        = new Parcelable.Creator<Data>() {
+      public Data createFromParcel(Parcel in) {
+        return new Data(in);
+      }
+
+      public Data[] newArray(int size) {
+        return new Data[size];
+      }
+    };
+
+    private Data(Parcel in) {
+      relationships = in.readParcelable(Data.Relationships.class.getClassLoader());
+      attributes = in.readParcelable(Data.Attributes.class.getClassLoader());
+    }
+
+    public static class Attributes implements Parcelable {
       //<duration_in_seconds>,
       @SerializedName("duration_sec")
       int durationSeconds;
@@ -109,6 +164,9 @@ public class VisitResult {
       @SerializedName("created_at")
       String createdAt;
 
+      public Attributes() {
+      }
+
       public int durationSeconds() {
         return this.durationSeconds;
       }
@@ -120,9 +178,36 @@ public class VisitResult {
       public String createdAt() {
         return this.createdAt;
       }
+
+      public int describeContents() {
+        return 0;
+      }
+
+      public void writeToParcel(Parcel out, int flags) {
+        out.writeInt(durationSeconds);
+        out.writeInt(totalPoints);
+        out.writeString(createdAt);
+      }
+
+      public static final Parcelable.Creator<Attributes> CREATOR
+          = new Parcelable.Creator<Attributes>() {
+        public Attributes createFromParcel(Parcel in) {
+          return new Attributes(in);
+        }
+
+        public Attributes[] newArray(int size) {
+          return new Attributes[size];
+        }
+      };
+
+      private Attributes(Parcel in) {
+        durationSeconds = in.readInt();
+        totalPoints = in.readInt();
+        createdAt = in.readString();
+      }
     }
 
-    public static class Relationships {
+    public static class Relationships implements Parcelable {
       // links the visit to the user who created it
       User user;
 
@@ -142,6 +227,9 @@ public class VisitResult {
 
       //tracks the associated score
       Score score;
+
+      public Relationships() {
+      }
 
       public User user() {
         return this.user;
@@ -167,12 +255,91 @@ public class VisitResult {
         return this.score;
       }
 
-      public static class PersonUpdates {
+      public static class PersonUpdates implements Parcelable {
         List<Person> data;
+
+        public int describeContents() {
+          return 0;
+        }
+
+        public void writeToParcel(Parcel out, int flags) {
+          out.writeList(data);
+        }
+
+        public static final Parcelable.Creator<PersonUpdates> CREATOR
+            = new Parcelable.Creator<PersonUpdates>() {
+          public PersonUpdates createFromParcel(Parcel in) {
+            return new PersonUpdates(in);
+          }
+
+          public PersonUpdates[] newArray(int size) {
+            return new PersonUpdates[size];
+          }
+        };
+
+        private PersonUpdates(Parcel in) {
+          data = in.readArrayList(Person.class.getClassLoader());
+        }
       }
 
-      public static class PeopleUpdates {
+      public static class PeopleUpdates implements Parcelable {
         List<Person> data;
+
+        public int describeContents() {
+          return 0;
+        }
+
+        public void writeToParcel(Parcel out, int flags) {
+          out.writeList(data);
+        }
+
+        public static final Parcelable.Creator<PeopleUpdates> CREATOR
+            = new Parcelable.Creator<PeopleUpdates>() {
+          public PeopleUpdates createFromParcel(Parcel in) {
+            return new PeopleUpdates(in);
+          }
+
+          public PeopleUpdates[] newArray(int size) {
+            return new PeopleUpdates[size];
+          }
+        };
+
+        private PeopleUpdates(Parcel in) {
+          data = in.readArrayList(Person.class.getClassLoader());
+        }
+      }
+
+      public int describeContents() {
+        return 0;
+      }
+
+      public void writeToParcel(Parcel out, int flags) {
+        out.writeParcelable(user, 0);
+        out.writeParcelable(addressUpdate, 0);
+        out.writeParcelable(address, 0);
+        out.writeParcelable(personUpdates, 0);
+        out.writeParcelable(people, 0);
+        out.writeParcelable(score, 0);
+      }
+
+      public static final Parcelable.Creator<Relationships> CREATOR
+          = new Parcelable.Creator<Relationships>() {
+        public Relationships createFromParcel(Parcel in) {
+          return new Relationships(in);
+        }
+
+        public Relationships[] newArray(int size) {
+          return new Relationships[size];
+        }
+      };
+
+      private Relationships(Parcel in) {
+        user = in.readParcelable(User.class.getClassLoader());
+        addressUpdate = in.readParcelable(ApiAddress.class.getClassLoader());
+        address = in.readParcelable(ApiAddress.class.getClassLoader());
+        personUpdates = in.readParcelable(PersonUpdates.class.getClassLoader());
+        people = in.readParcelable(PeopleUpdates.class.getClassLoader());
+        score = in.readParcelable(Score.class.getClassLoader());
       }
     }
   }

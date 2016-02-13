@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.view.View;
 import android.widget.Toast;
 import butterknife.BindString;
@@ -42,7 +43,7 @@ import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -67,7 +68,7 @@ import timber.log.Timber;
  *
  */
 @Layout(R.layout.screen_add_address)
-public class AddAddressScreen extends FlowPathBase {
+public class AddAddressScreen extends ParcelableScreen {
 
   private final ApiAddress address;
 
@@ -87,6 +88,21 @@ public class AddAddressScreen extends FlowPathBase {
   public String getScopeName() {
     return AddAddressScreen.class.getName();// TODO temp scope name?
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(address, 0);
+  }
+
+  public static final Creator<AddAddressScreen> CREATOR = new ScreenCreator<AddAddressScreen>() {
+    @Override protected AddAddressScreen doCreateFromParcel(Parcel source) {
+      ApiAddress address = source.readParcelable(ApiAddress.class.getClassLoader());
+      return new AddAddressScreen(address);
+    }
+
+    @Override public AddAddressScreen[] newArray(int size) {
+      return new AddAddressScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

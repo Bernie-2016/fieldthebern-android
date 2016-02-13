@@ -18,6 +18,8 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.SwitchCompat;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -42,7 +44,7 @@ import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.VisitModified;
 import com.berniesanders.fieldthebern.repositories.StatesRepo;
@@ -66,7 +68,7 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_new_visit)
-public class NewVisitScreen extends FlowPathBase {
+public class NewVisitScreen extends ParcelableScreen {
 
   private final ApiAddress apiAddress;
 
@@ -100,6 +102,22 @@ public class NewVisitScreen extends FlowPathBase {
   public String getScopeName() {
     return NewVisitScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(apiAddress, 0);
+  }
+
+  public static final Parcelable.Creator<NewVisitScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<NewVisitScreen>() {
+    @Override protected NewVisitScreen doCreateFromParcel(Parcel source) {
+      ApiAddress apiAddress = source.readParcelable(ApiAddress.class.getClassLoader());
+      return new NewVisitScreen(apiAddress);
+    }
+
+    @Override public NewVisitScreen[] newArray(int size) {
+      return new NewVisitScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module { // expose module to presenter and pass the data

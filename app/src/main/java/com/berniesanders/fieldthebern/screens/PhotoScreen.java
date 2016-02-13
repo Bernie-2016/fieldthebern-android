@@ -18,13 +18,15 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.models.Img;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.PhotoScreenView;
 import com.squareup.picasso.Picasso;
 import dagger.Module;
@@ -38,7 +40,7 @@ import timber.log.Timber;
  *
  */
 @Layout(R.layout.screen_photo_view)
-public class PhotoScreen extends FlowPathBase {
+public class PhotoScreen extends ParcelableScreen {
 
   private final Img img;
 
@@ -55,6 +57,22 @@ public class PhotoScreen extends FlowPathBase {
   public String getScopeName() {
     return PhotoScreen.class.getName();// TODO temp scope name?
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(img, 0);
+  }
+
+  public static final Parcelable.Creator<PhotoScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<PhotoScreen>() {
+    @Override protected PhotoScreen doCreateFromParcel(Parcel source) {
+      Img img = source.readParcelable(Img.class.getClassLoader());
+      return new PhotoScreen(img);
+    }
+
+    @Override public PhotoScreen[] newArray(int size) {
+      return new PhotoScreen[size];
+    }
+  };
 
   @Module
   class ImgModule {

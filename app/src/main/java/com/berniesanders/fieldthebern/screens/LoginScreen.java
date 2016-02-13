@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -47,13 +49,12 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
-import com.berniesanders.fieldthebern.models.ErrorResponse;
 import com.berniesanders.fieldthebern.models.LoginEmailRequest;
 import com.berniesanders.fieldthebern.models.LoginFacebookRequest;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.parsing.FormValidator;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
@@ -85,7 +86,7 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_login)
-public class LoginScreen extends FlowPathBase {
+public class LoginScreen extends ParcelableScreen {
 
   private final User user;
 
@@ -111,6 +112,22 @@ public class LoginScreen extends FlowPathBase {
   public String getScopeName() {
     return LoginScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(user, 0);
+  }
+
+  public static final Parcelable.Creator<LoginScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<LoginScreen>() {
+    @Override protected LoginScreen doCreateFromParcel(Parcel source) {
+      User user = source.readParcelable(User.class.getClassLoader());
+      return new LoginScreen(user);
+    }
+
+    @Override public LoginScreen[] newArray(int size) {
+      return new LoginScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

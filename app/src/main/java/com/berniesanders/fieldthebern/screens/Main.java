@@ -17,6 +17,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -30,7 +31,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.Collection;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.CollectionRepo;
 import com.berniesanders.fieldthebern.repositories.specs.CollectionSpec;
 import com.berniesanders.fieldthebern.views.MainView;
@@ -45,11 +46,15 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 @Layout(R.layout.main_view)
-public class Main extends FlowPathBase {
+public class Main extends ParcelableScreen {
 
   Parcelable savedState;
 
   public Main() {
+  }
+
+  public Main(Parcelable savedState) {
+    this.savedState = savedState;
   }
 
   @Override
@@ -61,6 +66,21 @@ public class Main extends FlowPathBase {
   public String getScopeName() {
     return Main.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(savedState, 0);
+  }
+
+  public static final Creator<Main> CREATOR = new ScreenCreator<Main>() {
+    @Override protected Main doCreateFromParcel(Parcel source) {
+      Parcelable savedState = source.readParcelable(Parcelable.class.getClassLoader());
+      return new Main(savedState);
+    }
+
+    @Override public Main[] newArray(int size) {
+      return new Main[size];
+    }
+  };
 
   @FtbScreenScope
   @dagger.Component(dependencies = MainComponent.class)

@@ -3,6 +3,8 @@ package com.berniesanders.fieldthebern.screens;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.TextView;
@@ -17,7 +19,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.location.EarlyState;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.EarlyStateView;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import dagger.Provides;
@@ -31,7 +33,7 @@ import timber.log.Timber;
 /**
  */
 @Layout(R.layout.screen_early_state)
-public class EarlyStateScreen extends FlowPathBase {
+public class EarlyStateScreen extends ParcelableScreen {
 
   private final EarlyState earlyState;
 
@@ -51,6 +53,22 @@ public class EarlyStateScreen extends FlowPathBase {
   public String getScopeName() {
     return EarlyStateScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(earlyState, 0);
+  }
+
+  public static final Parcelable.Creator<EarlyStateScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<EarlyStateScreen>() {
+    @Override protected EarlyStateScreen doCreateFromParcel(Parcel source) {
+      EarlyState earlyState = source.readParcelable(EarlyState.class.getClassLoader());
+      return new EarlyStateScreen(earlyState);
+    }
+
+    @Override public EarlyStateScreen[] newArray(int size) {
+      return new EarlyStateScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

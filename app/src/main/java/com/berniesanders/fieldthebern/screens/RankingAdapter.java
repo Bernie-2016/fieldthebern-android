@@ -39,14 +39,14 @@ public class RankingAdapter extends ArrayAdapter<String> {
   private List<Rankings.Data> datas;
 
   public RankingAdapter(Context context, List<UserData> userDatas, List<Rankings.Data> datas) {
-    super(context, R.layout.screen_profile_row, new String[userDatas.size()]);
+    super(context, R.layout.row_profile, new String[userDatas.size()]);
     this.context = context;
     this.userDatas = userDatas;
     this.datas = datas;
   }
 
   public View getView(int position, View view, ViewGroup viewGroup) {
-    View newView = LayoutInflater.from(context).inflate(R.layout.screen_profile_row, null, true);
+    View newView = LayoutInflater.from(context).inflate(R.layout.row_profile, null, true);
 
     UserAttributes attributes = this.userDatas.get(position).attributes();
     Rankings.Attributes attributes1 = this.datas.get(position).attributes();

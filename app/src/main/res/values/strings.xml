@@ -98,6 +98,7 @@
   <string name="err_invalid_phone">Please enter a valid phone number</string>
   <string name="err_address_blank">Please enter an address</string>
   <string name="err_cant_load_photo">Unable to load photo</string>
+  <string name="err_cant_load_photo_bad_extension">Unable to load photo. File extension is not accepted.</string>
   <string name="err_no_visit">Please add or edit a person, or indicate if no one was home, or you were asked to leave</string>
   <string name="err_registration_generic">Error logging in. Please restart and try again or email support at support@fieldthebern.com</string>
   <string name="err_incorrect_email_pass">Incorrect email or password</string>

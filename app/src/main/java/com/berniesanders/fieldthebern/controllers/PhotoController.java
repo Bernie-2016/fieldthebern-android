@@ -128,7 +128,8 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
           String imagePath = imageUri.getPath();
           //If the uri comes from the default document picker, we don't have to worry about the
           // extension. Android will already have made sure it is an image.
-          if (!"com.android.providers.media.documents".equals(imageUri.getAuthority())) {
+          if (!("media".equals(imageUri.getAuthority()) && imageUri.getPath().startsWith("/external/images/media"))
+                  && (!"com.android.providers.media.documents".equals(imageUri.getAuthority()))) {
             //The user chose to use the file browser to select the uri, it might not be an image.
             //Check the type to make sure it's accepted.
             String extension = MimeTypeMap.getFileExtensionFromUrl(imageUri.getPath());

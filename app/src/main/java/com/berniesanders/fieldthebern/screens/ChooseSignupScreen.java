@@ -261,11 +261,13 @@ public class ChooseSignupScreen extends FlowPathBase {
             .subscribe(new Action1<User>() {
               @Override
               public void call(User user) {
-                ProgressDialogService.get(getView()).dismiss();
-                showPleaseWait = false;
-                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                Flow.get(getView())
-                    .setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+                if(getView() != null) {
+                  ProgressDialogService.get(getView()).dismiss();
+                  showPleaseWait = false;
+                  FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+                  Flow.get(getView())
+                      .setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
+                }
               }
             });
       }

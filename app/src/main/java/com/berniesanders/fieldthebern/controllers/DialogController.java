@@ -28,6 +28,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
+import com.berniesanders.fieldthebern.R;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -192,14 +193,22 @@ public class DialogController extends Presenter<DialogController.Activity> {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-      builder.setTitle(config.title())
-          .setMessage(config.message())
-          .setPositiveButton(config.actions[0].label(), createClickListener(0));
+      // Issue #51 in Fabric, crash due to a null DialogConfig object. If that is the case just show a basic fragment.
+      // I am not sure this is what we want, but will suffice to prevent the crash, this isnt a common Error, since its happened only to 4 devices/users
+      if(config != null) {
+        builder.setTitle(config.title())
+            .setMessage(config.message())
+            .setPositiveButton(config.actions[0].label(), createClickListener(0));
 
-      if (!config.isSingleButton()) {
-        builder.setNegativeButton(config.actions[1].label(), createClickListener(1));
+        if (!config.isSingleButton()) {
+          builder.setNegativeButton(config.actions[1].label(), createClickListener(1));
+        }
       }
-      //builder.setCancelable(false);
+      else{
+        builder.setTitle(R.string.app_name).
+            setPositiveButton(R.string.continue_btn, createClickListener(0));
+      }
+
       Dialog dialog = builder.create();
       dialog.setCanceledOnTouchOutside(false);
       return dialog;

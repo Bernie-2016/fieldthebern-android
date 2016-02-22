@@ -39,7 +39,7 @@ import com.berniesanders.fieldthebern.models.FacebookUser;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.models.UserAttributes;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.views.ChooseSignupView;
@@ -67,7 +67,7 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_choose_signup)
-public class ChooseSignupScreen extends FlowPathBase {
+public class ChooseSignupScreen extends ParcelableScreen {
 
   /**
    */
@@ -89,6 +89,8 @@ public class ChooseSignupScreen extends FlowPathBase {
   public String getScopeName() {
     return ChooseSignupScreen.class.getName();
   }
+
+  public static final Creator<ChooseSignupScreen> CREATOR = zeroArgsScreenCreator(ChooseSignupScreen.class);
 
   @dagger.Module
   class Module {

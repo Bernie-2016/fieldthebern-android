@@ -38,7 +38,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.models.User;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.repositories.specs.RankingSpec;
@@ -56,7 +56,7 @@ import timber.log.Timber;
  * Profile Screen for updating user profiles
  */
 @Layout(R.layout.screen_profile)
-public class ProfileScreen extends FlowPathBase {
+public class ProfileScreen extends ParcelableScreen {
 
   /**
    * Constructor called by Flow throughout the app
@@ -93,6 +93,8 @@ public class ProfileScreen extends FlowPathBase {
   public String getScopeName() {
     return ProfileScreen.class.getName();
   }
+
+  public static final Creator<ProfileScreen> CREATOR = zeroArgsScreenCreator(ProfileScreen.class);
 
   @dagger.Module
   class ProfileModule {

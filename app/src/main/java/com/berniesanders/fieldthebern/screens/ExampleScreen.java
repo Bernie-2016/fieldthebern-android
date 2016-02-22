@@ -18,13 +18,14 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import butterknife.ButterKnife;
 import com.berniesanders.fieldthebern.FTBApplication;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.annotations.Layout;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.ExampleView;
 import dagger.Provides;
 import javax.inject.Inject;
@@ -36,7 +37,7 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_example)
-public class ExampleScreen extends FlowPathBase {
+public class ExampleScreen extends ParcelableScreen {
 
   private final String someData;
 
@@ -76,6 +77,21 @@ public class ExampleScreen extends FlowPathBase {
   public String getScopeName() {
     return ExampleScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeString(someData);
+  }
+
+  public static final Creator<ExampleScreen> CREATOR = new ScreenCreator<ExampleScreen>() {
+    @Override protected ExampleScreen doCreateFromParcel(Parcel source) {
+      String someData = source.readString();
+      return new ExampleScreen(someData);
+    }
+
+    @Override public ExampleScreen[] newArray(int size) {
+      return new ExampleScreen[size];
+    }
+  };
 
   @dagger.Module
   class ExampleModule {

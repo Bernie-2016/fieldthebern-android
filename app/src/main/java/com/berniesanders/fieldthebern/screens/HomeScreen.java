@@ -29,7 +29,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.controllers.PermissionService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.HomeView;
 import flow.Flow;
 import javax.inject.Inject;
@@ -39,7 +39,7 @@ import timber.log.Timber;
 /**
  */
 @Layout(R.layout.screen_home)
-public class HomeScreen extends FlowPathBase {
+public class HomeScreen extends ParcelableScreen {
   /**
    */
   public HomeScreen() {
@@ -59,6 +59,8 @@ public class HomeScreen extends FlowPathBase {
     // note someData.hashCode() makes the screen unique
     return HomeScreen.class.getName();
   }
+
+  public static final Creator<HomeScreen> CREATOR = zeroArgsScreenCreator(HomeScreen.class);
 
   /**
    */

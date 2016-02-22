@@ -17,6 +17,8 @@
 
 package com.berniesanders.fieldthebern.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ import java.util.List;
 /**
  * https://github.com/Bernie-2016/fieldthebern-api/wiki/API-Visits
  */
-public class Visit {
+public class Visit implements Parcelable {
 
   Data data = new Data();
 
@@ -42,6 +44,9 @@ public class Visit {
 
   public Attributes attributes() {
     return data.attributes;
+  }
+
+  public Visit() {
   }
 
   public Visit attributes(final Attributes attributes) {
@@ -64,11 +69,62 @@ public class Visit {
         (int) ((data.attributes.finishTime - data.attributes.startTime) / 1000));
   }
 
-  public static class Data {
-    Attributes attributes = new Attributes();
+  public int describeContents() {
+    return 0;
   }
 
-  public static class Attributes {
+  public void writeToParcel(Parcel out, int flags) {
+    out.writeParcelable(data, 0);
+    out.writeList(included);
+  }
+
+  public static final Parcelable.Creator<Visit> CREATOR
+      = new Parcelable.Creator<Visit>() {
+    public Visit createFromParcel(Parcel in) {
+      return new Visit(in);
+    }
+
+    public Visit[] newArray(int size) {
+      return new Visit[size];
+    }
+  };
+
+  private Visit(Parcel in) {
+    data = in.readParcelable(Data.class.getClassLoader());
+    included = in.readArrayList(CanvassData.class.getClassLoader());
+  }
+
+  public static class Data implements Parcelable {
+    Attributes attributes = new Attributes();
+
+    public Data() {
+    }
+
+    public int describeContents() {
+      return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+      out.writeParcelable(attributes, 0);
+    }
+
+    public static final Parcelable.Creator<Data> CREATOR
+        = new Parcelable.Creator<Data>() {
+      public Data createFromParcel(Parcel in) {
+        return new Data(in);
+      }
+
+      public Data[] newArray(int size) {
+        return new Data[size];
+      }
+    };
+
+    private Data(Parcel in) {
+      attributes = in.readParcelable(Attributes.class.getClassLoader());
+    }
+  }
+
+  public static class Attributes implements Parcelable {
 
     /**
      * Milliseconds since epoch
@@ -90,9 +146,39 @@ public class Visit {
       return this.duration;
     }
 
+    public Attributes() {
+    }
+
     public Attributes duration(final int duration) {
       this.duration = duration;
       return this;
+    }
+
+    public int describeContents() {
+      return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+      out.writeLong(startTime);
+      out.writeLong(finishTime);
+      out.writeInt(duration);
+    }
+
+    public static final Parcelable.Creator<Attributes> CREATOR
+        = new Parcelable.Creator<Attributes>() {
+      public Attributes createFromParcel(Parcel in) {
+        return new Attributes(in);
+      }
+
+      public Attributes[] newArray(int size) {
+        return new Attributes[size];
+      }
+    };
+
+    private Attributes(Parcel in) {
+      startTime = in.readLong();
+      finishTime = in.readLong();
+      duration = in.readInt();
     }
   }
 }

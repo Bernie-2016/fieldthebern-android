@@ -27,14 +27,14 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.LearnView;
 import javax.inject.Inject;
 import mortar.ViewPresenter;
 import timber.log.Timber;
 
 @Layout(R.layout.screen_learn)
-public class LearnScreen extends FlowPathBase {
+public class LearnScreen extends ParcelableScreen {
 
   public LearnScreen() {
   }
@@ -51,6 +51,8 @@ public class LearnScreen extends FlowPathBase {
   public String getScopeName() {
     return LearnScreen.class.getName();
   }
+
+  public static final Creator<LearnScreen> CREATOR = zeroArgsScreenCreator(LearnScreen.class);
 
   @dagger.Module
   class LearnModule {

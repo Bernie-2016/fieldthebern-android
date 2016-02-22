@@ -18,6 +18,8 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import com.berniesanders.fieldthebern.FTBApplication;
@@ -29,7 +31,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.ApiAddress;
 import com.berniesanders.fieldthebern.models.StatePrimaryResponse;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.StatesRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.StatePrimaryView;
@@ -49,7 +51,7 @@ import timber.log.Timber;
  * Mortar screen for State primaries
  */
 @Layout(R.layout.screen_state_primary)
-public class StatePrimaryScreen extends FlowPathBase {
+public class StatePrimaryScreen extends ParcelableScreen {
 
   private final ApiAddress apiAddress;
 
@@ -69,6 +71,22 @@ public class StatePrimaryScreen extends FlowPathBase {
   public String getScopeName() {
     return StatePrimaryScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(apiAddress, 0);
+  }
+
+  public static final Parcelable.Creator<StatePrimaryScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<StatePrimaryScreen>() {
+    @Override protected StatePrimaryScreen doCreateFromParcel(Parcel source) {
+      ApiAddress apiAddress = source.readParcelable(ApiAddress.class.getClassLoader());
+      return new StatePrimaryScreen(apiAddress);
+    }
+
+    @Override public StatePrimaryScreen[] newArray(int size) {
+      return new StatePrimaryScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

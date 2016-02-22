@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import com.berniesanders.fieldthebern.R;
 import com.berniesanders.fieldthebern.adapters.PageRecyclerAdapter;
@@ -26,7 +27,7 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.models.Page;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.PageView;
 import dagger.Module;
 import dagger.Provides;
@@ -40,7 +41,7 @@ import timber.log.Timber;
  *
  */
 @Layout(R.layout.screen_page)
-public class PageScreen extends FlowPathBase {
+public class PageScreen extends ParcelableScreen {
 
   private final Page page;
 
@@ -49,6 +50,11 @@ public class PageScreen extends FlowPathBase {
 
   public PageScreen(Page page) {
     this.page = page;
+  }
+
+  public PageScreen(Page page, Parcelable savedState) {
+    this.page = page;
+    this.savedState = savedState;
   }
 
   @Override
@@ -60,6 +66,24 @@ public class PageScreen extends FlowPathBase {
   public String getScopeName() {
     return PageScreen.class.getName() + page.getTitle();// TODO temp scope name?
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(page, 0);
+    parcel.writeParcelable(savedState, 0);
+  }
+
+  public static final Parcelable.Creator<PageScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<PageScreen>() {
+    @Override protected PageScreen doCreateFromParcel(Parcel source) {
+      Page page = source.readParcelable(Page.class.getClassLoader());
+      Parcelable savedState = source.readParcelable(Parcelable.class.getClassLoader());
+      return new PageScreen(page, savedState);
+    }
+
+    @Override public PageScreen[] newArray(int size) {
+      return new PageScreen[size];
+    }
+  };
 
   @Module
   class PageModule {

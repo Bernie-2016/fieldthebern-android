@@ -18,6 +18,7 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import butterknife.BindString;
@@ -39,7 +40,7 @@ import com.berniesanders.fieldthebern.models.MultiAddressResponse;
 import com.berniesanders.fieldthebern.models.RequestMultipleAddresses;
 import com.berniesanders.fieldthebern.models.RequestSingleAddress;
 import com.berniesanders.fieldthebern.models.SingleAddressResponse;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.parsing.ErrorResponseParser;
 import com.berniesanders.fieldthebern.repositories.AddressRepo;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
@@ -66,13 +67,19 @@ import timber.log.Timber;
  *
  */
 @Layout(R.layout.screen_map)
-public class MapScreen extends FlowPathBase {
+public class MapScreen extends ParcelableScreen {
 
   public CameraPosition cameraPosition;
   public ApiAddress address;
   public List<ApiAddress> nearby;
 
   public MapScreen() {
+  }
+
+  public MapScreen(CameraPosition cameraPosition, ApiAddress address, List<ApiAddress> nearby) {
+    this.cameraPosition = cameraPosition;
+    this.address = address;
+    this.nearby = nearby;
   }
 
   @Override
@@ -88,6 +95,25 @@ public class MapScreen extends FlowPathBase {
   //    @Module
   //    class Module {
   //    }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(cameraPosition, 0);
+    parcel.writeParcelable(address, 0);
+    parcel.writeList(nearby);
+  }
+
+  public static final Creator<MapScreen> CREATOR = new ScreenCreator<MapScreen>() {
+    @Override protected MapScreen doCreateFromParcel(Parcel source) {
+      CameraPosition cameraPosition = source.readParcelable(CameraPosition.class.getClassLoader());
+      ApiAddress address = source.readParcelable(ApiAddress.class.getClassLoader());
+      List<ApiAddress> nearby = source.readArrayList(ApiAddress.class.getClassLoader());
+      return new MapScreen(cameraPosition, address, nearby);
+    }
+
+    @Override public MapScreen[] newArray(int size) {
+      return new MapScreen[size];
+    }
+  };
 
   @FtbScreenScope
   @dagger.Component(dependencies = MainComponent.class)

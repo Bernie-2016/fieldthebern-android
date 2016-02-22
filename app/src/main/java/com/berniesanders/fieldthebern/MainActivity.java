@@ -70,7 +70,7 @@ import com.berniesanders.fieldthebern.db.SearchMatrixCursor;
 import com.berniesanders.fieldthebern.models.ApiItem;
 import com.berniesanders.fieldthebern.models.Collection;
 import com.berniesanders.fieldthebern.models.Page;
-import com.berniesanders.fieldthebern.mortar.GsonParceler;
+import com.berniesanders.fieldthebern.mortar.BernParceler;
 import com.berniesanders.fieldthebern.mortar.MortarScreenSwitcherFrame;
 import com.berniesanders.fieldthebern.repositories.RankingsRepo;
 import com.berniesanders.fieldthebern.screens.CollectionScreen;
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity
         FacebookSdk.getApplicationSignature(getApplicationContext()));
     initActivityScope();
 
-    GsonParceler parceler = new GsonParceler(gson);
+    BernParceler parceler = new BernParceler();
 
     FlowDelegate.NonConfigurationInstance nonConfig =
         (FlowDelegate.NonConfigurationInstance) getLastCustomNonConfigurationInstance();
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  private History getHistory(Bundle savedInstanceState, GsonParceler parceler) {
+  private History getHistory(Bundle savedInstanceState, BernParceler parceler) {
     if (savedInstanceState != null
         && savedInstanceState.getParcelableArrayList("ENTRIES") != null) {
       return History.from(savedInstanceState, parceler);

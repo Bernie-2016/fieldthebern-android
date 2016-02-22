@@ -18,6 +18,8 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -33,7 +35,7 @@ import com.berniesanders.fieldthebern.models.Person;
 import com.berniesanders.fieldthebern.models.Score;
 import com.berniesanders.fieldthebern.models.Visit;
 import com.berniesanders.fieldthebern.models.VisitResult;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.views.ScoreView;
 import dagger.Provides;
 import flow.Flow;
@@ -48,7 +50,7 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_score)
-public class ScoreScreen extends FlowPathBase {
+public class ScoreScreen extends ParcelableScreen {
 
   private final VisitResult visitResult;
   private final Visit visit;
@@ -78,6 +80,24 @@ public class ScoreScreen extends FlowPathBase {
   public String getScopeName() {
     return ScoreScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(visitResult, 0);
+    parcel.writeParcelable(visit, 0);
+  }
+
+  public static final Parcelable.Creator<ScoreScreen>
+      CREATOR = new ScoreScreen.ScreenCreator<ScoreScreen>() {
+    @Override protected ScoreScreen doCreateFromParcel(Parcel source) {
+      VisitResult visitResult = source.readParcelable(VisitResult.class.getClassLoader());
+      Visit visit = source.readParcelable(Visit.class.getClassLoader());
+      return new ScoreScreen(visitResult, visit);
+    }
+
+    @Override public ScoreScreen[] newArray(int size) {
+      return new ScoreScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

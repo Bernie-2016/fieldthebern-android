@@ -38,7 +38,7 @@ import com.berniesanders.fieldthebern.exceptions.NetworkUnavailableException;
 import com.berniesanders.fieldthebern.models.FacebookUser;
 import com.berniesanders.fieldthebern.models.Token;
 import com.berniesanders.fieldthebern.models.User;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.TokenRepo;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.views.ChooseLoginView;
@@ -66,7 +66,7 @@ import timber.log.Timber;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_choose_login)
-public class ChooseLoginScreen extends FlowPathBase {
+public class ChooseLoginScreen extends ParcelableScreen {
 
   /**
    */
@@ -92,6 +92,8 @@ public class ChooseLoginScreen extends FlowPathBase {
   @dagger.Module
   class Module {
   }
+
+  public static final Creator<ChooseLoginScreen> CREATOR = zeroArgsScreenCreator(ChooseLoginScreen.class);
 
   /**
    */
@@ -156,7 +158,7 @@ public class ChooseLoginScreen extends FlowPathBase {
       Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
       String userString = userPref.get();
 
-      //if we have any store user info we can start with that
+      //if we have any stored user info we can start with that
       User user = (userString == null) ? new User() : gson.fromJson(userString, User.class);
 
       ProgressDialogService.get(v).dismiss();

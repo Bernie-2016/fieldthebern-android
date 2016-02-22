@@ -18,6 +18,8 @@
 package com.berniesanders.fieldthebern.screens;
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -35,7 +37,7 @@ import com.berniesanders.fieldthebern.controllers.ToastService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.models.Person;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.VisitRepo;
 import com.berniesanders.fieldthebern.views.AddPersonView;
 import dagger.Provides;
@@ -55,7 +57,7 @@ import static com.berniesanders.fieldthebern.parsing.FormValidator.isPhoneValid;
  * Set the @Layout annotation to the resource id of the layout for the screen
  */
 @Layout(R.layout.screen_add_person)
-public class AddPersonScreen extends FlowPathBase {
+public class AddPersonScreen extends ParcelableScreen {
 
   @Nullable
   private final Person personToEdit;
@@ -82,6 +84,22 @@ public class AddPersonScreen extends FlowPathBase {
   public String getScopeName() {
     return AddPersonScreen.class.getName();
   }
+
+  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+    parcel.writeParcelable(personToEdit, 0);
+  }
+
+  public static final Parcelable.Creator<AddPersonScreen>
+      CREATOR = new ParcelableScreen.ScreenCreator<AddPersonScreen>() {
+    @Override protected AddPersonScreen doCreateFromParcel(Parcel source) {
+      Person person = source.readParcelable(Person.class.getClassLoader());
+      return new AddPersonScreen(person);
+    }
+
+    @Override public AddPersonScreen[] newArray(int size) {
+      return new AddPersonScreen[size];
+    }
+  };
 
   @dagger.Module
   class Module {

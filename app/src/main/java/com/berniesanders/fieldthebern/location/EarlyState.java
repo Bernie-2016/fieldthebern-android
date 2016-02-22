@@ -1,6 +1,8 @@
 package com.berniesanders.fieldthebern.location;
 
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.StringDef;
 import com.berniesanders.fieldthebern.models.FieldOffice;
 import com.berniesanders.fieldthebern.models.FieldOfficeList;
@@ -11,7 +13,7 @@ import java.lang.annotation.RetentionPolicy;
     the phonebank popup should go to people who are NOT in one of these states:
     AL, AR, AZ, CO, IA, MA, ME, MN, NH, NV, SC, VA, TX
  */
-public class EarlyState {
+public final class EarlyState implements Parcelable {
 
   public static final String PHONEBANK = "phonebank";
   public static final String FIELD_OFFICE = "field_office";
@@ -158,6 +160,9 @@ public class EarlyState {
     return this.type;
   }
 
+  public EarlyState() {
+  }
+
   public EarlyState fieldOffice(final FieldOffice fieldOffice) {
     this.closestOffice = fieldOffice;
     return this;
@@ -184,5 +189,39 @@ public class EarlyState {
   public EarlyState type(@ScreenType final String type) {
     this.type = type;
     return this;
+  }
+
+  // Parcelable stuff
+  @Override
+  public int describeContents() {
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeParcelable(closestOffice, 0);
+    dest.writeParcelable(location, 0);
+    dest.writeString(state);
+    dest.writeList(offices);
+    dest.writeFloat(distance);
+  }
+
+  public static final Parcelable.Creator<EarlyState> CREATOR
+      = new Parcelable.Creator<EarlyState>() {
+    public EarlyState createFromParcel(Parcel in) {
+      return new EarlyState(in);
+    }
+
+    public EarlyState[] newArray(int size) {
+      return new EarlyState[size];
+    }
+  };
+
+  private EarlyState(Parcel in) {
+    closestOffice = in.readParcelable(FieldOffice.class.getClassLoader());
+    location = in.readParcelable(Location.class.getClassLoader());
+    state = in.readString();
+    offices = (FieldOfficeList) in.readArrayList(FieldOfficeList.class.getClassLoader());
+    distance = in.readFloat();
   }
 }

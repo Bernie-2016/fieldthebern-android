@@ -37,7 +37,7 @@ import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
 import com.berniesanders.fieldthebern.events.LoginEvent;
 import com.berniesanders.fieldthebern.models.User;
-import com.berniesanders.fieldthebern.mortar.FlowPathBase;
+import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.UserRepo;
 import com.berniesanders.fieldthebern.views.NavigationView;
 import com.squareup.otto.Subscribe;
@@ -55,7 +55,7 @@ import timber.log.Timber;
  * Layout only really needed for Flow screens
  */
 @Layout(R.layout.screen_navigation_drawer)
-public class NavigationScreen extends FlowPathBase {
+public class NavigationScreen extends ParcelableScreen {
 
   /**
    * Not used in this case as flow isn't involved to call this method.
@@ -74,6 +74,8 @@ public class NavigationScreen extends FlowPathBase {
   //    @dagger.Module
   //    class Module {
   //    }
+
+  public static final Creator<NavigationScreen> CREATOR = zeroArgsScreenCreator(NavigationScreen.class);
 
   /**
    * This component is used to inject the view with the presenter once the view is inflated.

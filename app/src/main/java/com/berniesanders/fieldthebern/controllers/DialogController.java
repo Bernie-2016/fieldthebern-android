@@ -204,7 +204,7 @@ public class DialogController extends Presenter<DialogController.Activity> {
           builder.setNegativeButton(config.actions[1].label(), createClickListener(1));
         }
       }
-      else{
+      else {
         builder.setTitle(R.string.app_name).
             setPositiveButton(R.string.continue_btn, createClickListener(0));
       }

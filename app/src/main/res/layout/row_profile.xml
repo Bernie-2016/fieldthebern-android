@@ -23,14 +23,15 @@
 
   <TextView
     android:id="@+id/position"
-    android:layout_width="24dp"
+    android:layout_width="wrap_content"
+    android:minEms="3"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
     android:layout_centerVertical="true"
     android:layout_marginRight="8dp"
     android:gravity="right"
     android:textColor="@android:color/white"
-    tools:text="12" />
+    tools:text="1234" />
 
   <ImageView
     android:id="@+id/profile_image"

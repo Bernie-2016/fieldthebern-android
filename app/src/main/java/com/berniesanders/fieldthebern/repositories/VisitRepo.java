@@ -68,12 +68,7 @@ public class VisitRepo {
     this.config = config;
     this.context = context;
 
-    HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override
-      public void log(String message) {
-        Timber.v(message);
-      }
-    };
+    HttpLoggingInterceptor.Logger logger = message -> Timber.v(message);
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 

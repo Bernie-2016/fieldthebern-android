@@ -127,34 +127,31 @@ public class ScoreView extends RelativeLayout {
 
     ValueAnimator valueAnimator = ValueAnimator.ofInt(values).setDuration(1000);
     valueAnimator.setInterpolator(new DecelerateInterpolator());
-    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-      @Override
-      public void onAnimationUpdate(ValueAnimator animation) {
-        TextView pointstextView1 = (TextView) LayoutInflater.from(getContext())
-            .inflate(R.layout.points, pointsContainer, false);
-        int val = (int) animation.getAnimatedValue();
-        pointstextView1.setText(String.valueOf(val));
+    valueAnimator.addUpdateListener(animation -> {
+      TextView pointstextView1 = (TextView) LayoutInflater.from(getContext())
+          .inflate(R.layout.points, pointsContainer, false);
+      int val = (int) animation.getAnimatedValue();
+      pointstextView1.setText(String.valueOf(val));
 
-        long duration = (long) (600); //animation.getAnimatedFraction()
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(pointstextView1, View.SCALE_X, 1f, 1.5f, 1f)
-            .setDuration(duration);
+      long duration = (long) (600); //animation.getAnimatedFraction()
+      ObjectAnimator scaleX = ObjectAnimator.ofFloat(pointstextView1, View.SCALE_X, 1f, 1.5f, 1f)
+          .setDuration(duration);
 
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(pointstextView1, View.SCALE_Y, 1f, 1.5f, 1f)
-            .setDuration(duration);
+      ObjectAnimator scaleY = ObjectAnimator.ofFloat(pointstextView1, View.SCALE_Y, 1f, 1.5f, 1f)
+          .setDuration(duration);
 
-        scaleX.setInterpolator(new DecelerateInterpolator());
-        scaleY.setInterpolator(new DecelerateInterpolator());
+      scaleX.setInterpolator(new DecelerateInterpolator());
+      scaleY.setInterpolator(new DecelerateInterpolator());
 
-        scaleX.start();
-        scaleY.start();
+      scaleX.start();
+      scaleY.start();
 
-        pointsContainer.addView(pointstextView1);
+      pointsContainer.addView(pointstextView1);
 
-        if (val < pointTotal) {
-          ObjectAnimator fadeIn = ObjectAnimator.ofFloat(pointstextView1, View.ALPHA, 0f, 1f, 0f)
-              .setDuration(duration / 2);
-          fadeIn.start();
-        }
+      if (val < pointTotal) {
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(pointstextView1, View.ALPHA, 0f, 1f, 0f)
+            .setDuration(duration / 2);
+        fadeIn.start();
       }
     });
     valueAnimator.start();

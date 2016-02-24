@@ -15,6 +15,19 @@ repositories {
 }
 
 apply plugin: 'com.neenbedankt.android-apt'
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'me.tatarka:gradle-retrolambda:3.3.0-beta4'
+  }
+}
+
+repositories {
+  mavenCentral()
+}
 
 android {
   compileSdkVersion 23
@@ -45,6 +58,12 @@ android {
     multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
   buildTypes {
 
     def ftbSigningConfig = signingConfigs.ftb

@@ -203,20 +203,12 @@ public class NewVisitView extends RelativeLayout {
   }
 
   CompoundButton.OnCheckedChangeListener onCheckChange =
-      new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-          Person person = (Person) buttonView.getTag();
-          person.spokenTo(isChecked);
-        }
+      (buttonView, isChecked) -> {
+        Person person = (Person) buttonView.getTag();
+        person.spokenTo(isChecked);
       };
 
-  OnClickListener onClickListener = new OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      editPerson((Person) v.getTag());
-    }
-  };
+  OnClickListener onClickListener = v -> editPerson((Person) v.getTag());
 
   void editPerson(Person person) {
     Flow.get(this).set(new AddPersonScreen(person));

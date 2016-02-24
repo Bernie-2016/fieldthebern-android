@@ -69,24 +69,20 @@ public class CollectionRecyclerAdapter extends MultiAdapter {
     return layoutAnnotation.value();
   }
 
-  MultiAdapter.ClickListener onGridItemClick = new MultiAdapter.ClickListener() {
+  MultiAdapter.ClickListener onGridItemClick = (model, v) -> {
+    animateClick(v);
 
-    @Override
-    public void onClick(Object model, View v) {
-      animateClick(v);
+    ApiItem apiItem = (ApiItem) model;
 
-      ApiItem apiItem = (ApiItem) model;
+    Timber.v("onGridItemClick: %s %s", apiItem.getClass().getSimpleName(), apiItem.getTitle());
 
-      Timber.v("onGridItemClick: %s %s", apiItem.getClass().getSimpleName(), apiItem.getTitle());
-
-      if (apiItem instanceof Page) {
-        Flow.get(v).set(new PageScreen((Page) apiItem));
-      } else if (apiItem instanceof Collection) {
-        Flow.get(v).set(new CollectionScreen((Collection) apiItem));
-      }
-
-      Timber.v("Flow.get v= %s", Flow.get(v).toString());
+    if (apiItem instanceof Page) {
+      Flow.get(v).set(new PageScreen((Page) apiItem));
+    } else if (apiItem instanceof Collection) {
+      Flow.get(v).set(new CollectionScreen((Collection) apiItem));
     }
+
+    Timber.v("Flow.get v= %s", Flow.get(v).toString());
   };
 
   void animateClick(View v) {

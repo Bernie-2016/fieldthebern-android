@@ -46,10 +46,5 @@ public class ImgHolder extends BaseViewHolder<Img> {
     imageView.setOnClickListener(onClickListener);
   }
 
-  View.OnClickListener onClickListener = new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-      Flow.get(v).set(new PhotoScreen(model));
-    }
-  };
+  View.OnClickListener onClickListener = v -> Flow.get(v).set(new PhotoScreen(model));
 }

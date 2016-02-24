@@ -46,17 +46,13 @@ import com.f2prateek.rx.preferences.Preference;
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.google.gson.Gson;
 import flow.Flow;
 import flow.History;
 import javax.inject.Inject;
 import mortar.ViewPresenter;
-import org.json.JSONObject;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -93,7 +89,8 @@ public class ChooseLoginScreen extends ParcelableScreen {
   class Module {
   }
 
-  public static final Creator<ChooseLoginScreen> CREATOR = zeroArgsScreenCreator(ChooseLoginScreen.class);
+  public static final Creator<ChooseLoginScreen> CREATOR =
+      zeroArgsScreenCreator(ChooseLoginScreen.class);
 
   /**
    */
@@ -169,36 +166,30 @@ public class ChooseLoginScreen extends ParcelableScreen {
     //TODO: pass a pre-crafted user?
     @OnClick(R.id.login_facebook)
     void loginFacebook(final View v) {
-      FacebookService.get(v).loginWithFacebook(new Action0() {
-        @Override
-        public void call() {
-          Timber.v("Action0.call()");
+      FacebookService.get(v).loginWithFacebook(() -> {
+        Timber.v("Action0.call()");
 
-          Bundle parameters = new Bundle();
-          parameters.putString("fields", "id,first_name,last_name,picture,email,friends");
-          GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
-              new GraphRequest.GraphJSONObjectCallback() {
-                @Override
-                public void onCompleted(JSONObject object, GraphResponse response) {
-                  Timber.v("GraphRequest onCompleted response:%s",
-                      response.getJSONObject().toString());
-                  FacebookUser facebookUser =
-                      gson.fromJson(response.getJSONObject().toString(), FacebookUser.class);
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,first_name,last_name,picture,email,friends");
+        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+            (object, response) -> {
+              Timber.v("GraphRequest onCompleted response:%s",
+                  response.getJSONObject().toString());
+              FacebookUser facebookUser =
+                  gson.fromJson(response.getJSONObject().toString(), FacebookUser.class);
 
-                  if (getView() == null) {
-                    return;
-                  }
+              if (getView() == null) {
+                return;
+              }
 
-                  User user = new User();
-                  user.getData().attributes(facebookUser.convertToApiUser());
-                  ProgressDialogService.get(getView()).dismiss();
-                  showPleaseWait = false;
-                  Flow.get(getView().getContext()).set(new LoginScreen(user));
-                }
-              });
-          graphRequest.setParameters(parameters);
-          graphRequest.executeAsync();
-        }
+              User user = new User();
+              user.getData().attributes(facebookUser.convertToApiUser());
+              ProgressDialogService.get(getView()).dismiss();
+              showPleaseWait = false;
+              Flow.get(getView().getContext()).set(new LoginScreen(user));
+            });
+        graphRequest.setParameters(parameters);
+        graphRequest.executeAsync();
       });
     }
 
@@ -266,15 +257,12 @@ public class ChooseLoginScreen extends ParcelableScreen {
         userRepo.getMe()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<User>() {
-              @Override
-              public void call(User user) {
-                ProgressDialogService.get(getView()).dismiss();
-                showPleaseWait = false;
-                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                Flow.get(getView())
-                    .setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
-              }
+            .subscribe(user -> {
+              ProgressDialogService.get(getView()).dismiss();
+              showPleaseWait = false;
+              FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+              Flow.get(getView())
+                  .setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
             });
       }
     };

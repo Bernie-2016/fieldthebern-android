@@ -59,7 +59,6 @@ import mortar.ViewPresenter;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -96,21 +95,24 @@ public class MapScreen extends ParcelableScreen {
   //    class Module {
   //    }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(cameraPosition, 0);
     parcel.writeParcelable(address, 0);
     parcel.writeList(nearby);
   }
 
   public static final Creator<MapScreen> CREATOR = new ScreenCreator<MapScreen>() {
-    @Override protected MapScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected MapScreen doCreateFromParcel(Parcel source) {
       CameraPosition cameraPosition = source.readParcelable(CameraPosition.class.getClassLoader());
       ApiAddress address = source.readParcelable(ApiAddress.class.getClassLoader());
       List<ApiAddress> nearby = source.readArrayList(ApiAddress.class.getClassLoader());
       return new MapScreen(cameraPosition, address, nearby);
     }
 
-    @Override public MapScreen[] newArray(int size) {
+    @Override
+    public MapScreen[] newArray(int size) {
       return new MapScreen[size];
     }
   };
@@ -210,25 +212,19 @@ public class MapScreen extends ParcelableScreen {
           String.format(inProgressMessage, inProgressAddress.attributes().street1());
 
       DialogController.DialogAction confirmAction =
-          new DialogController.DialogAction().label(R.string.yes).action(new Action0() {
-            @Override
-            public void call() {
-              Timber.d("yes button click");
-              showInProgressDialog = false;
-              Flow.get(getView()).set(new NewVisitScreen(inProgressAddress));
-            }
+          new DialogController.DialogAction().label(R.string.yes).action(() -> {
+            Timber.d("yes button click");
+            showInProgressDialog = false;
+            Flow.get(getView()).set(new NewVisitScreen(inProgressAddress));
           });
 
       DialogController.DialogAction cancelAction =
-          new DialogController.DialogAction().label(R.string.no).action(new Action0() {
-            @Override
-            public void call() {
-              showInProgressDialog = false;
-              visitRepo.clear();
-              Iterator<Object> iterator = Flow.get(getView()).getHistory().iterator();
-              Flow.get(getView())
-                  .setHistory(History.single(iterator.next()), Flow.Direction.REPLACE);
-            }
+          new DialogController.DialogAction().label(R.string.no).action(() -> {
+            showInProgressDialog = false;
+            visitRepo.clear();
+            Iterator<Object> iterator = Flow.get(getView()).getHistory().iterator();
+            Flow.get(getView())
+                .setHistory(History.single(iterator.next()), Flow.Direction.REPLACE);
           });
 
       DialogService.get(getView())

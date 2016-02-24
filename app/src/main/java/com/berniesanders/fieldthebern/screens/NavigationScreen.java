@@ -21,7 +21,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,7 +74,8 @@ public class NavigationScreen extends ParcelableScreen {
   //    class Module {
   //    }
 
-  public static final Creator<NavigationScreen> CREATOR = zeroArgsScreenCreator(NavigationScreen.class);
+  public static final Creator<NavigationScreen> CREATOR =
+      zeroArgsScreenCreator(NavigationScreen.class);
 
   /**
    * This component is used to inject the view with the presenter once the view is inflated.
@@ -178,77 +178,47 @@ public class NavigationScreen extends ParcelableScreen {
           R.drawable.ic_info_outline_white_24dp
       }));
 
-      drawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-          final Flow flow = Flow.get(view);
-          switch (position) {
-            case 0:
-              if (!(flow.getHistory().top() instanceof MapScreen)) {
-                showMapScreen();
-              }
-              break;
-            case 1:
-              if (!(flow.getHistory().top() instanceof Main)) {
-                view.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    flow.set(new Main());
-                  }
-                });
-              }
-              break;
-            case 2:
-              if (!(flow.getHistory().top() instanceof LearnScreen)) {
-                view.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    flow.set(new LearnScreen());
-                  }
-                });
-              }
-              break;
-            case 3:
-              userRepo.logout();
-              view.post(new Runnable() {
-                @Override
-                public void run() {
-                  flow.setHistory(History.single(new ChooseSignupScreen()), Flow.Direction.REPLACE);
-                }
-              });
-              break;
-            case 4:
-              if (!(flow.getHistory().top() instanceof AboutScreen)) {
-                view.post(new Runnable() {
-                  @Override
-                  public void run() {
-                    flow.set(new AboutScreen());
-                  }
-                });
-              }
-              break;
-          }
-          drawerLayout.closeDrawers();
+      drawerListView.setOnItemClickListener((parent, view, position, id) -> {
+        final Flow flow = Flow.get(view);
+        switch (position) {
+          case 0:
+            if (!(flow.getHistory().top() instanceof MapScreen)) {
+              showMapScreen();
+            }
+            break;
+          case 1:
+            if (!(flow.getHistory().top() instanceof Main)) {
+              view.post(() -> flow.set(new Main()));
+            }
+            break;
+          case 2:
+            if (!(flow.getHistory().top() instanceof LearnScreen)) {
+              view.post(() -> flow.set(new LearnScreen()));
+            }
+            break;
+          case 3:
+            userRepo.logout();
+            view.post(() -> flow.setHistory(History.single(new ChooseSignupScreen()),
+                Flow.Direction.REPLACE));
+            break;
+          case 4:
+            if (!(flow.getHistory().top() instanceof AboutScreen)) {
+              view.post(() -> flow.set(new AboutScreen()));
+            }
+            break;
         }
+        drawerLayout.closeDrawers();
       });
     }
 
     private void showMapScreen() {
       if (PermissionService.get(getView()).isGranted()) {
-        getView().post(new Runnable() {
-          @Override
-          public void run() {
-            Flow.get(getView().getContext()).set(new MapScreen());
-          }
-        });
+        getView().post(() -> Flow.get(getView().getContext()).set(new MapScreen()));
       } else {
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
-            .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                PermissionService.get(getView()).requestPermission();
-              }
+            .setAction(android.R.string.ok, view -> {
+              PermissionService.get(getView()).requestPermission();
             })
             .show();
       }

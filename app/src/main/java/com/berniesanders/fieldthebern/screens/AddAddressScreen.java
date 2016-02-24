@@ -60,7 +60,6 @@ import retrofit2.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -89,17 +88,20 @@ public class AddAddressScreen extends ParcelableScreen {
     return AddAddressScreen.class.getName();// TODO temp scope name?
   }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(address, 0);
   }
 
   public static final Creator<AddAddressScreen> CREATOR = new ScreenCreator<AddAddressScreen>() {
-    @Override protected AddAddressScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected AddAddressScreen doCreateFromParcel(Parcel source) {
       ApiAddress address = source.readParcelable(ApiAddress.class.getClassLoader());
       return new AddAddressScreen(address);
     }
 
-    @Override public AddAddressScreen[] newArray(int size) {
+    @Override
+    public AddAddressScreen[] newArray(int size) {
       return new AddAddressScreen[size];
     }
   };
@@ -179,15 +181,12 @@ public class AddAddressScreen extends ParcelableScreen {
 
     void setActionBar() {
       ActionBarController.MenuAction menu =
-          new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override
-            public void call() {
-              if (getView() != null) {
-                visitRepo.clear();
-                showPleaseWait = false;
-                Flow.get(getView())
-                    .setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
-              }
+          new ActionBarController.MenuAction().label(cancel).action(() -> {
+            if (getView() != null) {
+              visitRepo.clear();
+              showPleaseWait = false;
+              Flow.get(getView())
+                  .setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
             }
           });
       ActionBarService.get(getView())
@@ -228,21 +227,14 @@ public class AddAddressScreen extends ParcelableScreen {
           String.format(confirmBody, address.attributes().street1(), apartment);
 
       DialogAction confirmAction =
-          new DialogAction().label(android.R.string.ok).action(new Action0() {
-            @Override
-            public void call() {
-              Timber.d("ok button click");
-              loadAddressFromApi();
-            }
+          new DialogAction().label(android.R.string.ok).action(() -> {
+            Timber.d("ok button click");
+            loadAddressFromApi();
           });
 
       DialogAction cancelAction =
-          new DialogAction().label(android.R.string.cancel).action(new Action0() {
-            @Override
-            public void call() {
-              Timber.d("cancel button click");
-            }
-          });
+          new DialogAction().label(android.R.string.cancel)
+              .action(() -> Timber.d("cancel button click"));
 
       DialogService.get(getView())
           .setDialogConfig(new DialogConfig().title(confirmTitle)

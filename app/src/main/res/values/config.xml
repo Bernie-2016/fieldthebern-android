@@ -20,8 +20,8 @@
   <string name="canvassUrl">##API_URL##</string>
   <string name="buildDate">##DATETIME##</string>
   <string name="gitHash">##HASHCODE##</string>
-  <string name="googleApiKey">##GOOGLE_API_KEY##</string>
-  <string name="facebook_app_id">##FACEBOOK_ID##</string>
-  <string name="oauth2ClientId">##OAUTH_ID##</string>
-  <string name="oauth2ClientSecret">##OAUTH_SECRET##</string>
+  <string name="googleApiKey">AIzaSyAnwqD5D2WhRVzwEYIQkfQXSLsSCt8nNWw</string>
+  <string name="facebook_app_id">1700759533502656</string>
+  <string name="oauth2ClientId">600682282830-2n8gv165m70t1pkcpgnk9jh0ppotjgle.apps.googleusercontent.com</string>
+  <string name="oauth2ClientSecret">600682282830-2n8gv165m70t1pkcpgnk9jh0ppotjgle.apps.googleusercontent.com</string>
 </resources>

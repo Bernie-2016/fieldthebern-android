@@ -70,7 +70,6 @@ import retrofit2.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -110,18 +109,21 @@ public class SignupScreen extends ParcelableScreen {
     return SignupScreen.class.getName();
   }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(userAttributes, 0);
   }
 
   public static final Parcelable.Creator<SignupScreen>
       CREATOR = new ParcelableScreen.ScreenCreator<SignupScreen>() {
-    @Override protected SignupScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected SignupScreen doCreateFromParcel(Parcel source) {
       UserAttributes userAttributes = source.readParcelable(UserAttributes.class.getClassLoader());
       return new SignupScreen(userAttributes);
     }
 
-    @Override public SignupScreen[] newArray(int size) {
+    @Override
+    public SignupScreen[] newArray(int size) {
       return new SignupScreen[size];
     }
   };
@@ -222,20 +224,12 @@ public class SignupScreen extends ParcelableScreen {
         // User may have set their own photo and persist through rotation
         photoEditView.load(userAttributes, userBitmap);
       } else {
-        getView().postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            photoEditView.toggleAvatarWidget(true);
-          }
-        }, 300);
+        getView().postDelayed(() -> photoEditView.toggleAvatarWidget(true), 300);
       }
 
-      photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
-        @Override
-        public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
-          userBitmap = bitmap;
-          userAttributes.base64PhotoData(base64PhotoData);
-        }
+      photoEditView.setPhotoChangeListener((bitmap, base64PhotoData) -> {
+        userBitmap = bitmap;
+        userAttributes.base64PhotoData(base64PhotoData);
       });
 
       if (PermissionService.get(getView()).isGranted()) {
@@ -256,13 +250,10 @@ public class SignupScreen extends ParcelableScreen {
 
     private void showEnableLocationDialog() {
       DialogController.DialogAction confirmAction =
-          new DialogController.DialogAction().label(android.R.string.ok).action(new Action0() {
-            @Override
-            public void call() {
-              Timber.d("ok button click");
-              Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-              getView().getContext().startActivity(myIntent);
-            }
+          new DialogController.DialogAction().label(android.R.string.ok).action(() -> {
+            Timber.d("ok button click");
+            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            getView().getContext().startActivity(myIntent);
           });
 
       DialogService.get(getView())
@@ -317,11 +308,8 @@ public class SignupScreen extends ParcelableScreen {
       } else {
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(getView(), R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
-            .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                PermissionService.get(v).requestPermission();
-              }
+            .setAction(android.R.string.ok, view -> {
+              PermissionService.get(v).requestPermission();
             })
             .show();
       }
@@ -457,7 +445,7 @@ public class SignupScreen extends ParcelableScreen {
           return;
         }
         ToastService.get(getView())
-                .bern(getView().getResources().getString((R.string.err_registration_generic)));
+            .bern(getView().getResources().getString((R.string.err_registration_generic)));
       }
 
       @Override

@@ -63,12 +63,9 @@ public class FramePathContainerView extends FrameLayout implements HandlesBack, 
 
     //TODO   add a method to container to hold a ref to the traversal, then we can get
     //TODO   a view for a SceneAction and for trying to use the Transitions framework
-    container.executeTraversal(this, traversal, new Flow.TraversalCallback() {
-      @Override
-      public void onTraversalCompleted() {
-        callback.onTraversalCompleted();
-        disabled = false;
-      }
+    container.executeTraversal(this, traversal, () -> {
+      callback.onTraversalCompleted();
+      disabled = false;
     });
   }
 

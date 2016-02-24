@@ -118,12 +118,9 @@ public class VideoHolder extends BaseViewHolder<Video> {
             }
           });
 
-      thumbnailView.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          Intent intent = YouTubeIntents.createPlayVideoIntent(v.getContext(), model.getId());
-          v.getContext().startActivity(intent);
-        }
+      thumbnailView.setOnClickListener(v -> {
+        Intent intent = YouTubeIntents.createPlayVideoIntent(v.getContext(), model.getId());
+        v.getContext().startActivity(intent);
       });
     } else {
       //try showing the video url as a text-link

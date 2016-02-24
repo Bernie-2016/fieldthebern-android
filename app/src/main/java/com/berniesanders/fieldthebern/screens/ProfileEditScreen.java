@@ -44,7 +44,6 @@ import flow.Flow;
 import javax.inject.Inject;
 import mortar.ViewPresenter;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -169,46 +168,32 @@ public class ProfileEditScreen extends ParcelableScreen {
       userRepo.getMe()
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<User>() {
-            @Override
-            public void call(User user) {
-              String firstName = user.getData().attributes().getFirstName();
-              String lastName = user.getData().attributes().getLastName();
-              //                    String email = user.getData().attributes().getEmail();
-              firstNameEditText.setText(firstName);
-              lastNameEditText.setText(lastName);
-              //                    emailEditText.setText(email);
-              photoEditView.load(user.getData().attributes(), userPhoto);
-            }
-          }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-              Timber.e(throwable, "Unable to retrieve profile");
-              Crashlytics.logException(throwable);
-              ProfileEditView view = getView();
-              if (view != null) {
-                ToastService.get(view)
-                    .bern(view.getContext().getString(R.string.error_retrieving_profile));
-              } else {
-                Timber.w("getView() null, can not notify user of failed profile retrieval.");
-              }
+          .subscribe(user -> {
+            String firstName = user.getData().attributes().getFirstName();
+            String lastName = user.getData().attributes().getLastName();
+            //                    String email = user.getData().attributes().getEmail();
+            firstNameEditText.setText(firstName);
+            lastNameEditText.setText(lastName);
+            //                    emailEditText.setText(email);
+            photoEditView.load(user.getData().attributes(), userPhoto);
+          }, throwable -> {
+            Timber.e(throwable, "Unable to retrieve profile");
+            Crashlytics.logException(throwable);
+            ProfileEditView view1 = getView();
+            if (view1 != null) {
+              ToastService.get(view1)
+                  .bern(view1.getContext().getString(R.string.error_retrieving_profile));
+            } else {
+              Timber.w("getView() null, can not notify user of failed profile retrieval.");
             }
           });
 
-      photoEditView.setPhotoChangeListener(new PhotoEditView.PhotoChangeListener() {
-        @Override
-        public void onPhotoChanged(Bitmap bitmap, String base64PhotoData) {
-          userPhoto = bitmap;
-          Presenter.this.base64PhotoData = base64PhotoData;
-        }
+      photoEditView.setPhotoChangeListener((bitmap, base64PhotoData1) -> {
+        userPhoto = bitmap;
+        Presenter.this.base64PhotoData = base64PhotoData1;
       });
 
-      getView().postDelayed(new Runnable() {
-        @Override
-        public void run() {
-          photoEditView.toggleAvatarWidget(true);
-        }
-      }, 300);
+      getView().postDelayed(() -> photoEditView.toggleAvatarWidget(true), 300);
     }
 
     /**
@@ -249,31 +234,25 @@ public class ProfileEditScreen extends ParcelableScreen {
       userRepo.update(spec)
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<User>() {
-            @Override
-            public void call(User user) {
-              Timber.v("Profile saved");
-              ProfileEditView view = getView();
-              if (view != null) {
-                ToastService.get(view).bern(view.getContext().getString(R.string.profile_saved));
-                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
-                Flow.get(view.getContext()).goBack();
-              } else {
-                Timber.w("getView() null, cannot notify user of successful profile save");
-              }
+          .subscribe(user1 -> {
+            Timber.v("Profile saved");
+            ProfileEditView view1 = getView();
+            if (view1 != null) {
+              ToastService.get(view1).bern(view1.getContext().getString(R.string.profile_saved));
+              FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user1));
+              Flow.get(view1.getContext()).goBack();
+            } else {
+              Timber.w("getView() null, cannot notify user of successful profile save");
             }
-          }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-              Timber.e(throwable, "Unable to save profile");
-              Crashlytics.logException(throwable);
-              ProfileEditView view = getView();
-              if (view != null) {
-                ToastService.get(view)
-                    .bern(view.getContext().getString(R.string.error_saving_profile));
-              } else {
-                Timber.w("getView() null, cannot notify user of failed profile save");
-              }
+          }, throwable -> {
+            Timber.e(throwable, "Unable to save profile");
+            Crashlytics.logException(throwable);
+            ProfileEditView view1 = getView();
+            if (view1 != null) {
+              ToastService.get(view1)
+                  .bern(view1.getContext().getString(R.string.error_saving_profile));
+            } else {
+              Timber.w("getView() null, cannot notify user of failed profile save");
             }
           });
     }

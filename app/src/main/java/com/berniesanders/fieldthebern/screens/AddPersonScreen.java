@@ -45,7 +45,6 @@ import flow.Flow;
 import javax.inject.Inject;
 import mortar.ViewPresenter;
 import org.apache.commons.lang3.StringUtils;
-import rx.functions.Action0;
 import timber.log.Timber;
 
 import static com.berniesanders.fieldthebern.parsing.FormValidator.isEmailValid;
@@ -85,18 +84,21 @@ public class AddPersonScreen extends ParcelableScreen {
     return AddPersonScreen.class.getName();
   }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(personToEdit, 0);
   }
 
   public static final Parcelable.Creator<AddPersonScreen>
       CREATOR = new ParcelableScreen.ScreenCreator<AddPersonScreen>() {
-    @Override protected AddPersonScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected AddPersonScreen doCreateFromParcel(Parcel source) {
       Person person = source.readParcelable(Person.class.getClassLoader());
       return new AddPersonScreen(person);
     }
 
-    @Override public AddPersonScreen[] newArray(int size) {
+    @Override
+    public AddPersonScreen[] newArray(int size) {
       return new AddPersonScreen[size];
     }
   };
@@ -185,12 +187,9 @@ public class AddPersonScreen extends ParcelableScreen {
 
     void setActionBar() {
       ActionBarController.MenuAction menu =
-          new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override
-            public void call() {
-              if (getView() != null) {
-                Flow.get(getView()).goBack();
-              }
+          new ActionBarController.MenuAction().label(cancel).action(() -> {
+            if (getView() != null) {
+              Flow.get(getView()).goBack();
             }
           });
       ActionBarService.get(getView())

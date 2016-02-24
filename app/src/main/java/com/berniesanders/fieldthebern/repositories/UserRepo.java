@@ -47,7 +47,6 @@ import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -74,12 +73,7 @@ public class UserRepo {
     this.config = config;
     this.context = context;
 
-    HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override
-      public void log(String message) {
-        Timber.v(message);
-      }
-    };
+    HttpLoggingInterceptor.Logger logger = message -> Timber.v(message);
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -160,61 +154,48 @@ public class UserRepo {
     // 8. return the user to the original subscriber
 
     return create(spec.getCreateUserRequest()).map(
-        new Func1<User, User>() { //save the user, this give the late .flatMap access to it
-          @Override
-          public User call(User user) {
-            Timber.v("user created, saving in memory...");
-            currentUser = user;
-            Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
-            userPref.set(gson.toJson(user));
-            return user;
-          }
-        }).flatMap(new Func1<User, Observable<Token>>() { //log them in
-      @Override
-      public Observable<Token> call(User user) {
-        Timber.v("user created, calling tokenRepo to sign in...");
+        user -> {
+          Timber.v("user created, saving in memory...");
+          currentUser = user;
+          Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+          userPref.set(gson.toJson(user));
+          return user;
+        }).flatMap(user -> {
+      Timber.v("user created, calling tokenRepo to sign in...");
 
-        //get the username and pass right out of the create user request
-        //the don't exist in the user object returned from the API call in .map above
-        final UserAttributes userAttributes = spec.getCreateUserRequest().getData().getAttributes();
+      //get the username and pass right out of the create user request
+      //the don't exist in the user object returned from the API call in .map above
+      final UserAttributes userAttributes = spec.getCreateUserRequest().getData().getAttributes();
 
-        if (!userAttributes.isFacebookUser()) {
-          LoginEmailRequest loginEmailRequest =
-              new LoginEmailRequest().username(userAttributes.getEmail())
-                  .password(userAttributes.getPassword());
-          return tokenRepo.loginEmail(new TokenSpec().email(loginEmailRequest));
-        } else {
-          LoginFacebookRequest loginFacebookRequest =
-              new LoginFacebookRequest().username(userAttributes.getEmail())
-                  .password(userAttributes.getPassword());
-          return tokenRepo.loginFacebook(new TokenSpec().facebook(loginFacebookRequest));
-        }
+      if (!userAttributes.isFacebookUser()) {
+        LoginEmailRequest loginEmailRequest =
+            new LoginEmailRequest().username(userAttributes.getEmail())
+                .password(userAttributes.getPassword());
+        return tokenRepo.loginEmail(new TokenSpec().email(loginEmailRequest));
+      } else {
+        LoginFacebookRequest loginFacebookRequest =
+            new LoginFacebookRequest().username(userAttributes.getEmail())
+                .password(userAttributes.getPassword());
+        return tokenRepo.loginFacebook(new TokenSpec().facebook(loginFacebookRequest));
       }
-    }).flatMap(new Func1<Token, Observable<User>>() { //upload photo
+    }).flatMap(user -> {
+      Timber.v("user signed in, calling update to upload the photo");
 
-      @Override
-      public Observable<User> call(Token user) {
-        Timber.v("user signed in, calling update to upload the photo");
-
-        final UserAttributes userAttributes = spec.getCreateUserRequest().getData().getAttributes();
-        currentUser.getData().attributes(userAttributes);
-        currentUser.getData()
-            .attributes()
-            .password(null); //it's all fun and games until someone loses a password
-        currentUser.getData().attributes().photoLargeUrl(null);
-        currentUser.getData().attributes().photoThumbUrl(null);
-        spec.update(currentUser);
-        return update(spec);
-      }
-    }).map(new Func1<User, User>() {  //re-save the user to be sure they are an awesome user
-      @Override
-      public User call(User user) {
-        Timber.v("photo uploaded, saving user and returning to the subscriber");
-        currentUser = user;
-        Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
-        userPref.set(gson.toJson(user));
-        return currentUser;
-      }
+      final UserAttributes userAttributes = spec.getCreateUserRequest().getData().getAttributes();
+      currentUser.getData().attributes(userAttributes);
+      currentUser.getData()
+          .attributes()
+          .password(null); //it's all fun and games until someone loses a password
+      currentUser.getData().attributes().photoLargeUrl(null);
+      currentUser.getData().attributes().photoThumbUrl(null);
+      spec.update(currentUser);
+      return update(spec);
+    }).map(user -> {
+      Timber.v("photo uploaded, saving user and returning to the subscriber");
+      currentUser = user;
+      Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+      userPref.set(gson.toJson(user));
+      return currentUser;
     });
   }
 
@@ -226,25 +207,22 @@ public class UserRepo {
       return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
-    return getMe().flatMap(new Func1<User, Observable<User>>() {
-      @Override
-      public Observable<User> call(User user) {
-        Timber.v("getMe flatmap");
-        String firstName = spec.user().getData().attributes().getFirstName();
-        String lastName = spec.user().getData().attributes().getLastName();
-        user.getData()
-            .attributes()
-            .firstName(firstName)
-            .lastName(lastName)
-            .base64PhotoData(spec.user().getData().attributes().getBase64PhotoData());
-        CreateUserRequest request =
-            spec.getCreateUserRequest().withAttributes(user.getData().attributes());
-        Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
-        userPref.set(gson.toJson(user));
-        currentUser = user;
-        currentUser.getData().attributes().password(null);  //be safe, children
-        return update(request);
-      }
+    return getMe().flatMap(user -> {
+      Timber.v("getMe flatmap");
+      String firstName = spec.user().getData().attributes().getFirstName();
+      String lastName = spec.user().getData().attributes().getLastName();
+      user.getData()
+          .attributes()
+          .firstName(firstName)
+          .lastName(lastName)
+          .base64PhotoData(spec.user().getData().attributes().getBase64PhotoData());
+      CreateUserRequest request =
+          spec.getCreateUserRequest().withAttributes(user.getData().attributes());
+      Preference<String> userPref = rxPrefs.getString(User.PREF_NAME);
+      userPref.set(gson.toJson(user));
+      currentUser = user;
+      currentUser.getData().attributes().password(null);  //be safe, children
+      return update(request);
     });
   }
 

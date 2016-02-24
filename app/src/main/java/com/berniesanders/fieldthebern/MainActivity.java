@@ -408,12 +408,9 @@ public class MainActivity extends AppCompatActivity
       } else {
         menu.add(actionBarMenuAction.label())
             .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            .setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-              @Override
-              public boolean onMenuItemClick(MenuItem menuItem) {
-                actionBarMenuAction.action().call();
-                return true;
-              }
+            .setOnMenuItemClickListener(menuItem -> {
+              actionBarMenuAction.action().call();
+              return true;
             });
       }
       //        // Inflate the options menu from XML
@@ -467,12 +464,7 @@ public class MainActivity extends AppCompatActivity
       if (item.getTitle().equals(title)) {
         final Page searchItem = (Page) item;
         Timber.v("Showing page from search: %s", searchItem.getTitle());
-        container.post(new Runnable() {
-          @Override
-          public void run() {
-            Flow.get(MainActivity.this).set(new PageScreen(searchItem));
-          }
-        });
+        container.post(() -> Flow.get(MainActivity.this).set(new PageScreen(searchItem)));
         break;
       }
     }
@@ -486,12 +478,7 @@ public class MainActivity extends AppCompatActivity
       if (item.getTitle().equals(title)) {
         final Collection searchItem = (Collection) item;
         Timber.v("Showing Collection from search: %s", item.getTitle());
-        container.post(new Runnable() {
-          @Override
-          public void run() {
-            Flow.get(MainActivity.this).set(new CollectionScreen(searchItem));
-          }
-        });
+        container.post(() -> Flow.get(MainActivity.this).set(new CollectionScreen(searchItem)));
         break;
       }
     }

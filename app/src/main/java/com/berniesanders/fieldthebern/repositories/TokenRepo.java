@@ -39,7 +39,6 @@ import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -63,12 +62,7 @@ public class TokenRepo {
     this.config = config;
     this.context = context;
 
-    HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override
-      public void log(String message) {
-        Timber.v(message);
-      }
-    };
+    HttpLoggingInterceptor.Logger logger = message -> Timber.v(message);
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -109,14 +103,11 @@ public class TokenRepo {
       return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
-    return loginEmail(spec.getEmail()).map(new Func1<Token, Token>() {
-      @Override
-      public Token call(Token token) {
-        Timber.v("loginEmail() saving token");
-        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-        tokenPref.set(gson.toJson(token));
-        return token;
-      }
+    return loginEmail(spec.getEmail()).map(token -> {
+      Timber.v("loginEmail() saving token");
+      Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+      tokenPref.set(gson.toJson(token));
+      return token;
     });
   }
 
@@ -129,14 +120,11 @@ public class TokenRepo {
       return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
-    return loginFacebook(spec.getFacebook()).map(new Func1<Token, Token>() {
-      @Override
-      public Token call(Token token) {
-        Timber.v("loginFacebook() saving token");
-        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-        tokenPref.set(gson.toJson(token));
-        return token;
-      }
+    return loginFacebook(spec.getFacebook()).map(token -> {
+      Timber.v("loginFacebook() saving token");
+      Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+      tokenPref.set(gson.toJson(token));
+      return token;
     });
   }
 
@@ -178,14 +166,11 @@ public class TokenRepo {
     }
 
     return endpoint.refresh(Token.GRANT_REFRESH, config.getClientId(), config.getClientSecret(),
-        refreshToken).map(new Func1<Token, Token>() {
-      @Override
-      public Token call(Token token) {
+        refreshToken).map(token -> {
 
-        Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
-        tokenPref.set(gson.toJson(token));
-        return token;
-      }
+      Preference<String> tokenPref = rxPrefs.getString(Token.PREF_NAME);
+      tokenPref.set(gson.toJson(token));
+      return token;
     });
   }
 

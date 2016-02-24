@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.Reader;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
@@ -48,7 +47,6 @@ import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func1;
 import timber.log.Timber;
 
 /**
@@ -91,13 +89,9 @@ public class CollectionRepo {
       return getFromFile();
     }
 
-    return getFromHttp(spec.url()).map(new Func1<Collection, Collection>() {
-
-      @Override
-      public Collection call(Collection collection) {
-        collectionMemCache = collection;
-        return collectionMemCache;
-      }
+    return getFromHttp(spec.url()).map(collection -> {
+      collectionMemCache = collection;
+      return collectionMemCache;
     });
   }
 
@@ -143,28 +137,20 @@ public class CollectionRepo {
       return Observable.error(new NetworkUnavailableException("No internet available"));
     }
 
-    HttpLoggingInterceptor.Logger logger = new HttpLoggingInterceptor.Logger() {
-      @Override
-      public void log(String message) {
-        Timber.v(message);
-      }
-    };
+    HttpLoggingInterceptor.Logger logger = message -> Timber.v(message);
     HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(logger);
     loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
     OkHttpClient client =
         new OkHttpClient.Builder().addInterceptor(new UserAgentInterceptor(config.getUserAgent()))
-            .addInterceptor(new Interceptor() {
-              @Override
-              public Response intercept(Interceptor.Chain chain) throws IOException {
-                Response response = chain.proceed(chain.request());
-                MediaType contentType = response.body().contentType();
-                String bodyString = response.body().string();
-                ResponseBody body = ResponseBody.create(contentType, bodyString);
-                ResponseBody body2 = ResponseBody.create(contentType, bodyString);
-                write(response.newBuilder().body(body2).build());
-                return response.newBuilder().body(body).build();
-              }
+            .addInterceptor(chain -> {
+              Response response = chain.proceed(chain.request());
+              MediaType contentType = response.body().contentType();
+              String bodyString = response.body().string();
+              ResponseBody body = ResponseBody.create(contentType, bodyString);
+              ResponseBody body2 = ResponseBody.create(contentType, bodyString);
+              write(response.newBuilder().body(body2).build());
+              return response.newBuilder().body(body).build();
             })
             .addInterceptor(loggingInterceptor)
             .build();

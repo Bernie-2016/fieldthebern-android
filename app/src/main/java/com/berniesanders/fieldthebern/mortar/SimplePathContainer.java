@@ -83,19 +83,16 @@ public class SimplePathContainer extends PathContainer {
     } else {
       containerView.addView(newView);
       final View finalFromView = fromView;
-      Utils.waitForMeasure(newView, new Utils.OnMeasuredCallback() {
-        @Override
-        public void onMeasured(View view, int width, int height) {
-          runAnimation(containerView, finalFromView, view, direction, new Flow.TraversalCallback() {
-            @Override
-            public void onTraversalCompleted() {
-              containerView.removeView(finalFromView);
-              oldPath.destroyNotIn(context, contextFactory);
-              callback.onTraversalCompleted();
-            }
-          });
-        }
-      });
+      Utils.waitForMeasure(newView,
+          (view, width, height) -> runAnimation(containerView,
+              finalFromView,
+              view,
+              direction,
+              () -> {
+                containerView.removeView(finalFromView);
+                oldPath.destroyNotIn(context, contextFactory);
+                callback.onTraversalCompleted();
+              }));
     }
   }
 

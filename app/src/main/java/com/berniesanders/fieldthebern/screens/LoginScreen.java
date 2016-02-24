@@ -75,7 +75,6 @@ import retrofit2.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -113,18 +112,21 @@ public class LoginScreen extends ParcelableScreen {
     return LoginScreen.class.getName();
   }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(user, 0);
   }
 
   public static final Parcelable.Creator<LoginScreen>
       CREATOR = new ParcelableScreen.ScreenCreator<LoginScreen>() {
-    @Override protected LoginScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected LoginScreen doCreateFromParcel(Parcel source) {
       User user = source.readParcelable(User.class.getClassLoader());
       return new LoginScreen(user);
     }
 
-    @Override public LoginScreen[] newArray(int size) {
+    @Override
+    public LoginScreen[] newArray(int size) {
       return new LoginScreen[size];
     }
   };
@@ -240,13 +242,10 @@ public class LoginScreen extends ParcelableScreen {
 
     private void showEnableLocationDialog() {
       DialogController.DialogAction confirmAction =
-          new DialogController.DialogAction().label(android.R.string.ok).action(new Action0() {
-            @Override
-            public void call() {
-              Timber.d("ok button click");
-              Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-              getView().getContext().startActivity(myIntent);
-            }
+          new DialogController.DialogAction().label(android.R.string.ok).action(() -> {
+            Timber.d("ok button click");
+            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            getView().getContext().startActivity(myIntent);
           });
 
       DialogService.get(getView())
@@ -346,11 +345,8 @@ public class LoginScreen extends ParcelableScreen {
       } else {
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(v, R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
-            .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                PermissionService.get(view).requestPermission();
-              }
+            .setAction(android.R.string.ok, view -> {
+              PermissionService.get(view).requestPermission();
             })
             .show();
       }
@@ -417,9 +413,11 @@ public class LoginScreen extends ParcelableScreen {
         }
 
         if (e instanceof HttpException && ((HttpException) e).code() == 401) {
-          ToastService.get(getView()).bern(getView().getResources().getString(R.string.err_incorrect_email_pass));
+          ToastService.get(getView())
+              .bern(getView().getResources().getString(R.string.err_incorrect_email_pass));
         } else {
-          ToastService.get(getView()).bern(getView().getResources().getString(R.string.err_login_failed_generic));
+          ToastService.get(getView())
+              .bern(getView().getResources().getString(R.string.err_login_failed_generic));
         }
         ProgressDialogService.get(getView()).dismiss();
         showPleaseWait = false;
@@ -538,18 +536,15 @@ public class LoginScreen extends ParcelableScreen {
         userRepo.getMe()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<User>() {
-              @Override
-              public void call(User user) {
-                if (getView() == null) { return; } //TODO need some kind of better error handling here
+            .subscribe(user1 -> {
+              if (getView() == null) { return; } //TODO need some kind of better error handling here
 
-                ProgressDialogService.get(getView()).dismiss();
-                showPleaseWait = false;
-                FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user));
+              ProgressDialogService.get(getView()).dismiss();
+              showPleaseWait = false;
+              FTBApplication.getEventBus().post(new LoginEvent(LoginEvent.LOGIN, user1));
 
-                Flow.get(getView())
-                    .setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
-              }
+              Flow.get(getView())
+                  .setHistory(History.single(new HomeScreen()), Flow.Direction.FORWARD);
             });
       }
     };

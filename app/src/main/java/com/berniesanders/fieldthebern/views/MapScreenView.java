@@ -51,13 +51,11 @@ import com.berniesanders.fieldthebern.screens.MapScreen;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import flow.Flow;
 import flow.path.Path;
 import flow.path.PathContext;
 import java.lang.ref.WeakReference;
@@ -163,29 +161,22 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
           .getFragmentManager()
           .findFragmentById(R.id.map_frag);
 
-      mapFragment.getMapAsync(new OnMapReadyCallback() {
-
-        @Override
-        public void onMapReady(GoogleMap gmap) {
-          Timber.v("OnMapReadyCallback");
-          if (PermissionService.get(MapScreenView.this).isGranted()) {
-            MapScreenView.this.googleMap = gmap;
-            gmap.setMyLocationEnabled(true);
-            gmap.getUiSettings().setMapToolbarEnabled(false);
-            initCameraPosition(gmap);
-          } else {
-            // Display a SnackBar with an explanation and a button to trigger the request.
-            Snackbar.make(MapScreenView.this,
-                R.string.permission_contacts_rationale,
-                Snackbar.LENGTH_INDEFINITE)
-                .setAction(android.R.string.ok, new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view) {
-                    PermissionService.get(MapScreenView.this).requestPermission();
-                  }
-                })
-                .show();
-          }
+      mapFragment.getMapAsync(gmap -> {
+        Timber.v("OnMapReadyCallback");
+        if (PermissionService.get(MapScreenView.this).isGranted()) {
+          MapScreenView.this.googleMap = gmap;
+          gmap.setMyLocationEnabled(true);
+          gmap.getUiSettings().setMapToolbarEnabled(false);
+          initCameraPosition(gmap);
+        } else {
+          // Display a SnackBar with an explanation and a button to trigger the request.
+          Snackbar.make(MapScreenView.this,
+              R.string.permission_contacts_rationale,
+              Snackbar.LENGTH_INDEFINITE)
+              .setAction(android.R.string.ok, view -> {
+                PermissionService.get(MapScreenView.this).requestPermission();
+              })
+              .show();
         }
       });
     }
@@ -265,12 +256,7 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
       if (address == null) {
         connectCameraObservable(map);
       } else {
-        handler.postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            connectCameraObservable(map);
-          }
-        }, 1000);
+        handler.postDelayed(() -> connectCameraObservable(map), 1000);
       }
       return;
     }
@@ -388,17 +374,13 @@ public class MapScreenView extends FrameLayout implements HandlesBack {
       public void call(final Subscriber<? super CameraPosition> subscriber) {
 
         GoogleMap.OnCameraChangeListener camChangeListener =
-            new GoogleMap.OnCameraChangeListener() {
-
-              @Override
-              public void onCameraChange(CameraPosition camPosition) {
-                address = null;
-                addressTextView.setText("");
-                leaningTextView.setText("");
-                progressBar.setVisibility(View.VISIBLE);
-                pinDrop.setVisibility(View.GONE);
-                subscriber.onNext(camPosition);
-              }
+            camPosition -> {
+              address = null;
+              addressTextView.setText("");
+              leaningTextView.setText("");
+              progressBar.setVisibility(View.VISIBLE);
+              pinDrop.setVisibility(View.GONE);
+              subscriber.onNext(camPosition);
             };
 
         map.setOnCameraChangeListener(camChangeListener);

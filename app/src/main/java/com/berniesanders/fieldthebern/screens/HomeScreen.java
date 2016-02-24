@@ -118,20 +118,12 @@ public class HomeScreen extends ParcelableScreen {
     void onCanvassClicked(final View v) {
 
       if (PermissionService.get(v).isGranted()) {
-        v.post(new Runnable() {
-          @Override
-          public void run() {
-            Flow.get(v).set(new MapScreen());
-          }
-        });
+        v.post(() -> Flow.get(v).set(new MapScreen()));
       } else {
         // Display a SnackBar with an explanation and a button to trigger the request.
         Snackbar.make(v, R.string.permission_contacts_rationale, Snackbar.LENGTH_INDEFINITE)
-            .setAction(android.R.string.ok, new View.OnClickListener() {
-              @Override
-              public void onClick(View view) {
-                PermissionService.get(getView()).requestPermission();
-              }
+            .setAction(android.R.string.ok, view -> {
+              PermissionService.get(getView()).requestPermission();
             })
             .show();
       }
@@ -139,22 +131,12 @@ public class HomeScreen extends ParcelableScreen {
 
     @OnClick(R.id.screen_home_issues)
     void onIssuesClicked(final View v) {
-      v.post(new Runnable() {
-        @Override
-        public void run() {
-          Flow.get(v).set(new Main());
-        }
-      });
+      v.post(() -> Flow.get(v).set(new Main()));
     }
 
     @OnClick(R.id.screen_home_learn)
     void onLearnClicked(final View v) {
-      v.post(new Runnable() {
-        @Override
-        public void run() {
-          Flow.get(v).set(new LearnScreen());
-        }
-      });
+      v.post(() -> Flow.get(v).set(new LearnScreen()));
     }
   }
 }

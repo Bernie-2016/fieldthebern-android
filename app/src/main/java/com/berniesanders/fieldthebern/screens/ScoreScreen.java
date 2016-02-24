@@ -81,20 +81,23 @@ public class ScoreScreen extends ParcelableScreen {
     return ScoreScreen.class.getName();
   }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(visitResult, 0);
     parcel.writeParcelable(visit, 0);
   }
 
   public static final Parcelable.Creator<ScoreScreen>
       CREATOR = new ScoreScreen.ScreenCreator<ScoreScreen>() {
-    @Override protected ScoreScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected ScoreScreen doCreateFromParcel(Parcel source) {
       VisitResult visitResult = source.readParcelable(VisitResult.class.getClassLoader());
       Visit visit = source.readParcelable(Visit.class.getClassLoader());
       return new ScoreScreen(visitResult, visit);
     }
 
-    @Override public ScoreScreen[] newArray(int size) {
+    @Override
+    public ScoreScreen[] newArray(int size) {
       return new ScoreScreen[size];
     }
   };
@@ -156,26 +159,23 @@ public class ScoreScreen extends ParcelableScreen {
       setActionBar();
 
       //let the gif load a bit
-      getView().post(new Runnable() {
-        @Override
-        public void run() {
-          String firstName = null;
-          try {
-            // TODO This doesn't account for who the canvasser actually talked to,
-            // we just grab the first name
-            Person person = (Person) visit.included().get(1);
-            firstName = person.attributes().firstName();
-          } catch (IndexOutOfBoundsException e) {
-            //this can happen if someone asked us to leave without giving their name
-            Timber.w(e, "no person update found");
-          }
-
-          Score score = visitResult.included().get(0);
-          int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
-          getView().animateScore(points);
-          getView().animateLabels(score.attributes().pointsForKnock(),
-              score.attributes().pointsForUpdates(), firstName);
+      getView().post(() -> {
+        String firstName = null;
+        try {
+          // TODO This doesn't account for who the canvasser actually talked to,
+          // we just grab the first name
+          Person person = (Person) visit.included().get(1);
+          firstName = person.attributes().firstName();
+        } catch (IndexOutOfBoundsException e) {
+          //this can happen if someone asked us to leave without giving their name
+          Timber.w(e, "no person update found");
         }
+
+        Score score = visitResult.included().get(0);
+        int points = score.attributes().pointsForKnock() + score.attributes().pointsForUpdates();
+        getView().animateScore(points);
+        getView().animateLabels(score.attributes().pointsForKnock(),
+            score.attributes().pointsForUpdates(), firstName);
       });
     }
 
@@ -199,12 +199,8 @@ public class ScoreScreen extends ParcelableScreen {
 
     @OnClick(R.id.back_to_map)
     public void backToMap(final View v) {
-      v.post(new Runnable() {
-        @Override
-        public void run() {
-          Flow.get(v).setHistory(History.single(new MapScreen()), Flow.Direction.BACKWARD);
-        }
-      });
+      v.post(() -> Flow.get(v)
+          .setHistory(History.single(new MapScreen()), Flow.Direction.BACKWARD));
     }
   }
 }

@@ -37,7 +37,6 @@ import com.berniesanders.fieldthebern.media.SaveImageTarget;
 import com.berniesanders.fieldthebern.models.UserAttributes;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import timber.log.Timber;
 
@@ -130,12 +129,7 @@ public class PhotoEditView extends FrameLayout {
   private void showPhoto(@NonNull Bitmap bitmap) {
     userImageView.setImageBitmap(bitmap);
     mask.setVisibility(View.VISIBLE);
-    post(new Runnable() {
-      @Override
-      public void run() {
-        toggleAvatarWidget(false);
-      }
-    });
+    post(() -> toggleAvatarWidget(false));
   }
 
   public void toggleAvatarWidget(boolean open) {
@@ -161,14 +155,11 @@ public class PhotoEditView extends FrameLayout {
     }
   }
 
-  private Action1<Bitmap> receiveNewBitmap = new Action1<Bitmap>() {
-    @Override
-    public void call(Bitmap bitmap) {
-      if (bitmap != null) {
-        showPhoto(bitmap);
-        String base64 = SaveImageTarget.base64EncodeBitmap(bitmap, getContext());
-        notifyPhotoChange(bitmap, base64);
-      }
+  private Action1<Bitmap> receiveNewBitmap = bitmap -> {
+    if (bitmap != null) {
+      showPhoto(bitmap);
+      String base64 = SaveImageTarget.base64EncodeBitmap(bitmap, getContext());
+      notifyPhotoChange(bitmap, base64);
     }
   };
 
@@ -191,65 +182,31 @@ public class PhotoEditView extends FrameLayout {
   }
 
   private void requestTakePhotoPermission(final View v) {
-    PermissionService.get(v).requestGalleryPermission(new Action0() {
-      @Override
-      public void call() {
-        takePicture(v);
-      }
-    }, new Action0() {
-      @Override
-      public void call() {
-        showTakePhotoSnackbar();
-      }
-    });
+    PermissionService.get(v)
+        .requestGalleryPermission(() -> takePicture(v), this::showTakePhotoSnackbar);
   }
 
   private void showTakePhotoSnackbar() {
     // Display a SnackBar with an explanation and a button
     // to trigger the request.
     Snackbar.make(this, R.string.permission_photo_rationale, Snackbar.LENGTH_INDEFINITE)
-        .setAction(android.R.string.ok, new View.OnClickListener() {
-          @Override
-          public void onClick(final View view) {
-            PermissionService.get(view).requestGalleryPermission(new Action0() {
-              @Override
-              public void call() {
-                takePicture(view);
-              }
-            }, null);
-          }
+        .setAction(android.R.string.ok, view -> {
+          PermissionService.get(view).requestGalleryPermission(() -> takePicture(view), null);
         })
         .show();
   }
 
   private void requestGalleryPermission(final View v) {
-    PermissionService.get(v).requestGalleryPermission(new Action0() {
-      @Override
-      public void call() {
-        choosePhoto(v);
-      }
-    }, new Action0() {
-      @Override
-      public void call() {
-        showGalleryPhotoSnackbar(v);
-      }
-    });
+    PermissionService.get(v)
+        .requestGalleryPermission(() -> choosePhoto(v), () -> showGalleryPhotoSnackbar(v));
   }
 
   private void showGalleryPhotoSnackbar(final View v) {
     // Display a SnackBar with an explanation and a button
     // to trigger the request.
     Snackbar.make(this, R.string.permission_photo_rationale, Snackbar.LENGTH_INDEFINITE)
-        .setAction(android.R.string.ok, new View.OnClickListener() {
-          @Override
-          public void onClick(final View view) {
-            PermissionService.get(view).requestGalleryPermission(new Action0() {
-              @Override
-              public void call() {
-                choosePhoto(view);
-              }
-            }, null);
-          }
+        .setAction(android.R.string.ok, view -> {
+          PermissionService.get(view).requestGalleryPermission(() -> choosePhoto(view), null);
         })
         .show();
   }

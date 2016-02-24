@@ -36,7 +36,6 @@ import com.berniesanders.fieldthebern.controllers.ActionBarController;
 import com.berniesanders.fieldthebern.controllers.ActionBarService;
 import com.berniesanders.fieldthebern.dagger.FtbScreenScope;
 import com.berniesanders.fieldthebern.dagger.MainComponent;
-import com.berniesanders.fieldthebern.models.Rankings;
 import com.berniesanders.fieldthebern.models.User;
 import com.berniesanders.fieldthebern.mortar.ParcelableScreen;
 import com.berniesanders.fieldthebern.repositories.RankingsRepo;
@@ -48,7 +47,6 @@ import flow.Flow;
 import javax.inject.Inject;
 import mortar.ViewPresenter;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -221,82 +219,58 @@ public class ProfileScreen extends ParcelableScreen {
       userRepo.getMe()
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<User>() {
-            @Override
-            public void call(User user) {
-              String firstName = user.getData().attributes().getFirstName();
-              String lastName = user.getData().attributes().getLastName();
-              if (fullNameTextView != null) {
-                fullNameTextView.setText(firstName + " " + lastName);
-              }
-
-              pointCountTextView.setText(user.getData().attributes().totalPoints());
-              doorCountTextView.setText(user.getData().attributes().visitsCount());
-
-              loadAvatar(user);
+          .subscribe(user -> {
+            String firstName = user.getData().attributes().getFirstName();
+            String lastName = user.getData().attributes().getLastName();
+            if (fullNameTextView != null) {
+              fullNameTextView.setText(firstName + " " + lastName);
             }
-          }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-              Timber.wtf(throwable, "rankings failed");
-            }
+
+            pointCountTextView.setText(user.getData().attributes().totalPoints());
+            doorCountTextView.setText(user.getData().attributes().visitsCount());
+
+            loadAvatar(user);
+          }, throwable -> {
+            Timber.wtf(throwable, "rankings failed");
           });
 
       rankingsRepo.get(new RankingSpec(RankingSpec.FRIENDS))
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<Rankings>() {
-            @Override
-            public void call(Rankings rankings) {
-              ProfileView view1 = getView();
-              if (rankings != null && view1 != null) {
-                rankingsListView.setAdapter(
-                    new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
-              }
+          .subscribe(rankings -> {
+            ProfileView view1 = getView();
+            if (rankings != null && view1 != null) {
+              rankingsListView.setAdapter(
+                  new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
             }
-          }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-              Timber.wtf(throwable, "rankings failed");
-            }
+          }, throwable -> {
+            Timber.wtf(throwable, "rankings failed");
           });
 
       rankingsRepo.get(new RankingSpec(RankingSpec.STATE))
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<Rankings>() {
-            @Override
-            public void call(Rankings rankings) {
-              ProfileView view1 = getView();
-              if (rankings != null && view1 != null) {
-                rankingsListView2.setAdapter(
-                    new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
-              }
+          .subscribe(rankings -> {
+            ProfileView view1 = getView();
+            if (rankings != null && view1 != null) {
+              rankingsListView2.setAdapter(
+                  new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
             }
-          }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-              Timber.wtf(throwable, "rankings failed");
-            }
+          }, throwable -> {
+            Timber.wtf(throwable, "rankings failed");
           });
 
       rankingsRepo.get(new RankingSpec(RankingSpec.EVERYONE))
           .subscribeOn(Schedulers.io())
           .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(new Action1<Rankings>() {
-            @Override
-            public void call(Rankings rankings) {
-              ProfileView view1 = getView();
-              if (rankings != null && view1 != null) {
-                rankingsListView3.setAdapter(
-                    new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
-              }
+          .subscribe(rankings -> {
+            ProfileView view1 = getView();
+            if (rankings != null && view1 != null) {
+              rankingsListView3.setAdapter(
+                  new RankingAdapter(view1.getContext(), rankings.included(), rankings.data()));
             }
-          }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-              Timber.wtf(throwable, "rankings failed");
-            }
+          }, throwable -> {
+            Timber.wtf(throwable, "rankings failed");
           });
     }
 

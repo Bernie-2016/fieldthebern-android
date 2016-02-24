@@ -59,7 +59,6 @@ import retrofit2.HttpException;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -103,18 +102,21 @@ public class NewVisitScreen extends ParcelableScreen {
     return NewVisitScreen.class.getName();
   }
 
-  @Override protected void doWriteToParcel(Parcel parcel, int flags) {
+  @Override
+  protected void doWriteToParcel(Parcel parcel, int flags) {
     parcel.writeParcelable(apiAddress, 0);
   }
 
   public static final Parcelable.Creator<NewVisitScreen>
       CREATOR = new ParcelableScreen.ScreenCreator<NewVisitScreen>() {
-    @Override protected NewVisitScreen doCreateFromParcel(Parcel source) {
+    @Override
+    protected NewVisitScreen doCreateFromParcel(Parcel source) {
       ApiAddress apiAddress = source.readParcelable(ApiAddress.class.getClassLoader());
       return new NewVisitScreen(apiAddress);
     }
 
-    @Override public NewVisitScreen[] newArray(int size) {
+    @Override
+    public NewVisitScreen[] newArray(int size) {
       return new NewVisitScreen[size];
     }
   };
@@ -296,13 +298,10 @@ public class NewVisitScreen extends ParcelableScreen {
 
     void setActionBar() {
       ActionBarController.MenuAction menu =
-          new ActionBarController.MenuAction().label(cancel).action(new Action0() {
-            @Override
-            public void call() {
-              visitRepo.clear();
-              Flow.get(getView())
-                  .setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
-            }
+          new ActionBarController.MenuAction().label(cancel).action(() -> {
+            visitRepo.clear();
+            Flow.get(getView())
+                .setHistory(History.single(new HomeScreen()), Flow.Direction.BACKWARD);
           });
       ActionBarService.get(getView())
           .showToolbar()

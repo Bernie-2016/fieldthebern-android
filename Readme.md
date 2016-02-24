@@ -26,6 +26,7 @@ We also use the following open-source libraries.
 * [Butterknife](https://github.com/JakeWharton/butterknife)
 * [RxJava](https://github.com/ReactiveX/RxJava)
 * [Otto](https://github.com/square/otto)
+* [Retrolambda](https://github.com/evant/gradle-retrolambda)
 
 Before contributing, please be sure your are familiar with the design patterns and libraries. 
 Feel free to reach out on Slack if you have questions!

@@ -23,12 +23,21 @@ package com.berniesanders.fieldthebern.controllers;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.MimeTypeMap;
+
 import com.berniesanders.fieldthebern.R;
 import com.crashlytics.android.Crashlytics;
+import com.google.common.collect.Sets;
+
+import java.io.FileDescriptor;
+import java.util.HashSet;
+
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -46,6 +55,11 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
 
   static final int REQUEST_IMAGE_CAPTURE = 1;
   static final int PICK_PHOTO = 2;
+  static final int THUMBNAIL_MINI_WIDTH = 512;
+  static final int THUMBNAIL_MINI_HEIGHT = 384;
+  static final HashSet<String> acceptedMimeTypes =
+          Sets.newHashSet("image/jpeg","image/png","image/gif");
+
   /**
    * passes the thumbnail of the photo taken/picked or null if cancelled
    *
@@ -94,7 +108,6 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
     //onComplete.call();
     Timber.v("activity result...");
 
-    //TODO this is really hacky code so let's fail gracefully for now
     try {
       if (requestCode == REQUEST_IMAGE_CAPTURE) {
         Bitmap imageBitmap = null;
@@ -112,15 +125,37 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
         if (resultCode == android.app.Activity.RESULT_OK) {
           Uri imageUri = data.getData();
 
-          //TODO this code sucks
-          // How is it the api for interacting with the media store
-          // is still manually iterating with a cursor...?!
-          long id = Long.parseLong(imageUri.getLastPathSegment()
-              .substring(imageUri.getLastPathSegment().lastIndexOf(":") + 1));
+          String imagePath = imageUri.getPath();
+          //If the uri comes from the default document picker, we don't have to worry about the
+          // extension. Android will already have made sure it is an image.
+          if (!("media".equals(imageUri.getAuthority()) && imageUri.getPath().startsWith("/external/images/media"))
+                  && (!"com.android.providers.media.documents".equals(imageUri.getAuthority()))) {
+            //The user chose to use the file browser to select the uri, it might not be an image.
+            //Check the type to make sure it's accepted.
+            String extension = MimeTypeMap.getFileExtensionFromUrl(imageUri.getPath());
+            if (extension != null) {
+              MimeTypeMap mime = MimeTypeMap.getSingleton();
+              String type = mime.getMimeTypeFromExtension(extension);
 
-          imageBitmap = MediaStore.Images.Thumbnails.getThumbnail(
-              getView().getActivity().getContentResolver(), id,
-              MediaStore.Images.Thumbnails.MINI_KIND, null);
+              if (!acceptedMimeTypes.contains(type)) {
+                showError(getView().getActivity().getString(R.string.err_cant_load_photo_bad_extension));
+                return;
+              }
+            } else {
+              showError(getView().getActivity().getString(R.string.err_cant_load_photo_bad_extension));
+              return;
+            }
+          }
+
+          //File is an accepted type. Get the bitmap
+          ParcelFileDescriptor parcelFileDescriptor =
+                  getView().getActivity().getContentResolver().openFileDescriptor(imageUri, "r");
+          FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+          Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+          parcelFileDescriptor.close();
+
+          imageBitmap = Bitmap.createScaledBitmap(image, THUMBNAIL_MINI_WIDTH, THUMBNAIL_MINI_HEIGHT, false);
+
         }
         if (onComplete != null) {
           onComplete.call(imageBitmap);
@@ -130,10 +165,15 @@ public class PhotoController extends Presenter<PhotoController.Activity> {
       Timber.e(e, "Error loading image");
       Crashlytics.logException(e);
 
-      if (getView() != null) {
-        String errmsg = getView().getActivity().getString(R.string.err_cant_load_photo);
-        ToastService.get(getView().getActivity()).bern(errmsg);
-      }
+
+      showError(getView().getActivity().getString(R.string.err_cant_load_photo));
+
+    }
+  }
+
+  private void showError(String errmsg) {
+    if (getView() != null) {
+      ToastService.get(getView().getActivity()).bern(errmsg);
     }
   }
 

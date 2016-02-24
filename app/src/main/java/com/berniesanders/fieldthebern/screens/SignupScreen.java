@@ -273,7 +273,7 @@ public class SignupScreen extends ParcelableScreen {
 
     @OnTouch(R.id.email_input_layout)
     boolean showEmailsInputLayout() {
-      if (Build.VERSION.SDK_INT >= 21) {
+      if (Build.VERSION.SDK_INT >= 21 && emailAutocompleteTV != null) {
         emailAutocompleteTV.showDropDown();
         emailAutocompleteTV.setFocusable(true);
         emailAutocompleteTV.setShowSoftInputOnFocus(true);
@@ -283,7 +283,7 @@ public class SignupScreen extends ParcelableScreen {
 
     @OnTouch(R.id.email)
     boolean showEmails() {
-      if (Build.VERSION.SDK_INT >= 21) {
+      if (Build.VERSION.SDK_INT >= 21 && emailAutocompleteTV != null) {
         emailAutocompleteTV.showDropDown();
         emailAutocompleteTV.setFocusable(true);
         emailAutocompleteTV.setShowSoftInputOnFocus(true);

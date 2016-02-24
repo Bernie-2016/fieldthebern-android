@@ -48,6 +48,8 @@ key.facebookid=...
 ```
 Please contact the current app devs for the `debug.keystore` and `debug_keys.properties` files
 
+[Retrolambda](https://github.com/evant/gradle-retrolambda) is used to give us access to Java 8's lambdas, so you will need to [install the Java 8 JDK](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Then go to Android Studio -> Preferences -> Path Variables and add a new JAVA8_HOME variable with the value set to your jdk8 path.
+
 ##Mortar and Flow
 
 A quick primer on how we're using mortar and flow.
